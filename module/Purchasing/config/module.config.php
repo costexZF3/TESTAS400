@@ -53,9 +53,9 @@ return [
                 // Give access to "index" actions to everyone with +menu.purchasing                  
                 ['actions' => ['index'],              'allow' => '+menu.purchasing'],                
                 ['actions' => ['watch'],              'allow' => '+module.watch.document'],
-//                 ['actions' => ['export','print',],    'allow' => '+purchasing.regular.level'],
-//                 ['actions' => ['create', 'update', ], 'allow' => '+purchasing.high.level'],
-//                 ['actions' => ['delete', ],           'allow' => '+purchasing.power.level'],
+//              ['actions' => ['export','print',],    'allow' => '+purchasing.regular.level'],
+//              ['actions' => ['create', 'update', ], 'allow' => '+purchasing.high.level'],
+//              ['actions' => ['delete', ],           'allow' => '+purchasing.power.level'],
             ], //END: access_filter for ClaimsController          
         ]
     ],
