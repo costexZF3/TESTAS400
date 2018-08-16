@@ -1,0 +1,76 @@
+<?php
+    $this->headTitle('Edit Role');
+    
+    $this->mainMenu()->setActiveItemId('roles');
+    
+    $this->pageBreadcrumbs()->setItems([
+                'Home'=>$this->url('home'),
+                'Manage Roles'=>$this->url('roles'),
+                'Edit Role ' => $this->url('roles', ['action'=>'edit', 'id'=>$role->getId()])
+                ]);
+    
+    
+    //getting value from ViewModel()
+    $form = $this->form;
+    
+    $form->get('name')->setAttributes([
+        'class'=>'form-control', 
+        'placeholder'=>'Enter name'
+        ]);
+    
+    $form->get('description')->setAttributes([
+        'class'=>'form-control', 
+        'placeholder'=>'Enter description'
+        ]);
+    
+    $form->get('inherit_roles')->setAttributes([
+        'class'=>'form-control', 
+        ]);
+    
+    
+    $form->get('submit')
+            ->setAttributes(['class'=>'btn btn-primary'])
+            ->setValue('Save');
+    
+    $form->prepare();
+?>
+
+<div class="row">
+    <div class="col-md-6">    	
+    	<div class="panel panel-success">
+    		<div class="panel-heading">EDIT ROLE <em class="ctp-red"><?= $this->escapeHtml($role->getName()) ?> </em></div>
+    			<div class="panel-body">
+    				<p>
+                        <a class="btn btn-default" href="<?= $this->url('roles', ['action'=>'editPermissions', 'id'=>$role->getId()]) ?>">
+                          <span class="glyphicon glyphicon-check ctp-red"></span> Edit Permissions
+                        </a>
+                    </p>
+                    <!-- OPENNING FORM TAG -->
+                    <?= $this->form()->openTag($form); ?>        
+                        <div class="form-group">
+                            <?= $this->formLabel($form->get('name')); ?>
+                            <?= $this->formElement($form->get('name')); ?>
+                            <?= $this->formElementErrors($form->get('name')); ?>                  
+                        </div>
+                        
+                        <div class="form-group">
+                            <?= $this->formLabel($form->get('description')); ?>
+                            <?= $this->formElement($form->get('description')); ?>
+                            <?= $this->formElementErrors($form->get('description')); ?>                  
+                        </div>
+                        
+                        <div class="form-group">
+                            <?= $this->formLabel($form->get('inherit_roles')); ?>
+                            <?= $this->formElement($form->get('inherit_roles')); ?>
+                            <?= $this->formElementErrors($form->get('inherit_roles')); ?>
+                        </div>
+                        
+                        <?= $this->formElement($form->get('csrf')); ?>
+                        
+                        <?= $this->formElement($form->get('submit')); ?>        
+                    <?= $this->form()->closeTag(); ?>
+               </div> <!-- END: DIV panel-body -->
+         </div> <!-- END: DIV panel-success -->
+    </div>    
+</div>   
+

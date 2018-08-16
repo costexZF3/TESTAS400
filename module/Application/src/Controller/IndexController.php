@@ -1,0 +1,102 @@
+<?php
+namespace Application\Controller;
+
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
+use User\Entity\User;
+use Zend\Mvc\MvcEvent;
+
+
+/**
+ * This is the main controller class of the User Demo application. It contains
+ * site-wide actions such as Home or About.
+ */
+class IndexController extends AbstractActionController 
+{
+    /**
+     * Entity manager.
+     * @var Doctrine\ORM\EntityManager
+     */
+    private $entityManager;
+    
+    /**
+     * Constructor. Its purpose is to inject dependencies into the controller.
+     */
+    public function __construct($entityManager) 
+    {
+       $this->entityManager = $entityManager;
+    }
+   
+    
+    /**
+     * This is the default "index" action of the controller. It displays the 
+     * Home page.
+     */
+    public function indexAction() 
+    {
+        return new ViewModel();
+        
+        //14.16 Disabling the View Rendering 
+        //if you want to avoid defaul view rendering use the following.
+        //return $this->getResponse(); 
+        
+        //it's used to be use for instance when you have a controller DownloadController and have a fileAction() than it 
+        //have to download simplily a file and it does not have anything to render on the browser.
+        
+    }
+
+    /**
+     * This is the "about" action. It is used to display the "About" page.
+     */
+    public function aboutAction() 
+    {                      
+       return new ViewModel();
+    }  
+    
+    /**
+     *  pagebuilding: It getting use to using when you want to display  a temporary page 
+     *  at meantime.E.g: if the Site is out of service, you can use it
+     *  to inform users about the website maintancement. 
+     */
+    public function pagebuildingAction()
+    {
+        return new ViewModel();
+    }
+    
+    /**
+     * The "settings" action displays the info about currently logged in user.
+     */
+    public function settingsAction()
+    {
+        $id = $this->params()->fromRoute('id');
+        
+        if ($id!=null) {
+            $user = $this->entityManager->getRepository(User::class)
+                    ->find($id);
+         } 
+        else {
+            $user = $this->currentUser();
+         }
+      
+        if ($user==null) {
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
+        
+        //checking the logged user's permissions, if he/she has no access to the route requested, 
+        //the response will be  NOT-AUTHORIZED page.
+        if (!$this->access('profile.any.view') && 
+            !$this->access('profile.own.view', ['user'=>$user])) {
+            return $this->redirect()->toRoute('not-authorized');
+        }
+        
+        //$this->layout()->setTemplate('layout/layout.phtml');
+        
+        $viewModel = new ViewModel([
+            'user' => $user
+        ]);       
+        
+        return  $viewModel;
+    }
+}
+

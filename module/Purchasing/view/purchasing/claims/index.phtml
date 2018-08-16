@@ -1,0 +1,67 @@
+<?php
+    /*getting values */
+       
+    $this->headTitle('Claims');	
+    $this->mainMenu()->setActiveItemId('claims'); 
+   
+    $this->pageBreadcrumbs()->setItems([
+        'Home'=>$this->url('home'),
+        'Claims Menu'=>$this->url('claims')       
+        ]);       
+
+    $menuClaims = $this->menuClaims; //getting the form's instance sent by the ViewModel create inside contactusAction method in the indexController
+    $user = $this->user;
+?>
+
+<html>
+   <head>
+   </head>
+   <body>
+       <div class="container">           
+           <div class = "row">
+               <?php                 
+                 // echo $user->getFullName(); 
+                ?>
+           </div>
+           <div class="row panel-body">                
+        		<div class="col-md-3">                    
+                  <?php if (isset($menuClaims['watch'])): ?>
+                  		<a href ="<?=$this->url('watch')?>"> 		
+                       		<label class ="btn btn-default"><?=$menuClaims['watch']?> </label>
+                  		</a>
+                  <?php endif; ?>        
+                </div>   
+                 
+                <div class="col-md-3"> 
+                    <?php if (isset($menuClaims['view'])): ?>
+                            <button class ="btn btn-default"><?=$menuClaims['view']?></button>                        
+                    <?php endif; ?>                    
+                </div>             
+                <div class="col-md-3"> 
+                    <?php if (isset($menuClaims['export'])): ?>
+                        	<button class ="btn btn-default"><?=$menuClaims['export']?></button>                        
+                    <?php endif; ?>               
+                </div>                              
+           </div>
+           
+           <div class="row panel-body">
+           		<div class="col-md-3">
+                    <?php if (isset($menuClaims['create'])): ?>
+                            <button class ="btn btn-default"> <?=$menuClaims['create']?></button>                        
+                    <?php endif; ?>
+                </div> 
+                <div class="col-md-3">                    
+                	<?php if (isset($menuClaims['update'])): ?>
+                    	   <button class ="btn btn-default"><?=$menuClaims['update']?></button>                	   
+                	<?php endif;?>                   	                                      
+                </div> 
+            
+                <div class="col-md-3">
+                	<?php if (isset($menuClaims['delete'])): ?>
+                        	<button class ="btn btn-default"> <?=$menuClaims['delete']?></button>
+                	<?php endif; ?>                                     
+                </div>               
+           </div>
+       </div>       
+   </body>
+</html>

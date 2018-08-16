@@ -1,0 +1,69 @@
+<?= $this->doctype() ?>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <?= $this->headTitle('CTPSYSTEM')->setSeparator(' - ')->setAutoEscape(false) ?>
+
+        <?= $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+
+        <!-- Le styles -->
+        <?= $this->headLink([
+                      'rel' => 'shortcut icon', 
+                      'type' => 'image/vnd.microsoft.icon', 
+                      'href' => $this->basePath().'/img/logo.png']
+                  )->prependStylesheet($this->basePath('css/style.css'))
+                   ->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
+                   ->prependStylesheet($this->basePath('css/bootstrap.min.css'))
+        ?>
+
+        <!-- Scripts -->
+        <?= $this->headScript()
+            ->prependFile($this->basePath('js/bootstrap.min.js'))
+            ->prependFile($this->basePath('js/jquery-2.2.4.min.js'))
+        ?>
+    </head>
+    
+    <body>
+        <!-- Page header -->
+        <div class="container-fluid" style="background-image: url('img/banner.png')">            
+            <!-- Page header -->
+            <div class="container">
+                <div class ="row">
+                    <div class="col-md-offset-4">
+                       
+                    </div>                    
+                    <div class = "col-md-1 top-buffer">
+                          <a href=""><img class="imgicon" src="<?= $this->basePath('img/LOGO.PNG') ?>" height="80" alt="Zend Framework <?= \Application\Module::VERSION ?>"/></a>
+                    </div>
+                    <div class = "col-md-6">
+                        <em class=" h1 text-warning top-buffer btn-toolbar"> Information System</em>
+                    </div>
+                </div>
+            </div>            
+        </div> 
+        
+        <!-- Page Content from here -->
+        <div class="container">             
+            <div class="row top-buffer">
+                <div class="col-md-12">
+                    <!-- Page content placeholder -->
+                    <?= $this->content; ?>
+                </div>
+            </div>
+        </div> 
+        
+        <hr>
+        <div class="container-fluid  jumbotron text ">  
+            
+            <footer class="container text text-nowrap text-center">
+                <p>&copy; 2005 - <?= date('Y') ?> by Costex Tractor Parts. All rights reserved.</p>
+            </footer>
+        </div>
+    
+        <?= $this->inlineScript() ?>
+    </body>
+</html>

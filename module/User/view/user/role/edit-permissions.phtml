@@ -1,0 +1,89 @@
+<?php
+    //TEXT that will be shown in the TAB Title
+    $this->headTitle('Edit Role Permissions');
+    
+    //setting roles as active Menu
+    $this->mainMenu()->setActiveItemId('roles');
+    
+    //redering de Breadcrumbs on the page
+    $this->pageBreadcrumbs()->setItems([
+                'Home'=>$this->url('home'),
+                'Manage Roles'=>$this->url('roles'),
+                'Edit Role'=>$this->url('roles', ['action'=>'edit', 'id'=>$role->getId()])
+                ]);
+    
+    //getting BUTTON SUBMIT of the ViewModel sent in the $form variable 
+    $form->get('submit')
+            ->setAttributes(['class'=>'btn btn-primary'])
+            ->setValue('Save');
+    
+    //it's completly necessary before rendering each FORM        
+    $form->prepare();
+?>
+
+<!-- TEXT that will be shown in the TAB Title -->
+
+<div class="row">
+    <div class="col-md-8">
+    	<div class="panel panel-success">
+    		<div class="panel-heading">
+    			EDIT PERMISSION: <em class="ctp-red"><?= $this->escapeHtml($role->getName()) ?></em>
+    		</div>
+			<div class="panel-body">    	
+            	<!-- OPENNING FORM TAG -->
+                <?=$this->form()->openTag($form);?>
+                    <table class="table table-striped table-bordered">
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                        </tr>
+                        <?php foreach ($allPermissions as $permission):
+                            $disable = false;
+                            $element = $form->get('permissions')->get($permission->getName());
+                        ?>
+                        <tr>
+                            <td>
+                                <div class="checkbox">
+                                    <label>
+                                    	<input type="checkbox" name="<?= $this->escapeHtmlAttr($element->getName()) ?>" 
+                                                  value="<?= $this->escapeHtmlAttr($element->getCheckedValue()) ?>"
+                                                  <?php if ($element->isChecked()) {
+                                                      echo 'checked';  
+                                                      $disable = true; 
+                                                      $classText ='ctp-blue';
+                                                  }?>
+                                                  <?php if ($element->getAttribute('disabled')){
+                                                      echo 'disabled'; 
+                                                      $disable= true; 
+                                                      $classText ='ctp-red'; 
+                                                  };?>
+                                             > <!-- CLOSING INPUT CHECKBOX TAG -->
+                                        <?php 
+                                           if ($disable) {echo "<em class=$classText>";}
+                                           echo $this->escapeHtml($element->getLabel()); 
+                                           if ($disable) {echo "</em>";}
+                                        ?>
+                                    </label>
+                                    <?= $this->formElementErrors($element); ?>                  
+                                </div>
+                            </td>
+                            <td>
+                                <?= $this->escapeHtml($permission->getDescription()) ?>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </table>
+                    <?= $this->formElement($form->get('csrf')); ?>            
+                    <?= $this->formElement($form->get('submit')); ?>        
+                <?= $this->form()->closeTag(); ?>
+      		</div> <!-- END: DIV panel-body -->
+     	</div> <!-- END: DIV panel-success -->
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6"> 
+        
+    </div>    
+</div>   
+

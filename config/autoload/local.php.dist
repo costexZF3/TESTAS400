@@ -1,0 +1,36 @@
+<?php
+/**
+ * Local Configuration Override
+ *
+ * This configuration override file is for overriding environment-specific and
+ * security-sensitive configuration information. Copy this file without the
+ * .dist extension at the end and populate values as needed.
+ *
+ * @NOTE: This file is ignored from Git by default with the .gitignore included
+ * in ZendSkeletonApplication. This is a good practice, as it prevents sensitive
+ * credentials from accidentally being committed into version control.
+ */
+
+
+use Doctrine\DBAL\Driver\IBMDB2\DB2Driver as DB2Drivers;
+
+return [
+    'doctrine' => [
+        'connection' => [
+            'orm_default' => [
+                'driverClass' => DB2Drivers::class,
+                'params' => [
+                    'dbname'   => 'COSTEX1',
+                    'user'     => '<usernamehere>',
+                    'password' => '<writeyourpassword>',
+                    'driver_options' => [
+                        'i5_naming'  =>  DB2_I5_NAMING_ON,
+                        'i5_commit' => DB2_I5_TXN_READ_UNCOMMITTED,
+                        'autocommit' => DB2_AUTOCOMMIT_OFF,
+                        'i5_libl'   =>'QS36F',
+                    ],
+                ],
+            ],
+        ],
+    ],
+];

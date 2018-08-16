@@ -1,0 +1,106 @@
+<?= $this->doctype() ?>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <?= $this->headTitle('CTPSYSTEM')->setSeparator(' - ')->setAutoEscape(false) ?>
+
+        <?= $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+
+        <!-- Le styles -->
+        <?= $this->headLink([
+                      'rel' => 'shortcut icon', 
+                      'type' => 'image/vnd.microsoft.icon', 
+                      'href' => $this->basePath().'/img/logo.png']
+                  )->prependStylesheet($this->basePath('css/style.css'))
+                   ->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
+                   ->prependStylesheet($this->basePath('css/bootstrap.min.css'))
+        ?>
+
+        <!-- Scripts -->
+        <?= $this->headScript()
+            ->prependFile($this->basePath('js/bootstrap.min.js'))
+            ->prependFile($this->basePath('js/jquery-2.2.4.min.js'))
+        ?>
+        
+        <?php
+             //----- getting PATH for banner.png inside the document root ---------------
+             $bannerPath = $this->basePath().'/img/banner.png'; 
+        ?>
+    </head>
+    
+    <body>
+        <body>
+        <!-- Page header -->        
+        <div class="container-fluid" style="background-image: url(<?=$bannerPath?>)">            
+            <!-- Page header -->
+            <div class="container">
+                <div class ="row">
+                    <div class="col-md-offset-8"></div>
+                    <div class = "col-md-1 top-buffer">
+                        <a href="<?= $this->url('home')?>">
+                            <img src="<?= $this->basePath().'/img/LOGO.PNG' ?>" height="80" alt="Zend Framework <?= \Application\Module::VERSION ?>"/></a>
+                    </div>
+                    <div class = "col-md-10 ">
+                        <em class=" h1 text-warning  btn-toolbar"> Information System</em>
+                    </div>
+                </div>
+            </div>            
+        </div> 
+         
+        <div class="container"> 
+            <div class="row">
+                <!-- Menu -->
+                <div class="col-md-12 ">                    
+                        <!-- Navigation bar -->
+                        <?php
+                            // Check if the activeMenuItemId passed to layout view model
+                            // and if so, use it for setting active navbar item.
+                            if (isset($activeMenuItemId)) {
+                                $this->mainMenu()->setActiveItemId($activeMenuItemId);
+                            }
+                            // Render the navbar
+                            echo $this->mainMenu()->render();
+                        ?>
+                    </div>   
+                <!-- Breadcrumbs -->
+                <?= $this->pageBreadcrumbs()->render(); ?>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12 panel panel-body">
+                    <!-- Page content placeholder -->
+                    <?= $this->content; ?>
+                </div>
+            </div>
+        </div>    
+        <hr>
+        
+        <div class="container">            
+                <div class="row">
+                    <div class="col-md-offset-4">
+                    </div>    
+                    <div clas="">
+                        <a class= "label label-info" href="<?= $this->url('home')?>"> Home Page</a>
+                        <a class= "label label-primary" href="<?= $this->url('about') ?>"> About Us</a>
+                        <a class= "label label-success" href="<?= $this->url('about') ?>"> Contact Us</a>
+                    </div>
+                    <p>
+                        <b>New CTP-System ver:</b> (<?= \Application\Module::VERSION?>).                
+                    &copy; 2005 - <?= date('Y') ?> MIS - Costex Tractor Parts Technologies Ltd. Costex All Rights Reserved.
+                    </p> 
+                </div>
+        </div>
+        <hr>
+        <div class="container-fluid  jumbotron text ">              
+            <footer class="container text text-nowrap text-center">
+                <p> Costex Tractor Parts. All rights reserved.</p>
+            </footer>
+        </div>
+    
+        <?= $this->inlineScript() ?>
+    </body>
+</html>
