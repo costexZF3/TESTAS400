@@ -19,35 +19,37 @@
    <body>
        <div class="container">           
            <div class = "row">
-               <?php                 
-                 // echo $user->getFullName(); 
-                ?>
            </div>
            <div class="row panel-body">                
-        		<div class="col-md-3">                    
+                <div class="col-md-3">                    
                   <?php if (isset($menuClaims['watch'])): ?>
                   		<a href ="<?=$this->url('watch')?>"> 		
-                       		<label class ="btn btn-default"><?=$menuClaims['watch']?> </label>
+                       		<label class ="btn btn-info"><?=$menuClaims['watch']?> </label>
                   		</a>
                   <?php endif; ?>        
                 </div>   
                  
                 <div class="col-md-3"> 
                     <?php if (isset($menuClaims['view'])): ?>
-                            <button class ="btn btn-default"><?=$menuClaims['view']?></button>                        
+                            <button class ="btn btn-primary"><?=$menuClaims['view']?></button>                        
                     <?php endif; ?>                    
                 </div>             
                 <div class="col-md-3"> 
                     <?php if (isset($menuClaims['export'])): ?>
-                        	<button class ="btn btn-default"><?=$menuClaims['export']?></button>                        
+                            <button class ="btn btn-danger"><?=$menuClaims['export']?></button>                        
                     <?php endif; ?>               
-                </div>                              
+                </div>   
+               <div class="col-md-3"> 
+                    <?php if (isset($menuClaims['print'])): ?>
+                            <button class ="btn btn-warning"><?=$menuClaims['print']?></button>                        
+                    <?php endif; ?>               
+                </div> 
            </div>
            
            <div class="row panel-body">
            		<div class="col-md-3">
                     <?php if (isset($menuClaims['create'])): ?>
-                            <button class ="btn btn-default"> <?=$menuClaims['create']?></button>                        
+                            <button class ="btn btn-success"> <?=$menuClaims['create']?></button>                        
                     <?php endif; ?>
                 </div> 
                 <div class="col-md-3">                    
