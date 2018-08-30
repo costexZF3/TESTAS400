@@ -41,21 +41,19 @@ return [
             
         ],
     ],
-     // The 'access_filter' key is used by the User module to restrict or permit
+    // The 'access_filter' key is used by the User module to restrict or permit
     // access to certain controller actions for unauthorized visitors.
-    'access_filter' => [
-        'options' => [
-            'mode' =>'restrictive'  
-        ],
+    'access_filter' => [      
         'controllers' => [
         Controller\ClaimsController::class => [
                 //Allowing routes access depending on the type of permission assigned to loggin user
                 // Give access to "index" actions to everyone with +menu.purchasing                  
-                ['actions' => ['index'],              'allow' => '+menu.purchasing'],                
-                ['actions' => ['watch'],              'allow' => '+module.watch.document'],
-//              ['actions' => ['export','print',],    'allow' => '+purchasing.regular.level'],
-//              ['actions' => ['create', 'update', ], 'allow' => '+purchasing.high.level'],
-//              ['actions' => ['delete', ],           'allow' => '+purchasing.power.level'],
+                ['actions' => ['index'],               'allow' => '+menu.purchasing'], 
+            
+                ['actions' => ['watch'],               'allow' => '+module.watch.document'],
+                ['actions' => ['export','print',],     'allow' => '+purchasing.regular.level'],
+                ['actions' => ['create', 'update', ],  'allow' => '+purchasing.high.level'],
+                 ['actions' => ['delete', ],           'allow' => '+purchasing.power.level'],
             ], //END: access_filter for ClaimsController          
         ]
     ],

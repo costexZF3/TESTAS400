@@ -11,12 +11,12 @@ $this->pageBreadcrumbs()->setItems([
 
 $form->get('email')->setAttributes([
     'class'=>'form-control', 
-    'placeholder'=>'name@example.com'
+    'placeholder'=>'mojeda@costex.com'
     ]);
 
 $form->get('full_name')->setAttributes([
     'class'=>'form-control', 
-    'placeholder'=>'John Doe'
+    'placeholder'=>'Mitchel Ojeda'
     ]);
 
 $form->get('status')->setAttributes([
@@ -24,7 +24,8 @@ $form->get('status')->setAttributes([
     ]);
 
 $form->get('roles')->setAttributes([
-    'class'=>'form-control'
+    'class'=>'form-control',
+    'lines'=> 6,
     ]);
 
 $form->get('submit')

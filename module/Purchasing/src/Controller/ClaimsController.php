@@ -23,6 +23,16 @@ class ClaimsController extends AbstractActionController
        $this->entityManager = $entityManager;
    }   
    
+   //getting the logged user 
+   private function getUser(){
+       $user = $this->currentUser();       
+       //validating the user
+       if ($user==null) {
+           $this->getResponse()->setStatusCode(404);
+           return;
+       } 
+       return $user;
+   }//End: getUser()
    
    /** -$permission : it has the name of the permission will be test to the user
     *  -$user: The user loggin (testing against the $permission)
@@ -34,64 +44,35 @@ class ClaimsController extends AbstractActionController
        $result = $menuList;
        if ($this->access($permission, ['user'=> $user])) {
            $result = array_merge($menuList, $newItem);
-       }   
-       
+       } 
        return $result;
    }//End: createMenu 
    
-   private function getUser(){
-       $user = $this->currentUser();
-       
-       //validating the user
-       if ($user==null) {
-           $this->getResponse()->setStatusCode(404);
-           return;
-       } 
-       return $user;
-   }//End: getUser()
    
-   
+   private function testPermission( string $permission){
+       $user = self::getUser();       
+        //------ inherited --------     
+       $accessT = $this->access( $permission, ['user'=> $user]);
+      return $accessT;
+   }
+             
    /**
     *  The IndexAction show the main Menu about all concerning to the Purchasing Menus
     */
-   public function indexAction(){
-              
-        //getting the loggin user object
+   public function indexAction(){              
+       //getting the loggin user object
        $user = self::getUser();
-               
         /** 
          * the Menu could be loading automaticaly with the following format
          * [menu][permissionassociate]            
         **/
-        
         // ---- Entry Level checking permissions ------
         $newItem = ['watch'=> 'Watch Reports',
                     'view' => 'View Profile'
         ];
         $menuList = self::createMenu('module.watch.document', $user, [], $newItem );
-        
-        //$accessT = $this->access('purchasing.entry.level', ['user'=> $user]);      
-        
-        //$accessT = $this->access('role.manage', ['user'=> $user]);
-        //$accessT = $this->access('user.manage', ['user'=> $user]);
-        //$accessT = $this->access('permission.manage', ['user'=> $user]);
-       
-        //------ inherited --------
-       //$accessT = $this->access('profile.any.view', ['user'=> $user]);
-       // $accessT = $this->access('profile.own.view', ['user'=> $user]);
-       // $accessT = $this->access('menu.purchasing', ['user'=> $user]);
-       //$accessT = $this->access('module.watch.document', ['user'=> $user]);
-       //$accessT = $this->access('menu.purchasing', ['user'=> $user]); 
-        $permission = 'module.export.document';
-       $accessT = $this->access($permission, ['user'=> $user]); 
-    
-       var_dump($permission); echo'<br>';
-      
-        var_dump($accessT); echo'<br>'; 
-        var_dump($user->getFullName()); exit;
-        
-        
-        // ---- Regular Level checking permissions ----
+            
+//        // ---- Regular Level checking permissions ----
         $newItem = ['export'=>'Export to Excel',
                     'print' =>'Print Document' 
         ];
@@ -106,8 +87,7 @@ class ClaimsController extends AbstractActionController
         //---- High level checking permissions
         $newItem = ['delete'=>'Delete Project', ];
         $menuList = self::createMenu('module.delete.document', $user, $menuList, $newItem );
-        //var_dump( $menuList );exit;
-        
+               
         /**------------- Creating the ViewModel will be rendered on the view Index.phtml -----------------
          *      return to the View the params needed for rendering on the index.phtml
          *      -$menuList : List of Menu Items will be show on the menu 
@@ -122,9 +102,8 @@ class ClaimsController extends AbstractActionController
     
     //watch route 
     public function watchAction(){
-        $flashText = 'Welcome to Watch Route';
-        
-        $user = self::getUser();        
+        $flashText = 'Welcome to Watch Route';        
+        $user = self::getUser();       
         
         // Add a flash message.
         $this->flashMessenger()->addSuccessMessage( $flashText );

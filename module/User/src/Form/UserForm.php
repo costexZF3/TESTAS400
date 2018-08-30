@@ -140,8 +140,7 @@ class UserForm extends Form
                 'value' => 'Create'
             ],
         ]);
-    }
-    
+    }    
     /**
      * This method creates input filter (used for form filtering/validation).
      */
@@ -189,6 +188,7 @@ class UserForm extends Form
                 'required' => true,
                 'filters'  => [                    
                     ['name' => 'StringTrim'],
+                    ['name' => 'StripTags'],
                 ],                
                 'validators' => [
                     [

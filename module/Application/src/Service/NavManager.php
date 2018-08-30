@@ -53,14 +53,21 @@ class NavManager
         //load the options associate to the user with the $menuPermission 
         //doit....
         
-        $options= []; //init $optionss       
+        $options= []; //init $optionss 
+        //------- checking permission Acces: +menu.purchasing ----------
         if ($this->rbacManager->isGranted(null, $menuPermission)) {
-            $options[] = [  
-                         'id' => 'claims',
-                         'label' => 'Claims',
-                         'link' => $url('claims',['action'=>'index'])
-                     ];
-              
+            
+            //the option will be render if user has permission associated to the 
+            // claims (action),  
+            if ($this->rbacManager->isGranted(null, 'option.purchasing.claims')) {
+                $options[] = [  
+                             'id' => 'claims',
+                             'label' => 'Claims',
+                             'link' => $url('claims',['action'=>'index'])
+                         ];
+            }//adding dynamically 
+            
+            
             /* Menu Product Developments */
             $options[] = [
                         'id' => 'productDevelopment',
@@ -165,13 +172,8 @@ class NavManager
     /**
      * This method returns menu items depending on whether user has logged in or not.
      */
-    public function getMenuItems() 
-    {
-        $url = $this->urlHelper;
-        //This variable ARRAY $items[] will contain all menu items that will be shown ******
-        $items = [];
-        
-        /*
+    
+     /*
          *  
          *  Menu: Home will be shown always, so you don't need to verify access
          *  indexs:
@@ -180,6 +182,12 @@ class NavManager
          *      - link : It identifies the route when the user click it on.
         */
         
+    public function getMenuItems() 
+    {
+        $url = $this->urlHelper;
+        //This variable ARRAY $items[] will contain all menu items that will be shown ******
+        $items = [];
+               
         //Home Menu
         $items[] = [
             'id' => 'home',
@@ -197,8 +205,7 @@ class NavManager
                 'link'  => $url('login'),
                 'float' => 'right'
             ];
-        } else {
-            
+        } else {            
             /**
              * CREATE DYNAMIC MENUS WITH THE OPTIONS GIVEN OR ASSIGNED EACH MENU 
              * Management, Marketing, MIS, Purchasing, Quality Control, Manufacturing, Sales Shipping
@@ -217,18 +224,15 @@ class NavManager
                     'label' => 'Puchasing',
                     'dropdown' => $purchasingMenuOptions
                 ];
-            }  
+            } 
             
-             /*
-             ****************************************************************************
-             *  Determine WHAT items(OPTIONS) must be displayed in Admin dropDownList   *
-             * **************************************************************************
+             /*             
+             *  Determine WHAT items(OPTIONS) must be displayed in Admin dropDownList   
              */            
             
             // ARRAY WITH ITEMS FOR ADMIN USERS
             $adminMenuOptions = [];
-            $has =  $this->rbacManager->isGranted(null, 'user.manage');
-            var_dump($has);
+            
             if ($this->rbacManager->isGranted(null, 'user.manage')) {                
                 $adminMenuOptions[] = [
                             'id' => 'users',
@@ -259,8 +263,7 @@ class NavManager
                     'label' => 'Admin',
                     'dropdown' => $adminMenuOptions
                 ];
-            }
-            
+            }            
             /*
              *  ABOUT MENU: it would be the lastest menu
              *  It does not need nothing special and neither checks if the user has permissions
@@ -271,9 +274,6 @@ class NavManager
             'link'  => $url('about')
             ];
             
-            /*
-             * 
-             */
             $items[] = [
                 'id' => 'logout',
                 'label' => $this->authService->getIdentity(),

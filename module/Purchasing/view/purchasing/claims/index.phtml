@@ -12,7 +12,7 @@
     $menuClaims = $this->menuClaims; //getting the form's instance sent by the ViewModel create inside contactusAction method in the indexController
     $user = $this->user;
 ?>
-
+<!-- HTML RENDER-->
 <html>
    <head>
    </head>
@@ -23,9 +23,9 @@
            <div class="row panel-body">                
                 <div class="col-md-3">                    
                   <?php if (isset($menuClaims['watch'])): ?>
-                  		<a href ="<?=$this->url('watch')?>"> 		
-                       		<label class ="btn btn-info"><?=$menuClaims['watch']?> </label>
-                  		</a>
+                            <a href ="<?=$this->url('watch')?>"> 		
+                            <label class ="btn btn-info"><?=$menuClaims['watch']?> </label>
+                            </a>
                   <?php endif; ?>        
                 </div>   
                  
@@ -42,20 +42,20 @@
                <div class="col-md-3"> 
                     <?php if (isset($menuClaims['print'])): ?>
                             <button class ="btn btn-warning"><?=$menuClaims['print']?></button>                        
-                    <?php endif; ?>               
+                    <?php endif; ?> 
                 </div> 
            </div>
            
            <div class="row panel-body">
-           		<div class="col-md-3">
+                <div class="col-md-3">
                     <?php if (isset($menuClaims['create'])): ?>
-                            <button class ="btn btn-success"> <?=$menuClaims['create']?></button>                        
+                        <button class ="btn btn-success"> <?=$menuClaims['create']?></button>                        
                     <?php endif; ?>
                 </div> 
                 <div class="col-md-3">                    
-                	<?php if (isset($menuClaims['update'])): ?>
-                    	   <button class ="btn btn-default"><?=$menuClaims['update']?></button>                	   
-                	<?php endif;?>                   	                                      
+                    <?php if (isset($menuClaims['update'])): ?>
+                       <button class ="btn btn-default"><?=$menuClaims['update']?></button>                	   
+                    <?php endif;?>                   	                                      
                 </div> 
             
                 <div class="col-md-3">

@@ -19,9 +19,11 @@ class NavManagerFactory
         $authService = $container->get(\Zend\Authentication\AuthenticationService::class);
         
         $viewHelperManager = $container->get('ViewHelperManager');
-        $urlHelper = $viewHelperManager->get('url');
+        $urlHelper = $viewHelperManager->get('url');        
         $rbacManager = $container->get(RbacManager::class);
+        //added kris to inject entityManager to NavManager 
+        $entityManager = $container->get('doctrine.entitymanager.orm_default');
         
-        return new NavManager($authService, $urlHelper, $rbacManager);
+        return new NavManager($authService, $urlHelper, $rbacManager, $entityManager);
     }
 }

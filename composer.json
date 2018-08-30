@@ -30,7 +30,8 @@
         "zendframework/zend-cache": "^2.7",
         "zendframework/zend-serializer": "^2.8",
         "zendframework/zend-permissions-rbac": "^2.5",
-        "zendframework/zend-db": "^2.9"
+        "zendframework/zend-db": "^2.9",
+        "zendframework/zend-json": "^3.1"
     },
     "autoload": {
         "psr-4": {
