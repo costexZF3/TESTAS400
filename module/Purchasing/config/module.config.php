@@ -47,8 +47,9 @@ return [
         'controllers' => [
         Controller\ClaimsController::class => [
                 //Allowing routes access depending on the type of permission assigned to loggin user
-                // Give access to "index" actions to everyone with +menu.purchasing                  
-                ['actions' => ['index'],               'allow' => '+menu.purchasing'], 
+                // Give access to "index" actions to everyone with +menu.purchasing  
+                //+option.purchasing.claim//
+                ['actions' => ['index'],               'allow' => '+purchasing.entry.level'], 
             
                 ['actions' => ['watch'],               'allow' => '+module.watch.document'],
                 ['actions' => ['export','print',],     'allow' => '+purchasing.regular.level'],

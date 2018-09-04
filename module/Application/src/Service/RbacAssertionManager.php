@@ -40,7 +40,7 @@ class RbacAssertionManager
      * -This Dynamic Assertions ensure that the user loggin only can only modify her/his data and her/his 
      * -has assigned the : profile.own.view permission 
      */
-    public function assert(Rbac $rbac, $permission, $params)
+    public function assert( Rbac $rbac, $permission, $params ) 
     {
         $currentUser = $this->entityManager->getRepository(User::class)
                 ->findOneByEmail($this->authService->getIdentity());        
