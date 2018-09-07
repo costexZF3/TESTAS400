@@ -195,20 +195,22 @@ class UserManager
         $user->setPasswordResetToken($token);
         
         $currentDate = date('Y-m-d H:i:s');
-        $user->setPasswordResetTokenCreationDate($currentDate);  
+        $user->setPasswordResetTokenCreationDate( $currentDate );  
         
         $this->entityManager->flush();
         
         $subject = 'Password Reset';
             
-        $httpHost = isset($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:'localhost';
-        $passwordResetUrl = 'http://' . $httpHost . '/set-password?token=' . $token;
+        //$httpHost = isset($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:'localhost';
+        $httpHost = ($_SERVER['HTTP_HOST'])??$_SERVER['HTTP_HOST']??'localhost';
+        $passwordResetUrl = 'http://'.$httpHost.'/ctpsystem/public/users/set-password?token=' . $token;
+        var_dump($passwordResetUrl); exit;
         
         $body = 'Please follow the link below to reset your password:\n';
         $body .= "$passwordResetUrl\n";
         $body .= "If you haven't asked to reset your password, please ignore this message.\n";
         
-        // Send email to user.
+        // Send email to user
         mail($user->getEmail(), $subject, $body);
     }
     
@@ -217,19 +219,24 @@ class UserManager
      */
     public function validatePasswordResetToken($passwordResetToken)
     {
+        var_dump($passwordResetToken);
         $user = $this->entityManager->getRepository(User::class)
                 ->findOneByPasswordResetToken($passwordResetToken);
         
         if($user==null) {
             return false;
         }
-        
+        //getting Date and Time when the Token was created 
         $tokenCreationDate = $user->getPasswordResetTokenCreationDate();
         $tokenCreationDate = strtotime($tokenCreationDate);
         
+        
         $currentDate = strtotime('now');
         
-        if ($currentDate - $tokenCreationDate > 12*60*60) {
+        var_dump($currentDate);
+        var_dump($currentDate - $tokenCreationDate);exit;
+        $timeExpired =  12*60*60; // 
+        if ($currentDate - $tokenCreationDate > ) {
             return false; // expired
         }
         
