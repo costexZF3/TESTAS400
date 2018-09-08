@@ -5,6 +5,7 @@ use Interop\Container\ContainerInterface;
 use User\Service\UserManager;
 use User\Service\RoleManager;
 use User\Service\PermissionManager;
+use Zend\Config\Config as ConfigObject;
 
 /**
  * This is the factory class for UserManager service. The purpose of the factory
@@ -19,8 +20,20 @@ class UserManagerFactory
         $permissionManager = $container->get(PermissionManager::class);
         
         $viewRenderer = $container->get('ViewRenderer');
-        $config = $container->get('Config');
+        $config = ['smtp' =>
+                   [
+                        'name' => 'mail.costex.com',
+                        'host' => '172.0.0.12',                   
+                        'connection_config' => [
+                                 'username' => 'misonline@costex.com', 
+                                 'password' => 'sys61001', 
+                                     'port' => 25],
+                   ],
+        ];
+                    
         
-        return new UserManager($entityManager, $roleManager, $permissionManager, $viewRenderer, $config);    
+        $smtpMail = $config['smtp'];
+        
+        return new UserManager($entityManager, $roleManager, $permissionManager, $viewRenderer, $smtpMail);    
     }
 }
