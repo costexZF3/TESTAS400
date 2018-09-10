@@ -9,7 +9,7 @@ use Zend\InputFilter\InputFilter;
  * This form is used when changing user's password (to collect user's old password 
  * and new password) or when resetting user's password (when user forgot his password).
  */
-class PasswordChangeForm extends Form
+class PasswordChangeForm extends Form 
 {   
     // There can be two scenarios - 'change' or 'reset'.
     private $scenario;
