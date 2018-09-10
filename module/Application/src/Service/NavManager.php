@@ -239,7 +239,7 @@ class NavManager
                             'label' => 'Manage Users',
                             'link' => $url('users')
                         ];
-            }
+            }            
             
             if ($this->rbacManager->isGranted(null, 'permission.manage')) {
                 $adminMenuOptions[] = [

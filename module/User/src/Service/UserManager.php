@@ -175,14 +175,25 @@ class UserManager
     }
     
     /**
+     * 
+     * @param type $email
+     * @return \User\Entity\User;
+     * return an Instance of an user with email = $email
+     * in other case it return NULL
+     */
+    public function getUser($email){
+        $user = $this->entityManager->getRepository(User::class)
+                ->findOneByEmail($email);
+        return ($user!==null)?$user:null;
+    }
+    
+    /**
      * Checks whether an active user with given email address already exists in the database.     
      */
     public function checkUserExists($email) {
+        $user = $this->getUser($email);
+        return $user !== null; 
         
-        $user = $this->entityManager->getRepository(User::class)
-                ->findOneByEmail($email);
-        
-        return $user !== null;
     }
     
       
@@ -205,7 +216,9 @@ class UserManager
         $tokenHash = $bcrypt->create($token);  
         
         // Save token to DB
-        $user->setPasswordResetToken($token);
+        //So far, I'll be using $token, insted $tokenHash due to the token field size is only 32 bytes so
+        // I need to increment it to 128 bytes at least.
+        $user->setPasswordResetToken($tokenHash); 
         
         // Save token creation date to DB.
         $currentDate = date('Y-m-d H:i:s');
@@ -218,8 +231,9 @@ class UserManager
         // Send an email to user.
         $subject = 'Password Reset';
             
-        $httpHost = isset($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:'localhost';
-        $passwordResetUrl = 'http://' . $httpHost . '/ctpsystem/public/users/set-password?token=' . $token . "&email=" . $user->getEmail();
+        //$httpHost = isset($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:'localhost';
+        $httpHost = ($_SERVER['HTTP_HOST'])??$_SERVER['HTTP_HOST']??'localhost';
+        $passwordResetUrl = 'http://' .$httpHost. '/ctpsystem/public/users/set-password?token=' . $token . "&email=" . $user->getEmail();
         
         // Produce HTML of password reset email
         $bodyHtml = $this->viewRenderer->render(
@@ -269,9 +283,9 @@ class UserManager
     public function validatePasswordResetToken($email, $passwordResetToken)
     {
         // Find user by email.
-        $user = $this->entityManager->getRepository(User::class)
-                ->findOneByEmail($email);
-        
+               
+        $user = $this->getUser($email);
+              
         if($user==null || $user->getStatus() != User::STATUS_ACTIVE) {
             return false;
         }
@@ -279,24 +293,23 @@ class UserManager
         // Check that token hash matches the token hash in our DB.
         $bcrypt = new Bcrypt();
         $tokenHash = $user->getPasswordResetToken();
-                
-        //if (!$bcrypt->verify($passwordResetToken, $tokenHash)) {
-        if ($passwordResetToken!= $tokenHash) {
+        
+        if (!$bcrypt->verify($passwordResetToken, $tokenHash)) {        
             return false; // mismatch
         }
         
         // Check that token was created not too long ago.
-        $tokenCreationDate = strtotime($user->getPasswordResetTokenCreationDate());
+        $tokenCreationDate = $user->getPasswordResetTokenCreationDate();
         $tokenCreationDate = strtotime($tokenCreationDate);
         
         $currentDate = strtotime('now');
-        
+              
         if ($currentDate - $tokenCreationDate > 24*60*60) {
             return false; // expired
         }
         
         return true;
-    }
+    } //END: METHOD - validatePasswordResetToken
     
     /**
      * This method sets new password by password reset token.
@@ -308,14 +321,13 @@ class UserManager
         }
         
         // Find user with the given email.
-        $user = $this->entityManager->getRepository(User::class)
-                ->findOneByEmail($email);
+        $user = $this->getUser($email);
         
         if ($user==null || $user->getStatus() != User::STATUS_ACTIVE) {
             return false;
         }
                 
-        // Set new password for user        
+        // Set new password for user ENCRYPTED        
         $bcrypt = new Bcrypt();
         $passwordHash = $bcrypt->create($newPassword);        
         $user->setPassword($passwordHash);
@@ -324,9 +336,12 @@ class UserManager
         $user->setPasswordResetToken(null);
         $user->setPasswordResetTokenCreationDate(null);
         
+        //updating  The fields on DB
+        // - PasswordResetToken, PasswordResetTokenCreationDate 
+        // ( it's used to check the time used for changing password
         $this->entityManager->flush();
         
-        return true;
+        return true; 
     }
     
     /**
@@ -336,8 +351,10 @@ class UserManager
     public function changePassword($user, $data)
     {
         $oldPassword = $data['old_password'];
-        
+        // Check if the user wants to change password has (+user.manage) permission)
+        // If he/she has the permission, then no check the oldPassword 
         // Check that old password is correct
+        //if (!$this->permissionManager()->)
         if (!$this->validatePassword($user, $oldPassword)) {
             return false;
         }                
