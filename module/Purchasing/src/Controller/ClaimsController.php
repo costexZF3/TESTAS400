@@ -33,29 +33,38 @@ class ClaimsController extends AbstractActionController
        } 
        return $user;
    }//End: getUser()
-   
-   /** -$permission : it has the name of the permission will be test to the user
-    *  -$user: The user loggin (testing against the $permission)
-    *  -$menuList: List of Items will be shown as Menu 
-    *  -$newItem : It's the menu item might be added depending on the $user has the $permission
-    */ 
-   private function createMenu($permission, $user, $menuList, $newItem )
-   {   //    
-       $result = $menuList;
-       if ($this->access($permission, ['user'=> $user]))
-           array_merge($menuList, $newItem);
-          
-       return $result;
-   }//End: createMenu 
-   
-   
+      
    private function testPermission( string $permission){
        $user = self::getUser();       
         //------ inherited --------     
        $accessT = $this->access( $permission, ['user'=> $user]);
-       echo $permission. '---'.$accessT;
-      return $accessT;
+       return $accessT;
    }
+   
+   /** 
+    * -$permission : it has the name of the permission will be test to the user     
+    *  -$menuList: List of Items will be shown as Menu 
+    *  -$newItem : It's the menu item might be added depending on the $user has the $permission
+    */ 
+   protected function createMenu($permission, $menuList, $newItem )
+   {   // 
+       $user = self::getUser(); 
+       //init $rest with $menuList  
+       $res = $menuList;
+                  
+       if (self::testPermission($permission)) {      
+           $res = array_merge($menuList, $newItem);  
+           
+           //echo "$permission : true". "<br>";
+       }
+       else{
+          //echo "$permission : false <br>";            
+       }       
+       //var_dump($res); echo "<br>";
+       return $res;
+   }//End: createMenu 
+   
+   
              
    /**
     *  The IndexAction show the main Menu about all concerning to the Purchasing Menus
@@ -71,33 +80,33 @@ class ClaimsController extends AbstractActionController
         $newItem = ['watch'=> 'Watch Reports',
                     'view' => 'View Profile'
         ];
-        $menuList = self::createMenu('module.watch.document', $user, [], $newItem );
+        $menuList = self::createMenu('module.watch.document', [], $newItem );
             
        // ---- Regular Level checking permissions ----
         $newItem = ['export'=>'Export to Excel',
                     'print' =>'Print Document' 
         ];
         
-        $menuList = self::createMenu('module.export.document', $user, $menuList, $newItem );
+        $menuList = self::createMenu('module.export.document',  $menuList, $newItem );
         
         //---- High level checking permissions
         $newItem = ['create'=>'Create Projects',
                     'update' =>'Update Documents'
         ];
-        $menuList = self::createMenu('module.create.document', $user, $menuList, $newItem );
+        $menuList = self::createMenu('module.create.document', $menuList, $newItem );
         
         //---- High level checking permissions
         $newItem = ['delete'=>'Delete Project', ];
-        $menuList = self::createMenu('module.delete.document', $user, $menuList, $newItem );
-               
+        $menuList = self::createMenu('module.delete.document',  $menuList, $newItem );
+        
+        //var_dump($menuList); exit;    
+        
         /**------------- Creating the ViewModel will be rendered on the view Index.phtml -----------------
          *      return to the View the params needed for rendering on the index.phtml
          *      -$menuList : List of Menu Items will be show on the menu 
          *      - $user : User that has been logged in
          */ 
-        
-             
-        var_dump($menuList);  exit();
+       
         return new ViewModel([
                 'menuClaims'=> $menuList,
                 'user' => $user,            
