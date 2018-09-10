@@ -48,13 +48,18 @@ return [
         Controller\ClaimsController::class => [
                 //Allowing routes access depending on the type of permission assigned to loggin user
                 // Give access to "index" actions to everyone with +menu.purchasing  
-                //+option.purchasing.claim//
-                ['actions' => ['index'],               'allow' => '+purchasing.entry.level'], 
+                //+option.purchasing.claims 
+                
+                //Actions reponse to Roles associated to MENUS 
+                ['actions' => ['index'],               'allow' => '*'],  //every body logged in can access
+                ['actions' => ['claims'],              'allow' => '+option.purchasing.claims'], 
             
-                ['actions' => ['watch'],               'allow' => '+module.watch.document'],
+                //Actions response to Roles associated to OPERATION
+                // an user with Entry Level will be permissions to 
+                ['actions' => ['watch'],               'allow' => '+purchasing.entry.level'],
                 ['actions' => ['export','print',],     'allow' => '+purchasing.regular.level'],
                 ['actions' => ['create', 'update', ],  'allow' => '+purchasing.high.level'],
-                 ['actions' => ['delete', ],           'allow' => '+purchasing.power.level'],
+                ['actions' => ['delete', ],           'allow' => '+purchasing.power.level'],
             ], //END: access_filter for ClaimsController          
         ]
     ],

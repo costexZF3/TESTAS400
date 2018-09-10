@@ -40,11 +40,11 @@ class ClaimsController extends AbstractActionController
     *  -$newItem : It's the menu item might be added depending on the $user has the $permission
     */ 
    private function createMenu($permission, $user, $menuList, $newItem )
-   {
+   {   //    
        $result = $menuList;
-       if ($this->access($permission, ['user'=> $user])) {
-           $result = array_merge($menuList, $newItem);
-       } 
+       if ($this->access($permission, ['user'=> $user]))
+           array_merge($menuList, $newItem);
+          
        return $result;
    }//End: createMenu 
    
@@ -53,6 +53,7 @@ class ClaimsController extends AbstractActionController
        $user = self::getUser();       
         //------ inherited --------     
        $accessT = $this->access( $permission, ['user'=> $user]);
+       echo $permission. '---'.$accessT;
       return $accessT;
    }
              
@@ -72,10 +73,11 @@ class ClaimsController extends AbstractActionController
         ];
         $menuList = self::createMenu('module.watch.document', $user, [], $newItem );
             
-//        // ---- Regular Level checking permissions ----
+       // ---- Regular Level checking permissions ----
         $newItem = ['export'=>'Export to Excel',
                     'print' =>'Print Document' 
         ];
+        
         $menuList = self::createMenu('module.export.document', $user, $menuList, $newItem );
         
         //---- High level checking permissions
@@ -94,6 +96,8 @@ class ClaimsController extends AbstractActionController
          *      - $user : User that has been logged in
          */ 
         
+             
+        var_dump($menuList);  exit();
         return new ViewModel([
                 'menuClaims'=> $menuList,
                 'user' => $user,            

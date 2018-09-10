@@ -227,9 +227,14 @@
                 return;
             }
 
+            // checking access to +user.manage permission for the user logged in   
+            $isUserManager = $this->access('user.manage');
+            
+            $passwordChangeOrReset = ($this->access('user.manage'))?"reset":"change";
             // Create "change password" form
-            $form = new PasswordChangeForm('change');
-
+            $form = new PasswordChangeForm($passwordChangeOrReset);
+           
+            
             // Check if user has submitted the form
             if ($this->getRequest()->isPost()) {
 
@@ -243,9 +248,9 @@
 
                     // Get filtered and validated data
                     $data = $form->getData();
-
+                    
                     // Try to change password.
-                    if (!$this->userManager->changePassword($user, $data)) {
+                    if (!$this->userManager->changePassword($user, $data, $passwordChangeOrReset)) {
                         $this->flashMessenger()->addErrorMessage(
                                 'Sorry, the old password is incorrect. Could not set the new password.');
                     } else {
@@ -258,10 +263,12 @@
                             ['action'=>'view', 'id'=>$user->getId()]);                
                 }               
             } 
-
+            
+            echo $passwordChangeOrReset;
             return new ViewModel([
                 'user' => $user,
-                'form' => $form
+                'form' => $form,
+     'showOldPassword' => $passwordChangeOrReset,
             ]);
         }
 

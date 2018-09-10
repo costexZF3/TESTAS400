@@ -192,8 +192,7 @@ class UserManager
      */
     public function checkUserExists($email) {
         $user = $this->getUser($email);
-        return $user !== null; 
-        
+        return $user !== null;         
     }
     
       
@@ -347,17 +346,17 @@ class UserManager
     /**
      * This method is used to change the password for the given user. To change the password,
      * one must know the old password.
+     * $isUserManager :"
      */
-    public function changePassword($user, $data)
+    public function changePassword($user, $data, $isUserManager  )
     {
         $oldPassword = $data['old_password'];
-        // Check if the user wants to change password has (+user.manage) permission)
-        // If he/she has the permission, then no check the oldPassword 
-        // Check that old password is correct
-        //if (!$this->permissionManager()->)
-        if (!$this->validatePassword($user, $oldPassword)) {
-            return false;
-        }                
+        //checking oldPassword If the Logged in User has not +user.manage 
+        if ($isUserManager!="reset") {                          
+            if (!$this->validatePassword($user, $oldPassword)) {
+                    return false;
+                }                
+        }
         
         $newPassword = $data['new_password'];
         
