@@ -10,6 +10,11 @@ body {
     color: #68b604;
 }
 
+.ctp-footer {
+    height: 200;
+    padding: 20;  
+}
+
 .ctp-red {
 	color: #C70039;
 }
