@@ -264,11 +264,10 @@
                 }               
             } 
             
-            echo $passwordChangeOrReset;
             return new ViewModel([
                 'user' => $user,
                 'form' => $form,
-     'showOldPassword' => $passwordChangeOrReset,
+     'showoldpassword' => $passwordChangeOrReset,
             ]);
         }
 
