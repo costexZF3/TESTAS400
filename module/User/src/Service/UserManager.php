@@ -211,7 +211,7 @@ class UserManager
         $currentDate = date('Y-m-d H:i:s');
         $user->setPasswordResetTokenCreationDate($currentDate);  
         
-        // Apply changes to DB.
+        // Apply changes to DB. (updating the new Token)
         $this->entityManager->flush();       
         
         
@@ -241,6 +241,7 @@ class UserManager
         $mail->addTo($user->getEmail(), $user->getFullName());
         $mail->setSubject($subject);
         
+        //Setup SMTP transport layer 
         $transport = new SmtpTransport();       
         $options   = new SmtpOptions($this->config);
         $transport->setOptions($options);
