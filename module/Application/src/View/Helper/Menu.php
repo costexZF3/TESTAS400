@@ -100,11 +100,10 @@ class Menu extends AbstractHelper
      * @return string HTML code of the item.
      */
     protected function renderItem($item) 
-    {
-        //$id = isset($item['id']) ? $item['id'] : '';
-        $id = $item['id']?? $item['id'] ?? '';
+    {        
+        $id = $item['id']?? '';
         $isActive = ($id==$this->activeItemId);
-        $label = $item['label'] ?? $item['label'] ?? '';
+        $label = $item['label'] ?? '';
              
         $result = ''; 
      
