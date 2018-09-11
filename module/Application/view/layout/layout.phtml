@@ -33,8 +33,7 @@
     </head>
     
     <body>
-        <body>
-        <!-- Page header -->        
+       <!-- ************************************** PAGE HEADER BANNER *************************************-->        
         <div class="container-fluid" style="background-image: url(<?=$bannerPath?>)">            
             <!-- Page header -->
             <div class="container">
@@ -79,9 +78,11 @@
         </div>    
         <hr>
         
-        <div class="container">            
+        <div class="container ">            
                 <div class="row">
-                    <div class="col-md-offset-4">
+                    <div class="col-md-offset-4"> 
+                    </div>
+                    <div class="col-md-offset-8">
                     </div>    
                     <div clas="">
                         <a class= "label label-info" href="<?= $this->url('home')?>"> Home Page</a>
@@ -90,17 +91,16 @@
                     </div>
                     <p>
                         <b>New CTP-System ver:</b> (<?= \Application\Module::VERSION?>).                
-                    &copy; 2005 - <?= date('Y') ?> MIS - Costex Tractor Parts Technologies Ltd. Costex All Rights Reserved.
+                    &copy; 1980 - <?= date('Y') ?> MIS - Costex Tractor Parts Technologies Ltd. Costex All Rights Reserved.
                     </p> 
                 </div>
         </div>
         <hr>
-        <div class="container-fluid  jumbotron text ">              
+        <div class="container-fluid  jumbotron text">              
             <footer class="container text text-nowrap text-center">
                 <p> Costex Tractor Parts. All rights reserved.</p>
             </footer>
-        </div>
-    
+        </div>    
         <?= $this->inlineScript() ?>
     </body>
 </html>
