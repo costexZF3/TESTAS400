@@ -31,6 +31,7 @@
             <div class="panel-heading"> <span class="">SIGN IN</span></div>            
             <div class="panel-body ">
                 <form class="form-signin" method="post">            
+                    <!-- checking if there was some error while -->
                     <?php if ($isLoginError): ?>
                         <div class="alert alert-warning" role="alert">
                             Incorrect login and/or password. 
@@ -38,11 +39,11 @@
                         </div>
                     <?php endif; ?>
                     <div class="input-group">
-                        <span class="input-group-addon label-info"><i class="glyphicon glyphicon-user"></i></span>                        
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>                        
                         <?= $this->formElement($form->get('email')); ?>
                     </div>
                     <div class="input-group">
-                        <span class="input-group-addon label-info"><i class="glyphicon glyphicon-lock"></i></span>                        
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>                        
                         <?= $this->formElement($form->get('password')); ?>
                     </div>    
                     <div class="checkbox">
@@ -52,9 +53,9 @@
                     </div>
                     <?= $this->formElement($form->get('redirect_url')); ?>
                     <?= $this->formElement($form->get('csrf')) ?>
-                    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                    <button class="btn btn-lg btn-info btn-block btn-sm" type="submit">Sign in</button>
                 </form>
             </div>
-        </div>
+        </div> <!-- panel primary -->
     </div>
 </div>
