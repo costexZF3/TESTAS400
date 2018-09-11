@@ -101,9 +101,10 @@ class Menu extends AbstractHelper
      */
     protected function renderItem($item) 
     {
-        $id = isset($item['id']) ? $item['id'] : '';
+        //$id = isset($item['id']) ? $item['id'] : '';
+        $id = $item['id']?? $item['id'] ?? '';
         $isActive = ($id==$this->activeItemId);
-        $label = isset($item['label']) ? $item['label'] : '';
+        $label = $item['label'] ?? $item['label'] ?? '';
              
         $result = ''; 
      
