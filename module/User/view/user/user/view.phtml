@@ -24,42 +24,45 @@
                 <!-- P TAG: THERE ARE TWO BUTTONS -->
                 <p>
                     <!-- BUTTON EDIT -->    
-                    <a class="btn btn-info btn-sm" href="<?= $this->url('users', 
+                    <a class="btn btn-info" href="<?= $this->url('users', 
                             ['action'=>'edit', 'id'=>$user->getId()]); ?>">
                         <span class="glyphicon glyphicon-pencil" ></span> Edit
                     </a>
                     <!-- BUTTON CHANGE PASSWORD -->
-                    <a class="btn btn-warning btn-sm" href="<?= $this->url('users',
+                    <a class="btn btn-warning" href="<?= $this->url('users',
                             ['action'=>'change-password', 'id'=>$user->getId()]); ?>">
                         <span class="glyphicon glyphicon-asterisk"></span> Change Password
                     </a>    
                 </p>
-                <table class="table table-striped table-bordered table-responsive">
-                     <tr>
-                        <th>ID:</th>
-                        <td><?= $this->escapeHtml($user->getId()) ?></th>
-                    </tr>
-                    <tr>
-                        <th>E-mail:</th>
-                        <td><?= $this->escapeHtml($user->getEmail()) ?></th>
-                    </tr>
-                    <tr>
-                        <th>Full Name:</th>
-                        <td><?= $this->escapeHtml($user->getFullName()) ?></th>
-                    </tr>
-                    <tr>
-                        <th>Date Created:</th>
-                        <td><?= $this->escapeHtml($user->getDateCreated()) ?></th>
-                    </tr>
-                    <tr>
-                        <th>Status:</th>
-                        <td><?= $this->escapeHtml($user->getStatusAsString()) ?></th>
-                    </tr>
-                    <tr>
-                        <th>Roles:</th>
-                        <td><?= $this->escapeHtml($user->getRolesAsString()) ?></th>
-                    </tr>
-                </table>
+                <!-- TABLE RESPONSIVE -->
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <tr class="success">
+                            <th>ID:</th>
+                            <td><?= $this->escapeHtml($user->getId()) ?></th>
+                        </tr>
+                        <tr class="">
+                            <th>E-mail:</th>
+                            <td><?= $this->escapeHtml($user->getEmail()) ?></th>
+                        </tr>
+                        <tr class="success">
+                            <th>Full Name:</th>
+                            <td><?= $this->escapeHtml($user->getFullName()) ?></th>
+                        </tr>
+                        <tr class="">
+                            <th>Date Created:</th>
+                            <td><?= $this->escapeHtml($user->getDateCreated()) ?></th>
+                        </tr>
+                        <tr class="success">
+                            <th>Status:</th>
+                            <td><?= $this->escapeHtml($user->getStatusAsString()) ?></th>
+                        </tr>
+                        <tr class="">
+                            <th>Roles:</th>
+                            <td><?= $this->escapeHtml($user->getRolesAsString()) ?></th>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
