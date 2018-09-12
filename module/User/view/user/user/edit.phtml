@@ -44,8 +44,7 @@
             
                 <div class="panel-heading"> EDIT USER <span class="alert">  <?= $this->escapeHtml($user->getEmail()) ?></span></div>            
                 <div class="panel-body">
-                    <div class="ctp-container">
-
+                    
                     <!-- form Render : Edit User -->
                     <?= $this->form()->openTag($form); ?>        
                         <div class="form-group">
@@ -76,7 +75,6 @@
                         <?= $this->formElementErrors($form->get('csrf')); ?>
                         <?= $this->formElement($form->get('submit')); ?>        
                     <?= $this->form()->closeTag(); ?>
-                    </div>
                 </div> <!-- panel-body -->
             
         </div> <!-- panel-primary (definition)  -->
