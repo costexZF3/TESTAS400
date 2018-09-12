@@ -44,11 +44,16 @@ class NavManager
          $this->entityManager = $entityManager;
     }
     
+    
+    
     /**
-     * this function return an array with the items will be shown 
+     * this function return an array with the items of menu
+     * will be shown  
      */
     private function addMenuOptions(string $menuPermission )
     {
+        //getting the Instance of urlHelper which let us create links on our page (on the menus)
+        // using VALID ROUTES definided on the module.config.php file
         $url = $this->urlHelper;
         //load the options associate to the user with the $menuPermission 
         //doit....
@@ -61,126 +66,179 @@ class NavManager
             // claims (action),  
             if ($this->rbacManager->isGranted(null, 'option.purchasing.claims')) {
                 $options[] = [  
-                             'id' => 'claims',
+                                'id' => 'claims',
                              'label' => 'Claims',
-                             'link' => $url('claims',['action'=>'index'])
+                              'link' => $url('claims',['action'=>'index'])
                          ];
-            }//adding dynamically 
+            }//ENDIF: granted +option.purchasing.claims 
             
             
-            /* Menu Product Developments */
+            /* Option: Product Developments */
             $options[] = [
                         'id' => 'productDevelopment',
                         'label' => 'Product Developments',
                         'link' => $url('pagebuilding')
                     ];
-            /* Menu supplies */ 
+            /* Menu: Purchasing
+             * - Option: supplies
+             */ 
             $options[] = [
                         'id' => 'supplies',
                         'label' => 'Supplies',
                         'link' => $url('pagebuilding')
                     ];
-                
-            /* Comments, New Supplies/Others */        
+            
+                            
+            /* Menu: Purchasing
+             * - Option:  
+             *     Comments, New Supplies/Others 
+             */
+            
             $options[] = [
                         'id' => 'comments',
                         'label' => 'Comments, New Supplies/Others',
                         'link' => $url('pagebuilding')
                     ];
-            /* Sales Back Orders */        
+            
+            /* a divider between options */ 
+            $options[] = [ 'id' => '-'];
+            
+            
+            /* Menu: Purchasing
+             * - Option:  
+             *     Sales Back Orders 
+             */
+                 
             $options[] = [
                        'id' => 'salesbackorders',
                        'label' => 'Sales Backorders',
                        'link' => $url('pagebuilding')
                    ];
                 
-                  /* Follow Backorders */        
+            /* Menu: Purchasing
+             * - Option:  
+             *  Follow Backorders 
+             */ 
+                   
             $options[] = [
                         'id' => 'followbackorders',
                         'label' => 'Follow Backorders',
                         'link' => $url('pagebuilding')
                     ];
-                
-            /* Part/Vendor Comments */        
+            
+            /* a divider between options */ 
+            $options[] = [ 'id' => '-'];
+            
+            /* Menu: Purchasing
+             * - Option:   
+             *   Part/Vendor Comments 
+             */        
             $options[] = [
                       'id' => 'partvendorcomments',
                       'label' => 'Part/Vendor Comments',
                       'link' => $url('pagebuilding')
                   ];
-                
-                  /* Purchasing Quote */        
-            $options[] = [
-                        'id' => 'partvendorcomments',
-                        'label' => 'Purchasing Quote',
-                        'link' => $url('pagebuilding')
-                    ];
-
-             /* Suspended Parts*/        
+            
+            /* Menu: Purchasing
+             * - Option: 
+             *     Suspended Parts
+             */        
             $options[] = [
                         'id' => 'suspendedparts',
                         'label' => 'Suspended Parts',
                         'link' => $url('pagebuilding')
                     ];
 
-             /* Upload OEM Pictures */        
-            $options[] = [
-                        'id' => 'uploadoempictures',
-                        'label' => 'Upload OEM Pictures',
-                        'link' => $url('pagebuilding')
-                    ];
-
-             /* Email Vendors */        
+            $options[] = [ 'id' => '-'];
+            
+            /* Menu: Purchasing
+             * - Option: 
+             *      Email Vendors */        
             $options[] = [
                         'id' => 'emailvendors',
                         'label' => 'Email Vendors',
                         'link' => $url('pagebuilding')
                     ];
 
-             /* Vendors Price List */        
+           /* Menu: Purchasing
+             * - Option:     
+             *       Purchasing Quote 
+             */        
+            $options[] = [
+                        'id' => 'partvendorcomments',
+                        'label' => 'Purchasing Quote',
+                        'link' => $url('pagebuilding')
+                    ];
+            
+            /* Menu: Purchasing
+             * - Option:  
+             *      Vendors Price List
+             */        
             $options[] = [
                         'id' => 'vendorspricelist',
                         'label' => 'Vendors Price List',
                         'link' => $url('pagebuilding')
                     ];
 
-             /* Print labels (Vendors)*/        
+            /* Menu: Purchasing
+             *  - Option: 
+             *      Print labels (Vendors)
+             */        
             $options[] = [
                         'id' => 'printlabels',
                         'label' => 'Print Labels(Vendors)',
                         'link' => $url('pagebuilding')
                     ];
 
-             /* Change Pur. Agent / Person in charge  */        
+            /* a divider between options */ 
+            $options[] = [ 'id' => '-'];
+            
+            /** Menu: Purchasing
+             *   - Option:  
+             *      Change Pur. Agent / Person in charge
+             */        
             $options[] = [
                         'id' => 'changeagentpersonincharge',
                         'label' => 'Change Pur. Agent/Person in charge',
                         'link' => $url('pagebuilding')
                     ];
-             /* Reports */        
+             
+            /* Menu: Purchasing
+             * - Option: 
+             *       Upload OEM Pictures 
+             */        
+            $options[] = [
+                        'id' => 'uploadoempictures',
+                        'label' => 'Upload OEM Pictures',
+                        'link' => $url('pagebuilding')
+                    ];
+            
+            /* Menu: Purchasing
+             * - Option:  
+             *      Reports 
+             */        
             $options[] = [
                         'id' => 'reports',
                         'label' => 'Reports',
                         'link' => $url('pagebuilding')
                     ];
                    
-        } //end if access() to $permission 
+        } //ENDIF:  access() to $permission 
         
         return $options;
-    } //End: method addMenuOptions
+    } //END METHOD: addMenuOptions(+permission)
     
     
     /**
-     * This method returns menu items depending on whether user has logged in or not.
-     */
-    
-     /*
-         *  
-         *  Menu: Home will be shown always, so you don't need to verify access
-         *  indexs:
-         *      - id   : it identifies each one of the menu items
-         *      - label: This NAME matches with how users will watch the menu option  on the UI
-         *      - link : It identifies the route when the user click it on.
-        */
+    * This method returns menu items depending on whether user has logged in or not.
+    *  
+    *  Menu: Home will be shown always, so you don't need to verify access
+    *  indexes:
+    *      - id   : it identifies each one of the menu items
+    *      - label: This NAME matches with how users will watch the menu option  on the UI
+    *      - link : It identifies the ROUTE (defined on the module.config.php ) 
+     *              when the user click it on.
+   */
         
     public function getMenuItems() 
     {
@@ -209,7 +267,7 @@ class NavManager
             /**
              * CREATE DYNAMIC MENUS WITH THE OPTIONS GIVEN OR ASSIGNED EACH MENU 
              * Management, Marketing, MIS, Purchasing, Quality Control, Manufacturing, Sales Shipping
-             *  Recesiving, Warehouse, maintenance 
+             *  Receiving, Warehouse, maintenance 
              */       
                         
             // Determine which items must be displayed in Purchasing           *
