@@ -41,40 +41,44 @@
 <div class="row">
     <div class="col-md-6">
         <div class="panel panel-primary">
-            <div class="panel-heading"> EDIT USER <span class="alert">  <?= $this->escapeHtml($user->getEmail()) ?></span></div>            
-            <div class="panel-body">
-                
-                <!-- form Render : Edit User -->
-                <?= $this->form()->openTag($form); ?>        
-                    <div class="form-group">
-                        <?= $this->formLabel($form->get('email')); ?>
-                        <?= $this->formElement($form->get('email')); ?>
-                        <?= $this->formElementErrors($form->get('email')); ?>                  
-                    </div>
+            
+                <div class="panel-heading"> EDIT USER <span class="alert">  <?= $this->escapeHtml($user->getEmail()) ?></span></div>            
+                <div class="panel-body">
+                    <div class="ctp-container">
 
-                    <div class="form-group">
-                        <?= $this->formLabel($form->get('full_name')); ?>
-                        <?= $this->formElement($form->get('full_name')); ?>
-                        <?= $this->formElementErrors($form->get('full_name')); ?>                  
-                    </div>
+                    <!-- form Render : Edit User -->
+                    <?= $this->form()->openTag($form); ?>        
+                        <div class="form-group">
+                            <?= $this->formLabel($form->get('email')); ?>
+                            <?= $this->formElement($form->get('email')); ?>
+                            <?= $this->formElementErrors($form->get('email')); ?>                  
+                        </div>
 
-                    <div class="form-group">
-                        <?= $this->formLabel($form->get('status')); ?>
-                        <?= $this->formElement($form->get('status')); ?>
-                        <?= $this->formElementErrors($form->get('status')); ?>                  
-                    </div>
+                        <div class="form-group">
+                            <?= $this->formLabel($form->get('full_name')); ?>
+                            <?= $this->formElement($form->get('full_name')); ?>
+                            <?= $this->formElementErrors($form->get('full_name')); ?>                  
+                        </div>
 
-                    <div class="form-group">
-                        <?= $this->formLabel($form->get('roles')); ?>
-                        <?= $this->formElement($form->get('roles')); ?>
-                        <?= $this->formElementErrors($form->get('roles')); ?>                  
-                    </div>
+                        <div class="form-group">
+                            <?= $this->formLabel($form->get('status')); ?>
+                            <?= $this->formElement($form->get('status')); ?>
+                            <?= $this->formElementErrors($form->get('status')); ?>                  
+                        </div>
 
-                    <?= $this->formElement($form->get('csrf')); ?>
-                    <?= $this->formElementErrors($form->get('csrf')); ?>
-                    <?= $this->formElement($form->get('submit')); ?>        
-                <?= $this->form()->closeTag(); ?>
-            </div> <!-- panel-body -->
+                        <div class="form-group">
+                            <?= $this->formLabel($form->get('roles')); ?>
+                            <?= $this->formElement($form->get('roles')); ?>
+                            <?= $this->formElementErrors($form->get('roles')); ?>                  
+                        </div>
+
+                        <?= $this->formElement($form->get('csrf')); ?>
+                        <?= $this->formElementErrors($form->get('csrf')); ?>
+                        <?= $this->formElement($form->get('submit')); ?>        
+                    <?= $this->form()->closeTag(); ?>
+                    </div>
+                </div> <!-- panel-body -->
+            
         </div> <!-- panel-primary (definition)  -->
     </div>   <! --column-md-6-- > 
 </div>   
