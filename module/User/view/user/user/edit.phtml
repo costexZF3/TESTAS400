@@ -16,7 +16,7 @@
 
     $form->get('full_name')->setAttributes([
         'class'=>'form-control', 
-        'placeholder'=>'Mitchel Ojeda'
+        'placeholder'=>'Kristov Magic'
         ]);
 
     $form->get('status')->setAttributes([
@@ -25,7 +25,7 @@
 
     $form->get('roles')->setAttributes([
         'class'=>'form-control',
-        'lines'=> 6,
+        'rows'=> 5, //wrong property
         ]);
 
     $form->get('submit')
@@ -41,8 +41,9 @@
 <div class="row">
     <div class="col-md-6">
         <div class="panel panel-primary">
-            <div class="panel-heading"> <span class="zf-green">EDIT USER:  <?= $this->escapeHtml($user->getEmail()) ?></span></div>            
+            <div class="panel-heading"> EDIT USER <span class="alert">  <?= $this->escapeHtml($user->getEmail()) ?></span></div>            
             <div class="panel-body">
+                
                 <!-- form Render : Edit User -->
                 <?= $this->form()->openTag($form); ?>        
                     <div class="form-group">
@@ -73,8 +74,8 @@
                     <?= $this->formElementErrors($form->get('csrf')); ?>
                     <?= $this->formElement($form->get('submit')); ?>        
                 <?= $this->form()->closeTag(); ?>
-            </div>
-        </div>
-    </div>    
+            </div> <!-- panel-body -->
+        </div> <!-- panel-primary (definition)  -->
+    </div>   <! --column-md-6-- > 
 </div>   
 
