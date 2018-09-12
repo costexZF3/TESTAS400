@@ -1,5 +1,5 @@
 <?php
-    $this->headTitle('Thank You');
+    $this->headTitle('Message');
 ?>
 
 <!--***************************************** RENDERING HTML ********************************************-->
@@ -15,7 +15,7 @@
                 <?php elseif ($id=='invalid-email'): ?>
                        <p> There is no user with such an email.</p>
                 <?php elseif ($id=='set'): ?>
-                       <p>Your new password has been set successfully </p>
+                       <p>Your new password has been <i>set</i> successfully </p>
                         <p> 
                             to <a href="<?= $this->url('login'); ?>">login page</a>.
                         </p>
@@ -27,4 +27,4 @@
             </div>    
          </div>         
     </div>
-</div>    
+</div>   <!-- row will be render on the CONTAINER --> 
