@@ -14,31 +14,32 @@
 <div class="row">
     <div class="col-md-12">        
         <h3> MANAGE USERS </h3>            
-            <div class="ctp-container">
+            <div>
                 <p> <!-- BUTTON NEW USER -->
-                    <a class="btn btn-default" href="<?= $this->url('users', ['action'=>'add']); ?>">
+                    <a class="btn btn-default"id="ctp-borderDemo" href="<?= $this->url('users', ['action'=>'add']); ?>">
                         <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> New User
                     </a>
                 </p>
                <!-- TABLE: RENDERING USER'S DATA --> 
                 <div class="table-responsive">
-                    <table class="table table-condensed">
+                    <table class="minimalistBlack">
                         <!-- table header -->
-                        <tr class="success">
-                            <th>ID</th>
-                            <th>E-mail</th>
-                            <th>Full Name</th>
-                            <th>Role(s)</th>        
-                            <th>Date Created</th>
-                            <th>Status</th>        
-                            <th>Actions</th>        
-                        </tr>
-
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>E-mail</th>
+                                <th>Full Name</th>
+                                <th>Role(s)</th>        
+                                <th>Date Created</th>
+                                <th>Status</th>        
+                                <th>Actions</th> 
+                            </tr>
+                        </thead>
                         <!-- table body -->
                         <tbody>
                             <?php foreach ($users as $user): ?>
 
-                            <tr class="warning">
+                            <tr class="">
                                 <td><?= $this->escapeHtml($user->getId()); ?></td>
                                 <td>
                                     <a href="<?= $this->url('users', ['action'=>'view', 'id'=>$user->getId()]); ?>">
@@ -54,14 +55,14 @@
                                 <td><nobr><?= $this->escapeHtml($user->getDateCreated()); ?></nobr></td>        
                                 <td><?= $this->escapeHtml($user->getStatusAsString()); ?></td>
                                 <td>
-                                    <a class="btn-success btn-sm"  href="<?= $this->url('users', 
+                                    <a id="ctp-borderDemo" class="btn btn-default btn-sm" href="<?= $this->url('users', 
                                             ['action'=>'edit', 'id'=>$user->getId()]); ?>">
-                                        <span class="glyphicon glyphicon-pencil" ></span> Edit
+                                        <span class="glyphicon glyphicon-pencil ctp-green" ></span> Edit
                                     </a>
                                     <span>&thinsp;</span>
-                                    <a class="btn-danger btn-sm" href="<?= $this->url('users',
+                                    <a id="ctp-borderDemo" class="btn btn-default btn-sm" href="<?= $this->url('users',
                                             ['action'=>'change-password', 'id'=>$user->getId()]); ?>">
-                                        <span class="glyphicon glyphicon-asterisk"></span> Change Password
+                                        <span class="glyphicon glyphicon-asterisk ctp-red"></span> Change Password
                                     </a>
                                 </td>    
                             </tr>
@@ -73,6 +74,15 @@
             </div> <!-- panel-body -->      
     </div>  <!-- col-sm-12 -->
 </div> <!-- row- bootstrap -->
+<div class="row">
+    <hr>
+    <p> <!-- BUTTON NEW USER -->
+        <span>&thinsp; </span>
+        <a class="btn btn-default"id="ctp-borderDemo" href="<?= $this->url('users', ['action'=>'add']); ?>">
+            <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> New User
+        </a>
+    </p>
+</div>
 
 <?php
 
