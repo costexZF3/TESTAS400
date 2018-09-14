@@ -25,7 +25,7 @@
 <table class="minimalistBlack">
     <thead>
         <tr>
-             <th>ID</th>
+             <!--<th>ID</th>-->
              <th>Name</th>
              <th>Description</th>
              <th>Date Created</th>
@@ -37,7 +37,7 @@
         <?php foreach ($permissions as $permission): ?>
 
         <tr>
-            <td><?= $this->escapeHtml($permission->getId()); ?></td>
+            <!--<td><?php //$this->escapeHtml($permission->getId()); ?></td>-->
             <td>
                 <a href="<?= $this->url('permissions', ['action'=>'view', 'id'=>$permission->getId()]); ?>">
                     <?= $this->escapeHtml($permission->getName()); ?>
