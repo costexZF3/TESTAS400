@@ -25,12 +25,9 @@ table.minimalistBlack tr:nth-child(even) {
     background: #f8f8f8;
 }
 table.minimalistBlack thead {
-    background: #b6eead;
-  background: -moz-linear-gradient(top, #c7dba0 0%, #bbd38d 66%, #B4CF81 100%);
-  background: -webkit-linear-gradient(top, #c7dba0 0%, #bbd38d 66%, #B4CF81 100%);
-  background: linear-gradient(to bottom, #c7dba0 0%, #bbd38d 66%, #B4CF81 100%);
-  border-bottom: 1px solid #000000;
-  border-top: 1px solid #000000;
+    background: #d8edd1;
+    border-bottom: 1px solid #F8F8F8;
+  border-top: 1px solid #F8F8F8;
 }
 table.minimalistBlack thead th {
   font-size: 14px;
