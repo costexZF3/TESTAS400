@@ -30,15 +30,15 @@
     
     $form->get('submit')
             ->setAttributes(['class'=>'ctp-btn'])
-            ->setValue(' Save ');
+            ->setValue('  Save  ');
     
     $form->prepare();
 ?>
 
 <div class="row">
     <div class="col-md-6"> 
-        <h3>EDIT ROLE</h3>
-        <p> ( Editing the Role <em><b><?= $this->escapeHtml($role->getName()) ?> </b></em> )</p>
+        <h3>EDIT ROLE  <span class="ctp-span"><em><?= $this->escapeHtml($role->getName()); ?></em></h3>
+        
         <div class="ctp-container">
             <!-- BUTTON EDIT PERMISSIONS -->
             <p>
