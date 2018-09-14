@@ -83,6 +83,10 @@ table.minimalistBlack tfoot td {
     margin-top:20px;
     margin-bottom: 20px;
 }
+.ctp-span {
+    color: #57a900;
+    font-size: 15px;
+}
 .ctp-green {
     color: #68b604;
 }
@@ -92,6 +96,9 @@ table.minimalistBlack tfoot td {
     padding: 20px;  
 }
 
+.ctp-white {
+    color: white;
+}
 .ctp-red {
 	color: #C70039;
 }
