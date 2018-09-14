@@ -14,8 +14,8 @@
     
     //getting BUTTON SUBMIT of the ViewModel sent in the $form variable 
     $form->get('submit')
-            ->setAttributes(['class'=>'btn btn-primary'])
-            ->setValue('Save');
+            ->setAttributes(['class'=>'ctp-btn'])
+            ->setValue('  Save  ');
     
     //it's completly necessary before rendering each FORM        
     $form->prepare();
@@ -24,60 +24,60 @@
 <!-- TEXT that will be shown in the TAB Title -->
 
 <div class="row">
-    <div class="col-md-8">
-    	<div class="panel panel-success">
-    		<div class="panel-heading">
-    			EDIT PERMISSION: <em class="ctp-red"><?= $this->escapeHtml($role->getName()) ?></em>
-    		</div>
-			<div class="panel-body">    	
-            	<!-- OPENNING FORM TAG -->
-                <?=$this->form()->openTag($form);?>
-                    <table class="table table-striped table-bordered">
-                        <tr>
-                            <th>Name</th>
-                            <th>Description</th>
-                        </tr>
-                        <?php foreach ($allPermissions as $permission):
-                            $disable = false;
-                            $element = $form->get('permissions')->get($permission->getName());
-                        ?>
-                        <tr>
-                            <td>
-                                <div class="checkbox">
-                                    <label>
-                                    	<input type="checkbox" name="<?= $this->escapeHtmlAttr($element->getName()) ?>" 
-                                                  value="<?= $this->escapeHtmlAttr($element->getCheckedValue()) ?>"
-                                                  <?php if ($element->isChecked()) {
-                                                      echo 'checked';  
-                                                      $disable = true; 
-                                                      $classText ='ctp-blue';
-                                                  }?>
-                                                  <?php if ($element->getAttribute('disabled')){
-                                                      echo 'disabled'; 
-                                                      $disable= true; 
-                                                      $classText ='ctp-red'; 
-                                                  };?>
-                                             > <!-- CLOSING INPUT CHECKBOX TAG -->
-                                        <?php 
-                                           if ($disable) {echo "<em class=$classText>";}
-                                           echo $this->escapeHtml($element->getLabel()); 
-                                           if ($disable) {echo "</em>";}
-                                        ?>
-                                    </label>
-                                    <?= $this->formElementErrors($element); ?>                  
-                                </div>
-                            </td>
-                            <td>
-                                <?= $this->escapeHtml($permission->getDescription()) ?>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </table>
-                    <?= $this->formElement($form->get('csrf')); ?>            
-                    <?= $this->formElement($form->get('submit')); ?>        
-                <?= $this->form()->closeTag(); ?>
-      		</div> <!-- END: DIV panel-body -->
-     	</div> <!-- END: DIV panel-success -->
+    <div class="col-md-8">    	
+        <h3> EDIT PERMISSION <span class="ctp-span">
+                <em><?= $this->escapeHtml($role->getName()) ?></em></span></h3>
+    			    	
+        <!-- OPENNING FORM TAG -->
+        <?=$this->form()->openTag($form);?>
+            <table class="table-bordered minimalistBlack">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($allPermissions as $permission):
+                        $disable = false;
+                        $element = $form->get('permissions')->get($permission->getName());
+                    ?>
+                    <tr>
+                        <td>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="<?= $this->escapeHtmlAttr($element->getName()) ?>" 
+                                              value="<?= $this->escapeHtmlAttr($element->getCheckedValue()) ?>"
+                                              <?php if ($element->isChecked()) {
+                                                  echo 'checked';  
+                                                  $disable = true; 
+                                                  $classText ='ctp-blue';
+                                              }?>
+                                              <?php if ($element->getAttribute('disabled')){
+                                                  echo 'disabled'; 
+                                                  $disable= true; 
+                                                  $classText ='ctp-red'; 
+                                              }?>
+                                         > <!-- CLOSING INPUT CHECKBOX TAG -->
+                                    <?php 
+                                       if ($disable) {echo "<em class=$classText>";}
+                                       echo $this->escapeHtml($element->getLabel()); 
+                                       if ($disable) {echo "</em>";}
+                                    ?>
+                                </label>
+                                <?= $this->formElementErrors($element); ?>                  
+                            </div>
+                        </td>
+                        <td>
+                            <?= $this->escapeHtml($permission->getDescription()) ?>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            <?= $this->formElement($form->get('csrf')); ?>            
+            <?= $this->formElement($form->get('submit')); ?>        
+        <?= $this->form()->closeTag(); ?>      
     </div>
 </div>
 
