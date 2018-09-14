@@ -9,65 +9,98 @@
                 'Manage Roles'=>$this->url('roles'),
                 ]);
 ?>
-
+<!--  FLASH MESSENGER WILL BE RENDERED WITH THE MESSAGE GENERADED -->
 <?= $this->flashMessenger()->render('error', ['alert', 'alert-warning']); ?>
 <?= $this->flashMessenger()->render('success', ['alert', 'alert-success']); ?>
 <?= $this->flashMessenger()->render('info', ['alert', 'alert-info']); ?>
 
+<!------------------------------------------------------------------------------------------------------------------------------------>
+<!-- ROW #1: DEFINING HEADER AND BUTTON SPACING -->
 
 <div class="row">
-    <div class="col-md-12">
-    	<div class="panel panel-success">
-    		<div class="panel-heading">MANAGE ROLES</div>
-    			<div class="panel-body">
-                            <p>
-                                <a class="btn btn-default" href="
-                                    <?= $this->url('roles', ['action'=>'add']); ?>">
-                                    <span class="glyphicon glyphicon-plus ctp-red" aria-hidden="true"></span> New Role
-                                </a>
-                            </p>
-                    <table class="table table-striped">
-                       <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Date Created</th>
-                            <th>Actions</th>        
-                        </tr>
-                        
-                        <?php foreach ($roles as $role): ?>
-                        
-                        <tr>
-                            <td><?= $this->escapeHtml($role->getId()); ?></td>
-                            <td>
-                                <a href="<?= $this->url('roles', ['action'=>'view', 'id'=>$role->getId()]); ?>">
-                                    <?= $this->escapeHtml($role->getName()); ?>
-                                </a> 
-                            </td>
-                            <td><?= $this->escapeHtml($role->getDescription()); ?></a> 
-                            </td>
-                            <td><nobr><?= $this->escapeHtml($role->getDateCreated()); ?></nobr></td>        
-                            <td>
-                                </nobr>
-                                <a class="btn btn-info" href="<?= $this->url('roles', 
-                                        ['action'=>'edit', 'id'=>$role->getId()]); ?>">
-                                    <span class="glyphicon glyphicon-pencil" ></span> Edit
-                                </a>
-                                <a class="btn btn-danger" href="<?= $this->url('roles',
-                                        ['action'=>'delete', 'id'=>$role->getId()]); ?>">
-                                    <span class="glyphicon glyphicon-remove"></span> Delete
-                                </a>
-                                </nobr>
-                            </td>    
-                        </tr>
-                            
-                        <?php endforeach; ?> 
-                    </table>
-                  </div> <!-- END: DIV panel-body -->
-         </div> <!-- END: DIV panel-success -->
-    </div> <!-- END: DIV col-md-12 : defining 6 columns on bootstramp -->    
-</div> <!-- END: DIV BOOTSTRAP ROW -->   
+    <H3><span>&thinsp;&thinsp;</span>MANAGE ROLES</H3>
+    <div class="col-md-2">        
+        <a class="btn btn-default" href="<?= $this->url('roles', ['action'=>'add']); ?>">
+            <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> New Role
+        </a>        
+    </div>    
+</div>  
 
+<br>
+
+<div class="row"> 
+    <div class="col-md-12 table-responsive">    
+        <table class="minimalistBlack">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Date Created</th>
+                    <th>Actions</th>        
+                </tr>
+            </thead>  
+            <tbody>
+                <!-- GENERATING EACH ROW WITH ROLES INFORMATION -->
+                <?php foreach ($roles as $role): ?>
+                    <tr>
+                        <td><?= $this->escapeHtml($role->getId()); ?></td>
+                        <td>
+                            <a href="<?= $this->url('roles', ['action'=>'view', 'id'=>$role->getId()]); ?>">
+                                <?= $this->escapeHtml($role->getName()); ?>
+                            </a> 
+                        </td>
+                        <td><?= $this->escapeHtml($role->getDescription()); ?>
+                        </td>
+                        <td><nobr><?= $this->escapeHtml($role->getDateCreated()); ?></nobr></td>        
+                        <td>
+                            <nobr>
+                            <a id="ctp-borderDemo" class="btn btn-info btn-sm" href="<?= $this->url('roles', 
+                                    ['action'=>'edit', 'id'=>$role->getId()]); ?>">
+                                <span class="glyphicon glyphicon-pencil" ></span> Edit
+                            </a>
+                            <a id="ctp-borderDemo" class="btn btn-info btn-sm" href="<?= $this->url('roles',
+                                    ['action'=>'delete', 'id'=>$role->getId()]); ?>">
+                                <span class="glyphicon glyphicon-remove"></span> Delete
+                            </a>
+                            </nobr>
+                        </td>    
+                    </tr>
+                <?php endforeach; ?> 
+            </tbody> 
+            <tfoot>
+                <tr></tr>
+            </tfoot>
+        </table>
+   </div> <!-- END: DIV TABLE-REPONSIVE -->    
+</div> <!-- END: DIV ROW 2:  DEFINING THE TABLE--> 
+
+<hr>
+<!--LAST ROW: DEFINING A BUTTON NEW ROLE-->
+<div class="row">    
+    <div class="col-md-2">        
+            <a id="" class="btn btn-default" href="<?= $this->url('roles', ['action'=>'add']); ?>">
+                <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> New Role
+            </a>        
+    </div>
+    
+    <!-- BUTTONS PREVIOUS AND NEXT IMPLEMENTATION -->
+    <div class="col-md-offset-7 col-md-3">
+        <div class="btn-group">
+            <a title="click to see Previous 15 Items" href="#">
+                <button class="btn btn-default" type="button">
+                    <span class="glyphicon glyphicon-menu-left ctp-green" aria-hidden="true"></span> Previous 
+                </button>
+            </a>    
+            <a title="click to see Next 15 Items" href="#">
+                <button class="btn btn-default" type="button">Next 
+                    <span class="glyphicon glyphicon-menu-right ctp-green" aria-hidden="true"></span> 
+                </button>
+            </a>     
+        </div>
+    </div>
+    
+</div> 
 
 
 
