@@ -104,11 +104,12 @@ class Menu extends AbstractHelper
         $id = $item['id']?? '';
         $isActive = ($id==$this->activeItemId);
         $label = $item['label'] ?? '';
-             
+            
         $result = ''; 
      
         $escapeHtml = $this->getView()->plugin('escapeHtml');
         
+        // checking the menu options
         if (isset($item['dropdown'])) {
             
             $dropdownItems = $item['dropdown'];
@@ -119,19 +120,24 @@ class Menu extends AbstractHelper
             $result .= '</a>';
            
             $result .= '<ul class="dropdown-menu">';
-            foreach ($dropdownItems as $item) {
-                $link = isset($item['link']) ? $item['link'] : '#';
-                $label = isset($item['label']) ? $item['label'] : '';
-                
-                $result .= '<li>';
-                $result .= '<a href="'.$escapeHtml($link).'">'.$escapeHtml($label).'</a>';
-                $result .= '</li>';
+            foreach ($dropdownItems as $item) {                
+                // adding a divider if it's defined 
+                if ($item['id']==='-') {
+                    $result .= '<li class ="divider">';                    
+                    $result .= '</li>';
+                } else {
+                    $link = $item['link'] ?? '#';
+                    $label = $item['label'] ?? '';
+                    $result .= '<li>';
+                    $result .= '<a href="'.$escapeHtml($link).'">'.$escapeHtml($label).'</a>';
+                    $result .= '</li>';
+                }
             }
             $result .= '</ul>';
             $result .= '</li>';
             
         } else {        
-            $link = isset($item['link']) ? $item['link'] : '#';
+            $link = $item['link']??'#';
             
             $result .= $isActive?'<li class="active">':'<li>';
             $result .= '<a href="'.$escapeHtml($link).'">'.$escapeHtml($label).'</a>';
