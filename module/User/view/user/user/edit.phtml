@@ -36,8 +36,8 @@
         ]);
 
     $form->get('submit')
-            ->setAttributes(['class'=>'btn btn-primary'])
-            ->setValue('Save');
+            ->setAttributes(['class'=>'ctp-btn'])
+            ->setValue(' Save ');
 
     $form->prepare();
 ?>
@@ -47,9 +47,10 @@
 
 <div class="row">
     <div class="col-md-6">
-        <div class="panel panel-primary">            
-            <div class="panel-heading"> EDIT USER <span class="alert">  <?= $this->escapeHtml($user->getEmail()) ?></span></div>            
-            <div class="panel-body">
+        <h3> EDIT USER <span class="ctp-span"><em>  <?= $this->escapeHtml($user->getEmail()) ?> </em></span></h3>
+        <div class="ctp-container">            
+                        
+            <div>
 
                 <!-- form Render : Edit User -->
                 <?= $this->form()->openTag($form); ?>        
