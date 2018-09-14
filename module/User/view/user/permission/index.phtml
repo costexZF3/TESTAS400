@@ -9,57 +9,69 @@
                 ]);
 ?>
 
-<h1>Manage Permissions</h1>
+<h3>Manage Permissions</h3>
 
 <?= $this->flashMessenger()->render('error', ['alert', 'alert-warning']); ?>
 <?= $this->flashMessenger()->render('success', ['alert', 'alert-success']); ?>
 <?= $this->flashMessenger()->render('info', ['alert', 'alert-info']); ?>
 
+<!--------- BUTTON NEW PERMISSION ----------------->
 <p>
-<a class="btn btn-default" href="
-    <?= $this->url('permissions', ['action'=>'add']); ?>">
-    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New Permission
-</a>
+    <a class="btn btn-default" href="<?= $this->url('permissions', ['action'=>'add']); ?>" >
+        <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> New Permission
+    </a>
 </p>
 
-<table class="table table-striped">
+<table class="minimalistBlack">
+    <thead>
+        <tr>
+             <th>ID</th>
+             <th>Name</th>
+             <th>Description</th>
+             <th>Date Created</th>
+             <th>Actions</th>        
+         </tr>
+    </thead>
+    
+    <tbody>
+        <?php foreach ($permissions as $permission): ?>
 
-   <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Date Created</th>
-        <th>Actions</th>        
-    </tr>
-    
-    <?php foreach ($permissions as $permission): ?>
-    
-    <tr>
-        <td><?= $this->escapeHtml($permission->getId()); ?></td>
-        <td>
-            <a href="<?= $this->url('permissions', ['action'=>'view', 'id'=>$permission->getId()]); ?>">
-                <?= $this->escapeHtml($permission->getName()); ?>
-            </a> 
-        </td>
-        <td><?= $this->escapeHtml($permission->getDescription()); ?></a> 
-        </td>
-        <td><nobr><?= $this->escapeHtml($permission->getDateCreated()); ?></nobr></td>        
-        <td>
-            <nobr>
-            <a class="btn btn-info" href="<?= $this->url('permissions', 
-                    ['action'=>'edit', 'id'=>$permission->getId()]); ?>">
-                <span class="glyphicon glyphicon-pencil" ></span> Edit
-            </a>
-            <a class="btn btn-danger" href="<?= $this->url('permissions',
-                    ['action'=>'delete', 'id'=>$permission->getId()]); ?>">
-                <span class="glyphicon glyphicon-remove"></span> Delete
-            </a>
-            </nobr>
-        </td>    
-    </tr>
-        
-    <?php endforeach; ?>   
-    
+        <tr>
+            <td><?= $this->escapeHtml($permission->getId()); ?></td>
+            <td>
+                <a href="<?= $this->url('permissions', ['action'=>'view', 'id'=>$permission->getId()]); ?>">
+                    <?= $this->escapeHtml($permission->getName()); ?>
+                </a> 
+            </td>
+            <td><?= $this->escapeHtml($permission->getDescription()); ?></a> 
+            </td>
+            <td><nobr><?= $this->escapeHtml($permission->getDateCreated()); ?></nobr></td>        
+            <!-- COLUMN WITH EDIT AND DELETE BUTTONS -->
+            <td>
+                <nobr>
+                <a id="ctp-borderDemo" class="btn btn-info btn-sm" href="<?= $this->url('permissions', 
+                        ['action'=>'edit', 'id'=>$permission->getId()]); ?>">
+                    <span class="glyphicon glyphicon-pencil" ></span> Edit
+                </a>
+                <a id="ctp-borderDemo" class="btn btn-danger btn-sm" href="<?= $this->url('permissions',
+                        ['action'=>'delete', 'id'=>$permission->getId()]); ?>">
+                    <span class="glyphicon glyphicon-remove"></span> Delete
+                </a>
+                </nobr>
+            </td>    
+        </tr>
+
+        <?php endforeach; ?>   
+    </tbody>
 </table>
+
+<hr>
+
+<!--------- BUTTON NEW PERMISSION ----------------->
+<p>
+    <a class="btn btn-default" href="<?= $this->url('permissions', ['action'=>'add']); ?>" >
+        <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> New Permission
+    </a>
+</p>
 
 
