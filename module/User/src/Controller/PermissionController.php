@@ -41,7 +41,7 @@ class PermissionController extends AbstractActionController
     {
         //getting all Permissions orders by id from Permission Repository
         $permissions = $this->entityManager->getRepository(Permission::class)
-                ->findBy([], ['id'=>'ASC']);
+                ->findBy([], ['name'=>'ASC']);
         
         return new ViewModel([
             'permissions' => $permissions
