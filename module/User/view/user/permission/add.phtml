@@ -26,8 +26,9 @@
         'placeholder'=>'Enter description'
         ]);
 
-    $form->get('submit')->setAttributes(['class'=>'ctp-btn']);
-    $form->get('submit')->setValue('  Create  ');
+    $form->get('submit')
+            ->setAttributes(['class'=>'ctp-btn'])
+            ->setValue('  Create  ');
 
     $form->prepare();
 ?>
