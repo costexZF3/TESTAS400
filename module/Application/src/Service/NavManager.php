@@ -43,14 +43,13 @@ class NavManager
         //add the options access for this user
          $this->entityManager = $entityManager;
     }
-    
-    
+       
     
     /**
      * this function return an array with the items of menu
      * will be shown  
      */
-    private function addMenuOptions(string $menuPermission )
+    private function addOptionsToMenu(string $menuPermission )
     {
         //getting the Instance of urlHelper which let us create links on our page (on the menus)
         // using VALID ROUTES definided on the module.config.php file
@@ -72,13 +71,15 @@ class NavManager
                          ];
             }//ENDIF: granted +option.purchasing.claims 
             
-            
+            if ($this->rbacManager->isGranted(null, 'option.purchasing.productdevelopments')) {   
             /* Option: Product Developments */
             $options[] = [
                         'id' => 'productDevelopment',
                         'label' => 'Product Developments',
                         'link' => $url('pagebuilding')
                     ];
+            }//END IF: option.purchasing.productdevelopments 
+            
             /* Menu: Purchasing
              * - Option: supplies
              */ 
@@ -228,22 +229,80 @@ class NavManager
         return $options;
     } //END METHOD: addMenuOptions(+permission)
     
-    
-    /**
-    * This method returns menu items depending on whether user has logged in or not.
-    *  
-    *  Menu: Home will be shown always, so you don't need to verify access
-    *  indexes:
-    *      - id   : it identifies each one of the menu items
-    *      - label: This NAME matches with how users will watch the menu option  on the UI
-    *      - link : It identifies the ROUTE (defined on the module.config.php ) 
-     *              when the user click it on.
-   */
+     private function getMainMenuPermissions(){
+        return [
+                    'management' =>[
+                        'permission'=>'menu.management',
+                                'id' =>'management',
+                             'label' =>'Management'
+                        ],
+                    
+                    'marketing' =>[
+                        'permission'=>'menu.marketing',
+                                'id' =>'marketing',
+                             'label' =>'Marketing'
+                          ],                     
+                    'mis' =>[
+                        'permission'=>'menu.mis',
+                                'id' =>'mis',
+                             'label' =>'MIS'
+                        ],
+                     
+                    'purchasing' =>[
+                        'permission'=>'menu.purchasing',
+                                'id' =>'purchasing',
+                             'label' =>'Purchasing'
+                        ],
+                     
+                    'quality' =>[
+                        'permission'=>'menu.quality',
+                                'id' =>'quality',
+                             'label' =>'Quality'
+                          ],
+                    
+                    'manufacturing' =>[
+                        'permission'=>'menu.manufacturing',
+                                'id' =>'manufacturing',
+                             'label' =>'Manufacturing'
+                       ],                    
+                    'sales' =>[
+                        'permission'=>'menu.sales',
+                                'id' =>'sales',
+                             'label' =>'Sales'
+                        ],                    
+                    'receiving' =>[
+                        'permission'=>'menu.receiving',
+                                'id' =>'receiving',
+                             'label' =>'Receiving'
+                        ],                    
+                    'warehourse' =>[
+                        'permission'=>'menu.warehourse',
+                                'id' =>'warehourse',
+                             'label' =>'Warehourse'
+                        ],                    
+                    'maintenance' =>[
+                        'permission'=>'menu.maintenance',
+                                'id' =>'maintenance',
+                             'label' =>'Maintenance'
+                        ],
+        ];
+     }//END: function getMainMenu()     
+     
+    /*
+        * This method returns menu items depending on whether user has logged in or not.
+        *  
+        *  Menu: Home will be shown always, so you don't need to verify access
+        *  indexes:
+        *      - id   : it identifies each one of the menu items
+        *      - label: This NAME matches with how users will watch the menu option  on the UI
+        *      - link : It identifies the ROUTE (defined on the module.config.php ) 
+        *              when the user click it on.
+    */
         
     public function getMenuItems() 
     {
         $url = $this->urlHelper;
-        //This variable ARRAY $items[] will contain all menu items that will be shown ******
+        //This variable ARRAY $items[] will contain all menu items that will be shown 
         $items = [];
                
         //Home Menu
@@ -263,24 +322,42 @@ class NavManager
                 'link'  => $url('login'),
                 'float' => 'right'
             ];
-        } else {            
-            /**
-             * CREATE DYNAMIC MENUS WITH THE OPTIONS GIVEN OR ASSIGNED EACH MENU 
-             * Management, Marketing, MIS, Purchasing, Quality Control, Manufacturing, Sales Shipping
-             *  Receiving, Warehouse, maintenance 
-             */       
-                        
-            // Determine which items must be displayed in Purchasing           *
-           $purchasingMenuOptions = $this->addMenuOptions('menu.purchasing');
+            } 
+        else {            
+        /**
+         * CREATE DYNAMIC MENUS WITH THE OPTIONS GIVEN OR ASSIGNED EACH MENU 
+         * Management, Marketing, MIS, Purchasing, Quality Control, Manufacturing, Sales Shipping
+         *  Receiving, Warehouse, maintenance 
+         */       
+            
+           // Determine which items must be displayed in Purchasing
+           $mainMenu = ["management"=>0,    "marketing"=>0, "mis"=>0, "purchasing"=>0, "purchasing"=>0,
+                      "quality"=>0,"manufacturing"=>0,"sales"=>0,"receiving"=>0,"warehourse"=>0,"maintenance"=>0];
+            
+        /* 
+         * GETTING THE MENUS AND THE PERMISSIONS ASSOCIATED TO THEM 
+         *  - getMainMenuPermissions(): it get back an array with
+         *  - the menu and the permissions associated to them
+         */
+           
+           $mainMenuPermissions = $this->getMainMenuPermissions();            
+           
+           //getting back the options associated to $menu['MODULE_NAME'] 
+           $menuOptions = $this->addOptionsToMenu($mainMenuPermissions['purchasing']['permission']);
+           
+           //checking COUNT of ITEMS(options) will be shown on the Menu: PURCHASING FOR EXAMPLE
+           $countOptionsMenu['purchasing'] =  count($menuOptions)??0;
+           
            
             //----- THE LINES BELOW MUTS BE DYNAMICALLY IMPLEMENTED ----
             //************ RENDERING PURCHASING dropDownItems WITH ALL OPTIONS *******************
             //checking whether purchasing's menu-items is different of 0 
-            if (count($purchasingMenuOptions)!=0) {
+           
+            if ($countOptionsMenu['purchasing']!=0) {
                 $items[] = [
                     'id' => 'purchasing', 
-                    'label' => 'Puchasing',
-                    'dropdown' => $purchasingMenuOptions
+                    'label' => $mainMenuPermissions['purchasing']['label'], //'Puchasing',
+                    'dropdown' => $menuOptions
                 ];
             } 
             
