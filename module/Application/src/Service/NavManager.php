@@ -230,75 +230,108 @@ class NavManager
     } //END METHOD: addMenuOptions(+permission)
     
      private function getMainMenuPermissions(){
-        return [
-                    'management' =>[
-                        'permission'=>'menu.management',
-                                'id' =>'management',
-                             'label' =>'Management'
-                        ],
-                    
-                    'marketing' =>[
-                        'permission'=>'menu.marketing',
-                                'id' =>'marketing',
-                             'label' =>'Marketing'
-                          ],                     
-                    'mis' =>[
-                        'permission'=>'menu.mis',
-                                'id' =>'mis',
-                             'label' =>'MIS'
-                        ],
-                     
-                    'purchasing' =>[
-                        'permission'=>'menu.purchasing',
-                                'id' =>'purchasing',
-                             'label' =>'Purchasing'
-                        ],
-                     
-                    'quality' =>[
-                        'permission'=>'menu.quality',
-                                'id' =>'quality',
-                             'label' =>'Quality'
-                          ],
-                    
-                    'manufacturing' =>[
-                        'permission'=>'menu.manufacturing',
-                                'id' =>'manufacturing',
-                             'label' =>'Manufacturing'
-                       ],                    
-                    'sales' =>[
-                        'permission'=>'menu.sales',
-                                'id' =>'sales',
-                             'label' =>'Sales'
-                        ],                    
-                    'receiving' =>[
-                        'permission'=>'menu.receiving',
-                                'id' =>'receiving',
-                             'label' =>'Receiving'
-                        ],                    
-                    'warehourse' =>[
-                        'permission'=>'menu.warehourse',
-                                'id' =>'warehourse',
-                             'label' =>'Warehourse'
-                        ],                    
-                    'maintenance' =>[
-                        'permission'=>'menu.maintenance',
-                                'id' =>'maintenance',
-                             'label' =>'Maintenance'
-                        ],
+        return [//0
+                'management' =>[
+                    'permission'=>'menu.management',
+                            'id' =>'management',
+                         'label' =>'Management'
+                    ],
+                //1    
+                'marketing' =>[
+                    'permission'=>'menu.marketing',
+                            'id' =>'marketing',
+                         'label' =>'Marketing'
+                      ],
+                //2      
+                'mis' =>[
+                    'permission'=>'menu.mis',
+                            'id' =>'mis',
+                         'label' =>'MIS'
+                    ],
+                //3    
+                'purchasing' =>[
+                    'permission'=>'menu.purchasing',
+                            'id' =>'purchasing',
+                         'label' =>'Purchasing'
+                    ],
+                //4
+                'quality' =>[
+                    'permission'=>'menu.quality',
+                            'id' =>'quality',
+                         'label' =>'Quality'
+                      ],
+                //5
+                'manufacturing' =>[
+                    'permission'=>'menu.manufacturing',
+                            'id' =>'manufacturing',
+                         'label' =>'Manufacturing'
+                   ],
+                //6   
+                'sales' =>[
+                    'permission'=>'menu.sales',
+                            'id' =>'sales',
+                         'label' =>'Sales'
+                    ],                    
+                //7
+                'receiving' =>[
+                    'permission'=>'menu.receiving',
+                            'id' =>'receiving',
+                         'label' =>'Receiving'
+                    ],
+                //8
+                'warehourse' =>[
+                    'permission'=>'menu.warehourse',
+                            'id' =>'warehourse',
+                         'label' =>'Warehourse'
+                    ],                    
+                //9
+                'maintenance' =>[
+                    'permission'=>'menu.maintenance',
+                            'id' =>'maintenance',
+                         'label' =>'Maintenance'
+                    ],
         ];
      }//END: function getMainMenu()     
-     
+    
     /*
+     * This method add a list of Options to a Menu with
+     *    -id: $id 
+     * -label: $label
+     */
+    private function setOptionsToMenu( $id, $label, $options ){
+        if (count($options)!=0){
+            return [
+                        'id' => $id,
+                     'label' => $label, 
+                  'dropdown' => $options
+            ];
+        }
+        
+        return [];
+        
+    } //ENDIF: function AddOptionsToMenuDropDown() 
+    
+  
+    private function setOptions($id, $label, $route ){  
+        $url = $this->urlHelper;
+        return [
+                'id' => $id,
+                'label' => $label,
+                'link' => $url($route),
+              ];                
+    }//END: setOptions
+    
+   
+     /*
         * This method returns menu items depending on whether user has logged in or not.
         *  
-        *  Menu: Home will be shown always, so you don't need to verify access
-        *  indexes:
+        *  Menu: Home will be shown always, so you don't need to verify access indexes:
         *      - id   : it identifies each one of the menu items
         *      - label: This NAME matches with how users will watch the menu option  on the UI
         *      - link : It identifies the ROUTE (defined on the module.config.php ) 
         *              when the user click it on.
     */
-        
+      
     public function getMenuItems() 
     {
         $url = $this->urlHelper;
@@ -329,68 +362,48 @@ class NavManager
          * Management, Marketing, MIS, Purchasing, Quality Control, Manufacturing, Sales Shipping
          *  Receiving, Warehouse, maintenance 
          */       
-            
-           // Determine which items must be displayed in Purchasing
-           $mainMenu = ["management"=>0,    "marketing"=>0, "mis"=>0, "purchasing"=>0, "purchasing"=>0,
-                      "quality"=>0,"manufacturing"=>0,"sales"=>0,"receiving"=>0,"warehourse"=>0,"maintenance"=>0];
-            
+       
+        $mainMenu = ["management", "marketing", "mis", "purchasing", "quality",
+                     "manufacturing", "sales","receiving","warehourse","maintenance"];
         /* 
          * GETTING THE MENUS AND THE PERMISSIONS ASSOCIATED TO THEM 
          *  - getMainMenuPermissions(): it get back an array with
-         *  - the menu and the permissions associated to them
+         *  - the menu and the permissions associated to them. 
+         *  -$mainMenuPermissions[] : it contains each module  
+         *    and the permission associated to it (this permission associate
+         *    to a Menu Role : (example:   
          */
            
            $mainMenuPermissions = $this->getMainMenuPermissions();            
            
            //getting back the options associated to $menu['MODULE_NAME'] 
+           //checking COUNT of ITEMS(options) will be shown on the Menu: PURCHASING FOR EXAMPLE
+           
            $menuOptions = $this->addOptionsToMenu($mainMenuPermissions['purchasing']['permission']);
            
-           //checking COUNT of ITEMS(options) will be shown on the Menu: PURCHASING FOR EXAMPLE
-           $countOptionsMenu['purchasing'] =  count($menuOptions)??0;
+           // get Id, Label and $menuOptions and pass them to the method:
+           // addOptionToMenuDropDown 
+           $id = $mainMenuPermissions['purchasing']['id'];
+           $label = $mainMenuPermissions['purchasing']['label'];           
+           $items[] = $this->setOptionsToMenu( $id, $label, $menuOptions );
            
-           
-            //----- THE LINES BELOW MUTS BE DYNAMICALLY IMPLEMENTED ----
-            //************ RENDERING PURCHASING dropDownItems WITH ALL OPTIONS *******************
-            //checking whether purchasing's menu-items is different of 0 
-           
-            if ($countOptionsMenu['purchasing']!=0) {
-                $items[] = [
-                    'id' => 'purchasing', 
-                    'label' => $mainMenuPermissions['purchasing']['label'], //'Puchasing',
-                    'dropdown' => $menuOptions
-                ];
-            } 
+           /*             
+            *  Determine WHAT items(OPTIONS) must be displayed in Admin dropDownList   
+            */            
             
-             /*             
-             *  Determine WHAT items(OPTIONS) must be displayed in Admin dropDownList   
-             */            
-            
-            // ARRAY WITH ITEMS FOR ADMIN USERS
-            $adminMenuOptions = [];
-            
-            if ($this->rbacManager->isGranted(null, 'user.manage')) {                
-                $adminMenuOptions[] = [
-                            'id' => 'users',
-                            'label' => 'Manage Users',
-                            'link' => $url('users')
-                        ];
+            // OPTIONS FOR ADMIN MENU: ARRAY WITH ITEMS FOR ADMIN USERS
+            // $adminMenuOptions = $this->setOptions($id, $label, $route, $permission);
+            $adminMenuOptions =[];
+            if ($this->rbacManager->isGranted(null, 'user.manage')) {
+                $adminMenuOptions[] = $this->setOptions('users', 'Manage Users', 'users');
             }            
-            
             if ($this->rbacManager->isGranted(null, 'permission.manage')) {
-                $adminMenuOptions[] = [
-                            'id' => 'permissions',
-                            'label' => 'Manage Permissions',
-                            'link' => $url('permissions')
-                        ];
+                $adminMenuOptions[] = $this->setOptions('permissions', 'Manage Permissions', 'permissions');                       
+            }            
+            if ($this->rbacManager->isGranted(null, 'role.manage')) {
+                $adminMenuOptions[] = $this->setOptions('roles', 'Manage Roles', 'roles');                       
             }
             
-            if ($this->rbacManager->isGranted(null, 'role.manage')) {
-                $adminMenuOptions[] = [
-                            'id' => 'roles',
-                            'label' => 'Manage Roles',
-                            'link' => $url('roles')
-                        ];
-            }
             //checking whether Admin's menu-items is different of 0 
             if (count($adminMenuOptions)!=0) {
                 $items[] = [
@@ -399,14 +412,14 @@ class NavManager
                     'dropdown' => $adminMenuOptions
                 ];
             }            
+            
             /*
-             *  ABOUT MENU: it would be the lastest menu
-             *  It does not need nothing special and neither checks if the user has permissions
+             *  Adding About Menu
              */
             $items[] = [
-            'id' => 'about',
-            'label' => 'About',
-            'link'  => $url('about')
+                'id' => 'about',
+                'label' => 'About',
+                'link'  => $url('about')
             ];
             
             $items[] = [
