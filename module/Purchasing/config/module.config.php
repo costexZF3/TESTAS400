@@ -51,7 +51,7 @@ return [
                 //+option.purchasing.claims 
                 
                 //Actions reponse to Roles associated to MENUS 
-                ['actions' => ['index'],               'allow' => '*'],  //every body logged in can access
+                ['actions' => ['index'],               'allow' => '+menu.purchasing'],  //every body logged in with this permission
                 ['actions' => ['claims'],              'allow' => '+option.purchasing.claims'], 
             
                 //Actions response to Roles associated to OPERATION
