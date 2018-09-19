@@ -57,10 +57,7 @@ class ClaimsController extends AbstractActionController
            
            //echo "$permission : true". "<br>";
        }
-       else{
-          //echo "$permission : false <br>";            
-       }       
-       //var_dump($res); echo "<br>";
+       
        return $res;
    }//End: createMenu 
    
