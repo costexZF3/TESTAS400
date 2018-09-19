@@ -126,7 +126,7 @@ class Menu extends AbstractHelper
                     $result .= '<li class ="divider">';                    
                     $result .= '</li>';
                 } else {
-                    $link = $item['link'] ?? '#';
+                    $link = $item['link'] ?? '';
                     $label = $item['label'] ?? '';
                     $result .= '<li>';
                     $result .= '<a href="'.$escapeHtml($link).'">'.$escapeHtml($label).'</a>';
@@ -136,13 +136,16 @@ class Menu extends AbstractHelper
             $result .= '</ul>';
             $result .= '</li>';
             
-        } else {        
-            $link = $item['link']??'#';
-            
+        } 
+      else {        
+        $link = $item['link']??'#';
+        //Some Menu==[] and it does not need be rendered
+        if ($link!='#') {
             $result .= $isActive?'<li class="active">':'<li>';
             $result .= '<a href="'.$escapeHtml($link).'">'.$escapeHtml($label).'</a>';
             $result .= '</li>';
-        }    
-        return $result;
-    }
+            }
+      }    
+      return $result;
+    } //END: function renderItem($item)
 }
