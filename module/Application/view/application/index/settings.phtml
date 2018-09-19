@@ -1,29 +1,21 @@
 <?php
-$this->headTitle('Settings');
+    $this->headTitle('Settings');
 
-$this->mainMenu()->setActiveItemId('settings');
+    $this->mainMenu()->setActiveItemId('settings');
 
-$this->pageBreadcrumbs()->setItems([
-            'Home'=>$this->url('home'),
-            'Settings'=>$this->url('application', ['action'=>'settings']),
-            ]);
+    $this->pageBreadcrumbs()->setItems([
+                'Home'=>$this->url('home'),
+                'Settings'=>$this->url('application', ['action'=>'settings']),
+                ]);
 
 ?>
 
-
+<!------------------------------------- RENDERING HTML  --------------------------------------->
 <div class="row">
     <div class="col-md-6">
         <div class="panel panel-primary">
             <div class="panel-heading"> <span class="zf-green">Settings</span></div>            
-            <div class="panel-body">
-                <!-- P TAG: THERE ARE TWO BUTTONS -->
-                <p>
-                    <!-- BUTTON CHANGE PASSWORD -->
-                    <a class="btn btn-warning" href="<?= $this->url('users',
-                            ['action'=>'change-password', 'id'=>$user->getId()]); ?>">
-                        <span class="glyphicon glyphicon-asterisk"></span> Change Password
-                    </a>    
-                </p>        
+            <div class="panel-body">                       
                 <table class="table table-striped table-bordered">
                      <tr class="info">
                         <th>ID:</th>
@@ -42,6 +34,15 @@ $this->pageBreadcrumbs()->setItems([
                         <td><?= $this->escapeHtml($user->getDateCreated()) ?></th>
                     </tr>
                 </table>
+                
+                <!-- P TAG: THERE ARE TWO BUTTONS -->
+                <p>
+                    <!-- BUTTON CHANGE PASSWORD -->
+                    <a class="btn btn-warning" href="<?= $this->url('users',
+                            ['action'=>'change-password', 'id'=>$user->getId()]); ?>">
+                        <span class="glyphicon glyphicon-asterisk"></span> Change Password
+                    </a>    
+                </p> 
             </div> <!-- panel-body -->
         </div> <!-- panel -->
     </div> <!-- col-md-6 -->
