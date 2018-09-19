@@ -54,177 +54,231 @@ class NavManager
         //getting the Instance of urlHelper which let us create links on our page (on the menus)
         // using VALID ROUTES definided on the module.config.php file
         $url = $this->urlHelper;
-        //load the options associate to the user with the $menuPermission 
-        //doit....
         
-        $options= []; //init $optionss 
-        //------- checking permission Acces: +menu.purchasing ----------
-        if ($this->rbacManager->isGranted(null, $menuPermission)) {
-            
-            //the option will be render if user has permission associated to the 
-            // claims (action),  
-            if ($this->rbacManager->isGranted(null, 'option.purchasing.claims')) {
-                $options[] = [  
-                                'id' => 'claims',
-                             'label' => 'Claims',
-                              'link' => $url('claims',['action'=>'index'])
-                         ];
-            }//ENDIF: granted +option.purchasing.claims 
-            
-            if ($this->rbacManager->isGranted(null, 'option.purchasing.productdevelopments')) {   
-            /* Option: Product Developments */
-            $options[] = [
-                        'id' => 'productDevelopment',
-                        'label' => 'Product Developments',
-                        'link' => $url('pagebuilding')
-                    ];
-            }//END IF: option.purchasing.productdevelopments 
-            
-            /* Menu: Purchasing
-             * - Option: supplies
-             */ 
-            $options[] = [
-                        'id' => 'supplies',
-                        'label' => 'Supplies',
-                        'link' => $url('pagebuilding')
-                    ];
-            
-                            
-            /* Menu: Purchasing
-             * - Option:  
-             *     Comments, New Supplies/Others 
-             */
-            
-            $options[] = [
-                        'id' => 'comments',
-                        'label' => 'Comments, New Supplies/Others',
-                        'link' => $url('pagebuilding')
-                    ];
-            
-            /* a divider between options */ 
-            $options[] = [ 'id' => '-'];
-            
-            
-            /* Menu: Purchasing
-             * - Option:  
-             *     Sales Back Orders 
-             */
-                 
-            $options[] = [
-                       'id' => 'salesbackorders',
-                       'label' => 'Sales Backorders',
-                       'link' => $url('pagebuilding')
-                   ];
+        /*
+         * Load the options associated to the user with the permission to the MENU ($menuPermission) 
+         * - if $menuPermission = 'menu.purchasing' then 
+         * - $options [] return all the options which the user has permission
+         */   
+        $options= []; //init $options
                 
-            /* Menu: Purchasing
-             * - Option:  
-             *  Follow Backorders 
-             */ 
-                   
-            $options[] = [
-                        'id' => 'followbackorders',
-                        'label' => 'Follow Backorders',
-                        'link' => $url('pagebuilding')
-                    ];
-            
-            /* a divider between options */ 
-            $options[] = [ 'id' => '-'];
-            
-            /* Menu: Purchasing
-             * - Option:   
-             *   Part/Vendor Comments 
-             */        
-            $options[] = [
-                      'id' => 'partvendorcomments',
-                      'label' => 'Part/Vendor Comments',
-                      'link' => $url('pagebuilding')
-                  ];
-            
-            /* Menu: Purchasing
-             * - Option: 
-             *     Suspended Parts
-             */        
-            $options[] = [
-                        'id' => 'suspendedparts',
-                        'label' => 'Suspended Parts',
-                        'link' => $url('pagebuilding')
-                    ];
+       // echo"ENTER---". $menuPermission;   
+        if ($this->rbacManager->isGranted(null, $menuPermission)) {
+            switch ($menuPermission) {
+                case 'menu.management': //doing all about management Menu  
+                    //No checking neither permission options 
+                    //------- checking permission Acces: +menu.purchasing ----------                
+                        $options[] = [
+                                        'id' => 'management',
+                                        'label' => 'Option 1 ',
+                                        'link' => $url('pagebuilding')
+                                    ];
+                        $options[] = [
+                                        'id' => 'management1',
+                                        'label' => 'Option 2',
+                                        'link' => $url('pagebuilding')
+                                    ];
 
-            $options[] = [ 'id' => '-'];
-            
-            /* Menu: Purchasing
-             * - Option: 
-             *      Email Vendors */        
-            $options[] = [
-                        'id' => 'emailvendors',
-                        'label' => 'Email Vendors',
-                        'link' => $url('pagebuilding')
-                    ];
+                        /* a divider between options */ 
+                            $options[] = [ 'id' => '-'];
 
-           /* Menu: Purchasing
-             * - Option:     
-             *       Purchasing Quote 
-             */        
-            $options[] = [
-                        'id' => 'partvendorcomments',
-                        'label' => 'Purchasing Quote',
-                        'link' => $url('pagebuilding')
-                    ];
-            
-            /* Menu: Purchasing
-             * - Option:  
-             *      Vendors Price List
-             */        
-            $options[] = [
-                        'id' => 'vendorspricelist',
-                        'label' => 'Vendors Price List',
-                        'link' => $url('pagebuilding')
-                    ];
+                        $options[] = [
+                                        'id' => 'management2',
+                                        'label' => 'Option 3',
+                                        'link' => $url('pagebuilding')
+                                    ];  
+                break; //END CASE: 'menu.management'
 
-            /* Menu: Purchasing
-             *  - Option: 
-             *      Print labels (Vendors)
-             */        
-            $options[] = [
-                        'id' => 'printlabels',
-                        'label' => 'Print Labels(Vendors)',
-                        'link' => $url('pagebuilding')
-                    ];
+                case 'menu.maketing' : //doing all about marketing Menu
+                break; //END CASE: 'menu.maketing'
 
-            /* a divider between options */ 
-            $options[] = [ 'id' => '-'];
+                case 'menu.mis' : //doing all about mis Menu
+                break;//END CASE: 'menu.mis'
             
-            /** Menu: Purchasing
-             *   - Option:  
-             *      Change Pur. Agent / Person in charge
-             */        
-            $options[] = [
-                        'id' => 'changeagentpersonincharge',
-                        'label' => 'Change Pur. Agent/Person in charge',
-                        'link' => $url('pagebuilding')
-                    ];
-             
-            /* Menu: Purchasing
-             * - Option: 
-             *       Upload OEM Pictures 
-             */        
-            $options[] = [
-                        'id' => 'uploadoempictures',
-                        'label' => 'Upload OEM Pictures',
-                        'link' => $url('pagebuilding')
-                    ];
-            
-            /* Menu: Purchasing
-             * - Option:  
-             *      Reports 
-             */        
-            $options[] = [
-                        'id' => 'reports',
-                        'label' => 'Reports',
-                        'link' => $url('pagebuilding')
-                    ];
-                   
-        } //ENDIF:  access() to $permission 
+                case 'menu.purchasing' : //doing all about purchasing Menu
+                   //------- checking permission Acces: +menu.purchasing ----------
+                   // if ($this->rbacManager->isGranted(null, $menuPermission)) {
+
+                        //the option will be render if user has permission associated to the 
+                        // claims (action),  
+                        if ($this->rbacManager->isGranted(null, 'option.purchasing.claims')) {
+                            $options[] = [  
+                                            'id' => 'claims',
+                                         'label' => 'Claims',
+                                          'link' => $url('claims',['action'=>'index'])
+                                     ];
+                        }//ENDIF: granted +option.purchasing.claims 
+
+                        if ($this->rbacManager->isGranted(null, 'option.purchasing.productdevelopments')) {   
+                        /* Option: Product Developments */
+                        $options[] = [
+                                    'id' => 'productDevelopment',
+                                    'label' => 'Product Developments',
+                                    'link' => $url('pagebuilding')
+                                ];
+                        }//END IF: option.purchasing.productdevelopments 
+
+                        /* Menu: Purchasing
+                         * - Option: supplies
+                         */ 
+                        $options[] = [
+                                    'id' => 'supplies',
+                                    'label' => 'Supplies',
+                                    'link' => $url('pagebuilding')
+                                ];
+
+
+                        /* Menu: Purchasing
+                         * - Option:  
+                         *     Comments, New Supplies/Others 
+                         */
+
+                        $options[] = [
+                                    'id' => 'comments',
+                                    'label' => 'Comments, New Supplies/Others',
+                                    'link' => $url('pagebuilding')
+                                ];
+
+                        /* a divider between options */ 
+                        $options[] = [ 'id' => '-'];
+
+
+                        /* Menu: Purchasing
+                         * - Option:  
+                         *     Sales Back Orders 
+                         */
+
+                        $options[] = [
+                                   'id' => 'salesbackorders',
+                                   'label' => 'Sales Backorders',
+                                   'link' => $url('pagebuilding')
+                               ];
+
+                        /* Menu: Purchasing
+                         * - Option:  
+                         *  Follow Backorders 
+                         */ 
+
+                        $options[] = [
+                                    'id' => 'followbackorders',
+                                    'label' => 'Follow Backorders',
+                                    'link' => $url('pagebuilding')
+                                ];
+
+                        /* a divider between options */ 
+                        $options[] = [ 'id' => '-'];
+
+                        /* Menu: Purchasing
+                         * - Option:   
+                         *   Part/Vendor Comments 
+                         */        
+                        $options[] = [
+                                  'id' => 'partvendorcomments',
+                                  'label' => 'Part/Vendor Comments',
+                                  'link' => $url('pagebuilding')
+                              ];
+
+                        /* Menu: Purchasing
+                         * - Option: 
+                         *     Suspended Parts
+                         */        
+                        $options[] = [
+                                    'id' => 'suspendedparts',
+                                    'label' => 'Suspended Parts',
+                                    'link' => $url('pagebuilding')
+                                ];
+
+                        $options[] = [ 'id' => '-'];
+
+                        /* Menu: Purchasing
+                         * - Option: 
+                         *      Email Vendors */        
+                        $options[] = [
+                                    'id' => 'emailvendors',
+                                    'label' => 'Email Vendors',
+                                    'link' => $url('pagebuilding')
+                                ];
+
+                       /* Menu: Purchasing
+                         * - Option:     
+                         *       Purchasing Quote 
+                         */        
+                        $options[] = [
+                                    'id' => 'partvendorcomments',
+                                    'label' => 'Purchasing Quote',
+                                    'link' => $url('pagebuilding')
+                                ];
+
+                        /* Menu: Purchasing
+                         * - Option:  
+                         *      Vendors Price List
+                         */        
+                        $options[] = [
+                                    'id' => 'vendorspricelist',
+                                    'label' => 'Vendors Price List',
+                                    'link' => $url('pagebuilding')
+                                ];
+
+                        /* Menu: Purchasing
+                         *  - Option: 
+                         *      Print labels (Vendors)
+                         */        
+                        $options[] = [
+                                    'id' => 'printlabels',
+                                    'label' => 'Print Labels(Vendors)',
+                                    'link' => $url('pagebuilding')
+                                ];
+
+                        /* a divider between options */ 
+                        $options[] = [ 'id' => '-'];
+
+                        /** Menu: Purchasing
+                         *   - Option:  
+                         *      Change Pur. Agent / Person in charge
+                         */        
+                        $options[] = [
+                                    'id' => 'changeagentpersonincharge',
+                                    'label' => 'Change Pur. Agent/Person in charge',
+                                    'link' => $url('pagebuilding')
+                                ];
+
+                        /* Menu: Purchasing
+                         * - Option: 
+                         *       Upload OEM Pictures 
+                         */        
+                        $options[] = [
+                                    'id' => 'uploadoempictures',
+                                    'label' => 'Upload OEM Pictures',
+                                    'link' => $url('pagebuilding')
+                                ];
+
+                        /* Menu: Purchasing
+                         * - Option:  
+                         *      Reports 
+                         */        
+                        $options[] = [
+                                    'id' => 'reports',
+                                    'label' => 'Reports',
+                                    'link' => $url('pagebuilding')
+                                ];
+
+                   // } //ENDIF:  access() to $permission 
+                break;
+                case 'menu.quality' : //doing all about quality Menu
+                break;
+                case 'menu.manufacturing' : //doing all about manufacturing Menu
+                break;
+                case 'menu.sales' : //doing all about sales Menu
+                break;
+                case 'menu.receiving' : //doing all about receiving Menu
+                break;
+                case 'menu.wharehouse' : //doing all about wharehouse Menu
+                break;
+                case 'menu.maintenance' : //doing all about maintenance Menu
+                break;       
+
+            } // END SWITCH 
+    }//End IF 
         
         return $options;
     } //END METHOD: addMenuOptions(+permission)
@@ -357,32 +411,45 @@ class NavManager
             ];
             } 
         else {            
-        /**
-         * CREATE DYNAMIC MENUS WITH THE OPTIONS GIVEN OR ASSIGNED EACH MENU 
-         * Management, Marketing, MIS, Purchasing, Quality Control, Manufacturing, Sales Shipping
-         *  Receiving, Warehouse, maintenance 
-         */       
+            /**
+             * CREATE DYNAMIC MENUS WITH THE OPTIONS GIVEN OR ASSIGNED EACH MENU 
+             * Management, Marketing, MIS, Purchasing, Quality Control, Manufacturing, Sales Shipping
+             *  Receiving, Warehouse, maintenance 
+             */       
        
         $mainMenu = ["management", "marketing", "mis", "purchasing", "quality",
                      "manufacturing", "sales","receiving","warehourse","maintenance"];
         /* 
          * GETTING THE MENUS AND THE PERMISSIONS ASSOCIATED TO THEM 
-         *  - getMainMenuPermissions(): it get back an array with
-         *  - the menu and the permissions associated to them. 
-         *  -$mainMenuPermissions[] : it contains each module  
-         *    and the permission associated to it (this permission associate
-         *    to a Menu Role : (example:   
+            *  - getMainMenuPermissions(): it get back an array with
+            *  - the menu and the permissions associated to them. 
+            *  -$mainMenuPermissions[] : it contains each module  
+            *    and the permission associated to it (this permission associate
+            *    to a Menu Role : (example:  +menu.purchasing  
          */
            
            $mainMenuPermissions = $this->getMainMenuPermissions();            
            
-           //getting back the options associated to $menu['MODULE_NAME'] 
-           //checking COUNT of ITEMS(options) will be shown on the Menu: PURCHASING FOR EXAMPLE
+           /* getting back the options associated to $menu['MODULE_NAME'] 
+             checking COUNT of ITEMS(options) will be shown on the Menu: PURCHASING FOR EXAMPLE
+              - $mainMenuPermission['management']['permission']] : it containts the permission menu
+            */   
            
-           $menuOptions = $this->addOptionsToMenu($mainMenuPermissions['purchasing']['permission']);
+            $menuOptions = $this->addOptionsToMenu($mainMenuPermissions['management']['permission']);
+          
+           
+          /*
+           *  get Id, Label and $menuOptions and pass them to the method:
+           *  addOptionToMenuDropDown             
+          */ 
+          
+           $id = $mainMenuPermissions['management']['id'];           
+           $label = $mainMenuPermissions['management']['label'];           
+           $items[] = $this->setOptionsToMenu( $id, $label, $menuOptions );
            
            // get Id, Label and $menuOptions and pass them to the method:
            // addOptionToMenuDropDown 
+           $menuOptions = $this->addOptionsToMenu($mainMenuPermissions['purchasing']['permission']);
            $id = $mainMenuPermissions['purchasing']['id'];
            $label = $mainMenuPermissions['purchasing']['label'];           
            $items[] = $this->setOptionsToMenu( $id, $label, $menuOptions );
@@ -416,12 +483,8 @@ class NavManager
             /*
              *  Adding About Menu
              */
-            $items[] = [
-                'id' => 'about',
-                'label' => 'About',
-                'link'  => $url('about')
-            ];
-            
+            $items[] = $this->setOptions('about', 'About', 'about');              
+                        
             $items[] = [
                 'id' => 'logout',
                 'label' => $this->authService->getIdentity(),
