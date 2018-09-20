@@ -7,13 +7,12 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace Management\Framework;
+namespace Sales\Framework;
 
 use PHPUnit_Framework_TestCase;
 
 class TestCase extends PHPUnit_Framework_TestCase
 {
-
     public static $locator;
 
     public static function setLocator($locator)

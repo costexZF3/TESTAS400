@@ -30,9 +30,10 @@ return [
     'Zend\Form',
     'Zend\Router',
     'Zend\Validator',    
-    'ZendDeveloperTools',    
+    'ZendDeveloperTools',     
     'User',
+    'Sales',
     'Management',
-    'Purchasing', 
+    'Purchasing',     
     'Application',
 ];
