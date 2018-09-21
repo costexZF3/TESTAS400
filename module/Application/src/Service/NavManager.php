@@ -166,31 +166,17 @@ class NavManager
                 break; //END CASE: 'menu.manufacturing'
                 
                 /**** SALES MENU ****/
-                case 'menu.sales' :
-                     $options[] = [
-                                        'id' => 'test',
-                                        'label' => 'Test',
-                                        'link' => $url('management',['action'=>'index'])
-                                    ];
-                        $options[] = [
-                                        'id' => 'option2',
-                                        'label' => 'Option 2',
-                                        'link' => $url('pagebuilding')
-                                    ];
-
-                        /* a divider between options */ 
-                            $options[] = [ 'id' => '-'];
-
-                        $options[] = [
-                                        'id' => 'option3',
-                                        'label' => 'Option 3',
-                                        'link' => $url('pagebuilding')
-                                    ];  
-                        $options[] = [
-                                        'id' => 'option4',
-                                        'label' => 'Option 4',
-                                        'link' => $url('pagebuilding')
-                                    ];
+                case 'menu.sales' :                    
+                        // 'link' => $url('sales',['action'=>'index'])
+                        $options[] = $this->setOptions('sales', 'Test', 'sales','');            
+                    
+                        $options[] = $this->setOptions('sales1', 'Option 1', 'pagebuilding','');
+                        $options[] = $this->setOptions('sales2', 'Option 2', 'pagebuilding','');
+                        
+                        $options[] = $this->setDivider($options);                         
+                        
+                        $options[] = $this->setOptions('sales3', 'Option 3', 'pagebuilding','');
+                        $options[] = $this->setOptions('sales4', 'Option 4', 'pagebuilding','');
                 break; //END CASE: 'menu.sales' 
             
                 /**** RECEIVING MENU ****/
