@@ -70,8 +70,8 @@ class NavManager
                                  
                         $options[] = [
                                         'id' => 'management',
-                                        'label' => 'Option 1 ',
-                                        'link' => $url('claims',['action'=>'index'])
+                                        'label' => 'Test',
+                                        'link' => $url('management',['action'=>'index'])
                                     ];
                         $options[] = [
                                         'id' => 'management1',
@@ -242,6 +242,30 @@ class NavManager
                 
                 /**** SALES MENU ****/
                 case 'menu.sales' :
+                     $options[] = [
+                                        'id' => 'test',
+                                        'label' => 'Test',
+                                        'link' => $url('management',['action'=>'index'])
+                                    ];
+                        $options[] = [
+                                        'id' => 'option2',
+                                        'label' => 'Option 2',
+                                        'link' => $url('pagebuilding')
+                                    ];
+
+                        /* a divider between options */ 
+                            $options[] = [ 'id' => '-'];
+
+                        $options[] = [
+                                        'id' => 'option3',
+                                        'label' => 'Option 3',
+                                        'link' => $url('pagebuilding')
+                                    ];  
+                        $options[] = [
+                                        'id' => 'option4',
+                                        'label' => 'Option 4',
+                                        'link' => $url('pagebuilding')
+                                    ];
                 break; //END CASE: 'menu.sales' 
             
                 /**** RECEIVING MENU ****/
@@ -343,8 +367,7 @@ class NavManager
         return [];
         
     } //ENDIF: function AddOptionsToMenuDropDown() 
-    
-  
+      
     private function setOptions($id, $label, $route ){  
         $url = $this->urlHelper;
         return [
@@ -352,18 +375,17 @@ class NavManager
                 'label' => $label,
                 'link' => $url($route),
               ];                
-    }//END: setOptions
-    
+    }//END: setOptions    
    
-     /*
-        * This method returns menu items depending on whether user has logged in or not.
-        *  
-        *  Menu: Home will be shown always, so you don't need to verify access indexes:
-        *      - id   : it identifies each one of the menu items
-        *      - label: This NAME matches with how users will watch the menu option  on the UI
-        *      - link : It identifies the ROUTE (defined on the module.config.php ) 
-        *              when the user click it on.
-    */
+/*
+* This method returns menu items depending on whether user has logged in or not.
+*  
+*  Menu: Home will be shown always, so you don't need to verify access indexes:
+*      - id   : it identifies each one of the menu items
+*      - label: This NAME matches with how users will watch the menu option  on the UI
+*      - link : It identifies the ROUTE (defined on the module.config.php ) 
+*              when the user click it on.
+*/
       
     public function getMenuItems() 
     {
@@ -414,14 +436,12 @@ class NavManager
               - $mainMenuPermission['management']['permission']] : it containts the permission menu
             */   
            
-            $menuOptions = $this->addOptionsToMenu($mainMenuPermissions['management']['permission']);
-          
+            $menuOptions = $this->addOptionsToMenu($mainMenuPermissions['management']['permission']);          
            
           /*
            *  get Id, Label and $menuOptions and pass them to the method:
            *  addOptionToMenuDropDown             
-          */ 
-          
+          */
            $id = $mainMenuPermissions['management']['id'];           
            $label = $mainMenuPermissions['management']['label'];           
            $items[] = $this->setOptionsToMenu( $id, $label, $menuOptions );
@@ -431,6 +451,12 @@ class NavManager
            $menuOptions = $this->addOptionsToMenu($mainMenuPermissions['purchasing']['permission']);
            $id = $mainMenuPermissions['purchasing']['id'];
            $label = $mainMenuPermissions['purchasing']['label'];           
+           $items[] = $this->setOptionsToMenu( $id, $label, $menuOptions );
+           
+           
+           $menuOptions = $this->addOptionsToMenu($mainMenuPermissions['sales']['permission']);
+           $id = $mainMenuPermissions['sales']['id'];
+           $label = $mainMenuPermissions['sales']['label'];           
            $items[] = $this->setOptionsToMenu( $id, $label, $menuOptions );
            
            /*             

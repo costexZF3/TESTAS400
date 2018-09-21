@@ -100,6 +100,7 @@ return [
     'rbac_manager' => [
         'assertions' => [Service\RbacAssertionManager::class],
     ],
+    //
     'service_manager' => [
         'factories' => [
             Service\NavManager::class => Service\Factory\NavManagerFactory::class,
