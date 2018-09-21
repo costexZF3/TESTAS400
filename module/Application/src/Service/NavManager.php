@@ -66,41 +66,27 @@ class NavManager
         if ($this->rbacManager->isGranted(null, $menuPermission)) {
             switch ($menuPermission) {                
                 /**** MANAGEMENT MENU ****/
-                case 'menu.management': 
-                                 
-                        $options[] = [
-                                        'id' => 'management',
-                                        'label' => 'Test',
-                                        'link' => $url('management',['action'=>'index'])
-                                    ];
-                        $options[] = [
-                                        'id' => 'management1',
-                                        'label' => 'Option 2',
-                                        'link' => $url('pagebuilding')
-                                    ];
-
-                        /* a divider between options */ 
-                            $options[] = [ 'id' => '-'];
-
-                        $options[] = [
-                                        'id' => 'management2',
-                                        'label' => 'Option 3',
-                                        'link' => $url('pagebuilding')
-                                    ];  
-                        $options[] = [
-                                        'id' => 'management3',
-                                        'label' => 'Option 4',
-                                        'link' => $url('pagebuilding')
-                                    ];
+                case 'menu.management':                                  
+                       
+                        // 'link' => $url('management',['action'=>'index'])
+                        $options[] = $this->setOptions('management', 'Test', 'management','');            
+                    
+                        $options[] = $this->setOptions('management1', 'Option 1', 'pagebuilding','');
+                        $options[] = $this->setOptions('management2', 'Option 2', 'pagebuilding','');
+                        
+                        $options[] = $this->setDivider($options);                         
+                        
+                        $options[] = $this->setOptions('management3', 'Option 3', 'pagebuilding','');
+                        $options[] = $this->setOptions('management4', 'Option 4', 'pagebuilding','');
                 break; //END CASE: 'menu.management'
             
                 /**** MARKETING MENU ****/
                 case 'menu.marketing' : //doing all about marketing Menu
-                break; //END CASE: 'menu.maketing'
+                break; //--------------------------  END CASE: 'menu.maketing'-------------------
                 
                 /****************************** MIS MENU ******************************/
                 case 'menu.mis' : //doing all about mis Menu
-                break;/*-------------      END CASE:  menu.mis  ----------------------*/
+                break;/*--------------------------   END CASE:  menu.mis  ----------------------*/
             
                 /************************** PURCHASING MENU ******************************/
                 case 'menu.purchasing' : 
