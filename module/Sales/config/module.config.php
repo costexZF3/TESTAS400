@@ -12,7 +12,7 @@ return [
                 'type'    => Literal::class,
                 'options' => [
                     // Change this to something specific to your module
-                    'route'    => '/',
+                    'route'    => '/sales',
                     'defaults' => [
                         'controller'    => Controller\IndexController::class,
                         'action'        => 'index',
