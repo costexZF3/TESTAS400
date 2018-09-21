@@ -98,148 +98,78 @@ class NavManager
                 case 'menu.marketing' : //doing all about marketing Menu
                 break; //END CASE: 'menu.maketing'
                 
-                /**** MIS MENU ****/
+                /****************************** MIS MENU ******************************/
                 case 'menu.mis' : //doing all about mis Menu
-                break;/*-------------      END CASE:  menu.mis ----------------------*/
+                break;/*-------------      END CASE:  menu.mis  ----------------------*/
             
-                /**** PURCHASING MENU ****/
+                /************************** PURCHASING MENU ******************************/
                 case 'menu.purchasing' : 
                     /* Options: CLAIMS */
-                    if ($this->rbacManager->isGranted(null, 'option.purchasing.claims')) {
-                        $options[] = [  
-                                        'id' => 'claims',
-                                     'label' => 'Claims',
-                                      'link' => $url('claims',['action'=>'index'])
-                                 ];
-                    }//ENDIF: granted +option.purchasing.claims 
+                    if ($this->rbacManager->isGranted(null, 'option.purchasing.claims')) {                   
+                        $options[] = $this->setOptions('claims', 'Claims', 'claims','');
+                    }//end if: granted +option.purchasing.claims 
 
                     /* Options: Product Developments */
-                    if ($this->rbacManager->isGranted(null, 'option.purchasing.productdevelopments')) {                      
-                        $options[] = [
-                                    'id' => 'productdevelopment',
-                                    'label' => 'Product Developments',
-                                    'link' => $url('pagebuilding')
-                                ];
-                    }//END IF: option.purchasing.productdevelopments 
+                    if ($this->rbacManager->isGranted(null, 'option.purchasing.productdevelopments')) {                                             
+                         $options[] = $this->setOptions('productdevelopment', 'Product Developments', 'pagebuilding','');
+                    }//end if: option.purchasing.productdevelopments 
 
                     /* Options: Supplies */
                     if ($this->rbacManager->isGranted(null, 'option.purchasing.supplies')) {
-                        $options[] = [
-                                    'id' => 'supplies',
-                                    'label' => 'Supplies',
-                                    'link' => $url('pagebuilding')
-                                ];
-                        $options[] = [
-                                    'id' => 'comments',
-                                    'label' => 'Comments, New Supplies/Others',
-                                    'link' => $url('pagebuilding')
-                                ];
-                    }//END IF: option.purchasing.supplies    
+                        $options[] = $this->setDivider($options); 
 
+                        $options[] = $this->setOptions('supplies', 'Supplies', 'pagebuilding','');
+                        $options[] = $this->setOptions('comments', 'Comments, New Supplies/Others', 'pagebuilding','');
+                       
+                    }//end if: option.purchasing.supplies    
                     
                     /* Options: Sales Backorders */
-                    if ($this->rbacManager->isGranted(null, 'option.purchasing.backorders')) { 
-                        /* divider */
-                        $options[] = (count($options)!=0) ? $this->setOptions('divider','','',''):null; 
+                    if ($this->rbacManager->isGranted(null, 'option.purchasing.backorders')) {                        
+                        $options[] = $this->setDivider($options); 
 
-                        $options[] = [
-                                   'id' => 'salesbackorders',
-                                   'label' => 'Sales Backorders',
-                                   'link' => $url('pagebuilding')
-                               ];
-                        
-                        $options[] = [
-                                    'id' => 'followbackorders',
-                                    'label' => 'Follow Backorders',
-                                    'link' => $url('pagebuilding')
-                                ];
-                    }//END IF: BACKORDERS 
+                        $options[] = $this->setOptions('salesbackorders', 'Sales Backorders', 'pagebuilding','');                                                 
+                        $options[] = $this->setOptions('followbackorders', 'Follow Backorders', 'pagebuilding',''); 
+                    }//end if: BACKORDERS 
 
                     /* Options: Vendors */
-                    if ($this->rbacManager->isGranted(null, 'option.purchasing.vendors')) {                         
-                        /* a divider between options */
-                        $options[] = (count($options)!=0)?$this->setOptions('divider','','',''):null; 
-                          
-                        $options[] = [
-                                  'id' => 'partvendorcomments',
-                                  'label' => 'Part/Vendor Comments',
-                                  'link' => $url('pagebuilding')
-                              ];
+                    if ($this->rbacManager->isGranted(null, 'option.purchasing.vendors')) {
+                        $options[] = $this->setDivider($options);  
                         
-                        $options[] = [
-                                    'id' => 'emailvendors',
-                                    'label' => 'Email Vendors',
-                                    'link' => $url('pagebuilding')
-                                ];   
-                        
-                        $options[] = [
-                                'id' => 'vendorspricelist',
-                                'label' => 'Vendors Price List',
-                                'link' => $url('pagebuilding')
-                            ];
-                        
-                        $options[] = [
-                                    'id' => 'printlabels',
-                                    'label' => 'Print Labels(Vendors)',
-                                    'link' => $url('pagebuilding')
-                                ];
+                        $options[] = $this->setOptions('partvendorcomments', 'Part/Vendor Comments', 'pagebuilding','');                           
+                        $options[] = $this->setOptions('emailvendors', 'Email Vendors', 'pagebuilding','');                        
+                        $options[] = $this->setOptions('vendorspricelist', 'Vendors Price List', 'pagebuilding','');                                               
+                        $options[] = $this->setOptions('printlabels', 'Print Labels(Vendors)', 'pagebuilding','');
                         
                     }//END IF: VENDORS
 
                     /* Options: parts */
-                    if ($this->rbacManager->isGranted(null, 'option.purchasing.parts')) {
-                        /* divider */
-                        $options[] = (count($options)!=0) ? $this->setOptions('divider','','',''):null;
+                    if ($this->rbacManager->isGranted(null, 'option.purchasing.parts')) {                        
+                        $options[] = $this->setDivider($options); 
+                       
+                        $options[] = $this->setOptions('suspendedparts', 'Suspended Parts', 'pagebuilding','');
+                        $options[] = $this->setOptions('partvendorcomments', 'Purchasing Quote', 'pagebuilding','');
                         
-                        $options[] = [
-                                        'id' => 'suspendedparts',
-                                        'label' => 'Suspended Parts',
-                                        'link' => $url('pagebuilding')
-                                    ];  
-                        $options[] = [
-                                    'id' => 'partvendorcomments',
-                                    'label' => 'Purchasing Quote',
-                                    'link' => $url('pagebuilding')
-                                ];
-                    }//END IF: PARTS
+                    }//end if: PARTS
 
-                    //* Options: AGENTS */
-                    if ($this->rbacManager->isGranted(null, 'option.purchasing.agents')) { 
-                        /* divider */
-                        $options[] = (count($options)!=0) ? $this->setOptions('divider','','',''):null;
-                        
-                        $options[] = [
-                                    'id' => 'changeagentpersonincharge',
-                                    'label' => 'Change Pur. Agent/Person in charge',
-                                    'link' => $url('pagebuilding')
-                                ];
-                    }//END IF: AGENTS 
-                        
+                    /* Options: AGENTS */
+                    if ($this->rbacManager->isGranted(null, 'option.purchasing.agents')) {                        
+                        $options[] = $this->setDivider($options);                                                  
+                        $options[] = $this->setOptions('changeagentpersonincharge', 'Change Pur. Agent/Person in charge', 'pagebuilding','');                          
+                    }//end if: AGENTS                         
 
-                    ///* Options: UPLOAD OEM PICS */
-                    if ($this->rbacManager->isGranted(null, 'option.purchasing.uploadoem')) { 
-                        /* divider */
-                        $options[] = (count($options)!=0) ? $this->setOptions('divider','','',''):null;
-                        $options[] = [
-                                    'id' => 'uploadoempictures',
-                                    'label' => 'Upload OEM Pictures',
-                                    'link' => $url('pagebuilding')
-                                ];
-                    }//END IF: UPLOAD OEM PICS
+                    /* Options: UPLOAD OEM PICS */
+                    if ($this->rbacManager->isGranted(null, 'option.purchasing.uploadoem')) {                        
+                        $options[] = $this->setDivider($options); 
+                        $options[] = $this->setOptions('uploadoempictures', 'Upload OEM Pictures', 'pagebuilding','');
+                    }//end if: UPLOAD OEM PICS
 
-                    ///* Options: REPORTS */
-                    if ($this->rbacManager->isGranted(null, 'option.purchasing.reports')) { 
-                        /* divider */
-                        $options[] = $this->setDivider($options);
-                        
-                        $options[] = [
-                                    'id' => 'reports',
-                                    'label' => 'Reports',
-                                    'link' => $url('pagebuilding')
-                                ];
-                    }//END IF: REPORTS
+                    /* Options: REPORTS */
+                    if ($this->rbacManager->isGranted(null, 'option.purchasing.reports')) {                        
+                        $options[] = $this->setDivider($options);                         
+                        $options[] = $this->setOptions('reports', 'Reports', 'pagebuilding','');                                
+                    }//end if: REPORTS
                     
-                break;/*-------------      END CASE:  menu.purchasing ----------------------*/
+                break;/*---------------------      END CASE:  menu.purchasing ----------------------*/
                 
                 /**** QUALITY MENU ****/
                 case 'menu.quality' :
