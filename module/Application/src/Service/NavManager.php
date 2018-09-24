@@ -64,7 +64,21 @@ class NavManager
                 
        // echo"ENTER---". $menuPermission;   
         if ($this->rbacManager->isGranted(null, $menuPermission)) {
-            switch ($menuPermission) {                
+            switch ($menuPermission) { 
+                /**** ADMIN MENU ****/
+                case 'menu.admin' : 
+                    if ($this->rbacManager->isGranted(null, 'user.manage')) {
+                        $options[] = $this->setOptions('users', 'Manage Users', 'users','');
+                    }            
+                    if ($this->rbacManager->isGranted(null, 'permission.manage')) {
+                        $options[] = $this->setOptions('permissions', 'Manage Permissions', 'permissions','');                       
+                    }            
+                    if ($this->rbacManager->isGranted(null, 'role.manage')) {
+                        $options[] = $this->setOptions('roles', 'Manage Roles', 'roles','');                       
+                    }
+                break; //end case: 'menu.admin'  
+                
+                
                 /**** MANAGEMENT MENU ****/
                 case 'menu.management':                                  
                        
@@ -258,6 +272,11 @@ class NavManager
                             'id' =>'maintenance',
                          'label' =>'Maintenance'
                     ],
+            'admin' =>[
+                    'permission'=>'menu.admin',
+                            'id' =>'admin',
+                         'label' =>'Admin'
+                    ],
         ];
      }//END: function getMainMenu()     
     
@@ -355,21 +374,22 @@ class NavManager
            
            //$mainMenu1 = ["management", "marketing", "mis", "purchasing", "quality",
            //             "manufacturing", "sales","receiving","warehourse","maintenance"]; 
-           
-           
+                      
                 
           /*
            *  Getting params
            *   -Id : id (it's like a name of object, 
            *   - Label: It's a string that idenfifies ONE item of the Main Menu 
            *   - $menuOptions : It receives the items of menu will be rendered
-           *  ---  Id, Labeland pass them to the method:
+           *  - Id, Label and pass them to the method:
            *  addOptionToMenuDropDown             
           */
            
-            $mainMenu = ["management", //"marketing", "mis", 
-                        "purchasing", //"quality","manufacturing", 
-                        "sales",//"receiving","warehourse","maintenance"
+            $mainMenu = [
+                            "management", //"marketing", "mis", 
+                            "purchasing", //"quality","manufacturing", 
+                            "sales",//"receiving","warehourse","maintenance"
+                            "admin",
                         ]; 
             foreach ($mainMenu as $moduleName) {
                 $menuOptions = $this->addOptionsToMenu($mainMenuPermissions[$moduleName]['permission']);  
@@ -377,38 +397,15 @@ class NavManager
                 $label = $mainMenuPermissions[$moduleName]['label'];           
                 $items[] = $this->setOptionsToMenu( $id, $label, $menuOptions );
             }
-                       
-           /*             
-            *  Determine WHAT items(OPTIONS) must be displayed in Admin dropDownList   
-            */            
-            
-            // OPTIONS FOR ADMIN MENU: ARRAY WITH ITEMS FOR ADMIN USERS
-            // $adminMenuOptions = $this->setOptions($id, $label, $route, $permission);
-            $adminMenuOptions =[];
-            if ($this->rbacManager->isGranted(null, 'user.manage')) {
-                $adminMenuOptions[] = $this->setOptions('users', 'Manage Users', 'users','');
-            }            
-            if ($this->rbacManager->isGranted(null, 'permission.manage')) {
-                $adminMenuOptions[] = $this->setOptions('permissions', 'Manage Permissions', 'permissions','');                       
-            }            
-            if ($this->rbacManager->isGranted(null, 'role.manage')) {
-                $adminMenuOptions[] = $this->setOptions('roles', 'Manage Roles', 'roles','');                       
-            }
-            
-            //checking whether Admin's menu-items is different of 0 
-            if (count($adminMenuOptions)!=0) {
-                $items[] = [
-                    'id' => 'admin',
-                    'label' => 'Admin',
-                    'dropdown' => $adminMenuOptions
-                ];
-            }            
             
             /*
              *  Adding About Menu
              */
             $items[] = $this->setOptions('about', 'About', 'about','');              
-                        
+             
+            /*
+             *  Adding Sing in, Settings and Logout options floating to the right
+             */
             $items[] = [
                 'id' => 'logout',
                 'label' => $this->authService->getIdentity(),
