@@ -354,21 +354,15 @@ class NavManager
         if (!$this->authService->hasIdentity()) {             
             $items[]= $this->setOptions('login', 'Sign in', 'login', 'right');            
         } 
-        else {            
-            /*
-             * CREATE DYNAMIC MENUS WITH THE OPTIONS GIVEN OR ASSIGNED EACH MENU              
-             */       
-       
-            
+        else {  //CREATE A DYNAMIC MENUS WITH THE OPTIONS GIVEN OR ASSIGNED TO EACH MENU          
+          
            /* 
-            * GETTING THE MENUS AND THE PERMISSIONS ASSOCIATED TO THEM 
-            *  - getMainMenuPermissions(): 
-            *       it returns an array with the menu and its permission associated by the Menu Role, 
-            *        which will be tested against the RBAC           
+            * - getMainMenuPermissions(): 
+            *   it returns an array with the menu and its permission associated by the Menu Role, 
+            *   which will be tested against the RBAC           
             */
            
-           $mainMenuPermissions = $this->getMainMenuPermissions(); 
-           
+           $mainMenuPermissions = $this->getMainMenuPermissions();            
            //$mainMenu1 = ["management", "marketing", "mis", "purchasing", "quality",
            //             "manufacturing", "sales","receiving","warehourse","maintenance"]; 
                       

@@ -42,7 +42,7 @@ class RoleController extends AbstractActionController
     public function indexAction() 
     {
         $roles = $this->entityManager->getRepository(Role::class)
-                ->findBy([], ['id'=>'ASC']);
+                ->findBy([], ['name'=>'ASC']);
         
         return new ViewModel([
             'roles' => $roles
