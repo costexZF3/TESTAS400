@@ -355,19 +355,16 @@ class NavManager
             $items[]= $this->setOptions('login', 'Sign in', 'login', 'right');            
         } 
         else {            
-            /**
-             * CREATE DYNAMIC MENUS WITH THE OPTIONS GIVEN OR ASSIGNED EACH MENU 
-             * Management, Marketing, MIS, Purchasing, Quality Control, Manufacturing, Sales Shipping
-             *  Receiving, Warehouse, maintenance 
+            /*
+             * CREATE DYNAMIC MENUS WITH THE OPTIONS GIVEN OR ASSIGNED EACH MENU              
              */       
        
             
            /* 
             * GETTING THE MENUS AND THE PERMISSIONS ASSOCIATED TO THEM 
             *  - getMainMenuPermissions(): 
-            *       it returns an array with the menu and its permissions associated which will be tested
-            *  -$mainMenuPermissions[] : it contains each module and the permission associated to it 
-            *    (this permission associate to a Menu Role : (example:  +menu.purchasing) 
+            *       it returns an array with the menu and its permission associated by the Menu Role, 
+            *        which will be tested against the RBAC           
             */
            
            $mainMenuPermissions = $this->getMainMenuPermissions(); 
@@ -378,7 +375,7 @@ class NavManager
                 
           /*
            *  Getting params
-           *   -Id : id (it's like a name of object, 
+           *   
            *   - Label: It's a string that idenfifies ONE item of the Main Menu 
            *   - $menuOptions : It receives the items of menu will be rendered
            *  - Id, Label and pass them to the method:
@@ -391,8 +388,11 @@ class NavManager
                             "sales",//"receiving","warehourse","maintenance"
                             "admin",
                         ]; 
+            
             foreach ($mainMenu as $moduleName) {
+                //getting the permission associated to menu :(+menu.purchasing, +menu.admin etc)
                 $menuOptions = $this->addOptionsToMenu($mainMenuPermissions[$moduleName]['permission']);  
+                 //-Id : id (it's like a name of object,
                 $id = $mainMenuPermissions[$moduleName]['id'];           
                 $label = $mainMenuPermissions[$moduleName]['label'];           
                 $items[] = $this->setOptionsToMenu( $id, $label, $menuOptions );
@@ -404,7 +404,7 @@ class NavManager
             $items[] = $this->setOptions('about', 'About', 'about','');              
              
             /*
-             *  Adding Sing in, Settings and Logout options floating to the right
+             *  Adding Sing in Menu  
              */
             $items[] = [
                 'id' => 'logout',
@@ -426,7 +426,7 @@ class NavManager
         }
         
         return $items;
-    }
+    }// END method: getMenuItems()
 }
 
 
