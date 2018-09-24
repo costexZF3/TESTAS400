@@ -301,6 +301,7 @@ class NavManager
                 'label' => $label,
                 'link' => $url($route),
               ]; 
+        
         if ( $floatItem!='' ){
             $result = $result + ['float'=>$floatItem];
         }
@@ -324,17 +325,16 @@ class NavManager
         //This variable ARRAY $items[] will contain all menu items that will be shown 
         $items = [];
         
-        //Home Menu: setOptions($id, $label, $route)
+        //Home Menu: setOptions($id, $label, $route, $floating)
         $items[]= $this->setOptions('home', 'Home', 'home', '');
                
-        // Display "Login" menu item for not authorized user only. On the other hand,
-        // display "Admin" and "Logout" menu items only for authorized users.       
-        
-        if (!$this->authService->hasIdentity()) { 
-            
-            $items[]= $this->setOptions('login', 'Sign in', 'login', 'right');
-            
-            } 
+        /* 
+         * Display "Login" menu item for not authorized user only. On the other hand,
+         * display "Admin" and "Logout" menu items only for authorized users.               
+         */
+        if (!$this->authService->hasIdentity()) {             
+            $items[]= $this->setOptions('login', 'Sign in', 'login', 'right');            
+        } 
         else {            
             /**
              * CREATE DYNAMIC MENUS WITH THE OPTIONS GIVEN OR ASSIGNED EACH MENU 
@@ -342,8 +342,7 @@ class NavManager
              *  Receiving, Warehouse, maintenance 
              */       
        
-            $mainMenu = ["management", "marketing", "mis", "purchasing", "quality",
-                     "manufacturing", "sales","receiving","warehourse","maintenance"];
+            
            /* 
             * GETTING THE MENUS AND THE PERMISSIONS ASSOCIATED TO THEM 
             *  - getMainMenuPermissions(): 
@@ -352,36 +351,33 @@ class NavManager
             *    (this permission associate to a Menu Role : (example:  +menu.purchasing) 
             */
            
-           $mainMenuPermissions = $this->getMainMenuPermissions();            
+           $mainMenuPermissions = $this->getMainMenuPermissions(); 
            
-           /* getting back the options associated to $menu['MODULE_NAME'] 
-              checking COUNT of ITEMS(options) will be shown on the Menu: PURCHASING FOR EXAMPLE
-              - $mainMenuPermission['management']['permission']] : it containts the permission menu
-            */   
+           //$mainMenu1 = ["management", "marketing", "mis", "purchasing", "quality",
+           //             "manufacturing", "sales","receiving","warehourse","maintenance"]; 
            
-            $menuOptions = $this->addOptionsToMenu($mainMenuPermissions['management']['permission']);          
            
+                
           /*
-           *  get Id, Label and $menuOptions and pass them to the method:
+           *  Getting params
+           *   -Id : id (it's like a name of object, 
+           *   - Label: It's a string that idenfifies ONE item of the Main Menu 
+           *   - $menuOptions : It receives the items of menu will be rendered
+           *  ---  Id, Labeland pass them to the method:
            *  addOptionToMenuDropDown             
           */
-           $id = $mainMenuPermissions['management']['id'];           
-           $label = $mainMenuPermissions['management']['label'];           
-           $items[] = $this->setOptionsToMenu( $id, $label, $menuOptions );
            
-           // get Id, Label and $menuOptions and pass them to the method:
-           // addOptionToMenuDropDown 
-           $menuOptions = $this->addOptionsToMenu($mainMenuPermissions['purchasing']['permission']);
-           $id = $mainMenuPermissions['purchasing']['id'];
-           $label = $mainMenuPermissions['purchasing']['label'];           
-           $items[] = $this->setOptionsToMenu( $id, $label, $menuOptions );
-           
-           
-           $menuOptions = $this->addOptionsToMenu($mainMenuPermissions['sales']['permission']);
-           $id = $mainMenuPermissions['sales']['id'];
-           $label = $mainMenuPermissions['sales']['label'];           
-           $items[] = $this->setOptionsToMenu( $id, $label, $menuOptions );
-           
+            $mainMenu = ["management", //"marketing", "mis", 
+                        "purchasing", //"quality","manufacturing", 
+                        "sales",//"receiving","warehourse","maintenance"
+                        ]; 
+            foreach ($mainMenu as $moduleName) {
+                $menuOptions = $this->addOptionsToMenu($mainMenuPermissions[$moduleName]['permission']);  
+                $id = $mainMenuPermissions[$moduleName]['id'];           
+                $label = $mainMenuPermissions[$moduleName]['label'];           
+                $items[] = $this->setOptionsToMenu( $id, $label, $menuOptions );
+            }
+                       
            /*             
             *  Determine WHAT items(OPTIONS) must be displayed in Admin dropDownList   
             */            
