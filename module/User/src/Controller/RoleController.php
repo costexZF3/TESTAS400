@@ -161,12 +161,20 @@ class RoleController extends AbstractActionController
             $roleList[$role2->getId()] = $role2->getName();
             
             if ($role->hasParent($role2)){
-            $selectedRoles[] = $role2->getId();}
+                $selectedRoles[] = $role2->getId();            
+            }
+            echo $role->getName();
         }//END: foreach
         
         $form->get('inherit_roles')->setValueOptions($roleList);        
         $form->get('inherit_roles')->setValue($selectedRoles);
         
+        if (count($roleList)>9) {            
+            $form->get('inherit_roles')->setAttributes([
+                'class'=>'form-control', 
+                'size' => 10,
+            ]);
+        }
         // Check if user has submitted the form
         if ($this->getRequest()->isPost()) {
             
