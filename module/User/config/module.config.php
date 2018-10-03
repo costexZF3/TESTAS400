@@ -130,16 +130,16 @@ return [
                 // to anyone.
                 ['actions' => ['resetPassword', 'message', 'setPassword'], 'allow' => '*'],
                 // Give access to "index", "add", "edit", "view", "changePassword" actions to users having the "user.manage" permission.
-                ['actions' => ['index', 'add', 'edit', 'view'], 'allow' => '+user.manage'],               
+                ['actions' => ['index', 'add', 'edit', 'view'], 'allow' => '+manage.user'],               
                 ['actions' => ['changePassword'], 'allow' => '@']
             ],
             Controller\RoleController::class => [
                 // Allow access to authenticated users having the "role.manage" permission.
-                ['actions' => '*', 'allow' => '+role.manage']
+                ['actions' => '*', 'allow' => '+manage.role']
             ],
             Controller\PermissionController::class => [
                 // Allow access to authenticated users having "permission.manage" permission.
-                ['actions' => '*', 'allow' => '+permission.manage']
+                ['actions' => '*', 'allow' => '+manage.permission']
             ],
         ]
     ],

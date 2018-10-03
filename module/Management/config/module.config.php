@@ -33,7 +33,7 @@ return [
          Controller\IndexController::class => [
                 //Allowing routes access depending on the type of permission assigned to loggin user
                 // Give access to "index" actions to everyone with +menu.purchasing  
-                //+option.purchasing.claims 
+                //+option.purchasing.claims  
                 
                 //Actions reponse to Roles associated to MENUS 
                 ['actions' => ['index'],               'allow' => '+menu.management'],  
