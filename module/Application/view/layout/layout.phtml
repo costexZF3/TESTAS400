@@ -18,7 +18,23 @@
                   )->prependStylesheet($this->basePath('css/style.css'))
                    ->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
                    ->prependStylesheet($this->basePath('css/bootstrap.min.css'))
+                   ->prependStylesheet($this->basePath('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'))
         ?>
+        
+        <!-------------------------------------------------------------------------------------------- 
+           Link remote defined by Kristofer. 
+           - All the icons in the icon libraries below, are scalable vector icons that can be customized with
+             CSS (size, color, shadow, etc.)
+        
+        
+        -------------------------------------------------------------------------------------------------->
+        <?= $this->headLink([
+                      'rel' => 'stylesheet',                        
+                      'href' => 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css']
+                  );
+        ?>
+        
+        
 
         <!-- Scripts -->
         <?= $this->headScript()
