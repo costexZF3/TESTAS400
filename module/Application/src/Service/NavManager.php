@@ -60,24 +60,22 @@ class NavManager
          * - if $menuPermission = 'menu.purchasing' then 
          * - $options [] return all the options which the user has permission
          */   
-        $options= []; //init $options
-                
-       // echo"ENTER---". $menuPermission;   
+        $options= []; //init $options               
+         
         if ($this->rbacManager->isGranted(null, $menuPermission)) {
             switch ($menuPermission) { 
                 /**** ADMIN MENU ****/
                 case 'menu.admin' : 
-                    if ($this->rbacManager->isGranted(null, 'user.manage')) {
+                    if ($this->rbacManager->isGranted(null, 'manage.user')) {
                         $options[] = $this->setOptions('users', 'Manage Users', 'users','');
                     }            
-                    if ($this->rbacManager->isGranted(null, 'permission.manage')) {
+                    if ($this->rbacManager->isGranted(null, 'manage.permission')) {
                         $options[] = $this->setOptions('permissions', 'Manage Permissions', 'permissions','');                       
                     }            
-                    if ($this->rbacManager->isGranted(null, 'role.manage')) {
+                    if ($this->rbacManager->isGranted(null, 'manage.role')) {
                         $options[] = $this->setOptions('roles', 'Manage Roles', 'roles','');                       
                     }
-                break; //end case: 'menu.admin'  
-                
+                break; //end case: 'menu.admin'                
                 
                 /**** MANAGEMENT MENU ****/
                 case 'menu.management':                                  
@@ -105,17 +103,17 @@ class NavManager
                 /************************** PURCHASING MENU ******************************/
                 case 'menu.purchasing' : 
                     /* Options: CLAIMS */
-                    if ($this->rbacManager->isGranted(null, 'option.purchasing.claims')) {                   
+                    if ($this->rbacManager->isGranted(null, 'purchasing.option.claims')) {                   
                         $options[] = $this->setOptions('claims', 'Claims', 'claims','');
                     }//end if: granted +option.purchasing.claims 
 
                     /* Options: Product Developments */
-                    if ($this->rbacManager->isGranted(null, 'option.purchasing.productdevelopments')) {                                             
+                    if ($this->rbacManager->isGranted(null, 'purchasing.option.productdevelopments')) {                                             
                          $options[] = $this->setOptions('productdevelopment', 'Product Developments', 'pagebuilding','');
                     }//end if: option.purchasing.productdevelopments 
 
                     /* Options: Supplies */
-                    if ($this->rbacManager->isGranted(null, 'option.purchasing.supplies')) {
+                    if ($this->rbacManager->isGranted(null, 'purchasing.option.supplies')) {
                         $options[] = $this->setDivider($options); 
 
                         $options[] = $this->setOptions('supplies', 'Supplies', 'pagebuilding','');
@@ -124,7 +122,7 @@ class NavManager
                     }//end if: option.purchasing.supplies    
                     
                     /* Options: Sales Backorders */
-                    if ($this->rbacManager->isGranted(null, 'option.purchasing.backorders')) {                        
+                    if ($this->rbacManager->isGranted(null, 'purchasing.option.backorders')) {                        
                         $options[] = $this->setDivider($options); 
 
                         $options[] = $this->setOptions('salesbackorders', 'Sales Backorders', 'pagebuilding','');                                                 
@@ -132,7 +130,7 @@ class NavManager
                     }//end if: BACKORDERS 
 
                     /* Options: Vendors */
-                    if ($this->rbacManager->isGranted(null, 'option.purchasing.vendors')) {
+                    if ($this->rbacManager->isGranted(null, 'purchasing.option.vendors')) {
                         $options[] = $this->setDivider($options);  
                         
                         $options[] = $this->setOptions('partvendorcomments', 'Part/Vendor Comments', 'pagebuilding','');                           
@@ -143,7 +141,7 @@ class NavManager
                     }//END IF: VENDORS
 
                     /* Options: parts */
-                    if ($this->rbacManager->isGranted(null, 'option.purchasing.parts')) {                        
+                    if ($this->rbacManager->isGranted(null, 'purchasing.option.parts')) {                        
                         $options[] = $this->setDivider($options); 
                        
                         $options[] = $this->setOptions('suspendedparts', 'Suspended Parts', 'pagebuilding','');
@@ -152,19 +150,19 @@ class NavManager
                     }//end if: PARTS
 
                     /* Options: AGENTS */
-                    if ($this->rbacManager->isGranted(null, 'option.purchasing.agents')) {                        
+                    if ($this->rbacManager->isGranted(null, 'purchasing.option.agents')) {                        
                         $options[] = $this->setDivider($options);                                                  
                         $options[] = $this->setOptions('changeagentpersonincharge', 'Change Pur. Agent/Person in charge', 'pagebuilding','');                          
                     }//end if: AGENTS                         
 
                     /* Options: UPLOAD OEM PICS */
-                    if ($this->rbacManager->isGranted(null, 'option.purchasing.uploadoem')) {                        
+                    if ($this->rbacManager->isGranted(null, 'purchasing.option.uploadoem')) {                        
                         $options[] = $this->setDivider($options); 
                         $options[] = $this->setOptions('uploadoempictures', 'Upload OEM Pictures', 'pagebuilding','');
                     }//end if: UPLOAD OEM PICS
 
                     /* Options: REPORTS */
-                    if ($this->rbacManager->isGranted(null, 'option.purchasing.reports')) {                        
+                    if ($this->rbacManager->isGranted(null, 'purchasing.option.reports')) {                        
                         $options[] = $this->setDivider($options);                         
                         $options[] = $this->setOptions('reports', 'Reports', 'pagebuilding','');                                
                     }//end if: REPORTS
@@ -195,6 +193,16 @@ class NavManager
             
                 /**** RECEIVING MENU ****/
                 case 'menu.receiving' : 
+                    // 'link' => $url('sales',['action'=>'index'])
+                        $options[] = $this->setOptions('rec1', 'Test', 'receiving','');            
+                    
+                        $options[] = $this->setOptions('rec2', 'Receiving 1', 'pagebuilding','');
+                        $options[] = $this->setOptions('rec3', 'Receiving 2', 'pagebuilding','');
+                        
+                        $options[] = $this->setDivider($options);                         
+                        
+                        $options[] = $this->setOptions('rec4', 'Receiving 3', 'pagebuilding','');
+                        $options[] = $this->setOptions('rec5', 'Receiving 4', 'pagebuilding','');
                 break; //END CASE:  'menu.receiving'
             
                 /**** WHAREHOUSE MENU ****/
@@ -262,13 +270,13 @@ class NavManager
                     ],
                 //8
                 'warehourse' =>[
-                    'permission'=>'menu.warehourse',
+                     'permission'=>'menu.warehourse',
                             'id' =>'warehourse',
                          'label' =>'Warehourse'
                     ],                    
                 //9
                 'maintenance' =>[
-                    'permission'=>'menu.maintenance',
+                     'permission'=>'menu.maintenance',
                             'id' =>'maintenance',
                          'label' =>'Maintenance'
                     ],
@@ -281,7 +289,7 @@ class NavManager
      }//END: function getMainMenu()     
     
     /*
-     * This method add a list of Options to a Menu with
+     * This method add a list of Options($options) to a Menu with
      *    -id: $id 
      * -label: $label
      */
@@ -292,18 +300,18 @@ class NavManager
                      'label' => $label, 
                   'dropdown' => $options
             ];
-        }
-        
+        }        
         return [];
         
     } //ENDIF: function AddOptionsToMenuDropDown() 
      
     /*
      * render a divider between options 
+     *
      */
     private function setDivider( $options ){
        return  (count($options)!=0) ? $this->setOptions('divider','','',''):null;
-    }//END METHOD: setDivider()
+    } //END method: setDivider()
     
     private function setOptions(string $id, string $label,  string $route, string $floatItem ){  
         $url = $this->urlHelper;
@@ -330,16 +338,16 @@ class NavManager
    
 /*
 * This method returns menu items depending on whether user has logged in or not.
-*  
+*  - $items = []; //its a associative array with all Menu and its options 
 *  Menu: Home will be shown always, so you don't need to verify access indexes:
 *      - id   : it identifies each one of the menu items
 *      - label: This NAME matches with how users will watch the menu option  on the UI
 *      - link : It identifies the ROUTE (defined on the module.config.php ) 
 *              when the user click it on.
+ *   
 */
       
-    public function getMenuItems() 
-    {
+    public function getMenuItems() {
         $url = $this->urlHelper;
         //This variable ARRAY $items[] will contain all menu items that will be shown 
         $items = [];
@@ -372,21 +380,24 @@ class NavManager
            *   
            *   - Label: It's a string that idenfifies ONE item of the Main Menu 
            *   - $menuOptions : It receives the items of menu will be rendered
-           *  - Id, Label and pass them to the method:
-           *  addOptionToMenuDropDown             
+           *  - Id, Label and $menuOptions are passed to the method:
+           *    addOptionToMenuDropDown to be added to Menu Items            
           */
            
+            //----- Menus will be added -----
             $mainMenu = [
                             "management", //"marketing", "mis", 
                             "purchasing", //"quality","manufacturing", 
-                            "sales",//"receiving","warehourse","maintenance"
+                            "sales",
+                            "receiving",//"warehourse","maintenance"
                             "admin",
-                        ]; 
+                        ];
             
+            // rendering the menus dynamically  
             foreach ($mainMenu as $moduleName) {
                 //getting the permission associated to menu :(+menu.purchasing, +menu.admin etc)
                 $menuOptions = $this->addOptionsToMenu($mainMenuPermissions[$moduleName]['permission']);  
-                 //-Id : id (it's like a name of object,
+                 // $id (it's like a name of object
                 $id = $mainMenuPermissions[$moduleName]['id'];           
                 $label = $mainMenuPermissions[$moduleName]['label'];           
                 $items[] = $this->setOptionsToMenu( $id, $label, $menuOptions );
