@@ -93,63 +93,53 @@ class Role
         return $this->name;
     }
     
-    public function setName($name)
-    {
+    public function setName($name){
         $this->name = $name;
     }
     
-    public function getDescription()
-    {
+    public function getDescription(){
         return $this->description;
     }
     
-    public function setDescription($description)
-    {
+    public function setDescription($description){
         $this->description = $description;
     }
     
-    public function getDateCreated()
-    {
+    public function getDateCreated(){
         return $this->dateCreated;
     }
     
-    public function setDateCreated($dateCreated)
-    {
+    public function setDateCreated($dateCreated){
         $this->dateCreated = $dateCreated;
     }
     
-    public function getParentRoles()
-    {
+    public function getParentRoles(){
         return $this->parentRoles;
     }
     
-    public function getChildRoles()
-    {
+    public function getChildRoles(){
         return $this->childRoles;
     }
     
-    public function getPermissions()
-    {
+    public function getPermissions(){
         return $this->permissions;
     }
 
-    public function addParent(Role $role)
-    {
+    public function addParent(Role $role){
         if ($this->getId() == $role->getId()) {
             return false;
-        }
+        }        
         if (!$this->hasParent($role)) {
             $this->parentRoles[] = $role;
             return true;
         }
         return false;
-    }
+    }//end: addParent() method
 
     /**
      * Clear parent roles
      */
-    public function clearParentRoles()
-    {
+    public function clearParentRoles(){
         $this->parentRoles = new ArrayCollection();
     }
 
