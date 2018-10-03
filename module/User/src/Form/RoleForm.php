@@ -70,7 +70,7 @@ class RoleForm extends Form
             'name' => 'inherit_roles',
             'attributes' => [
                 'id' => 'inherit_roles',
-                'multiple' => 'multiple',
+                'multiple' => 'multiple',                
             ],
             'options' => [
                 'label' => 'Optionally inherit permissions from these role(s)'
