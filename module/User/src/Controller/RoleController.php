@@ -163,7 +163,7 @@ class RoleController extends AbstractActionController
             if ($role->hasParent($role2)){
                 $selectedRoles[] = $role2->getId();            
             }
-            echo $role->getName();
+          
         }//END: foreach
         
         $form->get('inherit_roles')->setValueOptions($roleList);        
