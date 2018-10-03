@@ -47,7 +47,7 @@
         public function indexAction() 
         {
             // Access control.
-            if (!$this->access('user.manage')) {
+            if (!$this->access('manage.user')) {
                 $this->getResponse()->setStatusCode(401);
                 return;
             }
@@ -56,16 +56,17 @@
                          ->findBy([], ['id'=>'ASC']);
             
 //            $query = $this->entityManager->getRepository(User::class)
-//                    ->findAllUsers();
-//
+//                        ->findBy([], ['id'=>'ASC']);
+           
+//            
 //            $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
 //            $paginator = new Paginator($adapter);
-//            $paginator->setDefaultItemCountPerPage(3);        
+//            $paginator->setDefaultItemCountPerPage(5);        
 //            $paginator->setCurrentPageNumber($page);
             
             
             return new ViewModel([
-                'users' => $users//$paginator  //$users: got back before 
+                'users' => $users //$paginator  //$users: got back before 
             ]);
         } 
 
@@ -159,11 +160,22 @@
             // Get the list of all available roles (sorted by name).
             $allRoles = $this->entityManager->getRepository(Role::class)
                     ->findBy([], ['name'=>'ASC']);
+            
             $roleList = [];
             foreach ($allRoles as $role) {
                 $roleList[$role->getId()] = $role->getName();
             }
-
+            
+            if (count($roleList)>9) {            
+                $form->get('roles')->setAttributes([
+                    'class'=>'form-control', 
+                    'size' => 10,
+                ]);
+            }
+            /**
+             * HTML: SELECT ITEM IS FILLED WITH ALL ROLES 
+             * getting the instance from the role and setting the $roleList to the form Item : roles 
+             */
             $form->get('roles')->setValueOptions($roleList);
 
             // Check if user has submitted the form
@@ -195,18 +207,18 @@
                 }
 
                 $form->setData(array(
-                        'full_name'=>$user->getFullName(),
-                        'email'=>$user->getEmail(),
-                        'status'=>$user->getStatus(), 
-                        'roles' => $userRoleIds
+                        'full_name' => $user->getFullName(),
+                            'email' => $user->getEmail(),
+                            'status'=>$user->getStatus(), 
+                            'roles' => $userRoleIds
                     ));
-            }
+            } //end: else
 
             return new ViewModel(array(
                 'user' => $user,
                 'form' => $form
             ));
-        }
+        }// end method: editAction() 
 
         /**
          * This action displays a page allowing to change user's password.
@@ -228,9 +240,9 @@
             }
 
             // checking access to +user.manage permission for the user logged in   
-            $isUserManager = $this->access('user.manage');
+            $isUserManager = $this->access('manage.user');
             
-            $passwordChangeOrReset = ($this->access('user.manage'))?"reset":"change";
+            $passwordChangeOrReset = ($this->access('manage.user'))?"reset":"change";
             // Create "change password" form
             $form = new PasswordChangeForm($passwordChangeOrReset);
            
@@ -374,7 +386,7 @@
 
                         // Redirect to "message" page
                         return $this->redirect()->toRoute('users', 
-                                ['action'=>'message', 'id'=>'set']);                 
+                                                              ['action'=>'message', 'id'=>'set']);                 
                     } else {
                         // Redirect to "message" page
                         return $this->redirect()->toRoute('users', 
