@@ -8,7 +8,7 @@
                 'Manage Users'=>$this->url('users'),
                 ]);
 ?>
-
+   
 <!-- ******************************************* HTML RENDER ******************************************* -->
 
 <div class="row">
@@ -27,12 +27,12 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>E-mail</th>
-                            <th>Full Name</th>
-                            <th>Role(s)</th>        
-                            <th>Date Created</th>
-                            <th>Status</th>        
-                            <th>Actions</th> 
+                            <th><span><i class= "fa fa-envelope"></i></span> E-mail</th>
+                            <th><span><i class= "fa fa-user"></i></span> Full Name</th>
+                            <th><span><i class= "fa fa-odnoklassniki"></i></span> Role(s)</th>        
+                            <th><span><i class= "fa fa-table"></i></span> Date Created</th>
+                            <th><span><i class= "fa fa-users"></i></span> Status</th>        
+                            <th><span><i class= "fa fa-gear"></i></span> Actions</th> 
                         </tr>
                     </thead>
                     <!-- table body -->
@@ -50,10 +50,25 @@
                                 <?= $this->escapeHtml($user->getFullName()); ?></a> 
                             </td>
                             <td>
-                                <?= $this->escapeHtml($user->getRolesAsString()); ?></a> 
+                              <a href="#" data-toggle="modal" data-target="#basicModal">
+                                Role List
+                              </a>
+                              
+                               
                             </td>
                             <td><nobr><?= $this->escapeHtml($user->getDateCreated()); ?></nobr></td>        
-                            <td><?= $this->escapeHtml($user->getStatusAsString()); ?></td>
+                            <td>
+                                <?php
+                                    $colorRender = ($this->escapeHtml($user->getStatusAsString()=='Active'))? "green":"red";
+                                    $border = ($colorRender=="red")?"red":"green";
+                                ?>
+                                 <span title="green"> <i class="fa fa-circle "></i></span>
+                                <svg width="50" height="50">
+                               
+                                <circle  cx="25" cy="25" r="5" stroke=<?=$border;?> stroke-width="1" fill=<?=$colorRender;?> />
+                                    Sorry, your browser does not support inline SVG.
+                                </svg> 
+                            </td>
                             <td>
                                 <a id="ctp-borderDemo" class="btn btn-info btn-sm" href="<?= $this->url('users', 
                                         ['action'=>'edit', 'id'=>$user->getId()]); ?>">
@@ -103,10 +118,35 @@
     </div>
 </div> <!-- END: BUTTONS ROW: NEW USER, PREVIOUS AND NEXT -->
 
+<!-- MODAL DIALOG BOX -->
+<div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+
+          <h3  class="modal-title ctp-green" id="myModalLabel">Role List </h3>
+
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">x</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <?=$this->escapeHtml($user->getRolesAsString())?>
+        </div>
+        <!--  
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+        </div>
+        -->
+      </div>
+    </div>                                  
+</div> 
+
 <?php
 
 //$this->paginationControl($users,
 //                    'Sliding',
 //                    'user/partial/paginator', 
-//                    ['route' => 'users');
-?>
+//                    ['route' => 'users']);
+//?>
