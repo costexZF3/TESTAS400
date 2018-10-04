@@ -56,8 +56,8 @@ class Menu extends AbstractHelper
         if (count($this->items)==0){
             return ''; // Do nothing if there are no items.
         }        
-        $result = '<nav class="navbar navbar-inverse" role="">';
-        $result .= '<div class="navbar-header">';
+        $result = '<nav class="navbar navbar-inverse">';
+        $result .= '<div class="navbar-header>';
         $result .= '<button type="button" class="navbar-toggle" data-toggle="collapse"';
         $result .= 'data-target=".navbar-ex1-collapse">';
         $result .= '<span class="sr-only">Toggle navigation</span>';
