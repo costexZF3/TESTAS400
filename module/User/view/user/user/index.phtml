@@ -61,7 +61,7 @@
                                     $classRender = ($this->escapeHtml($user->getStatusAsString()=='Active'))? "ctp-green":"ctp-red";
                                 ?>  
                                 <!-- rendering USER's STATUS: green: means ACTIVE, red: means: INACTIVE -->
-                                <span class=<?=$colorRender;?>> <i class="fa fa-circle "></i></span>                                
+                                <span class=<?=$classRender;?>> <i class="fa fa-circle "></i></span>                                
                             </td>
                             <td>
                                 <a id="ctp-borderDemo" class="btn btn-info btn-sm" href="<?= $this->url('users', 
@@ -125,7 +125,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <?=$this->escapeHtml($user->getRolesAsString())?>
+          <?= $this->escapeHtml($user->getRolesAsString())?>
         </div>
         <!--  
         <div class="modal-footer">
