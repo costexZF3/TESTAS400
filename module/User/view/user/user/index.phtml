@@ -32,7 +32,7 @@
                             <th><span><i class= "fa fa-odnoklassniki"></i></span> Role(s)</th>        
                             <th><span><i class= "fa fa-table"></i></span> Date Created</th>
                             <th><span><i class= "fa fa-users"></i></span> Status</th>        
-                            <th><span><i class= "fa fa-gear"></i></span> Actions</th> 
+                            <th><span><i class= "fa fa-gears"></i></span> Actions</th> 
                         </tr>
                     </thead>
                     <!-- table body -->
@@ -50,7 +50,7 @@
                             </td>
                             <td>
                               <a href="#" data-toggle="modal" data-target="#basicModal">
-                                Role List
+                                <i id="icons" class="fa fa-list-alt" title="Role List"></i>
                               </a>
                               
                             </td>
@@ -59,20 +59,23 @@
                                 <?php
                                     $statusStr = $this->escapeHtml($user->getStatusAsString());
                                     $classRender = ($statusStr=='Active')? "ctp-green":"ctp-red";
-                                    $hint = ($statusStr=='Active')? "Active":"InActive";
+                                    $hint = ($statusStr=='Active')? "Active":"ctp-red";
                                 ?>  
                                 <!-- rendering USER's STATUS: green: means ACTIVE, red: means: INACTIVE -->
                                 <p title=<?=$hint;?>><span class=<?=$classRender;?>> <i class="fa fa-circle "></i></span></p>                               
                             </td>
                             <td>
-                                <a id="ctp-borderDemo" class="btn btn-info btn-sm" href="<?= $this->url('users', 
-                                        ['action'=>'edit', 'id'=>$user->getId()]); ?>">
-                                    <span class="glyphicon glyphicon-pencil" ></span> Edit
+                                <a href="<?= $this->url('users', ['action'=>'edit', 'id'=>$user->getId()]); ?>">
+                                    <i  id = "icons" class="fa fa-pencil" title="Edit" ></i> 
                                 </a>
                                 <span>&thinsp;</span>
-                                <a id="ctp-borderDemo" class="btn btn-warning btn-sm" href="<?= $this->url('users',
-                                        ['action'=>'change-password', 'id'=>$user->getId()]); ?>">
-                                    <span class="glyphicon glyphicon-asterisk"></span> Change Password
+                                <a href="<?= $this->url('users', ['action'=>'change-password', 'id'=>$user->getId()]); ?>">
+                                    <i id="icons" class="fa fa-lock" title="Change Password"></i>
+                                </a>
+                                
+                                <span>&thinsp;</span>
+                                <a href="#">
+                                    <i id="icons" class="fa fa-address-card-o" title="User Info"></i>
                                 </a>
                             </td>    
                         </tr>
