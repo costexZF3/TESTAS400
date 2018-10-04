@@ -53,15 +53,16 @@
                                 Role List
                               </a>
                               
-                               
                             </td>
                             <td><nobr><?= $this->escapeHtml($user->getDateCreated()); ?></nobr></td>        
                             <td>
                                 <?php
-                                    $classRender = ($this->escapeHtml($user->getStatusAsString()=='Active'))? "ctp-green":"ctp-red";
+                                    $statusStr = $this->escapeHtml($user->getStatusAsString());
+                                    $classRender = ($statusStr=='Active')? "ctp-green":"ctp-red";
+                                    $hint = ($statusStr=='Active')? "Active":"InActive";
                                 ?>  
                                 <!-- rendering USER's STATUS: green: means ACTIVE, red: means: INACTIVE -->
-                                <span class=<?=$classRender;?>> <i class="fa fa-circle "></i></span>                                
+                                <p title=<?=$hint;?>><span class=<?=$classRender;?>> <i class="fa fa-circle "></i></span></p>                               
                             </td>
                             <td>
                                 <a id="ctp-borderDemo" class="btn btn-info btn-sm" href="<?= $this->url('users', 
@@ -113,31 +114,11 @@
     </div>
 </div> <!-- END: BUTTONS ROW: NEW USER, PREVIOUS AND NEXT -->
 
-<!-- MODAL DIALOG BOX -->
-<div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
 
-          <h3  class="modal-title ctp-green" id="myModalLabel">Role List </h3>
-
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">x</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <?= $this->escapeHtml($user->getRolesAsString())?>
-        </div>
-        <!--  
-        <div class="modal-footer">
-           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-        -->
-      </div>
-    </div>                                  
-</div> 
-
+<!-- RENDER A DIV WITH A PARTIAL VIEW: MODAL WINDOWS --> 
 <?php
+  echo $this->partial('user/partial/render-modal', 
+                     ['listRoles' => $this->escapeHtml($user->getRolesAsString())]); 
 
 //$this->paginationControl($users,
 //                    'Sliding',
