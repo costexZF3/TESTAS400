@@ -9,6 +9,15 @@
   font-size: 28px;
   font-family: Arial, Helvetica, sans-serif;
 }*/
+
+#icons {
+  font-size: 15px;
+}
+
+.icon-edit{
+    color : #1b6d85;
+} 
+
 .header {
   /*background-color: #f1f1f1;*/
   
@@ -17,7 +26,7 @@
   
   padding: 30px;
   text-align: center;
-  color: #EBC14B;
+  color: #ebc14b;
   font-size: 40px;
   font-family: Arial, Helvetica, sans-serif;
 }
