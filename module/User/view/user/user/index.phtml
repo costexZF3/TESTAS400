@@ -9,7 +9,7 @@
                 ]);
 ?>
    
-<!-- ******************************************* HTML RENDER ******************************************* -->
+<!--***************************** HTML RENDER: IT RESPONSE TO IndexAction() on UserController ************************* -->
 
 <div class="row">
     <div class="col-md-12">        
@@ -84,6 +84,7 @@
     </div>  <!-- col-sm-12 -->
 </div> <!-- row- bootstrap -->
 
+<!-- BUTTONS RENDERED ON THE FOOTER : NEW USER, PREVIOUS AND NEXT -->
 <div class="row">
     <hr>
     <div class="col-md-2">
@@ -125,12 +126,11 @@
           </button>
         </div>
         <div class="modal-body">
-          <?= $this->escapeHtml($user->getRolesAsString())?>
+            <?= $this->escapeHtml($user->getRolesAsString())?>
         </div>
         <!--  
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-
+           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
         -->
       </div>
