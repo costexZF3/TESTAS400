@@ -18,7 +18,7 @@
                   )->prependStylesheet($this->basePath('css/style.css'))
                    ->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
                    ->prependStylesheet($this->basePath('css/bootstrap.min.css'))
-                   ->prependStylesheet($this->basePath('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'))
+                   ->prependStylesheet($this->basePath('css/stylelayout.css'))
         ?>
         
         <!-------------------------------------------------------------------------------------------- 
@@ -34,12 +34,11 @@
                   );
         ?>
         
-        
-
         <!-- Scripts -->
         <?= $this->headScript()
             ->prependFile($this->basePath('js/bootstrap.min.js'))
             ->prependFile($this->basePath('js/jquery-2.2.4.min.js'))
+            
         ?>
         
         <?php
@@ -49,27 +48,30 @@
     </head>
     
     <body>
-       <!-- ************************************** PAGE HEADER BANNER *************************************-->        
-        <div class="container-fluid" style="background-image: url(<?=$bannerPath?>)">            
-            <!-- Page header -->
-            <div class="container">
-                <div class ="row">
-                    <div class="col-md-offset-8"></div>
-                    <div class = "col-md-1 top-buffer">
-                        <a href="<?= $this->url('home')?>">
-                            <img src="<?= $this->basePath().'/img/LOGO.PNG' ?>" height="80" alt="Zend Framework <?= \Application\Module::VERSION ?>"/></a>
-                    </div>
-                    <div class = "col-md-10 ">
-                        <em class=" h1 text-warning  btn-toolbar"> Information System</em>
-                    </div>
-                </div>
-            </div>            
-        </div> 
-         
-        <div class="container"> 
-            <div class="row">
-                <!-- Menu -->
-                <div class="col-md-12 ">                    
+       <!-- ************************************** PAGE HEADER BANNER *************************************-->  
+       <div class="navbar-fixed-top">
+            <div class="header">
+             <div class=" container-fluid">
+                  <div class="row">                    
+                      <div>    
+                          <a href="<?= $this->url('home')?>">
+                              <img src="<?= $this->basePath().'/img/LOGO.PNG' ?>" height="80" alt="Zend Framework <?= \Application\Module::VERSION ?>"/>
+                          </a>
+                      </div>    
+
+                      <div class="">
+                          <em> Information System</em>
+                      </div>
+                  </div>
+
+             </div> 
+            </div>    
+       <!---------------------------------------- NAVIGATION BAR ---------------------------------------------->
+       
+            <div class="container"> 
+                <div class="row">
+                    <!-- Menu -->
+                    <div class="col-md-12">                    
                         <!-- Navigation bar -->
                         <?php
                             // Check if the activeMenuItemId passed to layout view model
@@ -81,42 +83,65 @@
                             echo $this->mainMenu()->render();
                         ?>
                     </div>   
-                <!-- Breadcrumbs -->
-                <?= $this->pageBreadcrumbs()->render(); ?>
-            </div>
-            <!--------------------------------  CONTENT TO BE RENDER ----------------------------------------->
+                    <!-- Breadcrumbs -->
+                    <?= $this->pageBreadcrumbs()->render(); ?>
+                </div>
+            </div>  
+       </div>
+    
+       
+        <div class="container content">
+        <!--------------------------------  CONTENT TO BE RENDER ----------------------------------------->
             <div class="row">
                 <div class="col-md-12 panel panel-body">
                     <!-- Page content placeholder -->
                     <?= $this->content; ?>
                 </div>
             </div>
-        </div>    
-        <hr>
-        
-        <div class="container ">            
-                <div class="row">
-                    <div class="col-md-offset-4"> 
-                    </div>
-                    <div class="col-md-offset-8">
-                    </div>    
-                    <div clas="">
-                        <a class= "label label-info" href="<?= $this->url('home')?>"> Home Page</a>
-                        <a class= "label label-primary" href="<?= $this->url('about') ?>"> About Us</a>
-                        <a class= "label label-success" href="<?= $this->url('about') ?>"> Contact Us</a>
-                    </div>
-                    <p>
-                        <b>New CTP-System ver:</b> (<?= \Application\Module::VERSION?>).                
-                    &copy; 1980 - <?= date('Y') ?> MIS - Costex Tractor Parts Technologies Ltd. Costex All Rights Reserved.
-                    </p> 
-                </div>
         </div>
-        <hr>
-        <div class="container-fluid  jumbotron text">              
-            <footer class="container text text-nowrap text-center">
-                <p> Costex Tractor Parts. All rights reserved.</p>
-            </footer>
-        </div>    
+
+    <hr>
+
+    <div class="container ">            
+        <div class="row">
+            <div class="col-md-offset-4"> 
+            </div>
+            <div class="col-md-offset-8">
+            </div>    
+            <div clas="">
+                <a class= "label label-info" href="<?= $this->url('home')?>"> Home Page</a>
+                <a class= "label label-primary" href="<?= $this->url('about') ?>"> About Us</a>
+                <a class= "label label-success" href="<?= $this->url('about') ?>"> Contact Us</a>
+            </div>
+            <p>
+                <b>New CTP-System ver:</b> (<?= \Application\Module::VERSION?>).                
+            &copy; 1980 - <?= date('Y') ?> MIS - Costex Tractor Parts Technologies Ltd. Costex All Rights Reserved.
+            </p> 
+        </div>
+    </div>
+    <hr>
+    <div class="container-fluid  jumbotron text">              
+        <footer class="container text text-nowrap text-center">
+            <p> Costex Tractor Parts. All rights reserved.</p>
+        </footer>
+    </div>  
+       
+       
         <?= $this->inlineScript() ?>
+<!--        <script>
+             window.onscroll = function() {myFunction();};
+
+            var navbar1 = document.getElementById("navbar1");
+            var sticky = navbar1.offsetTop;
+
+            function myFunction() {
+              if (window.pageYOffset >= sticky) {
+                navbar1.classList.add("sticky");
+              } else {
+                navbar1.classList.remove("sticky");
+              }
+            }
+
+        </script>-->
     </body>
 </html>

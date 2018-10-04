@@ -1,0 +1,39 @@
+
+/* 
+    Created on : Oct 4, 2018, 11:39:20 AM
+    Author     : Michel Ojeda
+*/
+
+/*body {
+  margin: 0;
+  font-size: 28px;
+  font-family: Arial, Helvetica, sans-serif;
+}*/
+.header {
+  /*background-color: #f1f1f1;*/
+  
+  background-color: #cccccc;
+  background-image: url(/ctpsystem/public/img/banner.png);
+  
+  padding: 30px;
+  text-align: center;
+  color: #EBC14B;
+  font-size: 40px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.h2 .header {
+  tex-color: #f1f1f1; 
+}
+
+#navbar1 {
+  
+  background-color: #333;
+  padding: 20px;
+}
+
+.content {
+  padding: 20px;
+  padding-top: 280px;
+}
+
