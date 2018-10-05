@@ -18,6 +18,20 @@
                   )->prependStylesheet($this->basePath('css/style.css'))
                    ->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
                    ->prependStylesheet($this->basePath('css/bootstrap.min.css'))
+                   ->prependStylesheet($this->basePath('css/stylelayout.css'))
+        ?>
+        
+         <!-------------------------------------------------------------------------------------------- 
+           Link remote defined by Kristofer. 
+           - All the icons in the icon libraries below, are scalable vector icons that can be customized with
+             CSS (size, color, shadow, etc.)
+        
+        
+        -------------------------------------------------------------------------------------------------->
+        <?= $this->headLink([
+                      'rel' => 'stylesheet',                        
+                      'href' => 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css']
+                  );
         ?>
 
         <!-- Scripts -->
@@ -25,25 +39,32 @@
             ->prependFile($this->basePath('js/bootstrap.min.js'))
             ->prependFile($this->basePath('js/jquery-2.2.4.min.js'))
         ?>
+        
+        <?php
+             //----- getting PATH for banner.png inside the document root ---------------
+             $bannerPath = $this->basePath().'/img/banner.png'; 
+        ?>
+        
+        
     </head>
     
-    <body class="label-info1">
+    <body style = "margin-top: 20px;">
         <!-- Page header -->
-        <div class="container-fluid" style="background-image: url('img/banner.png')">            
-            <!-- Page header -->
-            <div class="container">
-                <div class ="row">
-                    <div class="col-md-3">                       
-                    </div>                    
-                    <div class = "col-md-1 top-buffer">
-                          <a href=""><img class="imgicon" src="<?= $this->basePath('img/LOGO.PNG') ?>" height="80" alt="Zend Framework <?= \Application\Module::VERSION ?>"/></a>
+        <div class="header container-fluid">
+                <div class=" ">
+                    <div class="row">                    
+                        <div>    
+                            <a href="<?= $this->url('home')?>">
+                                <img src="<?= $this->basePath().'/img/LOGO.PNG' ?>" height="80" alt="Zend Framework <?= \Application\Module::VERSION ?>"/>
+                            </a>
+                        </div>    
+
+                        <div class="">
+                            <em> Information System</em>
+                        </div>
                     </div>
-                    <div class = "col-md-4">
-                        <em class=" h1 text-warning top-buffer btn-toolbar"> Information System</em>
-                    </div>
-                </div>
-            </div>            
-        </div> 
+                </div> 
+            </div> 
         
         <!-- Page Content from here -->
         <div class="container">             
@@ -56,12 +77,11 @@
         </div> 
         
         <hr>
-        <div class="alert alert-warning">  
-            
-            <footer class="text text-nowrap text-center">
-                <p>&copy; 200 - <?= date('Y') ?> by Costex Tractor Parts. All rights reserved.</p>
-            </footer>
-        </div>
+         <div class="container-fluid  jumbotron text">              
+        <footer class="container text text-nowrap text-center">
+            <p> Costex Tractor Parts. All rights reserved.</p>
+        </footer>
+    </div> 
     
         <?= $this->inlineScript() ?>
     </body>
