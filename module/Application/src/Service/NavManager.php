@@ -172,15 +172,11 @@ class NavManager
                 /**** QUALITY MENU ****/
                 case 'menu.quality' :
                 break; //END CASE: menu.qualiaty 
-            
-                /**** MANUFACTURING MENU ****/
-                case 'menu.manufacturing' : 
-                break; //END CASE: 'menu.manufacturing'
-                
+                           
                 /**** SALES MENU ****/
                 case 'menu.sales' :                    
                         // 'link' => $url('sales',['action'=>'index'])
-                        $options[] = $this->setOptions('sales', 'Test', 'sales','');            
+                        $options[] = $this->setOptions('sales', 'Test aaaa', 'sales','');            
                     
                         $options[] = $this->setOptions('sales1', 'Option 1', 'pagebuilding','');
                         $options[] = $this->setOptions('sales2', 'Option 2', 'pagebuilding','');
@@ -194,7 +190,7 @@ class NavManager
                 /**** RECEIVING MENU ****/
                 case 'menu.receiving' : 
                     // 'link' => $url('sales',['action'=>'index'])
-                        $options[] = $this->setOptions('rec1', 'Test', 'receiving','');            
+                        $options[] = $this->setOptions('rec1', 'Test rrrr', 'receiving','');            
                     
                         $options[] = $this->setOptions('rec2', 'Receiving 1', 'pagebuilding','');
                         $options[] = $this->setOptions('rec3', 'Receiving 2', 'pagebuilding','');
@@ -205,25 +201,45 @@ class NavManager
                         $options[] = $this->setOptions('rec5', 'Receiving 4', 'pagebuilding','');
                 break; //END CASE:  'menu.receiving'
             
-                /**** WHAREHOUSE MENU ****/
-                case 'menu.wharehouse' : 
-                      $options[] = $this->setOptions('warehouse1', 'Picking Process', 'pagebuilding','');            
+                /**** WHAREHOUSE MENU MANUFACTORING ****/
+                case 'menu.warehouse' : 
+                    $countOptions = 0; 
+                    if ($this->rbacManager->isGranted(null, 'warehouse.option.picking')) {
+                        $options[] = $this->setOptions('warehouse1', 'Picking Process', 'pagebuilding','');
+                        $countOptions++;
+                    }
                     
+                    if ($this->rbacManager->isGranted(null, 'warehouse.option.assembly')) {
                         $options[] = $this->setOptions('warehouse2', 'Assembly Process', 'pagebuilding','');
+                        $countOptions++; 
+                    }
+                    
+                    if ($this->rbacManager->isGranted(null, 'warehouse.option.seal')) {
                         $options[] = $this->setOptions('warehouse3', 'Seal Process', 'pagebuilding','');
+                        $countOptions++;
+                    }
                         
-                        $options[] = $this->setDivider($options);                         
+                    
+                    $options[] = $this->setDivider($options);                         
                         
+                    if ($this->rbacManager->isGranted(null, 'warehouse.option.missing.parts')) {
                         $options[] = $this->setOptions('warehouse4', 'Report Missing Parts', 'pagebuilding','');
+                    }
+                    
+                    if ($this->rbacManager->isGranted(null, 'warehouse.option.gasket')) {
                         $options[] = $this->setOptions('warehouse5', 'Gasket Process', 'pagebuilding','');
+                    }
+                    
+                    if ($this->rbacManager->isGranted(null, 'warehouse.option.kits.info')) {
                         $options[] = $this->setOptions('warehouse6', 'Kits Info', 'pagebuilding','');
+                    }    
                         
-                        $options[] = $this->setDivider($options);
-                        
-                        $options[] = $this->setOptions('manufacturing1', 'Picked up Process (Productivity)', 'pagebuilding','');
-                        $options[] = $this->setOptions('manufacturing2', 'Assembled', 'pagebuilding','');
-                        $options[] = $this->setOptions('manufacturing3', 'Kits Already Sealed Reports', 'pagebuilding','');
-                        $options[] = $this->setOptions('manufacturing3', 'Gaskets Already Sealed Reports', 'pagebuilding','');
+                    $options[] = $this->setDivider($options);  
+                    
+                    $options[] = $this->setOptions('manufacturing1', 'Picked up Process (Productivity)', 'pagebuilding','');
+                    $options[] = $this->setOptions('manufacturing2', 'Assembled', 'pagebuilding','');
+                    $options[] = $this->setOptions('manufacturing3', 'Kits Already Sealed Reports', 'pagebuilding','');
+                    $options[] = $this->setOptions('manufacturing3', 'Gaskets Already Sealed Reports', 'pagebuilding','');
                         
                         
                 break; //END CASE: 'menu.wharehouse'
@@ -270,10 +286,10 @@ class NavManager
                          'label' =>'Quality'
                       ],
                 //5
-                'manufacturing' =>[
-                    'permission'=>'menu.manufacturing',
-                            'id' =>'manufacturing',
-                         'label' =>'Manufacturing'
+                'warehouse' =>[
+                    'permission'=>'menu.warehouse',
+                            'id' =>'warehouse',
+                         'label' =>'Warehouse'
                    ],
                 //6   
                 'sales' =>[
@@ -408,7 +424,8 @@ class NavManager
                             "management", //"marketing", "mis", 
                             "purchasing", //"quality","manufacturing", 
                             "sales",
-                            "receiving",//"warehourse","maintenance"
+                            "receiving",
+                            "warehouse", //"maintenance"
                             "admin",
                         ];
             
