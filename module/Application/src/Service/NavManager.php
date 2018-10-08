@@ -207,6 +207,25 @@ class NavManager
             
                 /**** WHAREHOUSE MENU ****/
                 case 'menu.wharehouse' : 
+                      $options[] = $this->setOptions('warehouse1', 'Picking Process', 'pagebuilding','');            
+                    
+                        $options[] = $this->setOptions('warehouse2', 'Assembly Process', 'pagebuilding','');
+                        $options[] = $this->setOptions('warehouse3', 'Seal Process', 'pagebuilding','');
+                        
+                        $options[] = $this->setDivider($options);                         
+                        
+                        $options[] = $this->setOptions('warehouse4', 'Report Missing Parts', 'pagebuilding','');
+                        $options[] = $this->setOptions('warehouse5', 'Gasket Process', 'pagebuilding','');
+                        $options[] = $this->setOptions('warehouse6', 'Kits Info', 'pagebuilding','');
+                        
+                        $options[] = $this->setDivider($options);
+                        
+                        $options[] = $this->setOptions('manufacturing1', 'Picked up Process (Productivity)', 'pagebuilding','');
+                        $options[] = $this->setOptions('manufacturing2', 'Assembled', 'pagebuilding','');
+                        $options[] = $this->setOptions('manufacturing3', 'Kits Already Sealed Reports', 'pagebuilding','');
+                        $options[] = $this->setOptions('manufacturing3', 'Gaskets Already Sealed Reports', 'pagebuilding','');
+                        
+                        
                 break; //END CASE: 'menu.wharehouse'
             
                 /**** MAINTENANCE MENU ****/
