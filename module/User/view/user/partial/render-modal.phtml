@@ -1,23 +1,27 @@
 <!-- MODAL DIALOG BOX -->
-<div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+<div class="modal fade" id= <?=$this->roleId?> tabindex="-1" role="dialog" aria-labelledby=<?=$this->roleId?> aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-
-          <h3  class="modal-title ctp-green" id="myModalLabel">Role List </h3>
-
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">x</span>
-          </button>
+            <div class="row">  
+                <div class="col-md-4">  
+                   <h3  class="modal-title ctp-green" id="myModalLabel">Role List </h3>
+                </div> 
+                            
+                <button type="button" class="close ctp-green" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">x</span>
+                </button>
+            </div>
         </div>
+        <!-- RENDERING CONTENT -->
         <div class="modal-body">
-            <?= $this->listRoles;?>
+            <?= $this->content;?>
         </div>
-        <!--  
+         <!-- rendering buttons default and close--> 
         <div class="modal-footer">
-           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+           <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
         </div>
-        -->
+        
       </div>
     </div>                                  
 </div> 
