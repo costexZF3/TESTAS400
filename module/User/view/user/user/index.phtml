@@ -37,7 +37,13 @@
                     </thead>
                     <!-- table body -->
                     <tbody>
+                        <?php $id = 0; //identifying the basic Modal?>
                         <?php foreach ($users as $user): ?>
+                        <?php 
+                            //roleId: must be changed each time
+                            $roleId =  "basicModal".++$id; 
+                            $dataTarget = "#".$roleId;
+                        ?>
                         <tr>
                             <td><?= $this->escapeHtml($user->getId()); ?></td>
                             <td>
@@ -49,17 +55,24 @@
                                 <?= $this->escapeHtml($user->getFullName()); ?></a> 
                             </td>
                             <td>
-                              <a href="#" data-toggle="modal" data-target="#basicModal">
-                                <i id="icons" class="fa fa-list-alt" title="Role List"></i>
-                              </a>
-                              
+                                <a href="#" data-toggle="modal" data-target=<?=$dataTarget?>>
+                                    <i id="icons" class="fa fa-list-alt" title="Role List" inactive></i>
+                                </a>
+                                
+                                <?php
+                                    $roleList = $this->escapeHtml($user->getRolesAsString());
+                                    echo $this->partial('user/partial/render-modal', 
+                                          ['content' => $roleList,
+                                              'roleId' => $roleId   
+                                          ]); 
+                                ?>                                
                             </td>
                             <td><nobr><?= $this->escapeHtml($user->getDateCreated()); ?></nobr></td>        
                             <td>
                                 <?php
                                     $statusStr = $this->escapeHtml($user->getStatusAsString());
                                     $classRender = ($statusStr=='Active')? "ctp-green":"ctp-red";
-                                    $hint = ($statusStr=='Active')? "Active":"ctp-red";
+                                    $hint = ($statusStr=='Active')? "Active":"Inactive";
                                 ?>  
                                 <!-- rendering USER's STATUS: green: means ACTIVE, red: means: INACTIVE -->
                                 <p title=<?=$hint;?>><span class=<?=$classRender;?>> <i class="fa fa-circle "></i></span></p>                               
@@ -120,8 +133,7 @@
 
 <!-- RENDER A DIV WITH A PARTIAL VIEW: MODAL WINDOWS --> 
 <?php
-  echo $this->partial('user/partial/render-modal', 
-                     ['listRoles' => $this->escapeHtml($user->getRolesAsString())]); 
+  
 
 //$this->paginationControl($users,
 //                    'Sliding',
