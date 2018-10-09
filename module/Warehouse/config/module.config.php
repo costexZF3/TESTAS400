@@ -1,11 +1,12 @@
 <?php
 namespace Warehouse;
 
+use Zend\ServiceManager\Factory\InvokableFactory;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
-use Zend\ServiceManager\Factory\InvokableFactory;
 
-return [    
+return [
+    
     'router' => [
         'routes' => [
             'warehouse' => [
@@ -18,6 +19,7 @@ return [
                         'action'        => 'index',
                     ],
                 ],
+               
             ],
         ],
     ],
@@ -30,12 +32,13 @@ return [
     // access to certain controller actions for unauthorized visitors.
     'access_filter' => [      
         'controllers' => [
-         Controller\IndexController::class => [
+        Controller\IndexController::class => [
                 //Allowing routes access depending on the type of permission assigned to loggin user
-                // Give access to "index" actions to everyone with +menu.warehouse  
-                               
+                // Give access to "index" actions to everyone with +menu.purchasing  
+                //+option.purchasing.claims 
+                
                 //Actions reponse to Roles associated to MENUS 
-                ['actions' => ['index'],               'allow' => '+menu.warehouse'],  
+                ['actions' => ['index'],               'allow' => '+menu.warehouse'],  //, 
             
                 //Actions response to Roles associated to OPERATION
                 // an user with Entry Level will be permissions to 
@@ -44,7 +47,7 @@ return [
                 ['actions' => ['create', 'update', ],  'allow' => '+warehouse.high.level'],
                 ['actions' => ['delete', ],           'allow' => '+warehouse.power.level'],
             ], //END: access_filter for ClaimsController          
-        ],
+        ]
     ],
     'view_manager' => [
         'template_path_stack' => [

@@ -35,14 +35,14 @@
         "zendframework/zend-mail": "^2.10"
     },
     "autoload": {
-        "psr-4": {
-            "Application\\": "module/Application/src/",
-                   "User\\": "module/User/src/",
-             "Purchasing\\": "module/Purchasing/src/",
-             "Management\\": "module/Management/src/",            
-                  "Sales\\": "module/Sales/src/",
-                  "Warehouse\\": "module/Sales/src/",
-            
+        "psr-4": {           
+                   "User\\" : "module/User/src/",
+              "Warehouse\\" : "module/Warehouse/src/",
+             "Purchasing\\" : "module/Purchasing/src/",
+             "Management\\" : "module/Management/src/",            
+                  "Sales\\" : "module/Sales/src/",
+            "Application\\" : "module/Application/src/"
+              
         }
     },
     "autoload-dev": {
