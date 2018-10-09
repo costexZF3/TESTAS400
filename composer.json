@@ -1,6 +1,6 @@
 {
-    "name": "zendframework/skeleton-application",
-    "description": "Skeleton Application for Zend Framework zend-mvc applications",
+    "name": "zendframework/CTP SYSTEM",
+    "description": "CTP SYSTEM Application for COSTEX TRACTOR PARTS. zend-mvc applications",
     "type": "project",
     "license": "BSD-3-Clause",
     "keywords": [
@@ -8,7 +8,7 @@
         "mvc",
         "zf2"
     ],
-    "homepage": "http://framework.zend.com/",
+    "homepage": "http://costexm15:10090/ctpsystem/public/",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
@@ -35,14 +35,14 @@
         "zendframework/zend-mail": "^2.10"
     },
     "autoload": {
-        "psr-4": {           
-                   "User\\" : "module/User/src/",
-              "Warehouse\\" : "module/Warehouse/src/",
+        "psr-4": {        
+            "Application\\" : "module/Application/src/",
+                   "User\\" : "module/User/src/",             
              "Purchasing\\" : "module/Purchasing/src/",
              "Management\\" : "module/Management/src/",            
-                  "Sales\\" : "module/Sales/src/",
-            "Application\\" : "module/Application/src/"
-              
+                  "Sales\\" : "module/Sales/src/",            
+              "Warehouse\\" : "module/Warehouse/src/" 
+                          
         }
     },
     "autoload-dev": {

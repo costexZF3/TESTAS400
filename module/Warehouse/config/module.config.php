@@ -44,7 +44,7 @@ return [
                 ['actions' => ['watch'],               'allow' => '+warehouse.entry.level'],
                 ['actions' => ['export','print',],     'allow' => '+warehouse.regular.level'],
                 ['actions' => ['create', 'update', ],  'allow' => '+warehouse.high.level'],
-                ['actions' => ['delete', ],           'allow' => '+warehouse.power.level'],
+                ['actions' => ['delete', ],            'allow' => '+warehouse.power.level'],
             ], //END: access_filter for ClaimsController          
         ]
     ],

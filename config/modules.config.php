@@ -31,11 +31,11 @@ return [
     'Zend\Router',
     'Zend\Validator',    
     'ZendDeveloperTools',     
-    
+    'Application',
     'User',       
     'Sales',    
     'Management',
     'Purchasing',    
-    'Warehouse',
-    'Application',    
+    //'Warehouse',
+        
 ];
