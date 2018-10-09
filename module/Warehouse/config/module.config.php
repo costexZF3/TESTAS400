@@ -3,7 +3,7 @@ namespace Warehouse;
 
 use Zend\ServiceManager\Factory\InvokableFactory;
 use Zend\Router\Http\Literal;
-use Zend\Router\Http\Segment;
+
 
 return [
     
@@ -18,8 +18,7 @@ return [
                         'controller'    => Controller\IndexController::class,
                         'action'        => 'index',
                     ],
-                ],
-               
+                ],               
             ],
         ],
     ],
