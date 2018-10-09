@@ -34,6 +34,7 @@ return [
     'User',
     'Sales',
     'Management',
-    'Purchasing',     
+    'Purchasing', 
+    'Warehouse',
     'Application',
 ];

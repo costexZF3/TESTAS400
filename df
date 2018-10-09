@@ -1,0 +1,548 @@
+[33mcommit f760c9009e2b22d7fa75d88468a4184669fa32e4[m[33m ([m[1;36mHEAD -> [m[1;32mdev[m[33m)[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Mon Sep 24 14:23:45 2018 -0400
+
+    USER MODULE
+            RoleController.php
+      - method: IndexAction()
+            - roles: sorted by name ascending
+
+[33mcommit b6dd5798c0fbd1f705fbe127d3d87378cf2e0a4e[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Mon Sep 24 14:13:58 2018 -0400
+
+    APPLICATION MODULE
+            NavManager.php
+      - method: getMenuItems()
+            - foreach() what retrieve each name of module : adding comments
+
+[33mcommit b11346f15eded7eb2b728d2b486b2de6cf989dcf[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Mon Sep 24 14:06:35 2018 -0400
+
+    APPLICATION MODULE
+            NavManager.php
+      - method: getMenuItems()
+            - Menu: Admin creates dynamically and its functionality move into
+          addOptionsToMenu()
+
+[33mcommit 4980e653a019512d5fad11caba112ccbb1549d13[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Mon Sep 24 13:18:35 2018 -0400
+
+    APPLICATION MODULE
+            NavManager.php
+      - method: getMenuItems()
+            - rendering Options of Menu dinamically (foreach) not One by one.
+
+[33mcommit 10fe0067295363b09a0a628cabff646d147197df[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 21 15:43:40 2018 -0400
+
+    SALES MODULE
+    
+            -index.phtml
+        fix  controller and Action name to Index
+
+[33mcommit 4beb9f6bcfcba5755d5c43f61b6c4fb377c3ebfd[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 21 15:42:50 2018 -0400
+
+    SALES MODULE
+    
+            -module.config.php
+        fix the route name
+
+[33mcommit f51d5fbfbb4ea9c77417f6066d0cae0a1b2487ba[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 21 15:37:24 2018 -0400
+
+    APPLICATION MODULE
+    
+            -NavManager.php
+        case 'menu.sales'
+         - $options[] fix to $this->setOptions()
+
+[33mcommit 61149004e39f35f4f03799cde1ba616f9f8d49ce[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 21 15:31:23 2018 -0400
+
+    APPLICATION MODULE
+    
+            -NavManager.php
+        case 'menu.management'
+         - $options[] fix to $this->setOptions()
+
+[33mcommit 0bebd2d97e0dcb1387e113d2e74258ee27705daa[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 21 15:23:43 2018 -0400
+
+    APPLICATION MODULE
+    
+            -NavManager.php
+        case 'menu.purchasing'
+         - $options[] fix to $this->setOptions()
+
+[33mcommit 212877d8e92f6950d45eaefa33ae1c431afb717c[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 21 14:27:23 2018 -0400
+
+    APPLICATION MODULE
+    
+            -NavManager.php
+        ( create the new setDivider() method )
+
+[33mcommit b3d4e3041125f02634c36969efb349a3e113defb[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 21 09:49:17 2018 -0400
+
+    SALES MODULE
+    -View: index.phtml (script)
+            - fix texts to being shown
+
+[33mcommit 6631a2c5268c32a19d9d5dbfe2532450c4fdae5d[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Thu Sep 20 16:32:38 2018 -0400
+
+    SALES MODULE
+    ADDED TO THE PROJECT
+
+[33mcommit 5ac908943594f9b75c0afee2f360d9c88a823b67[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Thu Sep 20 15:28:58 2018 -0400
+
+    Management MODULE
+    -IndexController
+            - add clause: user Zend\View\Model\ViewModel;
+            action: Index ( fix return new ViewModel)
+
+[33mcommit b154edd77a459da5e66803ef412309c57329a5dd[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Thu Sep 20 09:08:16 2018 -0400
+
+     GENERAL
+     - composer.json (script)
+       It was modified.
+        - modified:
+      "autoload" : { "psr-4": {
+              ....
+               "Management\\":"module/Management/src"
+    }}
+    
+    this line guarantees the autoloading process of the Management module.
+
+[33mcommit 2dc91281ff86533344ff76cf73f5d9c6eaf1ad6c[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Thu Sep 20 09:01:36 2018 -0400
+
+    MODULES.CONFIG.PHP (GENERAL)
+     - modules.config.php(script)
+       it was added the module name: Management which needs to be uploaded starting the application
+
+[33mcommit bb5984306efffd2a5195ae19e76e593de0306927[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Sep 19 16:22:17 2018 -0400
+
+    PURCHASING MODULE
+     - ClaimsController.php(script)
+       -createMenu (methodo) was modified
+
+[33mcommit 4af280068dd1c84b8e0dadf2a0ced516f9c7352c[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Sep 19 14:52:00 2018 -0400
+
+    APPLICATION MODULE
+     - settings.phtml(script)
+       -changed BUTTON (change password) moved down the table settings
+
+[33mcommit 91c3f0a20f62e9a5eba423d76f59bf31ba620450[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Sep 19 14:42:54 2018 -0400
+
+    Purchasing MODULE
+     - module.config.php (script)
+       -changed access to accion (claims): only access users with +option.purchasing.claims is allowed
+
+[33mcommit 6f334f0cc01c2f206a18b5b79460efd02a05684c[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Sep 19 13:47:57 2018 -0400
+
+    APPLICATION MODULE
+    - NavManager.php
+     (In order to improve Management and  Purchasing Menues
+
+[33mcommit 53635245735c60b1f5a6c787b827f67fbebfda13[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Sep 19 11:23:20 2018 -0400
+
+    BOOTSTRAP VERSION MODIFIED
+     (CSS FOLDER inside the Public )
+
+[33mcommit 88ee518512c23cc02257f9ea18117206f7ef4ad4[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Sep 19 11:22:11 2018 -0400
+
+    MODULE APPLICATION
+    
+    - NavManager.php ( modified method: addOptionsToMenu()
+      -  adding Statement for checking if the user has permission to Menu
+         - if TRUE, then SELECT CASE of MENU, so test the permissions       associated to each option for this menu
+
+[33mcommit 6ae164e2094bd0cc670acfe6c9024c9a69db7924[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Sep 19 11:06:14 2018 -0400
+
+    MODULE APPLICATION
+    
+    - Menu.php (script modified)
+      - Adding (statement) In order to avoid rendering empty menu
+
+[33mcommit 3d392ead4d18b67424fadb337b8cd48372bf7cbb[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Mon Sep 17 13:41:55 2018 -0400
+
+    MODULE APPLICATION
+    .NavManager.php
+      (changed name to the function getmainMenuPermissions():
+     by : setOptions()
+
+[33mcommit 755a0df731a127dc6344c6b9b175fb27a368fa61[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Mon Sep 17 11:44:58 2018 -0400
+
+    MODULE APPLICATION
+    .NavManager.php
+      (added function getmainMenuPermissions(): give back an ARRAY)
+
+[33mcommit df682be74615cfeee206fc78d0cf7fa39463dacc[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 13:55:40 2018 -0400
+
+    INDEX.phtml (User Module)
+    (this script shows all Roles)
+    
+    - Delete Buttono has changed its style from btn-info to btn-danger
+
+[33mcommit 9b8eda955bd1ec45040a1804f26aa15e15f334ae[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 13:50:08 2018 -0400
+
+    INDEX.phtml (User Module)
+    (this script shows all permissions order by name)
+    
+    - The Id Field is hidden on the table
+
+[33mcommit 4e715f904dfab2d5f2fcf44ef100f92d5cf01d8e[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 13:43:46 2018 -0400
+
+    SIGN IN.css
+    
+    loggin style
+
+[33mcommit b05a3110e16156e2e50afe6be234d934f360c6d6[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 13:43:09 2018 -0400
+
+    MENU.php
+    
+    changing looking permissions
+
+[33mcommit e00a6ccb319f51bdda2298ccbb5f97c6f0a0cd8d[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 13:42:29 2018 -0400
+
+    Edit.phtml ( USER MODULE )
+    - VIEW
+    - The permissions are in the ABC ordered
+
+[33mcommit bdf5fb99422ea9b70cc3ab8ea26bbdfcfd75ee0a[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 13:38:47 2018 -0400
+
+    Permission.php (USER)
+    - PermissionCONTROLLER
+    
+    - changed the permissions order. they will be shown order by name
+
+[33mcommit fec3fe65057b047487799ee79723498c3bdb7f48[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 13:04:57 2018 -0400
+
+    ADD.phtml (USER MODULE)
+    - VIEW-CONTROLLER ROLE
+    
+    - changed STYLE TO THE FORM
+     USING ctp-container
+
+[33mcommit 53089aef0d7efcd1997cf0c480e621ca4326b1cb[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 13:04:10 2018 -0400
+
+    ADD.phtml (USER MODULE) VIEW-CONTROLLER PERMISSIONS
+    
+    - changed STYLE TO THE FORM
+     USING ctp-container
+
+[33mcommit 6ef7364bf0fcbb7197ddb80a0f44407c6be094a2[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 12:54:00 2018 -0400
+
+    INDEX.phtml (USER MODULE) VIEW-CONTROLLER USER
+    
+    - changed BUTTON STYLE(table)
+
+[33mcommit 97b7b52b86d466536e8ddcffba29ecf0a3dae45c[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 12:53:18 2018 -0400
+
+    INDEX.phtml (USER MODULE) VIEW-CONTROLLER PERMISSION
+    
+    - changed to minimalistBlack (table)
+
+[33mcommit ba26c5c7c888c963f8bf035925255e2f837b4241[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 12:48:49 2018 -0400
+
+    STYLE.CSS (PUBLIC)
+    
+    - changed heading color on minimalistBlack (table )
+
+[33mcommit 5c28b13e935d4eda2afe34cd23fc41d689401c68[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 12:35:19 2018 -0400
+
+    EDIT-PERMISSIONS.phtml (user MODULE)- ROLE
+      (this script show the Role with Id=X which will be Edited )
+       - added EDIT PERMISSIONS BUTTON AT THE END OF THE PAGE
+       - CHANGE LOOK
+
+[33mcommit 7c207bb218cc0a52c9e014180ab4d83a994236a1[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 12:01:52 2018 -0400
+
+    VIEW.phtml (user MODULE)- ROLE
+      (this script show the Role with Id=X which will be Edited )
+       - added EDIT PERMISSIONS BUTTON AT THE END OF THE PAGE
+       - CHANGE LOOK
+
+[33mcommit 9ff1c33d29b0361c069a46acca971b1a0c51e16a[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 11:56:17 2018 -0400
+
+    view.phtml (user MODULE)- ROLE
+       - added EDIT PERMISSIONS BUTTON AT THE END OF THE PAGE
+       - CHANGE LOOK
+
+[33mcommit 6259b700e534a70899ce542b0e2fa5048f0d97ec[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 11:21:28 2018 -0400
+
+    edit.phtml (PUBLIC MODULE)- ROLE
+       - added span
+
+[33mcommit 3e0c39dade581075778fb0b9a703958f0c47a73a[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 11:00:17 2018 -0400
+
+    edit.phtml (PUBLIC MODULE)-
+       - added span
+
+[33mcommit b9b1a40f7cb54968ce664ff77ed472a2a380337c[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 10:56:11 2018 -0400
+
+    STYLE.CSS (PUBLIC MODULE)-
+       - ADDED STYLE
+                    ctp-span style
+
+[33mcommit ffb16ed5cdf9d55178543d20fbdcd9e6c8d25936[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 10:54:16 2018 -0400
+
+    EDIT.phtml  (USER MODULE)- USER
+       - ADDED FEATURES ITS LOOK
+       - ADDED STYLE SPAN TO THE HEADER
+
+[33mcommit 04874b141bf49b69e7bb233368d9c65a6c3759bf[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 10:44:26 2018 -0400
+
+    EDIT.phtml  (USER MODULE)-ROLES
+       - ADDED FEATURES ITS LOOK
+       - ctp-container
+
+[33mcommit f2e1d682da4d5defeefbdc6b9babd06ece9e0794[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 10:39:09 2018 -0400
+
+    EDIT.phtml  (USER MODULE)-ROLES
+       - ADDED FEATURES ITS LOOK
+       - ctp-container
+
+[33mcommit e3765c612f73f85bb7ff7302196a96a4c31859a6[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 10:35:38 2018 -0400
+
+    EDIT.phtml (USER MODULE)
+       - ADDED FEATURES ITS LOOK
+
+[33mcommit 1c92903f3f33821db45135c32e0640d2102dd52c[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 10:27:02 2018 -0400
+
+    INDEX.PHTML (ROLES MODULE)
+    
+    -       ADDED BUTTONS PREVIOUS AND NEXT
+
+[33mcommit 9899802427771cb31a0e9eac5317e3a540f0471b[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 10:22:11 2018 -0400
+
+    INDEX.PHTML (ROLES MODULE)
+    
+    -       ADDED BUTTONS PREVIOUS AND NEXT
+
+[33mcommit 41b5cf64f6beaf0c3f0906179342328602e849ec[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 09:01:34 2018 -0400
+
+    INDEX.PHTML (USER MODULE)
+    - STYLE OF THE USER'S TABLE WAS IMPROVED USING THE STYLE
+       tale.minimalistBlack
+    
+    - modified the buttons EDIT, CHANGE PASSWORD (STYLE)
+    
+    - ADDED A NEW BUTTON AT THE LAST ROW ( New User)
+
+[33mcommit 0ca62e5f70aeaec827ae6b3530d56545f3ea6c1b[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 14 08:51:18 2018 -0400
+
+    STYLE.CSS (PUBLIC MODULE)
+    - FIXED: STYLE FOR
+       tale.minimalistBlack tbody td { font-size: 12px}
+
+[33mcommit e5c9fec1e32edd9ebbd377fe6f5508758790a012[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Thu Sep 13 11:41:52 2018 -0400
+
+    INDEX.PHTML (USER MODULE)
+    - FIXING ITS LOOK
+
+[33mcommit b4a1371a04430faed20317c6a5c7ca10839b17aa[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Thu Sep 13 10:24:36 2018 -0400
+
+    SET-PASSWORD.PHTML (USER MODULE)
+    - FIXING ITS LOOK
+
+[33mcommit f8ce7bfe82af6fe95ce635d572cec43c424b71cd[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Thu Sep 13 10:23:11 2018 -0400
+
+    STYLE.CSS (PUBLIC/CSS)
+    - AJUSTING CTP-BUTTON AND CTP-BTN
+
+[33mcommit 38eda62bb1bc4007a099311761685345d0904d8c[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Sep 12 15:11:49 2018 -0400
+
+    message.phtml (USER MODULE)
+    - adding new look
+
+[33mcommit 0fa6010f031e9eb830a2c3a77c90d9cebc6667fe[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Sep 12 14:02:42 2018 -0400
+
+    edit.phtml (USER MODULE)
+    - adding new look to the form
+
+[33mcommit 79662d955792f85d21d45ad46ec2d977ac96279d[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Sep 12 13:52:29 2018 -0400
+
+    edit.phtml (USER MODULE)
+    - adding new look to the form
+
+[33mcommit 6edab71d35d7271585965ee744af40e0d958fc3d[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Sep 12 13:44:04 2018 -0400
+
+    add.phtml (USER MODULE)
+    - adding new look to the form
+
+[33mcommit 1dde8314de34ced9d6230b12949442f976010346[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Sep 12 13:42:02 2018 -0400
+
+    styly.CSS(PUBLIC)
+    - adding new ctp-btn (class style)
+
+[33mcommit 9b150a570397d2f6bf87aadb4cb1a3accf170ef0[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Sep 12 12:42:53 2018 -0400
+
+    styly.CSS(PUBLIC)
+    - adding new ctp-container (class style) which will be used on forms
+
+[33mcommit 359a5198ba1b7b433863c5a3b252f88e3f19752f[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Sep 12 11:34:42 2018 -0400
+
+    EDIT.PHTM (USER MODULE)
+    - ADDING LOOKS FEATURES
+
+[33mcommit d42b685dadd080f4264441f8f395355381e9ede2[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Sep 12 11:23:26 2018 -0400
+
+    NavManager.PHP (APPLICATION MODULE)
+    - Adding NavManager OPTIONS to Menu
+
+[33mcommit b6794f0e3fafaa0e4b3fc56d7aada713f296f95a[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Tue Sep 11 14:00:16 2018 -0400
+
+    MENU.PHP (APPLICATION MODULE)
+    - CHANGE CODE TO PHP 7 USING ?? INSTED of use ISSET
+
+[33mcommit fd6ec9307bee4d5ac02fbdc88f2c91b1a532d7e7[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Tue Sep 11 13:55:42 2018 -0400
+
+    MENU.PHP (APPLICATION MODULE)
+    - CHANGE CODE TO PHP 7 USING ?? INSTED of use ISSET
+
+[33mcommit c7c5aa90ab4238e8cb3f7d7e62014e99c1063cca[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Tue Sep 11 13:43:36 2018 -0400
+
+    INDEX.PHTML (USER MODULE)
+    - CHANGING EDIT, AND CHANGE PASSWORD (BUTTONS) SHORTER
+
+[33mcommit ae8b1daf8246e7220e6a854f2288633e0f11d468[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Tue Sep 11 13:27:33 2018 -0400
+
+    LOGIN.PHTML (USER MODULE)
+    
+     - CHANGE ITS LOOK
+     - ADDED ICONS FOR USER AND PASSWORD
+
+[33mcommit b65a745c09f2177b631cb2f09a3ba8b0872e7b35[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Tue Sep 11 13:14:36 2018 -0400
+
+    LOGIN.PHTML (USER MODULE)
+    
+     - CHANGE ITS LOOK
+     - ADDED ICONS FOR USER AND PASSWORD
+
+[33mcommit 841158a3d027edd15327d5c357edf383f111061f[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Tue Sep 11 12:17:50 2018 -0400
+
+    VIEW.PHTML (USER MODULE)
+    
+     - updated header info

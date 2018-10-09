@@ -37,9 +37,12 @@
     "autoload": {
         "psr-4": {
             "Application\\": "module/Application/src/",
-                  "User\\": "module/User/src/",
-            "Purchasing\\": "module/Purchasing/src/",
-            "Management\\": "module/Management/src/"            
+                   "User\\": "module/User/src/",
+             "Purchasing\\": "module/Purchasing/src/",
+             "Management\\": "module/Management/src/",            
+                  "Sales\\": "module/Sales/src/",
+                  "Warehouse\\": "module/Sales/src/",
+            
         }
     },
     "autoload-dev": {

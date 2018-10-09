@@ -1,5 +1,5 @@
 <?php
-namespace Sales;
+namespace Warehouse;
 
 class Module
 {
