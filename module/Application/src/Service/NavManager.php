@@ -63,6 +63,7 @@ class NavManager
         $options= []; //init $options               
          
         if ($this->rbacManager->isGranted(null, $menuPermission)) {
+            //echo "true";
             switch ($menuPermission) { 
                 /**** ADMIN MENU ****/
                 case 'menu.admin' : 
@@ -105,12 +106,25 @@ class NavManager
                     /* Options: CLAIMS */
                     if ($this->rbacManager->isGranted(null, 'purchasing.option.claims')) {                   
                         $options[] = $this->setOptions('claims', 'Claims', 'claims','');
+                        $options[] = $this->setDivider($options); 
                     }//end if: granted +option.purchasing.claims 
 
                     /* Options: Product Developments */
                     if ($this->rbacManager->isGranted(null, 'purchasing.option.productdevelopments')) {                                             
-                         $options[] = $this->setOptions('productdevelopment', 'Product Developments', 'pagebuilding','');
+                         
+                        $options[] = $this->setOptions('productdevelopment', 'Product Developments', 'pagebuilding','');
                     }//end if: option.purchasing.productdevelopments 
+                    
+                    if ($this->rbacManager->isGranted(null, 'purchasing.option.pd.wishlist')) {                                             
+                         $options[] = $this->setOptions('pdwishlist', 'Product Dev. Wish List', 'pagebuilding','');
+                    }//end if: productdevelopments  wish list
+                    
+                    if ($this->rbacManager->isGranted(null, 'purchasing.option.pd.personincharge')) {                                             
+                         $options[] = $this->setOptions('pdpersonincharge', 'Product Dev. Person In Charge', 'pagebuilding','');
+                    }//end if: productdevelopments  wish list
+                    if ($this->rbacManager->isGranted(null, 'purchasing.option.pd.reports')) {                                             
+                         $options[] = $this->setOptions('pdreports', 'Product Dev. Reports', 'pagebuilding','');
+                    }//end if: productdevelopments  wish list
 
                     /* Options: Supplies */
                     if ($this->rbacManager->isGranted(null, 'purchasing.option.supplies')) {
@@ -203,7 +217,12 @@ class NavManager
             
                 /**** WHAREHOUSE MENU MANUFACTORING ****/
                 case 'menu.warehouse' : 
+                    
                     $countOptions = 0; 
+                    if ($this->rbacManager->isGranted(null, 'menu.warehouse')) {
+                       // echo "access granted: MENU WAREHOUSE"."<br>";
+                    }
+                    
                     if ($this->rbacManager->isGranted(null, 'warehouse.option.picking')) {
                         $options[] = $this->setOptions('warehouse1', 'Picking Process', 'pagebuilding','');
                         $countOptions++;
@@ -236,10 +255,10 @@ class NavManager
                         
                     $options[] = $this->setDivider($options);  
                     
-                    $options[] = $this->setOptions('manufacturing1', 'Picked up Process (Productivity)', 'pagebuilding','');
-                    $options[] = $this->setOptions('manufacturing2', 'Assembled', 'pagebuilding','');
-                    $options[] = $this->setOptions('manufacturing3', 'Kits Already Sealed Reports', 'pagebuilding','');
-                    $options[] = $this->setOptions('manufacturing3', 'Gaskets Already Sealed Reports', 'pagebuilding','');
+                    $options[] = $this->setOptions('warehouse7', 'Picked up Process (Productivity)', 'pagebuilding','');
+                    $options[] = $this->setOptions('warehouse8', 'Assembled', 'pagebuilding','');
+                    $options[] = $this->setOptions('warehouse9', 'Kits Already Sealed Reports', 'pagebuilding','');
+                    $options[] = $this->setOptions('warehouse10', 'Gaskets Already Sealed Reports', 'pagebuilding','');
                         
                         
                 break; //END CASE: 'menu.wharehouse'
@@ -289,7 +308,7 @@ class NavManager
                 'warehouse' =>[
                     'permission'=>'menu.warehouse',
                             'id' =>'warehouse',
-                         'label' =>'Warehouse'
+                         'label' =>'Warehouse Manufacturing'
                    ],
                 //6   
                 'sales' =>[
@@ -432,6 +451,7 @@ class NavManager
             // rendering the menus dynamically  
             foreach ($mainMenu as $moduleName) {
                 //getting the permission associated to menu :(+menu.purchasing, +menu.admin etc)
+                //echo $mainMenuPermissions[$moduleName]['permission']."<br>"; 
                 $menuOptions = $this->addOptionsToMenu($mainMenuPermissions[$moduleName]['permission']);  
                  // $id (it's like a name of object
                 $id = $mainMenuPermissions[$moduleName]['id'];           
