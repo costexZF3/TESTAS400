@@ -38,6 +38,7 @@ class ClaimsController extends AbstractActionController
        $user = self::getUser();       
         //------ inherited --------     
        $accessT = $this->access( $permission, ['user'=> $user]);
+       var_dump($accessT); echo "";
        return $accessT;
    }
    
@@ -103,10 +104,15 @@ class ClaimsController extends AbstractActionController
          *      -$menuList : List of Menu Items will be show on the menu 
          *      - $user : User that has been logged in
          */ 
-       
+        $especial = 'FALSE';
+        
+        if ($this->access('special.access')){
+             $especial ='TRUE';
+        }
+
         return new ViewModel([
-                'menuClaims'=> $menuList,
-                'user' => $user,            
+                    'menuClaims' => $menuList,
+                 'specialaccess' => $especial,            
             ]);
     }//END: indexAction method
     

@@ -64,6 +64,52 @@
                 	<?php endif; ?>                                     
                 </div>               
            </div>
-       </div>       
+       </div>   
+       
+        <!-- TABLE: RENDERING USER'S DATA --> 
+            <div class="table-responsive">
+                <table class="minimalistBlack">
+                    <!-- table header -->
+                    <thead>
+                        <tr>                            
+                            <th><span><i class= "fa fa-envelope"></i></span> E-mail</th>
+                            <th><span><i class= "fa fa-user"></i></span> Full Name</th>
+                            <?php if ($this->specialaccess==='TRUE'):?>
+                                <th><span><i class= "fa fa-odnoklassniki"></i></span> Role(s)(access!!!)</th>   
+                            <?php endif;?>    
+                            <th><span><i class= "fa fa-gears"></i></span> Actions</th> 
+                        </tr>
+                    </thead>
+                    <!-- table body -->
+                    <tbody>                        
+                        <tr>
+                            <td>user1@costex.com</td>
+                            <td>Mitchel Smith</td>
+                            <?php if ($this->specialaccess==='TRUE'):?>
+                                <td>Special Col</td>
+                            <?php endif;?>    
+                            <td>R, W, F</td>                              
+                        </tr>
+
+                        <tr>
+                            <td>user2@costex.com</td>
+                            <td>Robert Anderson</td>
+                             <?php if ($this->specialaccess==='TRUE'):?>
+                                <td>Special Col</td>
+                            <?php endif;?> 
+                            <td>R, W</td>                              
+                        </tr>
+                        
+                         <tr>
+                            <td>user3@costex.com</td>
+                            <td>Valeria Andrade</td>
+                             <?php if ($this->specialaccess==='TRUE'):?>
+                                <td>Special Col</td>
+                            <?php endif;?> 
+                            <td>R, W</td>                              
+                        </tr>
+                    </tbody>    
+                </table>
+            </div> <!-- table-responsive -->
    </body>
 </html>
