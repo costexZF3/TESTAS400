@@ -103,6 +103,7 @@ return [
     //
     'service_manager' => [
         'factories' => [
+            Service\MyAdapter::class => Service\Factory\MyAdapterFactory::class,
             Service\NavManager::class => Service\Factory\NavManagerFactory::class,
             Service\RbacAssertionManager::class => Service\Factory\RbacAssertionManagerFactory::class,
         ],
