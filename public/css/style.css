@@ -3,9 +3,38 @@ body {
 }
 
 /***********************************************************************************
- ----    CTP STYLES, KRISTOV 
-************************************************************************************
-*/
+    CTP STYLES, KRISTOV 
+*************************************************************************************/
+
+
+
+.table_ctp {
+    text-align: center;
+    font-family: Verdana, Arial, Helvetica, sans-serif;	
+    margin-left: 10px;
+    margin-right: 10px;	    
+}
+
+.table_ctp thead, tfoot {		
+    font-size        : 14px;
+    text-align       : center;
+    margin           : 5px;
+    background-color : #F3C54C;
+}
+
+.table_ctp tbody td {    	
+    font-size : 10px;
+}
+
+.table_ctp tbody, .description {    	
+    font-size : 11px;
+    text-align: left;
+}
+
+.table_ctp tbody th {    	
+    font-size : 12px;
+    color : #4B8B20;
+}
 
 
 table.minimalistBlack {
@@ -20,9 +49,9 @@ table.minimalistBlack td, table.minimalistBlack th {
   color: #000000;
 }
 table.minimalistBlack tbody td {
-  font-size: 12px;
-  
+  font-size: 12px;  
 }
+
 table.minimalistBlack tr:nth-child(even) {
     background: #f8f8f8;
 }

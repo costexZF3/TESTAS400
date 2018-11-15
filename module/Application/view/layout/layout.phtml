@@ -15,18 +15,29 @@
                       'rel' => 'shortcut icon', 
                       'type' => 'image/vnd.microsoft.icon', 
                       'href' => $this->basePath().'/img/logo.png']
-                  )->prependStylesheet($this->basePath('css/style.css'))
-                   ->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
+                  )->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
                    ->prependStylesheet($this->basePath('css/bootstrap.min.css'))
-                   ->prependStylesheet($this->basePath('css/stylelayout.css'))
+                   
+                   // ->prependStylesheet($this->basePath('datatable/css/jquery.dataTables.min.css'))
+                    ->prependStylesheet($this->basePath('css/style.css'))
+                    ->prependStylesheet($this->basePath('css/stylelayout.css'))
+                                           
         ?>
         
+        <!--- CSS: BY KRISTOV ---->
+        <?= $this->headLink([
+                      'rel' => 'stylesheet', 
+                      'type' => 'text/css', 
+                      'href' => "https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css"])
+                   ->prependStylesheet($this->basePath('css/style.css'))
+                   ->prependStylesheet($this->basePath('css/stylelayout.css'))
+                   //->prependStylesheet($this->basePath('datatable/css/jquery.dataTables.min.css'))
+                   
+        ?>
         <!-------------------------------------------------------------------------------------------- 
            Link remote defined by Kristofer. 
            - All the icons in the icon libraries below, are scalable vector icons that can be customized with
              CSS (size, color, shadow, etc.)
-        
-        
         -------------------------------------------------------------------------------------------------->
         <?= $this->headLink([
                       'rel' => 'stylesheet',                        
@@ -36,20 +47,27 @@
         
         <!-- Scripts -->
         <?= $this->headScript()
-            ->prependFile($this->basePath('js/bootstrap.min.js'))
+            ->prependFile($this->basePath('js/bootstrap.js'))
+           // ->prependFile('https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js') 
+            ->prependFile('https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js') 
             ->prependFile($this->basePath('js/jquery-2.2.4.min.js'))
-            
+           // ->prependFile($this->basePath('datatable/js/jquery.dataTables.js'))
+          
         ?>
         
+        <!-- SCRIPTS DEFINED BY KRISTOFER FOR DATATABLE -->
+         
         <?php
              //----- getting PATH for banner.png inside the document root ---------------
              $bannerPath = $this->basePath().'/img/banner.png'; 
         ?>
+       
+        
     </head>
     
-    <body style = "margin-top: 20px;">
+    <body>
        <!-- ************************************** PAGE HEADER BANNER *************************************-->  
-        <div class="navbar-fixed-top">
+        <div class="navbar1">
             <div class="header container-fluid">
                 <div class=" ">
                     <div class="row">                    
@@ -123,15 +141,14 @@
         <footer class="container text text-nowrap text-center">
             <p> Costex Tractor Parts. All rights reserved.</p>
         </footer>
-    </div>  
-       
+    </div> 
        
         <?= $this->inlineScript() ?>
-<!--        <script>
-             window.onscroll = function() {myFunction();};
-
-            var navbar1 = document.getElementById("navbar1");
-            var sticky = navbar1.offsetTop;
+         <script>
+            let navbar1 = document.getElementById("navbar1");
+            let sticky = navbar1.offsetTop;
+            window.onscroll = ()=>{myFunction();};           
+            alert (sticky);
 
             function myFunction() {
               if (window.pageYOffset >= sticky) {
@@ -140,6 +157,6 @@
                 navbar1.classList.remove("sticky");
               }
             }
-        </script>-->
+        </script>
     </body>
 </html>

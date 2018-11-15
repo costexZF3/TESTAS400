@@ -4,12 +4,6 @@
     Author     : Michel Ojeda
 */
 
-body {
-  
-  margin-top: 20px;  
-/*  font-size: 28px;
-  font-family: Arial, Helvetica, sans-serif;*/
-}
 
 #icons {
   font-size: 15px;
@@ -19,31 +13,40 @@ body {
     color : #1b6d85;
 } 
 
-.header {
-  /*background-color: #f1f1f1;*/
-  
-  background-color: #cccccc;
-  background-image: url(/ctpsystem/public/img/banner.png);
-  
-  padding: 30px;
-  text-align: center;
-  color: #ebc14b;
-  font-size: 40px;
-  font-family: Arial, Helvetica, sans-serif;
+.header {    
+    background-color: #cccccc;
+    background-image: url(/ctpsystem/public/img/banner.png);
+
+    padding: 30px;
+    text-align: center;
+    color: #ebc14b;
+    font-size: 40px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .h2 .header {
   tex-color: #f1f1f1; 
 }
 
-#navbar1 {
-  
+#navbar1 {  
   background-color: #333;
-  padding: 20px;
+  overflow: hidden;
+  
 }
 
 .content {
   padding: 20px;
-  padding-top: 280px;
+    
 }
 
+/* The sticky class is added to the navbar with JS when it reaches its scroll position */
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+/* Add some top padding to the page content to prevent sudden quick movement (as the navigation bar gets a new position at the top of the page (position:fixed and top:0) */
+.sticky + .content {
+  padding-top: 100px;
+}
