@@ -12,8 +12,7 @@ class ClaimsController extends AbstractActionController
      * Entity manager.
      * @var Doctrine\ORM\EntityManager
      */
-    private $entityManager;
-   
+    private $entityManager;   
     
     /**------------- Class Methods -----------------*/ 
     
@@ -38,7 +37,7 @@ class ClaimsController extends AbstractActionController
        $user = self::getUser();       
         //------ inherited --------     
        $accessT = $this->access( $permission, ['user'=> $user]);
-       var_dump($accessT); echo "";
+       
        return $accessT;
    }
    
@@ -53,15 +52,12 @@ class ClaimsController extends AbstractActionController
        //init $rest with $menuList  
        $res = $menuList;
                   
-       if (self::testPermission($permission)) {      
+       if (self::testPermission( $permission )) {      
            $res = array_merge($menuList, $newItem);  
-           
-           //echo "$permission : true". "<br>";
        }
        
        return $res;
    }//End: createMenu 
-   
    
              
    /**

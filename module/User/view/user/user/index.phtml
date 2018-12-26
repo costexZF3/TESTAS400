@@ -13,7 +13,7 @@
 
 <div class="row">
     <div class="col-md-12">        
-        <h3> MANAGE USERS </h3>            
+        <h3 class="ctp_subtitle"> MANAGE USERS </h3>            
         <div>
             <p> <!-- BUTTON NEW USER -->
                 <a class="btn btn-default" href="<?= $this->url('users', ['action'=>'add']); ?>">
@@ -40,7 +40,7 @@
                         <?php $id = 0; //identifying the basic Modal?>
                         <?php foreach ($users as $user): ?>
                         <?php 
-                            //roleId: must be changed each time
+                            /* roleId: must be changed each time */ 
                             $roleId =  "basicModal".++$id; 
                             $dataTarget = "#".$roleId;
                         ?>

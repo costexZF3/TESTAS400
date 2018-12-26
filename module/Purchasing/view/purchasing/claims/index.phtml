@@ -12,104 +12,96 @@
     $menuClaims = $this->menuClaims; //getting the form's instance sent by the ViewModel create inside contactusAction method in the indexController
     $user = $this->user;    
 ?>
-<!-- HTML RENDER-->
-<html>
-   <head>
-   </head>
-   <body>
-       <div class="container">           
-           <div class = "row">
-           </div>
-           <div class="row panel-body">                
-                <div class="col-md-3">                    
-                  <?php if (isset($menuClaims['watch'])): ?>
-                            <a href ="<?=$this->url('watch')?>"> 		
-                            <label class ="btn btn-info"><?=$menuClaims['watch']?> </label>
-                            </a>
-                  <?php endif; ?>        
-                </div>   
-                 
-                <div class="col-md-3"> 
-                    <?php if (isset($menuClaims['view'])): ?>
-                            <button class ="btn btn-primary"><?=$menuClaims['view']?></button>                        
-                    <?php endif; ?>                    
-                </div>             
-                <div class="col-md-3"> 
-                    <?php if (isset($menuClaims['export'])): ?>
-                            <button class ="btn btn-danger"><?=$menuClaims['export']?></button>                        
-                    <?php endif; ?>               
-                </div>   
-               <div class="col-md-3"> 
-                    <?php if (isset($menuClaims['print'])): ?>
-                            <button class ="btn btn-warning"><?=$menuClaims['print']?></button>                        
-                    <?php endif; ?> 
-                </div> 
-           </div>
-           
-           <div class="row panel-body">
-                <div class="col-md-3">
-                    <?php if (isset($menuClaims['create'])): ?>
-                        <button class ="btn btn-success"> <?=$menuClaims['create']?></button>                        
-                    <?php endif; ?>
-                </div> 
-                <div class="col-md-3">                    
-                    <?php if (isset($menuClaims['update'])): ?>
-                       <button class ="btn btn-default"><?=$menuClaims['update']?></button>                	   
-                    <?php endif;?>                   	                                      
-                </div> 
-            
-                <div class="col-md-3">
-                	<?php if (isset($menuClaims['delete'])): ?>
-                        	<button class ="btn btn-default"> <?=$menuClaims['delete']?></button>
-                	<?php endif; ?>                                     
-                </div>               
-           </div>
-       </div>   
-       
-        <!-- TABLE: RENDERING USER'S DATA --> 
-            <div class="table-responsive">
-                <table class="minimalistBlack">
-                    <!-- table header -->
-                    <thead>
-                        <tr>                            
-                            <th><span><i class= "fa fa-envelope"></i></span> E-mail</th>
-                            <th><span><i class= "fa fa-user"></i></span> Full Name</th>
-                            <?php if ($this->specialaccess==='TRUE'):?>
-                                <th><span><i class= "fa fa-odnoklassniki"></i></span> Role(s)(access!!!)</th>   
-                            <?php endif;?>    
-                            <th><span><i class= "fa fa-gears"></i></span> Actions</th> 
-                        </tr>
-                    </thead>
-                    <!-- table body -->
-                    <tbody>                        
-                        <tr>
-                            <td>user1@costex.com</td>
-                            <td>Mitchel Smith</td>
-                            <?php if ($this->specialaccess==='TRUE'):?>
-                                <td>Special Col</td>
-                            <?php endif;?>    
-                            <td>R, W, F</td>                              
-                        </tr>
+         
+<p class="h1my"> TEST </p>    
 
-                        <tr>
-                            <td>user2@costex.com</td>
-                            <td>Robert Anderson</td>
-                             <?php if ($this->specialaccess==='TRUE'):?>
-                                <td>Special Col</td>
-                            <?php endif;?> 
-                            <td>R, W</td>                              
-                        </tr>
-                        
-                         <tr>
-                            <td>user3@costex.com</td>
-                            <td>Valeria Andrade</td>
-                             <?php if ($this->specialaccess==='TRUE'):?>
-                                <td>Special Col</td>
-                            <?php endif;?> 
-                            <td>R, W</td>                              
-                        </tr>
-                    </tbody>    
-                </table>
-            </div> <!-- table-responsive -->
-   </body>
-</html>
+<div class="row">                
+     <div class="col-md-3">                    
+       <?php if (isset($menuClaims['watch'])): ?>
+                 <a href ="<?=$this->url('watch')?>"> 		
+                 <label class ="btn btn-info"><?=$menuClaims['watch']?> </label>
+                 </a>
+       <?php endif; ?>        
+     </div>   
+
+     <div class="col-md-3"> 
+         <?php if (isset($menuClaims['view'])): ?>
+                 <button class ="btn btn-primary"><?=$menuClaims['view']?></button>                        
+         <?php endif; ?>                    
+     </div>             
+     <div class="col-md-3"> 
+         <?php if (isset($menuClaims['export'])): ?>
+                 <button class ="btn btn-danger"><?=$menuClaims['export']?></button>                        
+         <?php endif; ?>               
+     </div>   
+    <div class="col-md-3"> 
+         <?php if (isset($menuClaims['print'])): ?>
+                 <button class ="btn btn-warning"><?=$menuClaims['print']?></button>                        
+         <?php endif; ?> 
+     </div> 
+</div>
+
+<div class="row panel-body">
+     <div class="col-md-3">
+         <?php if (isset($menuClaims['create'])): ?>
+             <button class ="btn btn-success"> <?=$menuClaims['create']?></button>                        
+         <?php endif; ?>
+     </div> 
+     <div class="col-md-3">                    
+         <?php if (isset($menuClaims['update'])): ?>
+            <button class ="btn btn-default"><?=$menuClaims['update']?></button>                	   
+         <?php endif;?>                   	                                      
+     </div> 
+
+     <div class="col-md-3">
+             <?php if (isset($menuClaims['delete'])): ?>
+                     <button class ="btn btn-default"> <?=$menuClaims['delete']?></button>
+             <?php endif; ?>                                     
+     </div>               
+</div>  
+
+ <!-- TABLE: RENDERING USER'S DATA --> 
+     
+<table class="minimalistBlack table-responsive">
+    <!-- table header -->
+    <thead>
+        <tr>                            
+            <th><span><i class= "fa fa-envelope"></i></span> E-mail</th>
+            <th><span><i class= "fa fa-user"></i></span> Full Name</th>
+            <?php if ($this->specialaccess==='TRUE'):?>
+                <th><span><i class= "fa fa-odnoklassniki"></i></span> Role(s)(access!!!)</th>   
+            <?php endif;?>    
+            <th><span><i class= "fa fa-gears"></i></span> Actions</th> 
+        </tr>
+    </thead>
+    <!-- table body -->
+    <tbody>                        
+        <tr>
+            <td>user1@costex.com</td>
+            <td>Mitchel Smith</td>
+            <?php if ($this->specialaccess==='TRUE'):?>
+                <td>Special Col</td>
+            <?php endif;?>    
+            <td>R, W, F</td>                              
+        </tr>
+
+        <tr>
+            <td>user2@costex.com</td>
+            <td>Robert Anderson</td>
+             <?php if ($this->specialaccess==='TRUE'):?>
+                <td>Special Col</td>
+            <?php endif;?> 
+            <td>R, W</td>                              
+        </tr>
+
+         <tr>
+            <td>user3@costex.com</td>
+            <td>Valeria Andrade</td>
+             <?php if ($this->specialaccess==='TRUE'):?>
+                <td>Special Col</td>
+            <?php endif;?> 
+            <td>R, W</td>                              
+        </tr>
+    </tbody>    
+</table>
+  

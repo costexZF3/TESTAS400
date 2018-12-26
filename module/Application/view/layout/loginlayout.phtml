@@ -10,15 +10,14 @@
             ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
         ?>
 
-        <!-- Le styles -->
+        <!-- CSS FILES -->
         <?= $this->headLink([
                       'rel' => 'shortcut icon', 
                       'type' => 'image/vnd.microsoft.icon', 
                       'href' => $this->basePath().'/img/logo.png']
                   )->prependStylesheet($this->basePath('css/style.css'))
                    ->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
-                   ->prependStylesheet($this->basePath('css/bootstrap.min.css'))
-                   ->prependStylesheet($this->basePath('css/stylelayout.css'))
+                   ->prependStylesheet($this->basePath('css/bootstrap.min.css'))                   
         ?>
         
          <!-------------------------------------------------------------------------------------------- 
@@ -48,30 +47,29 @@
         
     </head>
     
-    <body style = "margin-top: 20px;">
+    <body>        
         <!-- Page header -->
-        <div class="header container-fluid">
-                <div class=" ">
-                    <div class="row">                    
-                        <div>    
-                            <a href="<?= $this->url('home')?>">
-                                <img src="<?= $this->basePath().'/img/LOGO.PNG' ?>" height="80" alt="Zend Framework <?= \Application\Module::VERSION ?>"/>
-                            </a>
-                        </div>    
-
-                        <div class="">
-                            <em> Information System</em>
-                        </div>
-                    </div>
-                </div> 
-            </div> 
+        <!-- ************************************** PAGE HEADER BANNER *************************************-->        
+        
+        <div class="header">
+            <div class="row">                    
+                <div>    
+                    <a href="<?= $this->url('home')?>">
+                        <img class="header-img" src="<?= $this->basePath().'/img/LOGO.PNG' ?>" height="80" alt="Zend Framework <?= \Application\Module::VERSION ?>"/>
+                    </a>
+                </div>   
+                <div class="ctp_title">
+                    <h1> Information System</h1>
+                </div>
+            </div>
+        </div> 
         
         <!-- Page Content from here -->
         <div class="container">             
-            <div class="row top-buffer">
-                <div class="col-md-12">
+            <div class="row">
+                <div class="ctp-form-loggin">
                     <!-- Page content placeholder -->
-                    <?= $this->content; ?>
+                    <?= $this->content;?>
                 </div>
             </div>
         </div> 

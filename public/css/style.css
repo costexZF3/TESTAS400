@@ -1,41 +1,228 @@
-body {
-    padding-bottom: 40px;
+/* injecting fonts from server */
+@font-face {
+  font-family: H1_Oswald;  
+  src:url('https://fonts.googleapis.com/font?family=Oswald:200,300,400,500|Raleway|Roboto');
+/*      url('../fonts/Oswald-Bold.ttf')
+       url('../../fonts/Oswald-ExtraLight.ttf') format('embedded-opentype'),
+       url('../fonts/Oswald-Medium.ttf') format('embedded-opentype'),*/
+              
 }
 
-/***********************************************************************************
-    CTP STYLES, KRISTOV 
-*************************************************************************************/
+
+@font-face {
+  font-family: MyOswald;
+  src: url(../fonts/Oswald-ExtraLight.ttf);
+}
+
+
+@font-face {
+    font-family: MyAmaranta;
+    
+    src: url(../fonts/Amaranth-Regular.otf);     
+}
+ 
+
+/* CLEANING ALL PARAMETERS AND POSSIBLE VALUES OF THE HTML ELEMENTS */
+
+    html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+
+/* body */
+body {
+  padding-top: 0;}
+  body:before {
+    content: ' ';
+    background-image: url(/ctpsystem/public/img/bg.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.05; 
+  }
+
+/* boxes */
+.box {
+   background-color:  #FACB4C;  
+}
+
+/* grid */
+
+.grid {
+  border: 2px blue solid;
+  width: 100%;
+  height: 400px;
+  display: grid;
+  
+  grid-template: repeat(3, 1fr) / 1fr 1fr;
+  grid-gap: 10px;  
+  padding: 5px;  
+}
+
+/* panels: panels headings */
+
+.panel-heading h3 {
+    font-family: MyOswald, monospace, Arial;
+    font-weight: 300;
+    color: #F39C12;
+}
+
+
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/*********************************************************************/
+
+#icons {
+  font-size: 15px;
+}
+
+.icon-edit{
+    color : #1b6d85;
+} 
+
+.ctp-user-img {    
+    width: 50%;
+    height: 50%;
+    border-radius: 50%;   
+    background-image: url(/ctpsystem/public/img/avatar.png); 
+}
+
+.header {     
+    height: 90%;
+    width: 100%;
+    
+    /* borders - properties */
+    border-bottom: 20px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-color: #ebc14b; 
+    background-image: url(/ctpsystem/public/img/banner.png); 
+    opacity: 0.90;        
+    z-index: 10;
+}
+
+.ctp-form-loggin {
+    width: 20%;
+    margin-left: 470px;
+    alignment-adjust: central;
+}
+
+.ctp_title {
+    text-transform: uppercase;
+    text-align: center;   
+}
+
+/* All H1 elements with (.ctp_title class)*/
+.ctp_title h1{
+    /* font properties */
+    font-family: H1_Oswald, Arial, Helvetica, sans-serif; 
+    font-size: 32px;
+    font-weight: 200;    
+    color: #ebc14b;     
+    text-combine-upright: all;
+}
 
 
 
+/*  All a h1 elements with (.ctp_subtitle) class */
+h1.ctp_subtitle {
+    font-family: H1_Oswald, Helvetica, sans-serif; 
+    /*font-weight: 200;*/
+    font-stretch: condensed;
+    color: #ebc14b; 
+}
+
+h3.ctp_subtitle {
+    font-family: MyOswald, Arial,Helvetica, sans-serif; 
+    font-weight: 300;
+    color: #57a900;    
+}
+
+#navbar1 {  
+  background-color: #333;
+  overflow: hidden;  
+}
+
+.header-img {
+    margin: 20px auto;    
+    display: block;    
+}
+
+.ctp-content{
+    margin: 10px 30px;
+}
+  
 .table_ctp {
     text-align: center;
     font-family: Verdana, Arial, Helvetica, sans-serif;	
-    margin-left: 10px;
-    margin-right: 10px;	    
 }
 
 .table_ctp thead, tfoot {		
     font-size        : 14px;
-    text-align       : center;
-    margin           : 5px;
-    background-color : #F3C54C;
+    text-align       : center;    
+    background-color : #F9C05F;
 }
 
 .table_ctp tbody td {    	
     font-size : 10px;
 }
 
-.table_ctp tbody, .description {    	
-    font-size : 11px;
+.table_ctp .description {    	
+    font-size : 10px;
     text-align: left;
 }
+
+.table_ctp .money {    	
+    font-size  : 11px;
+    text-align : right;
+}
+
 
 .table_ctp tbody th {    	
     font-size : 12px;
     color : #4B8B20;
 }
-
 
 table.minimalistBlack {
   font-family: Tahoma, Geneva, sans-serif;
@@ -88,6 +275,7 @@ table.minimalistBlack tfoot td {
     -moz-border-radius: 40px 40px 40px 40px;
     border-radius: 40px 40px 40px 40px;
 }
+
 .ctp-btn {
   background-color: #33cc33;
   border-radius: 4px;
@@ -95,7 +283,7 @@ table.minimalistBlack tfoot td {
   color: white;
  
   height: 40px;
-  padding: 5px 15px 5px 15px;
+  padding: 5px 15px;
   text-align: center;
   font-size: 16px;
   margin: 5px 5px;
@@ -103,7 +291,7 @@ table.minimalistBlack tfoot td {
   transition: 0.3s;
 }
 
-.ctp-btn:hover {opacity: 1}
+.ctp-btn:hover { opacity: 0.75 }
 
 
 

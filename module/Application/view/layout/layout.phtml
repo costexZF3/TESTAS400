@@ -17,23 +17,12 @@
                       'href' => $this->basePath().'/img/logo.png']
                   )->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
                    ->prependStylesheet($this->basePath('css/bootstrap.min.css'))
-                   
-                   // ->prependStylesheet($this->basePath('datatable/css/jquery.dataTables.min.css'))
                     ->prependStylesheet($this->basePath('css/style.css'))
-                    ->prependStylesheet($this->basePath('css/stylelayout.css'))
+                    ->prependStylesheet($this->basePath('css/ctpstyle.css'))
+                   
                                            
         ?>
         
-        <!--- CSS: BY KRISTOV ---->
-        <?= $this->headLink([
-                      'rel' => 'stylesheet', 
-                      'type' => 'text/css', 
-                      'href' => "https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css"])
-                   ->prependStylesheet($this->basePath('css/style.css'))
-                   ->prependStylesheet($this->basePath('css/stylelayout.css'))
-                   //->prependStylesheet($this->basePath('datatable/css/jquery.dataTables.min.css'))
-                   
-        ?>
         <!-------------------------------------------------------------------------------------------- 
            Link remote defined by Kristofer. 
            - All the icons in the icon libraries below, are scalable vector icons that can be customized with
@@ -47,14 +36,12 @@
         
         <!-- Scripts -->
         <?= $this->headScript()
-            ->prependFile($this->basePath('js/bootstrap.js'))
-           // ->prependFile('https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js') 
-            ->prependFile('https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js') 
+            ->prependFile($this->basePath('js/bootstrap.js')) 
             ->prependFile($this->basePath('js/jquery-2.2.4.min.js'))
-           // ->prependFile($this->basePath('datatable/js/jquery.dataTables.js'))
-          
+            ->prependFile('https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')              
         ?>
         
+      
         <!-- SCRIPTS DEFINED BY KRISTOFER FOR DATATABLE -->
          
         <?php
@@ -66,25 +53,23 @@
     </head>
     
     <body>
-       <!-- ************************************** PAGE HEADER BANNER *************************************-->  
-        <div class="navbar1">
-            <div class="header container-fluid">
-                <div class=" ">
-                    <div class="row">                    
-                        <div>    
-                            <a href="<?= $this->url('home')?>">
-                                <img src="<?= $this->basePath().'/img/LOGO.PNG' ?>" height="80" alt="Zend Framework <?= \Application\Module::VERSION ?>"/>
-                            </a>
-                        </div>    
+       <!-- ************************************** PAGE HEADER BANNER *************************************-->        
+        
+        <div class="header">
+            <div class="row">                    
+                <div>    
+                    <a href="<?= $this->url('home')?>">
+                        <img class="header-img" src="<?= $this->basePath().'/img/LOGO.PNG' ?>" height="80" alt="Zend Framework <?= \Application\Module::VERSION ?>"/>
+                    </a>
+                </div>   
+                <div class="ctp_title">
+                    <h1> Information System</h1>
+                </div>
+            </div>
+        </div> 
 
-                        <div class="">
-                            <em> Information System</em>
-                        </div>
-                    </div>
-                </div> 
-            </div>    
        <!---------------------------------------- NAVIGATION BAR ---------------------------------------------->
-       
+        <div class="navbar">
             <div class="container"> 
                 <div class="row">
                     <!-- Menu -->
@@ -108,55 +93,41 @@
     
        
         <div class="container content">
-        <!--------------------------------  CONTENT TO BE RENDER ----------------------------------------->
+        <!--------------------------------  CONTENT TO RENDERING  ----------------------------------------->
             <div class="row">
-                <div class="col-md-12 panel panel-body">
-                    <!-- Page content placeholder -->
+                <div class="col-md-12">
+                    <!-- Page content -->
                     <?= $this->content; ?>
                 </div>
             </div>
         </div>
 
-    <hr>
+        <hr>
 
-    <div class="container ">            
-        <div class="row">
-            <div class="col-md-offset-4"> 
+        <div class="container ">            
+            <div class="row">
+                <div class="col-md-offset-4"> 
+                </div>
+                <div class="col-md-offset-8">
+                </div>    
+                <div clas="">
+                    <a class= "label label-info" href="<?= $this->url('home')?>"> Home Page</a>
+                    <a class= "label label-primary" href="<?= $this->url('about') ?>"> About Us</a>
+                    <a class= "label label-success" href="<?= $this->url('about') ?>"> Contact Us</a>
+                </div>
+                <p>
+                    <b>New CTP-System ver:</b> (<?= \Application\Module::VERSION?>).                
+                &copy; 1980 - <?= date('Y') ?> MIS - Costex Tractor Parts Technologies Ltd. Costex All Rights Reserved.
+                </p> 
             </div>
-            <div class="col-md-offset-8">
-            </div>    
-            <div clas="">
-                <a class= "label label-info" href="<?= $this->url('home')?>"> Home Page</a>
-                <a class= "label label-primary" href="<?= $this->url('about') ?>"> About Us</a>
-                <a class= "label label-success" href="<?= $this->url('about') ?>"> Contact Us</a>
-            </div>
-            <p>
-                <b>New CTP-System ver:</b> (<?= \Application\Module::VERSION?>).                
-            &copy; 1980 - <?= date('Y') ?> MIS - Costex Tractor Parts Technologies Ltd. Costex All Rights Reserved.
-            </p> 
         </div>
-    </div>
-    <hr>
-    <div class="container-fluid  jumbotron text">              
-        <footer class="container text text-nowrap text-center">
-            <p> Costex Tractor Parts. All rights reserved.</p>
-        </footer>
-    </div> 
-       
+        <hr>
+        <div class="container-fluid  jumbotron text">              
+            <footer class="container text text-nowrap text-center">
+                <p> Costex Tractor Parts. All rights reserved.</p>
+            </footer>
+        </div>   
         <?= $this->inlineScript() ?>
-         <script>
-            let navbar1 = document.getElementById("navbar1");
-            let sticky = navbar1.offsetTop;
-            window.onscroll = ()=>{myFunction();};           
-            alert (sticky);
-
-            function myFunction() {
-              if (window.pageYOffset >= sticky) {
-                navbar1.classList.add("sticky");
-              } else {
-                navbar1.classList.remove("sticky");
-              }
-            }
-        </script>
+         
     </body>
 </html>
