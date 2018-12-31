@@ -117,6 +117,7 @@ class NavManager
                     
                     if ($this->rbacManager->isGranted(null, 'purchasing.option.pd.wishlist')) {                                             
                          $options[] = $this->setOptions('pdwishlist', 'Product Dev. Wish List', 'pagebuilding','');
+                         $options[] = $this->setOptions('lostsales', 'Lost Sales', 'lostsales','');
                     }//end if: productdevelopments  wish list
                     
                     if ($this->rbacManager->isGranted(null, 'purchasing.option.pd.personincharge')) {                                             
@@ -445,7 +446,7 @@ class NavManager
                             "sales",
                             "receiving",
                             "warehouse", //"maintenance"
-                            "admin",
+                            "admin",                            
                         ];
             
             // rendering the menus dynamically  

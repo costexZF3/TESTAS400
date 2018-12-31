@@ -1,0 +1,138 @@
+<?php
+    /*getting values */
+       
+    $this->headTitle('Lost Sales');	
+    $this->mainMenu()->setActiveItemId('lostsales'); 
+   
+    $this->pageBreadcrumbs()->setItems([
+        'Home'=>$this->url('home'),
+        'Lost Sales'=>$this->url('lostsales')       
+        ]);       
+    
+    //*** getting params from IndexAction() inside LostsaleController 
+    $user = $this->user;
+    $specialAccess = $this->specialAccess;
+    $lostSales = $this->lostsalelist; 
+    $count = $this->count; //
+?>
+
+ 	
+    
+    <script language="JavaScript">
+		 $(document).ready(function(){ 
+			//------------------ function to convert to EXCEL FILE THE LOGGED CONTENT TO SCREEN ---------------------------------------- 
+			$("#convert").click(function(){			   
+				var strDate = new Date().toISOString().replace(/[\-\:\.]/g, "_");	
+				
+				
+				$("#table_toexcel").table2excel({
+					exclude: ".noExl",
+					name: "LostSales",
+					filename: "LostSales_"+ strDate +".xls",					
+					sheetName:"Lost Sales",
+					exclude_img: true,
+					exclude_links: true,
+					exclude_inputs: true
+				});	 //end of : table2excel		 
+		    }); //end ON CLICK: CONVERT FUNCTION 
+		 }); //end: ON READY 
+		  
+	 
+	</script>
+        
+<!-- HTML RENDER-->
+
+<div class = "box-buttons">
+    <input class="btn btn-info" id="convert" type="button" name="btnexcel" value="Convert to Excel">
+</div>
+    
+<p  class="label label-succesS">   
+  <b>LOST SALES : </b> <?=$count;?>  </br>
+</p>
+
+
+<table class="minimalistBlack  table_filter display " id="table_toexcel">
+     <thead>
+         <tr> 
+             <th>Part Number </th>
+             <th>Description </th>
+             <!--<th> Description 2</th>-->
+             <th>Description 3 </th>                
+             <th>Qty Quote </th>
+             <th>Times Quote </th>
+             <th>Custs. Quote</th>
+             <th>Sales Las 12</th>
+             <th>Vendor NO.</th>
+             <th>Vendor Name</th>
+             <th>Pur. Agent</th>
+             <th>Caterpillar (P/L)</th>
+             <th>Wish List</th>
+             <th>Dev. Proj</th>
+             <th>Dev. Status</th>
+             <th>Loc.20</th>
+             <th>OEM VND</th>
+             <th>Mayor</th> 
+             <th>Category</th>
+             <th>Minor</th>
+             <th>Description</th>
+         </tr>
+     </thead>
+     <tbody>          
+        <?php $iteration = 0; ?>
+         <?php foreach ($lostSales as $list) :?>
+             <tr id="<?=$iteration;?>">
+                 <th><b><?=$list->IMPTN;?></b></th> <!-- PART NUMBER -->              
+                 <td class="description"><?=$list->IMDSC;?></td>        <!-- DESCRIPTION -->
+                 <!--<td><=$list->IMDS2;?></td>         DESCRIPTION 2 -->
+                 <td class="description"><?=$list->IMDS3;?></td>        <!-- DESCRIPTION 3 -->
+                 <td><?=($list->TQUOTE)??0;?></td>  <!-- QUANTITY QUOTE  -->
+                 <td><?=($list->TIMESQ)??0;?></td>  <!-- TIMES QUOTE  -->
+                 <td><?=($list->NCUS)??0;?></td>    <!-- CUSTOMERS QUOTE  -->
+                 <td><?=($list->QTYSOLD)??0;?></td> <!-- CUSTOMERS QUOTE  -->
+                 <td><?=($list->VENDOR)??0;?></td>  <!-- VENDOR NUMBER  -->                    
+                 <td>---</td>  <!-- VENDOR NAME  -->
+                 <td>--</td>  <!-- PURCHASING AGENT NAME  -->
+                 <td class="money">$<?=(floatval($list->IMPRC))??0;?></td>  <!-- PRICE LIST CATERPILLAR  -->
+                 <td>--</td>  <!-- WISH LIST  -->
+                 <td>--</td>  <!-- DEVELOPMENT PROJECT  -->
+                 <td>--</td>  <!-- DEVELOPMENT STATUS  -->                    
+                 <td><?=($list->F20)??0;?></td>  <!-- LOCATION 20  -->
+                 <td><?=($list->FOEM)??0;?></td>  <!-- OEM VND  -->
+                 <td><?=($list->IMPC1)??0;?></td>  <!-- MAYOR  -->
+                 <td><?=($list->IMCATA)??0;?></td>  <!-- CATEGORY  -->
+                 <td><?=($list->IMPC2)??0;?></td>  <!-- MINOR  -->
+                 <td><?=($list->mindsc)??"N/A";?></td>  <!-- MINOR DESCRIPTION -->   
+             <tr>     
+         <?php
+            $iteration++;
+            if ($iteration==200){ break;} 
+            endforeach; 
+         ?> 
+     </tbody>
+     <tfoot>
+         <tr> 
+             <td>Part Number </th>
+             <td>Description </th>
+             <!--<th> Description 2</th>-->
+             <td>Description 3</th>                
+             <td>Qty Quote </th>
+             <td>Times Quote </th>
+             <td>Custs. Quote</th>
+             <td>Sales Las 12</th>
+             <td>Vendor NO.</th>
+             <td>Vendor Name</th>
+             <td>Pur. Agent</th>
+             <td>Caterpillar (P/L)</th>
+             <td>Wish List</td>
+             <td>Dev. Proj</td>
+             <td>Dev. Status</td>
+             <td>Loc.20</td>
+             <td>OEM VND</td>
+             <td>Mayor</td> 
+             <td>Category</td>
+             <td>Minor</td>
+             <td>Description</td>
+         </tr>
+     </tfoot>
+ </table>
+

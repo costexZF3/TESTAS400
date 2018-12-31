@@ -50,6 +50,15 @@ footer, header, hgroup, menu, nav, section {
 	display: block;
 }
 
+/* the main content inside pages with grids */
+.main-content {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(3, 1fr);    
+    grid-gap: 20px;
+    grid-auto-flow: row dense;
+}
+
 /* body */
 body {
   padding-top: 0;}
@@ -153,6 +162,7 @@ table {
     text-align: center;   
 }
 
+
 /* All H1 elements with (.ctp_title class)*/
 .ctp_title h1{
     /* font properties */
@@ -162,8 +172,6 @@ table {
     color: #ebc14b;     
     text-combine-upright: all;
 }
-
-
 
 /*  All a h1 elements with (.ctp_subtitle) class */
 h1.ctp_subtitle {

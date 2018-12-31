@@ -19,6 +19,18 @@ return [
                     ],
                 ],                
             ],//end: claims route
+            /*********************************  LOST SALE ROUTESSS **********************************************/
+            'lostsales' => [
+                'type'    => Literal::class,
+                'options' => [
+                    // Change this to something specific to your module
+                    'route'    => '/lostsale',
+                    'defaults' => [
+                        'controller'    => Controller\LostsaleController::class,
+                        'action'        => 'index',
+                    ],
+                ],                
+            ],//end: lostsale route
             'watch' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -37,7 +49,8 @@ return [
     ],    
     'controllers' => [
         'factories' => [
-            Controller\ClaimsController::class => Controller\Factory\ClaimsControllerFactory::class
+            Controller\ClaimsController::class => Controller\Factory\ClaimsControllerFactory::class,
+            Controller\LostsaleController::class => Controller\Factory\LostsaleControllerFactory::class
             
         ],
     ],
@@ -52,7 +65,7 @@ return [
                 
                 //Actions reponse to Roles associated to MENUS 
                 ['actions' => ['index'],               'allow' => '+menu.purchasing'],  //every body logged in with this permission
-                ['actions' => ['claims'],              'allow' => '+option.purchasing.claims'], 
+                ['actions' => ['claims'],              'allow' => '+option.purchasing.claims'],                 
             
                 //Actions response to Roles associated to OPERATION
                 // an user with Entry Level will be permissions to 
@@ -60,7 +73,19 @@ return [
                 ['actions' => ['export','print',],     'allow' => '+purchasing.regular.level'],
                 ['actions' => ['create', 'update', ],  'allow' => '+purchasing.high.level'],
                 ['actions' => ['delete', ],           'allow' => '+purchasing.power.level'],
-            ], //END: access_filter for ClaimsController          
+            ], //END: access_filter for ClaimsController       
+            
+            Controller\LostsaleController::class => [
+                //Allowing routes access depending on the type of permission assigned to loggin user
+                // Give access to "index" actions to everyone with +menu.purchasing  
+                //+option.purchasing.claims 
+                
+                //Actions reponse to Roles associated to MENUS 
+                ['actions' => ['index'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
+                ['actions' => ['lostsales'],      'allow' => '+option.purchasing.claims'],                 
+            
+            ], //END: access_filter for LostSaleController           
+            
         ]
     ],
      'view_manager' => [
