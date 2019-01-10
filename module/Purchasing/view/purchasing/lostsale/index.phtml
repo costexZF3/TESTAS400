@@ -15,15 +15,11 @@
     $lostSales = $this->lostsalelist; 
     $count = $this->count; //
 ?>
-
  	
     
-    <script language="JavaScript">
-		 $(document).ready(function(){ 
-			//------------------ function to convert to EXCEL FILE THE LOGGED CONTENT TO SCREEN ---------------------------------------- 
-			$("#convert").click(function(){			   
-				var strDate = new Date().toISOString().replace(/[\-\:\.]/g, "_");	
-				
+    <script language="JavaScript">   
+        const convert = function(){			   
+				var strDate = new Date().toISOString().replace(/[\-\:\.]/g, "_");				
 				
 				$("#table_toexcel").table2excel({
 					exclude: ".noExl",
@@ -34,11 +30,13 @@
 					exclude_links: true,
 					exclude_inputs: true
 				});	 //end of : table2excel		 
-		    }); //end ON CLICK: CONVERT FUNCTION 
-		 }); //end: ON READY 
-		  
-	 
-	</script>
+                        }; 
+        $(document).ready(function(){ 
+               //------------------ function to convert to EXCEL FILE THE LOGGED CONTENT TO SCREEN ---------------------------------------- 
+               $("#convert").click( convert ); //end ON CLICK: CONVERT FUNCTION 
+        }); //end: ON READY s
+        
+    </script>
         
 <!-- HTML RENDER-->
 
@@ -105,7 +103,7 @@
              <tr>     
          <?php
             $iteration++;
-            if ($iteration==200){ break;} 
+            if ($iteration==20){ break;} 
             endforeach; 
          ?> 
      </tbody>
