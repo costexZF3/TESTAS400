@@ -31,33 +31,87 @@
 					exclude_inputs: true
 				});	 //end of : table2excel		 
                         }; 
+                        
+        /**** filtering items by TimesQuote ****/
+        const timesQuote = tq =>{ 
+            //tq: (it could have the following values: tq100plus, tq50plus, tq30plus, tq10plus)
+            var tqClassElements = document.getElementsByClassName("tq10plus");
+            var tqClassElements = document.querySelector(".tq10plus");
+           
+            tqClassElements.innerHTML()
+            alert(tqClassElements.+'--- '+tq);
+            //hiding everything 
+            for (var i = 0; i < tqClassElements.length; i++)
+            {               
+               document.getElementsByClassName(tqClassElements.item(i)).className = "hideRow";
+            }
+            
+//            var tqClassElements = document.getElementsByClassName( tq );
+//            
+//              $('.'+tq).                  
+            }; 
+        
+       /* getting all parts from screen */
+        const fillArray_partsLostSales = ()=> {
+            
+        };
+        
         $(document).ready(
             function(){ 
                //------------------ function to convert to EXCEL FILE THE LOGGED CONTENT TO SCREEN ---------------------------------------- 
-               $("#convert").click( convert ); //end ON CLICK: CONVERT FUNCTION 
-            }
-                 
-        ); //end: ON READY s
-        
+               $("#convert").click( convert );
+             
+                /* call a function which it  fills an array with items rendered on the screen */
+               const LostSales = fillArray_PartsToLostSales();
+            }    
+        ); 
+      
     </script>
         
 <!-- HTML RENDER-->
 
-<div class = "box-buttons">
-    <input class="btn btn-info" id="convert" type="button" name="btnexcel" value="Convert to Excel">
-</div>
-    
-<p  class="label label-succesS">   
-  <b>LOST SALES : </b> <?=$count;?>  </br>
-</p>
+<?php if ($specialAccess): ?>
+   <div class ="">
+    <div class = "box-buttons row">
+        <div class="col-md-6">            
+            <form>
+                <fieldset>
+                    <div class="legendCTP">
+                        <legend> Please select your preferred Times Quotes[10+, 30+, 50+, 100+]: </legend>
+                        
+                        <input onclick="timesQuote('tq10pluss')" type="radio" name="timesquote" id="tqr10" required >
+                        <label for="tqr10">10+</label>
 
+                        
+                        <input onclick="timesQuote('tq30pluss')" type="radio" name="timesquote" id="tqr30" required>
+                        <label for="tqr30">30+</label>
 
-<table class="minimalistBlack  table_filter display " id="table_toexcel">
+                        
+                        <input onclick="timesQuote('tq50pluss')" type="radio" name="timesquote" id="tqr50" required>
+                        <label for="tqr50">50+</label>
+
+                        <input onclick="timesQuote('tq100pluss')"type="radio" name="timesquote" id="tqr100" required>
+                        <label for="tqr100">100+</label>
+
+                        <input class="btn btn-info" id="reloadtimesquote" name="reloadbtn" value="Update Times Quote" >
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        
+        <div class="col-md-6">
+            <input class="btn btn-info" id="convert" type="button" name="btnexcel" value="Convert to Excel">
+        </div>
+    </div>
+   <div>
+<?php endif; ?>
+
+<table class="table_ctp table_filter display " id="table_toexcel">
      <thead>
          <tr> 
              <th>Part Number </th>
              <th>Description </th>
-             <!--<th> Description 2</th>-->
+             <th> Description 2</th>
              <th>Description 3 </th>                
              <th>Qty Quote </th>
              <th>Times Quote </th>
@@ -79,51 +133,65 @@
          </tr>
      </thead>
      <tbody>          
-        <?php $iteration = 0; ?>
-         <?php foreach ($lostSales as $list) :?>
-             <tr id="<?=$iteration;?>">
-                 <th><b><?=$list->IMPTN;?></b></th> <!-- PART NUMBER -->              
-                 <td class="description"><?=$list->IMDSC;?></td>        <!-- DESCRIPTION -->
-                 <!--<td><=$list->IMDS2;?></td>         DESCRIPTION 2 -->
-                 <td class="description"><?=$list->IMDS3;?></td>        <!-- DESCRIPTION 3 -->
-                 <td><?=($list->TQUOTE)??0;?></td>  <!-- QUANTITY QUOTE  -->
-                 <td><?=($list->TIMESQ)??0;?></td>  <!-- TIMES QUOTE  -->
-                 <td><?=($list->NCUS)??0;?></td>    <!-- CUSTOMERS QUOTE  -->
-                 <td><?=($list->QTYSOLD)??0;?></td> <!-- CUSTOMERS QUOTE  -->
-                 <td><?=($list->VENDOR)??0;?></td>  <!-- VENDOR NUMBER  -->                    
-                 <td>---</td>  <!-- VENDOR NAME  -->
-                 <td>--</td>  <!-- PURCHASING AGENT NAME  -->
-                 <td class="money">$<?=(floatval($list->IMPRC))??0;?></td>  <!-- PRICE LIST CATERPILLAR  -->
-                 <td>--</td>  <!-- WISH LIST  -->
-                 <td>--</td>  <!-- DEVELOPMENT PROJECT  -->
-                 <td>--</td>  <!-- DEVELOPMENT STATUS  -->                    
-                 <td><?=($list->F20)??0;?></td>  <!-- LOCATION 20  -->
-                 <td><?=($list->FOEM)??0;?></td>  <!-- OEM VND  -->
-                 <td><?=($list->IMPC1)??0;?></td>  <!-- MAYOR  -->
-                 <td><?=($list->IMCATA)??0;?></td>  <!-- CATEGORY  -->
-                 <td><?=($list->IMPC2)??0;?></td>  <!-- MINOR  -->
-                 <td><?=($list->mindsc)??"N/A";?></td>  <!-- MINOR DESCRIPTION -->   
-             <tr>     
+        <?php $iteration = 0; 
+             foreach ($lostSales as $list){             
+                     
+                //code snippet to add a sort of classification to the row
+                $timesQuotes = $list->TIMESQ;
+                
+                if ( $timesQuotes >= 100 ){
+                    $className="tq100plus";  
+                } else if ( $timesQuotes >= 50 ){
+                    $className="tq50plus";
+                } else if ( $timesQuotes >= 30 ){
+                    $className="tq30plus";
+                } else {
+                    $className="tq10plus";
+                }                
+             ?>
+                <tr class="<?=$className;?>">                 
+                    <td><b><?=$list->IMPTN;?></b></td> <!-- PART NUMBER -->              
+                    <td class="description"><?=$list->IMDSC;?></td>        <!-- DESCRIPTION -->
+                    <td><?=$list->IMDS2;?></td> <!--DESCRIPTION 2 -->
+                    <td class="description"><?=$list->IMDS3;?></td>        <!-- DESCRIPTION 3 -->
+                    <td><?=($list->TQUOTE)??0;?></td>  <!-- QUANTITY QUOTE  -->
+                    <td id="tq<?=$iteration?>"><?=($list->TIMESQ)??0;?></td>  <!-- TIMES QUOTE  -->
+                    <td><?=($list->NCUS)??0;?></td>    <!-- CUSTOMERS QUOTE  -->
+                    <td><?=($list->QTYSOLD)??0;?></td> <!-- CUSTOMERS QUOTE  -->
+                    <td><?=($list->VENDOR)??0;?></td>  <!-- VENDOR NUMBER  -->                    
+                    <td>---</td>  <!-- VENDOR NAME  -->
+                    <td>--</td>  <!-- PURCHASING AGENT NAME  -->
+                    <td class="money">$<?=(floatval($list->IMPRC))??0;?></td>  <!-- PRICE LIST CATERPILLAR  -->
+                    <td>--</td>  <!-- WISH LIST  -->
+                    <td>--</td>  <!-- DEVELOPMENT PROJECT  -->
+                    <td>--</td>  <!-- DEVELOPMENT STATUS  -->                    
+                    <td><?=($list->F20)??0;?></td>  <!-- LOCATION 20  -->
+                    <td><?=($list->FOEM)??0;?></td>  <!-- OEM VND  -->
+                    <td><?=($list->IMPC1)??0;?></td>  <!-- MAYOR  -->
+                    <td><?=($list->IMCATA)??0;?></td>  <!-- CATEGORY  -->
+                    <td><?=($list->IMPC2)??0;?></td>  <!-- MINOR  -->
+                    <td><?=($list->mindsc)??"N/A";?></td>  <!-- MINOR DESCRIPTION -->   
+                <tr>                
          <?php
             $iteration++;
-            if ($iteration==20){ break;} 
-            endforeach; 
+            //if ($iteration==700){ break;} 
+             }; 
          ?> 
      </tbody>
      <tfoot>
-         <tr> 
-             <td>Part Number </th>
-             <td>Description </th>
+         <tr id="countItem_<?=$iteration?>"> 
+             <td>Part Number </td>
+             <td>Description </td>
              <!--<th> Description 2</th>-->
-             <td>Description 3</th>                
-             <td>Qty Quote </th>
-             <td>Times Quote </th>
-             <td>Custs. Quote</th>
-             <td>Sales Las 12</th>
-             <td>Vendor NO.</th>
-             <td>Vendor Name</th>
-             <td>Pur. Agent</th>
-             <td>Caterpillar (P/L)</th>
+             <td>Description 3</td>                
+             <td>Qty Quote </td>
+             <td>Times Quote </td>
+             <td>Custs. Quote</td>
+             <td>Sales Las 12</td>
+             <td>Vendor NO.</td>
+             <td>Vendor Name</td>
+             <td>Pur. Agent</td>
+             <td>Caterpillar (P/L)</td>
              <td>Wish List</td>
              <td>Dev. Proj</td>
              <td>Dev. Status</td>
