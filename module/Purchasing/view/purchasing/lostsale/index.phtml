@@ -18,14 +18,22 @@
  	
     
     <script language="JavaScript">   
-        const convert = function(){			   
+        /*function to conver to EXCEL a table rendered */
+        
+        /**
+         * 
+         * @param {string} fileName : Name will have the file exported to EXCEL
+         * @param {string} sheetName : name wich you find the sheet inside de Excel File
+         * @returns {undefined}
+         */
+        const convert = (fileName, sheetName) =>{			   
 				var strDate = new Date().toISOString().replace(/[\-\:\.]/g, "_");				
 				
 				$("#table_toexcel").table2excel({
 					exclude: ".noExl",
-					name: "LostSales",
-					filename: "LostSales_"+ strDate +".xls",					
-					sheetName:"Lost Sales",
+					name: fileName, //"LostSales",
+					filename: fileName+"_"+ strDate +".xls",					
+					sheetName:sheetName,
 					exclude_img: true,
 					exclude_links: true,
 					exclude_inputs: true
@@ -33,18 +41,26 @@
                         }; 
                         
         /**** filtering items by TimesQuote ****/
-        const timesQuote = tq =>{ 
-            //tq: (it could have the following values: tq100plus, tq50plus, tq30plus, tq10plus)
-            var tqClassElements = document.getElementsByClassName("tq10plus");
-            var tqClassElements = document.querySelector(".tq10plus");
+        /**
+         * 
+         * @param {string} timesQ  : (it could have the following values: tq100plus, tq50plus, tq30plus, tq10plus)
+         * @returns {undefined}
+         */
+        const timesQuote = (timesQ) =>{ 
+            var tqClassElements = document.getElementsByClassName( timesQ ).length;
+            //var tqClassElements = document.querySelector(timesQ );
            
-            tqClassElements.innerHTML()
-            alert(tqClassElements.+'--- '+tq);
+            //console.log( tqClassElements ); 
+            
+            //tqClassElements.innerHTML()
+            alert( tqClassElements +' --- '+ timesQ);
+           // console.log( tqClassElements );
+            
             //hiding everything 
-            for (var i = 0; i < tqClassElements.length; i++)
-            {               
-               document.getElementsByClassName(tqClassElements.item(i)).className = "hideRow";
-            }
+//            for (var i = 0; i < tqClassElements.length; i++)
+//            {               
+//               document.getElementsByClassName(tqClassElements.item(i)).className = "hideRow";
+//            }
             
 //            var tqClassElements = document.getElementsByClassName( tq );
 //            
@@ -56,15 +72,15 @@
             
         };
         
-        $(document).ready(
-            function(){ 
+        $(document).ready( function(){ 
                //------------------ function to convert to EXCEL FILE THE LOGGED CONTENT TO SCREEN ---------------------------------------- 
-               $("#convert").click( convert );
+               $("#convert").click( function() {
+                   convert('LostSales','lost sales');
+               });
              
                 /* call a function which it  fills an array with items rendered on the screen */
-               const LostSales = fillArray_PartsToLostSales();
-            }    
-        ); 
+               //const LostSales = fillArray_partsLostSales();
+            }); 
       
     </script>
         
@@ -174,7 +190,7 @@
                 <tr>                
          <?php
             $iteration++;
-            //if ($iteration==700){ break;} 
+            if ($iteration==30){ break;} 
              }; 
          ?> 
      </tbody>
