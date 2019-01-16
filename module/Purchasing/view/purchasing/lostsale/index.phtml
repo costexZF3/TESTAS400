@@ -1,4 +1,4 @@
-<?php
+<?php     
     /*getting values */
        
     $this->headTitle('Lost Sales');	
@@ -13,76 +13,107 @@
     $user = $this->user;
     $specialAccess = $this->specialAccess;
     $lostSales = $this->lostsalelist; 
-    $count = $this->count; //
-?>
+    $count = $this->count; 
+ ?>  
  	
+  
+<script language="JavaScript">   
+    /*function to conver to EXCEL a table rendered */
+
+    /**
+     * @param {string} fileName : Name will have the file exported to EXCEL
+     * @param {string} sheetName : name wich you find the sheet inside de Excel File
+     * @returns {undefined}
+     */
+    const convert = (fileName, sheetName) =>{			   
+                            var strDate = new Date().toISOString().replace(/[\-\:\.]/g, "_");				
+
+                            $("#table_toexcel").table2excel({
+                                    exclude: ".noExl",
+                                    name: fileName, //"LostSales",
+                                    filename: fileName+"_"+ strDate +".xls",					
+                                    sheetName:sheetName,
+                                    exclude_img: true,
+                                    exclude_links: true,
+                                    exclude_inputs: true
+                            });	 //end of : table2excel		 
+                    }; 
+              
     
-    <script language="JavaScript">   
-        /*function to conver to EXCEL a table rendered */
+    const createArrayFromNodeList = ( nodeList )=> {
+      var myArrayFromNodeList = []; // empty at first  
+      for (var i = 0; i < nodeList.length; i++) {
+            myArrayFromNodeList.push(nodeList[i]); // ahhh, push it            
+        }  
         
-        /**
-         * 
-         * @param {string} fileName : Name will have the file exported to EXCEL
-         * @param {string} sheetName : name wich you find the sheet inside de Excel File
-         * @returns {undefined}
-         */
-        const convert = (fileName, sheetName) =>{			   
-				var strDate = new Date().toISOString().replace(/[\-\:\.]/g, "_");				
-				
-				$("#table_toexcel").table2excel({
-					exclude: ".noExl",
-					name: fileName, //"LostSales",
-					filename: fileName+"_"+ strDate +".xls",					
-					sheetName:sheetName,
-					exclude_img: true,
-					exclude_links: true,
-					exclude_inputs: true
-				});	 //end of : table2excel		 
-                        }; 
-                        
-        /**** filtering items by TimesQuote ****/
-        /**
-         * 
-         * @param {string} timesQ  : (it could have the following values: tq100plus, tq50plus, tq30plus, tq10plus)
-         * @returns {undefined}
-         */
-        const timesQuote = (timesQ) =>{ 
-            var tqClassElements = document.getElementsByClassName( timesQ ).length;
-            //var tqClassElements = document.querySelector(timesQ );
-           
-            //console.log( tqClassElements ); 
-            
-            //tqClassElements.innerHTML()
-            alert( tqClassElements +' --- '+ timesQ);
-           // console.log( tqClassElements );
-            
-            //hiding everything 
-//            for (var i = 0; i < tqClassElements.length; i++)
-//            {               
-//               document.getElementsByClassName(tqClassElements.item(i)).className = "hideRow";
-//            }
-            
-//            var tqClassElements = document.getElementsByClassName( tq );
-//            
-//              $('.'+tq).                  
-            }; 
+      return myArrayFromNodeList;
+    };
+    
+    //getting back all element: (element can be all p, class, id, etc)
+    const queryAllElement = element => { return document.querySelectorAll(element);};
+    
+    const getTimesQuote =( tq )=> {
+        let color = "";
         
-       /* getting all parts from screen */
-        const fillArray_partsLostSales = ()=> {
+        switch (tq ){
+            case 'tq100plus' : 
+                color = "#dfff80";
+                break;
             
+            case 'tq50plus' : 
+                color = "#ffff80";
+                break;
+            
+            case 'tq30plus' :
+                color = "#ffff80";
+                break;
+            
+            case 'tq10plus': 
+                color = "#80ffbf";
+                break;
+            default:
+                color = "#dfff80";
+            break;
         };
+       
+        var myNodeList = queryAllElement('.'+tq);
+               
+        for (var i = 0; i < myNodeList.length; i++) {          
+            myNodeList[i].style.backgroundColor = color; 
+                             
+            
+           // value += document.getElementById('#tq'+i).value);             
+        }        
         
-        $(document).ready( function(){ 
-               //------------------ function to convert to EXCEL FILE THE LOGGED CONTENT TO SCREEN ---------------------------------------- 
-               $("#convert").click( function() {
-                   convert('LostSales','lost sales');
-               });
-             
-                /* call a function which it  fills an array with items rendered on the screen */
-               //const LostSales = fillArray_partsLostSales();
-            }); 
-      
-    </script>
+        myArrayFromNodeList = createArrayFromNodeList( myNodeList );
+        
+        console.log( myNodeList );
+        console.log( myArrayFromNodeList );                
+    };  
+    
+    
+    /**
+     * @param {string} timesQ  : (it could have the following values: tq100plus, tq50plus, tq30plus, tq10plus)
+     * @returns {undefined}
+     */
+    const timesQuote = (timesQ) =>{ getTimesQuote( timesQ );}; 
+
+   /* getting all parts from screen */
+    const fillArray_partsLostSales = ()=> {
+            
+    };
+
+    $(document).ready( function(){ 
+           //------------------ function to convert to EXCEL FILE THE LOGGED CONTENT TO SCREEN ---------------------------------------- 
+           $("#convert").click( function() {
+               convert('LostSales','lost sales');
+           });
+
+            /* call a function which it  fills an array with items rendered on the screen */
+           //const LostSales = fillArray_partsLostSales();
+        }); 
+
+</script>
         
 <!-- HTML RENDER-->
 
@@ -91,27 +122,26 @@
     <div class = "box-buttons row">
         <div class="col-md-6">            
             <form>
-                <fieldset>
-                    <div class="legendCTP">
+                <div class="legendCTP">
                         <legend> Please select your preferred Times Quotes[10+, 30+, 50+, 100+]: </legend>
                         
-                        <input onclick="timesQuote('tq10pluss')" type="radio" name="timesquote" id="tqr10" required >
+                        <input onclick="timesQuote('tq10plus')" type="radio" name="timesquote" id="tqr10" required >
                         <label for="tqr10">10+</label>
 
                         
-                        <input onclick="timesQuote('tq30pluss')" type="radio" name="timesquote" id="tqr30" required>
+                        <input onclick="timesQuote('tq30plus')" type="radio" name="timesquote" id="tqr30" required>
                         <label for="tqr30">30+</label>
 
                         
-                        <input onclick="timesQuote('tq50pluss')" type="radio" name="timesquote" id="tqr50" required>
+                        <input onclick="timesQuote('tq50plus')" type="radio" name="timesquote" id="tqr50" required>
                         <label for="tqr50">50+</label>
 
-                        <input onclick="timesQuote('tq100pluss')"type="radio" name="timesquote" id="tqr100" required>
+                        <input onclick="timesQuote('tq100plus')"type="radio" name="timesquote" id="tqr100" required>
                         <label for="tqr100">100+</label>
 
-                        <input class="btn btn-info" id="reloadtimesquote" name="reloadbtn" value="Update Times Quote" >
-                    </div>
-                </fieldset>
+<!--                        <input type="button" class="btn btn-info" id="reloadtimesquote" name="reloadbtn" value="Update Times Quote"  
+                               onclick="getTimesQuote()">-->
+                </div>                
             </form>
         </div>
         
@@ -155,13 +185,14 @@
                 //code snippet to add a sort of classification to the row
                 $timesQuotes = $list->TIMESQ;
                 
+                /* clasifying all rows of the table according the times quotes: */
                 if ( $timesQuotes >= 100 ){
                     $className="tq100plus";  
                 } else if ( $timesQuotes >= 50 ){
                     $className="tq50plus";
                 } else if ( $timesQuotes >= 30 ){
                     $className="tq30plus";
-                } else {
+                } else if ( $timesQuotes >= 10 ){
                     $className="tq10plus";
                 }                
              ?>
@@ -181,16 +212,16 @@
                     <td>--</td>  <!-- WISH LIST  -->
                     <td>--</td>  <!-- DEVELOPMENT PROJECT  -->
                     <td>--</td>  <!-- DEVELOPMENT STATUS  -->                    
-                    <td><?=($list->F20)??0;?></td>  <!-- LOCATION 20  -->
-                    <td><?=($list->FOEM)??0;?></td>  <!-- OEM VND  -->
-                    <td><?=($list->IMPC1)??0;?></td>  <!-- MAYOR  -->
-                    <td><?=($list->IMCATA)??0;?></td>  <!-- CATEGORY  -->
-                    <td><?=($list->IMPC2)??0;?></td>  <!-- MINOR  -->
-                    <td><?=($list->mindsc)??"N/A";?></td>  <!-- MINOR DESCRIPTION -->   
+                    <td><?=($list->F20)??0;?></td>          <!-- LOCATION 20  -->
+                    <td><?=($list->FOEM)??0;?></td>         <!-- OEM VND  -->
+                    <td><?=($list->IMPC1)??0;?></td>        <!-- MAYOR  -->
+                    <td><?=($list->IMCATA)??0;?></td>       <!-- CATEGORY  -->
+                    <td><?=($list->IMPC2)??0;?></td>        <!-- MINOR  -->
+                    <td><?=($list->mindsc)??"N/A";?></td>   <!-- MINOR DESCRIPTION -->   
                 <tr>                
          <?php
             $iteration++;
-            if ($iteration==30){ break;} 
+            if ($iteration==500){ break;} 
              }; 
          ?> 
      </tbody>
