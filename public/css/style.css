@@ -1,23 +1,12 @@
 /* injecting fonts from server */
-@font-face {
-  font-family: H1_Oswald;  
-  src:url('https://fonts.googleapis.com/font?family=Oswald:200,300,400,500|Raleway|Roboto');
-/*      url('../fonts/Oswald-Bold.ttf')
-       url('../../fonts/Oswald-ExtraLight.ttf') format('embedded-opentype'),
-       url('../fonts/Oswald-Medium.ttf') format('embedded-opentype'),*/
-              
-}
-
 
 @font-face {
   font-family: MyOswald;
   src: url(../fonts/Oswald-ExtraLight.ttf);
 }
 
-
 @font-face {
-    font-family: MyAmaranta;
-    
+    font-family: MyAmaranta;    
     src: url(../fonts/Amaranth-Regular.otf);     
 }
  
@@ -55,7 +44,7 @@ footer, header, hgroup, menu, nav, section {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     grid-template-rows: repeat(3, 1fr);    
-    grid-gap: 20px;
+    grid-gap: 10px;
     grid-auto-flow: row dense;
 }
 
@@ -83,34 +72,41 @@ body {
    background-color:  #FACB4C;  
 }
 
+/*****************************  radio buttons *****************************/
+.box-buttons {
+    margin-bottom: 10px;
+    padding: 10px 10px;
+    background: rgba(250, 193, 96, 0.69);
+    border: #000000 dashed thick;     
+}
+
 /* grid */
 
 .grid {
   border: 2px blue solid;
   width: 100%;
   height: 400px;
-  display: grid;
-  
+  display: grid;  
   grid-template: repeat(3, 1fr) / 1fr 1fr;
   grid-gap: 10px;  
   padding: 5px;  
 }
 
 /* panels: panels headings */
-
 .panel-heading h3 {
     font-family: MyOswald, monospace, Arial;
     font-weight: 300;
     color: #F39C12;
 }
 
-
 ol, ul {
 	list-style: none;
 }
+
 blockquote, q {
 	quotes: none;
 }
+
 blockquote:before, blockquote:after,
 q:before, q:after {
 	content: '';
@@ -120,6 +116,8 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
+
 /*********************************************************************/
 
 #icons {
@@ -166,7 +164,7 @@ table {
 /* All H1 elements with (.ctp_title class)*/
 .ctp_title h1{
     /* font properties */
-    font-family: H1_Oswald, Arial, Helvetica, sans-serif; 
+    font-family: MyOswald, Arial, Helvetica, sans-serif; 
     font-size: 32px;
     font-weight: 200;    
     color: #ebc14b;     
@@ -201,36 +199,50 @@ h3.ctp_subtitle {
     margin: 10px 30px;
 }
   
+/* TABLE CTP PROPERTIES */
 .table_ctp {
     text-align: center;
     font-family: Verdana, Arial, Helvetica, sans-serif;	
 }
 
-.table_ctp thead, tfoot {		
-    font-size        : 14px;
-    text-align       : center;    
-    background-color : #F9C05F;
+.table_ctp thead, tfoot {    
+    font-size        : 12px;
+    text-align       : left;    
+    background-color : #ffdf80; /*#F9C05F*/
 }
 
-.table_ctp tbody td {    	
+.table_ctp > tbody{    	
     font-size : 10px;
 }
 
-.table_ctp .description {    	
-    font-size : 10px;
+/* highlighter columns */
+.table_ctp .description {    	    
     text-align: left;
 }
 
-.table_ctp .money {    	
-    font-size  : 11px;
+.table_ctp .money {    	    
     text-align : right;
+    color: #C70039;
 }
 
-
-.table_ctp tbody th {    	
-    font-size : 12px;
-    color : #4B8B20;
+.table_ctp .partnumber {
+    font-size: 11px;
+    color: #ff8080;
 }
+
+.table_ctp .timesq {
+    color: #57a900;
+}
+
+.showrow {
+    visibility: visible;
+}
+
+.hiderow {
+    visibility: collapse;
+}
+
+/*----------------------------------------------------------------------------*/
 
 table.minimalistBlack {
   font-family: Tahoma, Geneva, sans-serif;
@@ -274,10 +286,8 @@ table.minimalistBlack tfoot {
 table.minimalistBlack tfoot td {
   font-size: 14px;
 }
-/*********************************************
 
- button ctp-btn */
-
+/* button ctp-btn */
 #ctp-borderDemo {
     -webkit-border-radius: 40px 40px 40px 40px;
     -moz-border-radius: 40px 40px 40px 40px;
@@ -285,17 +295,16 @@ table.minimalistBlack tfoot td {
 }
 
 .ctp-btn {
-  background-color: #33cc33;
-  border-radius: 4px;
+  color: white;  
+  background-color: #33cc33;  
   border: none;
-  color: white;
- 
+  border-radius: 4px; 
   height: 40px;
   padding: 5px 15px;
-  text-align: center;
-  font-size: 16px;
   margin: 5px 5px;
-  opacity: 0.7;
+  text-align: center;
+  font-size: 16px; 
+  opacity: 0.6;
   transition: 0.3s;
 }
 
