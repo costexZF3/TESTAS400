@@ -77,7 +77,7 @@ body {
     margin-bottom: 10px;
     padding: 10px 10px;
     background: rgba(250, 193, 96, 0.69);
-    border: #000000 dashed thick;     
+    border: #000000 solid thin;     
 }
 
 /* grid */
@@ -199,6 +199,13 @@ h3.ctp_subtitle {
     margin: 10px 30px;
 }
   
+/*** hidding all items with less than 100 TIMES QUOTE ***/ 
+[class~=tq10plus111]{
+  /* hide all rows with times quotes under 100 */
+  visibility: collapse;
+}
+
+
 /* TABLE CTP PROPERTIES */
 .table_ctp {
     text-align: center;
@@ -206,17 +213,26 @@ h3.ctp_subtitle {
 }
 
 .table_ctp thead, tfoot {    
-    font-size        : 12px;
-    text-align       : left;    
-    background-color : #ffdf80; /*#F9C05F*/
+    font-size: 12px;
+    text-align: left;   
+    padding: 2px 2px;
+    background-color: #ffdf80; /*#F9C05F*/
 }
 
+
+td {
+    padding: 1px 1px;
+    margin: 1px 1px;
+}
 .table_ctp > tbody{    	
     font-size : 10px;
+    padding: 1px 1px;
+    margin: 1px 1px;
 }
 
+
 /* highlighter columns */
-.table_ctp .description {    	    
+.table_ctp .description,.partnumber {    	    
     text-align: left;
 }
 
@@ -227,7 +243,7 @@ h3.ctp_subtitle {
 
 .table_ctp .partnumber {
     font-size: 11px;
-    color: #ff8080;
+    color: #593a78;
 }
 
 .table_ctp .timesq {

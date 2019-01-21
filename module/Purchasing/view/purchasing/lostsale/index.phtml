@@ -19,7 +19,6 @@
   
 <script language="JavaScript">   
     /*function to conver to EXCEL a table rendered */
-
     /**
      * @param {string} fileName : Name will have the file exported to EXCEL
      * @param {string} sheetName : name wich you find the sheet inside de Excel File
@@ -49,46 +48,97 @@
       return myArrayFromNodeList;
     };
     
-    //getting back all element: (element can be all p, class, id, etc)
+    //it return a NodeList with all element inside the document: (element can be all p, class, id, etc)
     const queryAllElement = element => { return document.querySelectorAll(element);};
+    
+    const changeBackgrounColor = (item, color) => { item.style.backgroundColor = color;};
+    
+    /* function to hide an Element */
+    const hideElement = ( classElement )=> { $('.' + classElement).fadeOut();};
+    
+      /* function to show an Element */
+    const showElement = ( classElement )=> { $('.' + classElement).fadeIn();};
     
     const getTimesQuote =( tq )=> {
         let color = "";
+        var NodeList = [];
         
         switch (tq ){
-            case 'tq100plus' : 
-                color = "#dfff80";
-                break;
+            case 'tq100plus' :                 
+                hideElement('tq50plus'); hideElement('tq30plus'); hideElement('tq10plus'); hideElement('tq5plus');                
+                
+                color = "#E6CAE6";
+                
+                //hide all items with class under tq50plus
+                ShowElement('tq50plus'); ShowElement('tq30plus'); ShowElement('tq10plus'); 
+                
+                /* changing color to Elements for being redered */
+                NodeList['tq100plus'] = queryAllElement('.tq100plus');
+                NodeList['tq100plus'].forEach(item=>{ changeBackgrounColor(item, color);});                
+            break;
             
-            case 'tq50plus' : 
-                color = "#ffff80";
-                break;
+            case 'tq50plus' :                 
+                //hide all items with class under tq50plus
+                hideElement('tq30plus'); hideElement('tq10plus'); hideElement('tq5plus');
+                
+                color = "#ffff80"; 
+                
+                //Show elements with classes: tq100plus and tq50plus                
+                ShowElement('tq100plus'); ShowElement('tq50plus'); 
+                
+                NodeList['tq50plus'] = queryAllElement('.tq50plus');
+                
+                //change background color                
+                 NodeList['tq50plus'].forEach(item=>{ changeBackgrounColor(item, color);});
+                 NodeList['tq100plus'].forEach(item=>{ changeBackgrounColor(item, color);});                  
+            break;
             
             case 'tq30plus' :
-                color = "#ffff80";
-                break;
+                
+                //hide all items with class under tq30plus                
+                hideElement('tq10plus'); hideElement('tq5plus');
+                
+                /* background color for elements with class: tq30plus*/
+                color = "#CDCD6E";                 
+                
+                ShowElement('tq100plus'); ShowElement('tq50plus'); ShowElement('tq30plus'); 
+                
+                NodeList['tq30plus'] = queryAllElement('.tq30plus');
+                
+                //change background color                
+                NodeList['tq30plus'].forEach(item=>{ changeBackgrounColor(item, color);});
+                NodeList['tq50plus'].forEach(item=>{ changeBackgrounColor(item, color);});
+                NodeList['tq100plus'].forEach(item=>{ changeBackgrounColor(item, color);});
+            break;
             
             case 'tq10plus': 
-                color = "#80ffbf";
-                break;
+                //hide all items with class under tq10plus                
+                hideElement('tq5plus');
+                
+                /* background color for elements with class: tq10plus*/
+                color = "#CAE6E6";                 
+                
+                /* rendering elements */
+                ShowElement('tq100plus'); ShowElement('tq50plus'); ShowElement('tq30plus'); ShowElement('tq10plus'); 
+                
+                NodeList['tq10plus'] = queryAllElement('.tq10plus');
+                
+                //change background color                
+                 NodeList['tq10plus'].forEach(item=>{ changeBackgrounColor(item, color);});
+                 NodeList['tq30plus'].forEach(item=>{ changeBackgrounColor(item, color);});
+                 NodeList['tq50plus'].forEach(item=>{ changeBackgrounColor(item, color);});
+                 NodeList['tq100plus'].forEach(item=>{ changeBackgrounColor(item, color);});
+            break;
+                
             default:
                 color = "#dfff80";
             break;
         };
-       
-        var myNodeList = queryAllElement('.'+tq);
-               
-        for (var i = 0; i < myNodeList.length; i++) {          
-            myNodeList[i].style.backgroundColor = color; 
-                             
-            
-           // value += document.getElementById('#tq'+i).value);             
-        }        
-        
-        myArrayFromNodeList = createArrayFromNodeList( myNodeList );
-        
-        console.log( myNodeList );
-        console.log( myArrayFromNodeList );                
+      
+        //queryAllElement: function created by kristov. It gives back a NodeList with all Elements
+        //var myNodeList = queryAllElement('.'+tq);
+        //console.log( myNodeList );
+        //console.log( myArrayFromNodeList );                
     };  
     
     
@@ -105,9 +155,14 @@
 
     $(document).ready( function(){ 
            //------------------ function to convert to EXCEL FILE THE LOGGED CONTENT TO SCREEN ---------------------------------------- 
-           $("#convert").click( function() {
-               convert('LostSales','lost sales');
-           });
+        $("#convert").click( function() {
+            convert('LostSales','lost sales');
+        });
+           
+        $('.tq10plus').fadeOut();
+        $('.tq5plus').fadeOut();
+        $('.tq30plus').fadeOut();
+        $('.tq50plus').fadeOut();
 
             /* call a function which it  fills an array with items rendered on the screen */
            //const LostSales = fillArray_partsLostSales();
@@ -123,7 +178,7 @@
         <div class="col-md-6">            
             <form>
                 <div class="legendCTP">
-                        <legend> Please select your preferred Times Quotes[10+, 30+, 50+, 100+]: </legend>
+                        <p> Please select your preferred Times Quotes[10+, 30+, 50+, 100+]: </p>
                         
                         <input onclick="timesQuote('tq10plus')" type="radio" name="timesquote" id="tqr10" required >
                         <label for="tqr10">10+</label>
@@ -138,9 +193,6 @@
 
                         <input onclick="timesQuote('tq100plus')"type="radio" name="timesquote" id="tqr100" required>
                         <label for="tqr100">100+</label>
-
-<!--                        <input type="button" class="btn btn-info" id="reloadtimesquote" name="reloadbtn" value="Update Times Quote"  
-                               onclick="getTimesQuote()">-->
                 </div>                
             </form>
         </div>
@@ -157,7 +209,7 @@
          <tr> 
              <th>Part Number </th>
              <th>Description </th>
-             <th> Description 2</th>
+             <th>Description 2</th>
              <th>Description 3 </th>                
              <th>Qty Quote </th>
              <th>Times Quote </th>
@@ -179,9 +231,13 @@
          </tr>
      </thead>
      <tbody>          
-        <?php $iteration = 0; 
-             foreach ($lostSales as $list){             
-                     
+        <?php $iteration = 1; 
+        
+             foreach ($lostSales as $list){   
+                 
+                 if (trim($list->VENDOR)=="" || trim($list->VENDOR)=="000000" ){ continue; }
+                 
+                 $className="tq5plus";    
                 //code snippet to add a sort of classification to the row
                 $timesQuotes = $list->TIMESQ;
                 
@@ -194,18 +250,18 @@
                     $className="tq30plus";
                 } else if ( $timesQuotes >= 10 ){
                     $className="tq10plus";
-                }                
+                }           
              ?>
                 <tr class="<?=$className;?>">                 
-                    <td><b><?=$list->IMPTN;?></b></td> <!-- PART NUMBER -->              
+                    <td class="partnumber"><?=$list->IMPTN;?></td> <!-- PART NUMBER -->              
                     <td class="description"><?=$list->IMDSC;?></td>        <!-- DESCRIPTION -->
-                    <td><?=$list->IMDS2;?></td> <!--DESCRIPTION 2 -->
+                    <td class="description"><?=$list->IMDS2;?></td> <!--DESCRIPTION 2 -->
                     <td class="description"><?=$list->IMDS3;?></td>        <!-- DESCRIPTION 3 -->
                     <td><?=($list->TQUOTE)??0;?></td>  <!-- QUANTITY QUOTE  -->
-                    <td id="tq<?=$iteration?>"><?=($list->TIMESQ)??0;?></td>  <!-- TIMES QUOTE  -->
+                    <td class="timesq" id="tq<?=$iteration?>"><?=($list->TIMESQ)??0;?></td>  <!-- TIMES QUOTE  -->
                     <td><?=($list->NCUS)??0;?></td>    <!-- CUSTOMERS QUOTE  -->
                     <td><?=($list->QTYSOLD)??0;?></td> <!-- CUSTOMERS QUOTE  -->
-                    <td><?=($list->VENDOR)??0;?></td>  <!-- VENDOR NUMBER  -->                    
+                    <td><?=($list->VENDOR)??'N/A';?></td>  <!-- VENDOR NUMBER  -->                    
                     <td>---</td>  <!-- VENDOR NAME  -->
                     <td>--</td>  <!-- PURCHASING AGENT NAME  -->
                     <td class="money">$<?=(floatval($list->IMPRC))??0;?></td>  <!-- PRICE LIST CATERPILLAR  -->
@@ -217,11 +273,11 @@
                     <td><?=($list->IMPC1)??0;?></td>        <!-- MAYOR  -->
                     <td><?=($list->IMCATA)??0;?></td>       <!-- CATEGORY  -->
                     <td><?=($list->IMPC2)??0;?></td>        <!-- MINOR  -->
-                    <td><?=($list->mindsc)??"N/A";?></td>   <!-- MINOR DESCRIPTION -->   
+                    <td class="description"><?=($list->mindsc)??"N/A";?></td>   <!-- MINOR DESCRIPTION -->   
                 <tr>                
          <?php
             $iteration++;
-            if ($iteration==500){ break;} 
+            //if ($iteration==500){ break;} 
              }; 
          ?> 
      </tbody>
@@ -229,7 +285,7 @@
          <tr id="countItem_<?=$iteration?>"> 
              <td>Part Number </td>
              <td>Description </td>
-             <!--<th> Description 2</th>-->
+             <td> Description 2</td>
              <td>Description 3</td>                
              <td>Qty Quote </td>
              <td>Times Quote </td>
