@@ -70,7 +70,7 @@
                 color = "#E6CAE6";
                 
                 //hide all items with class under tq50plus
-                ShowElement('tq50plus'); ShowElement('tq30plus'); ShowElement('tq10plus'); 
+                showElement('tq100plus'); 
                 
                 /* changing color to Elements for being redered */
                 NodeList['tq100plus'] = queryAllElement('.tq100plus');
@@ -84,7 +84,7 @@
                 color = "#ffff80"; 
                 
                 //Show elements with classes: tq100plus and tq50plus                
-                ShowElement('tq100plus'); ShowElement('tq50plus'); 
+                showElement('tq100plus'); showElement('tq50plus'); 
                 
                 NodeList['tq50plus'] = queryAllElement('.tq50plus');
                 
@@ -101,7 +101,7 @@
                 /* background color for elements with class: tq30plus*/
                 color = "#CDCD6E";                 
                 
-                ShowElement('tq100plus'); ShowElement('tq50plus'); ShowElement('tq30plus'); 
+                showElement('tq100plus'); showElement('tq50plus'); showElement('tq30plus'); 
                 
                 NodeList['tq30plus'] = queryAllElement('.tq30plus');
                 
@@ -119,7 +119,7 @@
                 color = "#CAE6E6";                 
                 
                 /* rendering elements */
-                ShowElement('tq100plus'); ShowElement('tq50plus'); ShowElement('tq30plus'); ShowElement('tq10plus'); 
+                showElement('tq100plus'); showElement('tq50plus'); showElement('tq30plus'); showElement('tq10plus'); 
                 
                 NodeList['tq10plus'] = queryAllElement('.tq10plus');
                 
@@ -133,7 +133,7 @@
             default:
                 color = "#dfff80";
             break;
-        };
+        }; /* end case */
       
         //queryAllElement: function created by kristov. It gives back a NodeList with all Elements
         //var myNodeList = queryAllElement('.'+tq);
@@ -158,7 +158,8 @@
         $("#convert").click( function() {
             convert('LostSales','lost sales');
         });
-           
+         
+        /* hidding all Elements with less than 100 times quotes*/ 
         $('.tq10plus').fadeOut();
         $('.tq5plus').fadeOut();
         $('.tq30plus').fadeOut();
