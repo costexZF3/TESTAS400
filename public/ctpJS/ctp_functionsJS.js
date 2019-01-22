@@ -1,7 +1,18 @@
 /* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * 
+ * CTP_functionsJS: Developed by Kristov Michelov
+ * 01/22/2019 for CTP: COSTEX TRACTOR PARTS 
+ *  
+ * It's a Library with a bunch of tools developed in JS. It can be used through out whole project depending on functionalities you are implementing
+ * * 
+ *  1) convertToExcel (param1, param2 ) : this function convert the table with ID = table_toexcel inside your HTML to an
+ *      Excel file.  
+ *  - param1: Name of the Excel File
+ *  - param1: Sheet Name inside the Excel File
+ * 
+ * 2) queryAllElement( element )
+ *  - the function return a NodeList with all elements rendered on your Screen (HTML)
+ *   - example: const allTR = queryallElement('tr');  return a NodeList with all Row in the HTML
  */
 
 /*function to conver to EXCEL a table rendered */
