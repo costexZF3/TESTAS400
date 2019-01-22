@@ -22,7 +22,7 @@ class LostsaleController extends AbstractActionController
     
     /* DB2 connection */
     
-     private $conn; //it's the adapter
+    private $conn; //it's the adapter
     private $db;
     
     /**------------- Class Methods -----------------*/ 
