@@ -38,7 +38,9 @@ class LostsaleController extends AbstractActionController
       // $this->db = new Sql($this->conn);
    }   
    
-   //getting the logged user 
+   /*
+    * getting the logged user 
+    */
    private function getUser(){
        $user = $this->currentUser();       
        //validating the user
@@ -61,10 +63,10 @@ class LostsaleController extends AbstractActionController
     *  The IndexAction show the main Menu about all concerning to the Purchasing Menus
     */
    public function indexAction(){              
-       //getting the loggin user object
-       $user = self::getUser();  
+     //getting the loggin user object
+    $user = self::getUser();  
               
-       //-- checking if the logged user has SPECIAL ACCESS: he/she would be an Prod. Specialist
+        //-- checking if the logged user has SPECIAL ACCESS: he/she would be an Prod. Specialist
        $especial = ($this->access('special.access'))?'TRUE':'FALSE';
        
        //Initicial Value for TimesQuote 
@@ -73,15 +75,13 @@ class LostsaleController extends AbstractActionController
         * LostSale: It's an Object that will be the core of LostSales
         */
        $LostSale = new LostSale($this->conn, $timesQuote);
-       $resultSet = $LostSale->populateHtml();      
+       $resultSet = $LostSale->populateHtml();            
        
-       $count = 20;
        
        $this->layout()->setTemplate('layout/layoutLostSale');
       //  $this->layout()->setTemplate('layout/layout');
        return new ViewModel([
-                    'lostsalelist' => $resultSet,                 
-                           'count' => $count,
+                    'lostsalelist' => $resultSet,                                            
                            'user'  => $user,
                    'specialAccess' => $especial,
             ]);
