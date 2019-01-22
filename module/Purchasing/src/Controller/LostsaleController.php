@@ -9,6 +9,8 @@ use Zend\Db\Adapter\Adapter;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Sql;
 
+use Purchasing\Object\LostSale;
+
 
 
 class LostsaleController extends AbstractActionController
@@ -69,6 +71,14 @@ class LostsaleController extends AbstractActionController
        
        //Initicial Value for TimesQuote 
        $timesQuote = "10";
+       
+       /*
+        * LostSale: It's an Object that will be the core of LostSales
+        */
+       $LostSale = new LostSale($this->conn, $timesQuote);
+       
+       
+       
        
        /* create a model class with hand  */ 
        $result1 = "with z as (SELECT WRKPTN,qt,t1+t2+t3+t4+t5+t6+t7+t8+t9+t10+t11+t12+t13 TQ from "
