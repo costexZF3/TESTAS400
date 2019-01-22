@@ -12,7 +12,9 @@ use Zend\Db\Sql\Sql;
 
 /**
  * Description of LostSale
- *
+ * -This class is a wrapper. This encapsulates main operatios through the LostSale file 
+ *  depend on some criterias 
+ * 
  * @author mojeda
  */
 class LostSale {
@@ -91,7 +93,7 @@ class LostSale {
                . "coalesce(catprc,coalesce(kopric,0)) imprc, z.TQ Timesq, '' F20, '' Foem, 0 Ncus, impc1, imcata, "
                . "'TEST' mindsc from z left join cater on z.wrkptn = catptn left join inmsta on z.wrkptn = inmsta.imptn"
                . " left join komat on z.wrkptn = koptno where imsts <> 'D' and z.wrkptn not in "
-               . "(select dvpart from dvinva where dvlocn in ('01', '05', '07'))";      
+               . "(select dvpart from dvinva where dvlocn in ('01', '05', '07'))";    
        
         return $sqlStr;  
     }
