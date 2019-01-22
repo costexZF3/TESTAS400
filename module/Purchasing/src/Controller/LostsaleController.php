@@ -69,7 +69,8 @@ class LostsaleController extends AbstractActionController
        
        //Initicial Value for TimesQuote 
        $timesQuote = "10";
-              
+       
+       /* create a model class with hand  */ 
        $result1 = "with z as (SELECT WRKPTN,qt,t1+t2+t3+t4+t5+t6+t7+t8+t9+t10+t11+t12+t13 TQ from "
                 . "(SELECT WRKPTN,(WRK001+ WRK002+ WRK003+ WRK004+ WRK005+ WRK006+WRK007+WRK008+ WRK009+ "
                 . "WRK010+ WRK011+ WRK012+ WRK013) QT,"
