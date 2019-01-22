@@ -107,7 +107,7 @@ class LostSale {
     }
     
     /*
-     * runSql: run the  
+     * runSql: run the query associated with the sqlStr 
      */
     private function  runSql(){
         try
@@ -121,6 +121,14 @@ class LostSale {
         return $resultSet;
     }
     
+    /*
+     * populateHTML : this method populate the table using the resultSet 
+     * value returned by the function runSql()
+     */
+    public function populateHtml(){
+       //
+        return '';
+    }
     
     
 }
