@@ -1,7 +1,7 @@
 <?php     
     /*getting values */
        
-    $this->headTitle('Lost Sales');	
+    $this->headTitle('Lost Sales: Quoted Items no Stock no Order');	
     $this->mainMenu()->setActiveItemId('lostsales'); 
    
     $this->pageBreadcrumbs()->setItems([
@@ -12,33 +12,17 @@
     //*** getting params from IndexAction() inside LostsaleController 
     $user = $this->user;
     $specialAccess = $this->specialAccess;
-    $lostSales = $this->lostsalelist; 
-    $count = $this->count; 
+    $lostSales = $this->lostsalelist;     
  ?>  
  	
-  
-<script language="JavaScript">   
-    /*function to conver to EXCEL a table rendered */
-    /**
-     * @param {string} fileName : Name will have the file exported to EXCEL
-     * @param {string} sheetName : name wich you find the sheet inside de Excel File
-     * @returns {undefined}
+ 
+<script language="JavaScript">      
+                  
+    /*
+     * this function crea a new array of Elements on the web
+     * @param {List} classElement
+     * @returns {[]}
      */
-    const convert = (fileName, sheetName) =>{			   
-                            var strDate = new Date().toISOString().replace(/[\-\:\.]/g, "_");				
-
-                            $("#table_toexcel").table2excel({
-                                    exclude: ".noExl",
-                                    name: fileName, //"LostSales",
-                                    filename: fileName+"_"+ strDate +".xls",					
-                                    sheetName:sheetName,
-                                    exclude_img: true,
-                                    exclude_links: true,
-                                    exclude_inputs: true
-                            });	 //end of : table2excel		 
-                    }; 
-              
-    
     const createArrayFromNodeList = ( nodeList )=> {
       var myArrayFromNodeList = []; // empty at first  
       for (var i = 0; i < nodeList.length; i++) {
@@ -48,17 +32,7 @@
       return myArrayFromNodeList;
     };
     
-    //it return a NodeList with all element inside the document: (element can be all p, class, id, etc)
-    const queryAllElement = element => { return document.querySelectorAll(element);};
-    
-    const changeBackgrounColor = (item, color) => { item.style.backgroundColor = color;};
-    
-    /* function to hide an Element */
-    const hideElement = ( classElement )=> { $('.' + classElement).fadeOut();};
-    
-      /* function to show an Element */
-    const showElement = ( classElement )=> { $('.' + classElement).fadeIn();};
-    
+        
     const getTimesQuote =( tq )=> {
         let color = "";
         var NodeList = [];
@@ -133,15 +107,9 @@
             default:
                 color = "#dfff80";
             break;
-        }; /* end case */
-      
-        //queryAllElement: function created by kristov. It gives back a NodeList with all Elements
-        //var myNodeList = queryAllElement('.'+tq);
-        //console.log( myNodeList );
-        //console.log( myArrayFromNodeList );                
+        }; /* end case */                    
     };  
-    
-    
+        
     /**
      * @param {string} timesQ  : (it could have the following values: tq100plus, tq50plus, tq30plus, tq10plus)
      * @returns {undefined}
@@ -153,20 +121,25 @@
             
     };
 
+    /*
+     * JQuery code:
+     * This occurs when the page has finished to load
+    */    
+    
     $(document).ready( function(){ 
            //------------------ function to convert to EXCEL FILE THE LOGGED CONTENT TO SCREEN ---------------------------------------- 
         $("#convert").click( function() {
-            convert('LostSales','lost sales');
+            convertToExcel('LostSales','lost sales');
         });
          
         /* hidding all Elements with less than 100 times quotes*/ 
-        $('.tq10plus').fadeOut();
-        $('.tq5plus').fadeOut();
-        $('.tq30plus').fadeOut();
-        $('.tq50plus').fadeOut();
-
-            /* call a function which it  fills an array with items rendered on the screen */
-           //const LostSales = fillArray_partsLostSales();
+        hideElement('tq50plus');
+        hideElement('tq30plus');
+        hideElement('tq10plus');
+        hideElement('tq5plus');
+       
+        /* call a function which it  fills an array with items rendered on the screen */
+         //const LostSales = fillArray_partsLostSales();
         }); 
 
 </script>
@@ -174,34 +147,36 @@
 <!-- HTML RENDER-->
 
 <?php if ($specialAccess): ?>
+<h1 class="ctp_title"> Quoted Items no Stock no Order (LostSales) </h1>
    <div class ="">
-    <div class = "box-buttons row">
-        <div class="col-md-6">            
-            <form>
-                <div class="legendCTP">
-                        <p> Please select your preferred Times Quotes[10+, 30+, 50+, 100+]: </p>
-                        
-                        <input onclick="timesQuote('tq10plus')" type="radio" name="timesquote" id="tqr10" required >
-                        <label for="tqr10">10+</label>
+        <div class = "box-buttons row">
+            <div class="col-md-offset-2 col-md-6">   
+                <p> Please select your preferred Times Quotes[10+, 30+, 50+, 100+]: </p>
+                <form>
+                    <div class="">
+                            <input onclick="timesQuote('tq10plus')" type="radio" name="timesquote" id="tqr10" required >
+                            <label for="tqr10">10+</label>
 
-                        
-                        <input onclick="timesQuote('tq30plus')" type="radio" name="timesquote" id="tqr30" required>
-                        <label for="tqr30">30+</label>
 
-                        
-                        <input onclick="timesQuote('tq50plus')" type="radio" name="timesquote" id="tqr50" required>
-                        <label for="tqr50">50+</label>
+                            <input onclick="timesQuote('tq30plus')" type="radio" name="timesquote" id="tqr30" required>
+                            <label for="tqr30">30+</label>
 
-                        <input onclick="timesQuote('tq100plus')"type="radio" name="timesquote" id="tqr100" required>
-                        <label for="tqr100">100+</label>
-                </div>                
-            </form>
+
+                            <input onclick="timesQuote('tq50plus')" type="radio" name="timesquote" id="tqr50" required>
+                            <label for="tqr50">50+</label>
+
+                            <input onclick="timesQuote('tq100plus')"type="radio" name="timesquote" id="tqr100" required>
+                            <label for="tqr100">100+</label>
+                    </div>                
+                </form>
+            </div>            
         </div>
-        
-        <div class="col-md-6">
-            <input class="btn btn-info" id="convert" type="button" name="btnexcel" value="Convert to Excel">
+       <div class="row">
+            <div class="col-sm-12">
+                <input class="btn btn-info" id="convert" type="button" name="btnexcel" value="Convert to Excel">
+                <input class="btn btn-danger" id="topdf" type="button" name="btnpdf" value="Convert to PDF">
+            </div>
         </div>
-    </div>
    <div>
 <?php endif; ?>
 
@@ -278,8 +253,8 @@
                 <tr>                
          <?php
             $iteration++;
-            //if ($iteration==500){ break;} 
-             }; 
+           
+            }; 
          ?> 
      </tbody>
      <tfoot>
