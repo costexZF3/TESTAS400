@@ -13,7 +13,10 @@
  * 2) queryAllElement( element )
  *  - the function return a NodeList with all elements rendered on your Screen (HTML)
  *   - example: const allTR = queryallElement('tr');  return a NodeList with all Row in the HTML
- */
+ *   
+ * 3) changeBackgrounColor (item, color)
+ *    - change an Element(HTML) background color. (it can be <tr>, <td> etc.
+  */
 
 /*function to conver to EXCEL a table rendered */
 /**
