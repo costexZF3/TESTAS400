@@ -42,8 +42,7 @@
         
         <!-- ******************  SCRIPTS DEFINED BY KRISTOFER FOR DATATABLE -->         
         <?php $bannerPath = $this->basePath().'/img/banner.png'; ?>        
-       
-         
+               
         <link rel="stylesheet" type="text/css"  href="<?=$this->basePath()."/";?>DataTables-1.10.18/css/dataTables.semanticui.min.css">      
        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>       
@@ -56,9 +55,8 @@
          
         <script>
             $(document).ready( 
-                function(){
-                            $('.table_filter').dataTable();                   
-                });			
+                    function(){ $('.table_filter').dataTable();}   
+               );			
         </script>
     </head>
     
