@@ -6,8 +6,12 @@
 }
 
 @font-face {
-    font-family: MyAmaranta;    
+    font-family: MyAmarantaReg;    
     src: url(../fonts/Amaranth-Regular.otf);     
+}
+@font-face {
+    font-family: MyOswaldMedium;    
+    src: url(../fonts/Amaranth-Medium.ttf);     
 }
  
 
@@ -72,12 +76,28 @@ body {
    background-color:  #FACB4C;  
 }
 
-/*****************************  radio buttons *****************************/
-.box-buttons {
-    margin-bottom: 10px;
+/* ctp-panel 
+*  -ctp-panel-header
+*  -ctp-panel-body    
+*/
+.ctp-panel {
+    margin-bottom: 10px;   
+    background: rgba(250, 193, 96, 0.30);     
+    border-radius: 15px; 
+}
+
+/* select all elements h3 inside  elements with class: .box-buttons: */
+.ctp-panel-header  {
+    background: rgba(250, 193, 96, 0.80); 
+    border-radius: 15px 15px 0 0;
+}
+.ctp-panel-body{
     padding: 10px 10px;
-    background: rgba(250, 193, 96, 0.69);
-    border: #000000 solid thin;     
+}
+
+.ctp-panel-body > p  {
+    font-family: MyOswaldRegular, arial, helvetica;
+    
 }
 
 /* grid */
@@ -155,13 +175,13 @@ table {
     alignment-adjust: central;
 }
 
+/* ctp titles */
 .ctp_title {
     text-transform: uppercase;
     text-align: center;   
 }
 
-
-/* All H1 elements with (.ctp_title class)*/
+/* All H1 elements inside (.ctp_title class)*/
 .ctp_title h1{
     /* font properties */
     font-family: MyOswald, Arial, Helvetica, sans-serif; 
@@ -171,18 +191,32 @@ table {
     text-combine-upright: all;
 }
 
-/*  All a h1 elements with (.ctp_subtitle) class */
+/* ctp_subtitle */
+.ctp_subtitle, ctp_title {
+    margin: 0px 0px 20px 0px;
+}
+
+/*  All a h1, h2, h3 elements with class (.ctp_subtitle) */
 h1.ctp_subtitle {
-    font-family: H1_Oswald, Helvetica, sans-serif; 
+    font-family: MyOswald, Helvetica, sans-serif; 
     /*font-weight: 200;*/
     font-stretch: condensed;
     color: #ebc14b; 
 }
 
-h3.ctp_subtitle {
-    font-family: MyOswald, Arial,Helvetica, sans-serif; 
-    font-weight: 300;
+h2.ctp_subtitle {
+    font-family: MyAmaranta, Arial,Helvetica, sans-serif; 
+    font-weight: 200;
     color: #57a900;    
+}
+
+h3.ctp_subtitle {
+    padding: 5px 5px;
+    font-family: MyOswald, MyOswaldMedium, Helvetica, sans-serif;       
+    font-stretch: expanded;
+    color: #57a900;     
+    margin: 0px 0px 20px 10px;       
+    text-transform: capitalize;
 }
 
 #navbar1 {  
@@ -205,8 +239,7 @@ h3.ctp_subtitle {
   visibility: collapse;
 }
 
-
-/* TABLE CTP PROPERTIES */
+/*******************   TABLE CTP PROPERTIES ***********************************/
 .table_ctp {
     text-align: center;
     font-family: Verdana, Arial, Helvetica, sans-serif;	
@@ -218,7 +251,6 @@ h3.ctp_subtitle {
     padding: 2px 2px;
     background-color: #ffdf80; /*#F9C05F*/
 }
-
 
 td {
     padding: 1px 1px;
