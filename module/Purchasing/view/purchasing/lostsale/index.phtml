@@ -48,7 +48,7 @@
                 
                 /* changing color to Elements for being redered */
                 NodeList['tq100plus'] = queryAllElement('.tq100plus');
-                NodeList['tq100plus'].forEach(item=>{ changeBackgrounColor(item, color);});                
+                NodeList['tq100plus'].forEach(item=>{ changeBGColor(item, color);});                
             break;
             
             case 'tq50plus' :                 
@@ -63,8 +63,8 @@
                 NodeList['tq50plus'] = queryAllElement('.tq50plus');
                 
                 //change background color                
-                 NodeList['tq50plus'].forEach(item=>{ changeBackgrounColor(item, color);});
-                 NodeList['tq100plus'].forEach(item=>{ changeBackgrounColor(item, color);});                  
+                 NodeList['tq50plus'].forEach(item=>{ changeBGColor(item, color);});
+                 NodeList['tq100plus'].forEach(item=>{ changeBGColor(item, color);});                  
             break;
             
             case 'tq30plus' :
@@ -80,9 +80,9 @@
                 NodeList['tq30plus'] = queryAllElement('.tq30plus');
                 
                 //change background color                
-                NodeList['tq30plus'].forEach(item=>{ changeBackgrounColor(item, color);});
-                NodeList['tq50plus'].forEach(item=>{ changeBackgrounColor(item, color);});
-                NodeList['tq100plus'].forEach(item=>{ changeBackgrounColor(item, color);});
+                NodeList['tq30plus'].forEach(item=>{ changeBGColor(item, color);});
+                NodeList['tq50plus'].forEach(item=>{ changeBGColor(item, color);});
+                NodeList['tq100plus'].forEach(item=>{ changeBGColor(item, color);});
             break;
             
             case 'tq10plus': 
@@ -98,10 +98,10 @@
                 NodeList['tq10plus'] = queryAllElement('.tq10plus');
                 
                 //change background color                
-                 NodeList['tq10plus'].forEach(item=>{ changeBackgrounColor(item, color);});
-                 NodeList['tq30plus'].forEach(item=>{ changeBackgrounColor(item, color);});
-                 NodeList['tq50plus'].forEach(item=>{ changeBackgrounColor(item, color);});
-                 NodeList['tq100plus'].forEach(item=>{ changeBackgrounColor(item, color);});
+                 NodeList['tq10plus'].forEach(item =>{ changeBGColor(item, color);});
+                 NodeList['tq30plus'].forEach(item =>{ changeBGColor(item, color);});
+                 NodeList['tq50plus'].forEach(item =>{ changeBGColor(item, color);});
+                 NodeList['tq100plus'].forEach(item =>{ changeBGColor(item, color);});
             break;
                 
             default:
@@ -146,38 +146,47 @@
         
 <!-- HTML RENDER-->
 
+<!-- **************************************** FLASH MESSENGER RENDER ***************************************************--> 
+<?= $this->flashMessenger()->render('error', ['alert', 'alert-warning']); ?>
+<?= $this->flashMessenger()->render('success', ['alert', 'alert-success']); ?>
+<?= $this->flashMessenger()->render('info', ['alert', 'alert-info']); ?>
+
 <?php if ($specialAccess): ?>
-<h1 class="ctp_title"> Quoted Items no Stock no Order (LostSales) </h1>
-   <div class ="">
-        <div class = "box-buttons row">
-            <div class="col-md-offset-2 col-md-6">   
-                <p> Please select your preferred Times Quotes[10+, 30+, 50+, 100+]: </p>
+    <div class="ctp_title"> 
+       <h1> Quoted Items no Stock no Order ( LostSales ) </h1>
+    </div>   
+   <div class ="ctp-panel">
+       <div class="ctp-panel-header">
+            <h3 class="ctp_subtitle"> Tuning your Choice </h3>
+       </div>     
+        <div class = "row ctp-panel-body">          
+            <div class="col-md-2">                   
+                <p> Times Quotes[10+, 30+, 50+, 100+]: </p>
                 <form>
-                    <div class="">
-                            <input onclick="timesQuote('tq10plus')" type="radio" name="timesquote" id="tqr10" required >
-                            <label for="tqr10">10+</label>
+                    <div class="alert alert-warning">                        
+                        <input onclick="timesQuote('tq10plus')" type="radio" name="timesquote" id="tqr10" required >
+                        <label for="tqr10"><span> 10+ </span></label>
 
+                        <input onclick="timesQuote('tq30plus')" type="radio" name="timesquote" id="tqr30" required>
+                        <label for="tqr30"><span> 30+ </span></label>
 
-                            <input onclick="timesQuote('tq30plus')" type="radio" name="timesquote" id="tqr30" required>
-                            <label for="tqr30">30+</label>
+                        <input onclick="timesQuote('tq50plus')" type="radio" name="timesquote" id="tqr50" required>
+                        <label for="tqr50"><span> 50+ </span></label>
 
-
-                            <input onclick="timesQuote('tq50plus')" type="radio" name="timesquote" id="tqr50" required>
-                            <label for="tqr50">50+</label>
-
-                            <input onclick="timesQuote('tq100plus')"type="radio" name="timesquote" id="tqr100" required>
-                            <label for="tqr100">100+</label>
+                        <input onclick="timesQuote('tq100plus')"type="radio" name="timesquote" id="tqr100" required>
+                        <label for="tqr100"><span> 100+ </span></label>
                     </div>                
                 </form>
             </div>            
         </div>
        <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-offset-4 col-sm-8">
                 <input class="btn btn-info" id="convert" type="button" name="btnexcel" value="Convert to Excel">
                 <input class="btn btn-danger" id="topdf" type="button" name="btnpdf" value="Convert to PDF">
             </div>
         </div>
-   <div>
+       <br>
+   </div>
 <?php endif; ?>
 
 <table class="table_ctp table_filter display " id="table_toexcel">
@@ -215,7 +224,7 @@
                  
                  $className="tq5plus";    
                 //code snippet to add a sort of classification to the row
-                $timesQuotes = $list->TIMESQ;
+                $timesQuotes = $list->TIMESQ; 
                 
                 /* clasifying all rows of the table according the times quotes: */
                 if ( $timesQuotes >= 100 ){
@@ -253,7 +262,7 @@
                 <tr>                
          <?php
             $iteration++;
-           
+            //if ($iteration==100) break;
             }; 
          ?> 
      </tbody>

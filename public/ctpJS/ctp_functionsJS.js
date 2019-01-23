@@ -14,7 +14,7 @@
  *  - the function return a NodeList with all elements rendered on your Screen (HTML)
  *   - example: const allTR = queryallElement('tr');  return a NodeList with all Row in the HTML
  *   
- * 3) changeBackgrounColor (item, color)
+ * 3) changeBGColor (item, color)
  *    - change an Element(HTML) background color. (it can be <tr>, <td> etc.
   */
 
@@ -42,7 +42,7 @@ const convertToExcel = (fileName, sheetName) =>{
 //it return a NodeList with all element inside the document: (element can be all p, class, id, etc)
 const queryAllElement = element => { return document.querySelectorAll(element);};
 
-const changeBackgrounColor = (item, color) => { item.style.backgroundColor = color;};
+const changeBGColor = (item, color) => { item.style.backgroundColor = color;};
 
 /* function to hide an Element */
 const hideElement = ( classElement )=> { $('.' + classElement).fadeOut();};
