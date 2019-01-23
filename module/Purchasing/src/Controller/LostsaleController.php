@@ -62,21 +62,23 @@ class LostsaleController extends AbstractActionController
    /**
     *  The IndexAction show the main Menu about all concerning to the Purchasing Menus
     */
-   public function indexAction(){              
-     //getting the loggin user object
+   public function indexAction(){ 
+
+    $this->flashMessenger()->addInfoMessage('The shown data are based on the following criteria: TimesQuote: +100, Vendors Assigned: YES ');
+     
+    //getting the loggin user object
     $user = self::getUser();  
               
         //-- checking if the logged user has SPECIAL ACCESS: he/she would be an Prod. Specialist
        $especial = ($this->access('special.access'))?'TRUE':'FALSE';
        
        //Initicial Value for TimesQuote 
-       $timesQuote = "10";       
+       $timesQuote = "100";       
        /*
         * LostSale: It's an Object that will be the core of LostSales
         */
        $LostSale = new LostSale($this->conn, $timesQuote);
-       $resultSet = $LostSale->populateHtml();            
-       
+       $resultSet = $LostSale->populateHtml(); 
        
        $this->layout()->setTemplate('layout/layoutLostSale');
       //  $this->layout()->setTemplate('layout/layout');
