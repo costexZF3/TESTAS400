@@ -57,7 +57,7 @@ class LostSale {
     private function getSqlStr():String{
        /* getting date of one year before as string */    
        $fromDate = $this->dateOneYearBefore();
-       
+           
       /* create a model class with hand  */ 
        $sqlStr = "with z as (SELECT WRKPTN,qt,t1+t2+t3+t4+t5+t6+t7+t8+t9+t10+t11+t12+t13 TQ from "
                 . "(SELECT WRKPTN,(WRK001+ WRK002+ WRK003+ WRK004+ WRK005+ WRK006+WRK007+WRK008+ WRK009+ "
@@ -92,7 +92,7 @@ class LostSale {
                . "where dvlocn in ('01', '05', '07') and trim(dvprmg) <> '' and dvonh# <= 0 and dvono# <= 0 "
                . "group by dvpart) x on inmsta.imptn = x.dvpart inner join invptyf on inmsta.imptn = invptyf.ippart "
                . "where substr(ucase(trim(imdsc)),1,3) <> 'USE' and imsts <> 'D' and impc1 = '01' and"
-               . " (INMSTA.IMQTE+INMSTA.IMQT01+INMSTA.IMQT02+INMSTA.IMQT03+INMSTA.IMQT04+INMSTA.IMQT05+INMSTA.IMQT06+"
+               . " (INMSTA.IMQTE+INMSTA.IMQT01+INMSTA.IMQT02+INMSTA.IMQT03+I NMSTA.IMQT04+INMSTA.IMQT05+INMSTA.IMQT06+"
                . "INMSTA.IMQT07+INMSTA.IMQT08+INMSTA.IMQT09+INMSTA.IMQT10+INMSTA.IMQT11+INMSTA.IMQT12) > 0 and"
                . " imptn not in (select dvpart from dvinva where dvlocn in ('01', '05', '07') and"
                . " (dvprmg = '' or dvonh# > 0 or dvono# > 0)) and invptyf.iptqte >= ".$this->timesQuote." union "
