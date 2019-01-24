@@ -151,17 +151,17 @@ class LostSale {
     }
     
     /*
-     * function: convertDataToHtml() 
+     * function: dataToHtml() 
      * -this return all processed data as a HTML file. This will be rendered by the view
      */    
-    public function convertDataToHtml(){
+    public function dataToHtml(){
         //checking if the method: runSql() was invoked before...
         $ranSQLQuery = self::dataSetReady();
         
         if (!$ranSQLQuery) { return '';}
         
         //------------ creating table with all data from dataSet ----------------------------
-        $tableHeader = '<table><thead class=""><tr>';  
+        $tableHeader = '<table class="table_ctp table_filter display " id="table_toexcel"><thead class=""><tr>';  
         
         //generating each column label dynamically
         foreach ($this->columnHeaders as $field) {           
@@ -171,7 +171,7 @@ class LostSale {
         /* concatening all header */
         $tableHeader .= '</tr></thead>';
 
-        $tableBody = '<tbody>';
+        //$tableBody = '<tbody>';
         
         $tableTotal = $tableHeader;
         //$tableTotal = $tableHeader.$tableBody.$tableFooter;
