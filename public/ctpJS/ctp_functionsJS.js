@@ -39,6 +39,21 @@ const convertToExcel = (fileName, sheetName) =>{
                 }; 
                 
 
+ /*
+     * this function crea a new array of Elements on the web
+     * @param {List} classElement
+     * @returns {[]}
+     */
+const createArrayFromNodeList = ( nodeList )=> {
+    var myArrayFromNodeList = []; // empty at first  
+      for (var i = 0; i < nodeList.length; i++) {
+            myArrayFromNodeList.push(nodeList[i]); // ahhh, push it            
+        }  
+        
+      return myArrayFromNodeList;
+    };
+    
+
 //it return a NodeList with all element inside the document: (element can be all p, class, id, etc)
 const queryAllElement = element => { return document.querySelectorAll(element);};
 
