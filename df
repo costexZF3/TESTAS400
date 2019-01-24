@@ -1,0 +1,558 @@
+[33mcommit 0f7fbb3d66f09e152bdc9503046355855b1575eb[m[33m ([m[1;36mHEAD -> [m[1;32mdevCTP[m[33m)[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Tue Jan 22 15:28:15 2019 -0500
+
+    LostSale Class
+    wrapper..ok
+
+[33mcommit 04299df0332ebb1d66ed07d13996d7dc1ce57c8f[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Tue Jan 22 15:27:33 2019 -0500
+
+    index.phtml (associated to lostsales)
+    
+    $(document).ready(function(){})
+    - changed the way about how hide Elements from beginning.
+
+[33mcommit c5d41337bb7c27d09fb8218d03288805cd098e51[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Tue Jan 22 15:21:12 2019 -0500
+
+    ctp_funtionsJS.js
+    
+    documenting the CTP_FUNTIONJS.js file with its functions
+
+[33mcommit 00c80b9f26ec3738d0364b7fe9190047c55343d1[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Tue Jan 22 15:05:42 2019 -0500
+
+    ctp_funtionsJS.js
+    
+    - adding NEW CTP_functionsJS.js
+    - populating this JS file with Standards functions JS
+
+[33mcommit dc7050e6178121796ecb4cd39f6a50d72ee4bda4[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Tue Jan 22 14:25:14 2019 -0500
+
+    LostsaleController.php
+    
+    updating namespace for LostSale..
+
+[33mcommit 7f99f002ee82c46ef15af0c83bf838bc30c9d30a[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Tue Jan 22 12:33:00 2019 -0500
+
+    LostSale.php
+    
+    updating comments
+
+[33mcommit 0d9409fcf1b5d80910e949f1907a6669c5a3c351[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Tue Jan 22 12:32:11 2019 -0500
+
+    LostsaleController.php
+    
+    Updating the IndexController Method
+
+[33mcommit dd101e9175f0d5a91c7b8f6af4f10389c947b95e[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Tue Jan 22 12:24:15 2019 -0500
+
+    LostSale.php: adding method: populate with it will be able to create a table with all data
+
+[33mcommit 1239c0b583514526ed0c065a729a37a642d6ddf7[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Tue Jan 22 12:22:34 2019 -0500
+
+    LostSale.php: adding method: populate with it will be able to create a table with all data
+
+[33mcommit cf95f56dd23edaa6b49d1f2b22f6c8c3fa5ebf17[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Tue Jan 22 12:16:49 2019 -0500
+
+    Adding getSqlStr(), dateFromOneYear(), and runSql()
+
+[33mcommit 22441d789f2c7cb959119bee768afe23d8d645aa[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Tue Jan 22 11:00:47 2019 -0500
+
+    Creating LostSale.php class: used to recover lostSale
+
+[33mcommit 7a243d8d7e88b2b7edce26b1c8239e3f60c814d5[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Tue Jan 22 10:54:56 2019 -0500
+
+    composer111.lock : update
+
+[33mcommit 444e5b5fca502b121c9e42f7a12425eb331a9d53[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Tue Jan 22 10:53:26 2019 -0500
+
+    LostSaleController
+
+[33mcommit b9c64a08d339faae2baadb177275fcc0d5890f5e[m[33m ([m[1;32mmaster[m[33m)[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Tue Jan 22 08:38:55 2019 -0500
+
+    LostsaleController.php
+    
+    - Query optimized ...
+    -timesquote dynamic
+
+[33mcommit 1f37e030ae136eea39013d3d0e3fb46aab50e0a5[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Mon Jan 21 17:10:49 2019 -0500
+
+    LostsaleController.php
+    
+    - Query optimized ...
+    -timesquote dynamic
+
+[33mcommit db503363afdfda09087e6256bdb9d7f4bff1c84e[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Mon Jan 21 17:09:48 2019 -0500
+
+    index.phtml
+    ( JavaScript functions added )
+
+[33mcommit aeb3ad7723c6a6db03fa2215c573f0e0fd3ccfce[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Mon Jan 21 16:56:53 2019 -0500
+
+    index.phtml
+    ( JavaScript functions added )
+
+[33mcommit ae7db4e9b4cb879415c9f1d3c3ea411a750175ea[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Wed Jan 16 11:56:10 2019 -0500
+
+    STYLE.CSS
+    
+    - changing styles for class: .table_ctp
+
+[33mcommit 5e40fa5ad7eb670943ebd2cfee5a355637a567e4[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Wed Jan 16 10:22:09 2019 -0500
+
+    INDEX.PHTML ( at purchasing module, lostsale )
+    
+    adding to getTimesQuote() function(....)
+      - switch statement
+    
+    creating queryAllElement (it giveback a NodeList with all items:(p, div, .class, #id, etc)
+     -
+
+[33mcommit a1c884a32857b008aae5263ea808497b0bc3e109[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Mon Jan 14 11:28:58 2019 -0500
+
+    INDEX.PHTML ( at purchasing module, lostsale )
+    
+    adding function timesQuote
+
+[33mcommit 77078520ee4af4522d4b19e6ed042eb33952cd3c[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Mon Jan 14 08:49:34 2019 -0500
+
+    INDEX.PHTML ( at purchasing module, lostsale )
+    
+    adding function timesQuote
+
+[33mcommit 4b715b41a75179f2864473445a1b8265fee2b84e[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Fri Jan 11 09:17:19 2019 -0500
+
+    INDEX.PHTML ( at purchasing module, lostsale )
+    
+    function convert changing
+
+[33mcommit 1164d50e2fa9830b2882feb64651ff92f3b907ae[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Thu Jan 10 16:40:21 2019 -0500
+
+    modifiying script funtion to convert to excel
+
+[33mcommit ce09f6ec75f3fc3f58d5b518e4e4a1909a8ce19c[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Thu Jan 10 16:39:46 2019 -0500
+
+    composer update
+
+[33mcommit 0aaf5d659282346b02f645341a086c21325446fc[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Thu Jan 10 16:12:28 2019 -0500
+
+    modifying 404.phtml file styling
+
+[33mcommit 7952d39a4a4697d269b03713567737e6f8a8d851[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Mon Dec 31 09:21:49 2018 -0500
+
+    COMMITING EVERYTHING
+
+[33mcommit d3885751fc5802fd32c560307935d1463b780bb9[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Wed Dec 26 08:40:00 2018 -0500
+
+    modifying 404.phtml file styling
+
+[33mcommit 382c65265cb3fa7eefdb6dec82b3bebe1720189a[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Wed Dec 26 08:35:39 2018 -0500
+
+    add styles to style.ccss: added the status for .table_ctp thead, tfood
+
+[33mcommit 24d71f9953472d2abfa4523ff40d55eb77aec140[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Thu Nov 15 16:19:09 2018 -0500
+
+    add styles to style.ccss: added the status for .table_ctp thead, tfood
+
+[33mcommit e4e037ef16c1bbabc7ff3d89fceb788ea0be5c58[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Wed Oct 31 09:31:43 2018 -0400
+
+    Add Service: MyAdapter.php and its  Factory: MyAdapterFactory
+
+[33mcommit 273945727cef61f7094e1903632969ad8fe858f9[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Wed Oct 31 09:29:58 2018 -0400
+
+    Add to module.config.php  to the 'service_manager' key the service:
+     -MyAdapter (which it will be create though the MyAdapterFactory.
+
+[33mcommit 63f5178911a6331aa166d355c8d315893049cb42[m[33m ([m[1;31morigin/master[m[33m)[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Fri Oct 12 10:56:36 2018 -0400
+
+    ClaimsController and index change
+
+[33mcommit 9f04260db9b472204fc2b57db3fc64e2889b8c59[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Wed Oct 10 01:11:30 2018 -0400
+
+    NavManager.php : added product developments options
+
+[33mcommit 070d43bc82f6216def21a437fb15afe3d86a16e1[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Tue Oct 9 16:30:13 2018 -0400
+
+    module.config.php and composer.json have been modified
+
+[33mcommit 8525dfe8cbaf40e7d5832c9196107494426d4f3c[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Tue Oct 9 14:45:46 2018 -0400
+
+    module.config.php in warehouse
+
+[33mcommit 7ae8a1fc848339abadc450b68ea489fd5df93be6[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Tue Oct 9 14:25:30 2018 -0400
+
+    composer.json updated and Warehouse
+
+[33mcommit b61e9b449ccaba0ecbef24abd15ce227d78cefd2[m[33m ([m[1;31morigin/dev[m[33m, [m[1;32mdev[m[33m)[m
+Author: CostexZF3 <mojeda@costex.com>
+Date:   Tue Oct 9 12:41:12 2018 -0400
+
+    warehouse module added
+
+[33mcommit 8bc1c15c837379a4a42f3d00b1cf40dde3b2091a[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Mon Oct 8 16:50:19 2018 -0400
+
+    Create a new module: Warehouse (manufacturing)
+
+[33mcommit 5e8748aca13abaf6741754d562fa053d4e737849[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Mon Oct 8 16:41:13 2018 -0400
+
+    NavManager.php( application )
+       - Modify: addOptionsToMenu()
+          - Check the case WAREHOUSE option
+           (add permissions checking)
+
+[33mcommit 68be8e2ac6945f4f655a1dceaaa3b97796d0c5e9[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Mon Oct 8 14:29:04 2018 -0400
+
+     NavManager.php( application )
+       - Modify: addOptionsToMenu()
+          - Check the case WAREHOUSE option
+
+[33mcommit 119cd3ab249d90c38da27a5f54247307c2425396[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Mon Oct 8 11:22:03 2018 -0400
+
+    Index.phtml (show users)
+    
+     - take the Inactive status off
+
+[33mcommit 20dfda5d53f365757fc41a5100a535ae9bbee438[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Mon Oct 8 11:11:11 2018 -0400
+
+    render-modal.phtml (show users)
+    
+     - change Id Name dynamically
+
+[33mcommit ef5b8556044865600b78d871f5a9a5dd4cd08681[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Mon Oct 8 11:07:24 2018 -0400
+
+    Index.phtml (show users)
+    
+     - modify code to render the partial View to render each
+
+[33mcommit 702518f3f178f2ec5156ab6ee54349f7382213e4[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Oct 5 14:52:20 2018 -0400
+
+    Layourt.phtml (Application)
+    
+     - behavior
+
+[33mcommit 32026f5df9e9221c72bf57a67dfa206438cc6f3c[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Oct 5 12:02:03 2018 -0400
+
+    layout.css( add style)
+    
+            - added margin-top: 20px
+
+[33mcommit ad0bacb0c588cc450c50f2e63fc5c2629ce3b1d4[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Thu Oct 4 16:53:25 2018 -0400
+
+    Index.phtml (user)
+    
+            - added new icons styles
+
+[33mcommit 971c970bbcc6f12276117cdd197b75cfb5f3447e[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Thu Oct 4 16:52:56 2018 -0400
+
+    stylelayout.css
+    
+            - added new icons styles
+
+[33mcommit 26f0e653bbf386aadefd65a87504a5bb971288f8[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Thu Oct 4 15:41:16 2018 -0400
+
+    Menu.php (main) on Application
+    
+     - Ready freezin
+
+[33mcommit 2ad0d610097cc816495545ce2b189fd36f505876[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Thu Oct 4 15:39:43 2018 -0400
+
+    layout (main) on Application
+    
+     - Ready Freezing top
+
+[33mcommit 79ffb7af68c18dc62ac13a44fd62273a47acf9fa[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Thu Oct 4 11:30:58 2018 -0400
+
+    layout (main) on Application
+    
+     - Add content divider .
+
+[33mcommit c3066cd4b8520914ed0e35f449a6b017406d36a3[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Thu Oct 4 10:38:18 2018 -0400
+
+    Partials Views
+    
+     -add render-modal.phtml (Partial View)
+       It render <div> html tag, which It will be rendered in a show modal way.
+
+[33mcommit 144ccc5e81642f7821dc77728031bbdaf8fdf9f6[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Thu Oct 4 10:36:24 2018 -0400
+
+    Index.php (from user)
+    
+            - Add Particial View call at the end of the file
+            - Add title, dinamically (Active, Inactive) for User's Status
+
+[33mcommit 3c6ed5df89e18eb013572130171a5edd5156259f[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Thu Oct 4 09:12:01 2018 -0400
+
+    Index.php (from user)
+    
+            - commenting
+
+[33mcommit e107533e6cb575609c9aacfd685965d40f1701da[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Thu Oct 4 08:43:01 2018 -0400
+
+    Index.php (from user)
+    
+            - change Variable name: $classToRender
+
+[33mcommit 98807d54d1dcffc5179da8156da58aafc34a8769[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Oct 3 16:57:26 2018 -0400
+
+    Index.php (from user)
+    
+            - Status fixed with (fa icons)ok
+
+[33mcommit 804159d23f597602db9221381dddb7b9215f1950[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Oct 3 16:35:55 2018 -0400
+
+    NavManager.php
+    
+            - adding case: menu.receiving option...
+
+[33mcommit 5add5f122d7bcdf7ea8243397a23f5a8e0e1debc[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Oct 3 16:34:30 2018 -0400
+
+    User.php
+    
+    - minimal modifications to getStatusAsString() method
+
+[33mcommit c91cdd3c5777770da435026cc9a013daba3db2c8[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Oct 3 16:32:47 2018 -0400
+
+    Role.php
+    
+    - stylish only
+
+[33mcommit 47681faef83ca2cb265ea6994999e371b7ab0261[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Oct 3 16:32:02 2018 -0400
+
+    UserController.php
+    
+            -adding checking of count of roles to show
+                    if it's greater than 9 then increse SELECT HTML element up to 10 lines
+    
+    - change permissions name: +user.manage to +manage.user
+
+[33mcommit f176b68129e456286dcc6e4d3eb4cb796acaa45b[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Oct 3 16:30:18 2018 -0400
+
+    module.config.php
+    
+    - change permissions name: +user.manage to +manage.user
+
+[33mcommit d49e69189e967e18acf7bc993321fff091141739[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Oct 3 16:29:17 2018 -0400
+
+    RoleController.php
+    
+    minimal changes
+
+[33mcommit 3bbfde4335349f37ba2ecc648bd6f5da491428db[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Oct 3 16:28:27 2018 -0400
+
+    index.phtml (users view) response to IndexControler.php
+    
+            - adding icons with fa class: headers of table
+        - showing status with circle: green (Active) red (Inactive)
+
+[33mcommit 7ffcc0de117a9f6b7ba976b24d5c9dc1b8cf0c3b[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Oct 3 16:26:12 2018 -0400
+
+    style.css
+    
+    (adding style to fa class)
+
+[33mcommit 0cdae6ae5f349b0d68808a3ea659d8fc49187810[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Wed Oct 3 16:25:24 2018 -0400
+
+    Layout.phtml
+    
+    (adding link to CSS.min. with access to fa fa-iconsss
+
+[33mcommit 5757a8196af442a3eff35e53da101a2866b3e813[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Tue Oct 2 16:10:55 2018 -0400
+
+    Rolecontroller.php
+    (Add lines to check $rolesList's count items, if these are greater than 9 then  inherit_roles will be extended to 10 lines)
+
+[33mcommit 4006a59114948b532e85221d69341db06cbef885[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Thu Sep 27 14:05:47 2018 -0400
+
+    Add W3.CCS to public folder
+
+[33mcommit f760c9009e2b22d7fa75d88468a4184669fa32e4[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Mon Sep 24 14:23:45 2018 -0400
+
+    USER MODULE
+            RoleController.php
+      - method: IndexAction()
+            - roles: sorted by name ascending
+
+[33mcommit b6dd5798c0fbd1f705fbe127d3d87378cf2e0a4e[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Mon Sep 24 14:13:58 2018 -0400
+
+    APPLICATION MODULE
+            NavManager.php
+      - method: getMenuItems()
+            - foreach() what retrieve each name of module : adding comments
+
+[33mcommit b11346f15eded7eb2b728d2b486b2de6cf989dcf[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Mon Sep 24 14:06:35 2018 -0400
+
+    APPLICATION MODULE
+            NavManager.php
+      - method: getMenuItems()
+            - Menu: Admin creates dynamically and its functionality move into
+          addOptionsToMenu()
+
+[33mcommit 4980e653a019512d5fad11caba112ccbb1549d13[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Mon Sep 24 13:18:35 2018 -0400
+
+    APPLICATION MODULE
+            NavManager.php
+      - method: getMenuItems()
+            - rendering Options of Menu dinamically (foreach) not One by one.
+
+[33mcommit 10fe0067295363b09a0a628cabff646d147197df[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 21 15:43:40 2018 -0400
+
+    SALES MODULE
+    
+            -index.phtml
+        fix  controller and Action name to Index
+
+[33mcommit 4beb9f6bcfcba5755d5c43f61b6c4fb377c3ebfd[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 21 15:42:50 2018 -0400
+
+    SALES MODULE
+    
+            -module.config.php
+        fix the route name
+
+[33mcommit f51d5fbfbb4ea9c77417f6066d0cae0a1b2487ba[m
+Author: Michel Ojeda <mojeda@costex.com>
+Date:   Fri Sep 21 15:37:24 2018 -0400
+
+    APPLICATION MODULE
+    
+            -NavManager.php
+        case 'menu.sales'
+         - $options[] fix to $this->setOptions()
