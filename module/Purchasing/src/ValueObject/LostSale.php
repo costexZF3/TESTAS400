@@ -19,10 +19,16 @@ use Zend\Db\Sql\Sql;
  */
 class LostSale {
     /*
-     * colums: array with all items that will be generated for rendering ....
+     * array with all COLUMN LABELS that will be rendered
      */
-    private $columns = [];  
-    
+    private $columnHeaders = ['Part Number', 'Description', 'Description 2','Description 3', 
+                              'Qty Quote', 'Times Quote', 'Sales Last12', 'VND No', 'Vendor Name','Pur. Agent', 
+                              'Caterpillar (P/L)', 'Wish List', 'Dev.Proj', 'Dev.Status', 'Loc.20', 'OEM VND', 'Major', 
+                              'Category', 'Minor', 'Description'];
+    /*
+     * rows: this array saves all <tr> elements generated running sql query..
+     */
+    private $rows = [];
     /*  
      * $conn: it's the adapter injected from LostSaleController 
      * $db: it's and instance from  Zend\Db\Sql\Sql;
@@ -31,8 +37,9 @@ class LostSale {
     private $conn; 
     private $db;
     
-    private $sqlStr= "";  
+    private $sqlStr= '';  
     private $timesQuote=0;
+    private $tableAsHtml = '';
     
     /* constructor */
     public  function __construct(MyAdapter $adaptConn, $timesQuote = 5 ) {
@@ -47,9 +54,8 @@ class LostSale {
      * this method return the SqlString generatered by the constructor
      */
     public function getSqlString():string{
-        return $this->sqlStr;             
-    }
-    
+       return $this->sqlStr;             
+    }    
     
     /*
      * getSqlStr: It returns and STRING tha will be used to execute the SQL query.
@@ -136,6 +142,7 @@ class LostSale {
      */
     public function populateHtml(){
        $resultSet = self::runSql();
+       // 
        return $resultSet;
     }
     
