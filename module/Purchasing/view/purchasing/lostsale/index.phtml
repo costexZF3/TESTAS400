@@ -18,20 +18,7 @@
  
 <script language="JavaScript">      
                   
-    /*
-     * this function crea a new array of Elements on the web
-     * @param {List} classElement
-     * @returns {[]}
-     */
-    const createArrayFromNodeList = ( nodeList )=> {
-      var myArrayFromNodeList = []; // empty at first  
-      for (var i = 0; i < nodeList.length; i++) {
-            myArrayFromNodeList.push(nodeList[i]); // ahhh, push it            
-        }  
-        
-      return myArrayFromNodeList;
-    };
-    
+   
         
     const getTimesQuote =( tq )=> {
         let color = "";
@@ -267,7 +254,7 @@
          ?> 
      </tbody>
      <tfoot>
-         <tr id="countItem_<?=$iteration?>"> 
+         <tr id="countItem_<?=--$iteration;?>"> 
              <td>Part Number </td>
              <td>Description </td>
              <td> Description 2</td>
