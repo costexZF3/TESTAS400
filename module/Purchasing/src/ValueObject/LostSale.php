@@ -53,7 +53,7 @@ class LostSale {
     /*
      * this method return the SqlString generatered by the constructor
      */
-    public function getSqlString():string{
+    private function getSqlString():string{
        return $this->sqlStr;             
     }    
     
@@ -112,10 +112,10 @@ class LostSale {
         return $sqlStr;  
     }
     
+    /*
+     * Return date as String (one year before) 
+     */
     private function dateOneYearBefore(){
-        /*
-         * date MUST be returned as String 
-         */        
         $year = date('y')-1; 
         $month = date('m'); 
         $day= date('d');
@@ -146,5 +146,14 @@ class LostSale {
        return $resultSet;
     }
     
+    /*
+     * function: convertDataToHtml() 
+     * -this return all processed data as a HTML file. This will be rendered by the view
+     */
+    
+    public function convertDateToHtml(){
+        
+    }
+            
     
 }
