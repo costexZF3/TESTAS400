@@ -12,10 +12,10 @@
     //*** getting params from IndexAction() inside LostsaleController 
     $user = $this->user;
     $specialAccess = $this->specialAccess;
-    $lostSales = $this->lostsalelist;     
+    $lostSales = $this->lostsalelist;    
+    $tableHeader = $this->tableHeader;
  ?>  
- 	
- 
+ 	 
 <script language="JavaScript">      
                   
    
@@ -176,34 +176,9 @@
    </div>
 <?php endif; ?>
 
-<table class="table_ctp table_filter display " id="table_toexcel">
-     <thead>
-         <tr> 
-             <th>Part Number </th>
-             <th>Description </th>
-             <th>Description 2</th>
-             <th>Description 3 </th>                
-             <th>Qty Quote </th>
-             <th>Times Quote </th>
-             <th>Custs. Quote</th>
-             <th>Sales Las 12</th>
-             <th>Vendor NO.</th>
-             <th>Vendor Name</th>
-             <th>Pur. Agent</th>
-             <th>Caterpillar (P/L)</th>
-             <th>Wish List</th>
-             <th>Dev. Proj</th>
-             <th>Dev. Status</th>
-             <th>Loc.20</th>
-             <th>OEM VND</th>
-             <th>Mayor</th> 
-             <th>Category</th>
-             <th>Minor</th>
-             <th>Description</th>
-         </tr>
-     </thead>
-     <tbody>          
-        <?php $iteration = 1; 
+        <?=$tableHeader;?>
+        <?php            
+            $iteration = 1; 
         
              foreach ($lostSales as $list){   
                  
