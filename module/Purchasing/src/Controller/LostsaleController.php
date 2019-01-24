@@ -73,12 +73,14 @@ class LostsaleController extends AbstractActionController
        $especial = ($this->access('special.access'))?'TRUE':'FALSE';
        
        //Initicial Value for TimesQuote 
-       $timesQuote = "100";       
+       $timesQuote = "50";       
        /*
         * LostSale: It's an Object that will be the core of LostSales
         */
        $LostSale = new LostSale($this->conn, $timesQuote);
-       $resultSet = $LostSale->populateHtml(); 
+       /* this method retrives all items and return a resultSet or data as HTML tableGrid */
+       $resultSet = $LostSale->getDataSet(); 
+       $tableHeader = $LostSale->getGridAsHtml();
        
        $this->layout()->setTemplate('layout/layoutLostSale');
       //  $this->layout()->setTemplate('layout/layout');
@@ -86,6 +88,7 @@ class LostsaleController extends AbstractActionController
                     'lostsalelist' => $resultSet,                                            
                            'user'  => $user,
                    'specialAccess' => $especial,
+                   'tableHeader' => $tableHeader,
             ]);
     }//END: indexAction method
 } //END: LostsaleController
