@@ -35,16 +35,21 @@ class LostSale {
      */
     private $conn; 
     private $db;
-    
-    private $sqlStr= '';  
-    private $timesQuote=0;
+    /* helpful attributes */
+    private $sqlStr= '';      
+    private $countItems = 0;
     private $tableAsHtml = '';
     
+    /* filters */
+    private $vendorAssigned = true;
+    private $timesQuote= 0;
     /* constructor */
-    public  function __construct(MyAdapter $adaptConn, $timesQuote = 5 ) {
+    public  function __construct(MyAdapter $adaptConn, $timesQuote = 5, $vendorAssigned = true) {
         /* injection adapter connection from LostSaleController*/
         $this->conn = $adaptConn;
         $this->timesQuote = $timesQuote;
+        $this->vendorAssigned = $vendorAssigned;
+        
         $this->db = new Sql($this->conn);
         $this->sqlStr = $this->getSqlStr();
         $this->runSql();
@@ -141,15 +146,34 @@ class LostSale {
     private function dataSetReady(){
         return ($this->dataSet!=null)?true:false;
     }
-    
-    
+        
     /*
      * populateHTML : this method populate the table using the resultSet 
      * value returned by the function runSql()
      */
     public function getDataSet(){              
        return $this->dataSet;
-    }  
+    } 
+    
+    public function getCountItems(){
+        return $this->countItems;
+    }
+    
+    private function getClassNameForTQ( Int $timesQuotes ){
+       $className="tq5plus";
+       
+       /* clasifying all rows of the table according the times quotes: */
+        if ( $timesQuotes >= 100 ){
+            $className="tq100plus";  
+        } else if ( $timesQuotes >= 50 ){
+            $className="tq50plus";
+        } else if ( $timesQuotes >= 30 ){
+            $className="tq30plus";
+        } else if ( $timesQuotes >= 10 ){
+            $className="tq10plus";
+        }        
+        return $className;
+    }/* END: getClassnameForTQ */
     /*
      * function: dataToHtml() 
      * -this return all processed data as a HTML file. This will be rendered by the view
@@ -163,21 +187,45 @@ class LostSale {
         //------------ creating table with all data from dataSet ----------------------------
         $tableHeader = '<table class="table_ctp table_filter display " id="table_toexcel"><thead class=""><tr>';  
         
-        //generating each column label dynamically
+        /*********** generating each column label dynamically *****************/
         foreach ($this->columnHeaders as $field) {           
             $tableHeader.='<th>'.$field.'</th>';
         }
         
-        /* concatening all header */
+        /* concatening  header */
         $tableHeader .= '</tr></thead>';
+        
+        /*********** adding tbody element ***************/         
+        $tableBody = '<tbody>';
+        
+        $iteration = 1;
+        /************* dynamic body **********************/
+//        ['Part Number', 'Description', 'Description 2','Description 3', 'Qty Quote', 'Times Quote','Custs. Quote',
+//                              'Sales Last12', 'VND No', 'Vendor Name','Pur. Agent', 'Caterpillar (P/L)', 'Wish List', 
+//                              'Dev.Proj', 'Dev.Status', 'Loc.20', 'OEM VND', 'Major', 'Category', 'Minor', 'Description'];
+        foreach ($this->dataSet as $item) { 
+            //checking is there is vendorAssigned
+            if ($this->vendorAssigned and (trim($item->VENDOR)==="" || trim($item->VENDOR)==="000000" )){ continue; } 
+            
+            /* retriving the className adde to each <tr> element */
+            $className = getClassNameForTQ( $item->TIMESQ );
+              
+           // $this->row['Part Number'] = $item->;
+           
+            
+                                    
+            $tableBody .="<tr><td>".$name."</td><td>".$lastname."</td><td>".$age."</td></tr>"; 
+        }    
 
-        //$tableBody = '<tbody>';
         
-        $tableTotal = $tableHeader;
-        //$tableTotal = $tableHeader.$tableBody.$tableFooter;
+        $tableFooter = '';
         
-        return  $tableTotal;
-    }
+        $this->tableAsHtml = $tableHeader.$tableBody.$tableFooter;
+        
+        $this->countItems = --$iteration;
+        
+        return  $this->tableAsHtml;
+    }/* END: getGridAsHtml()*/
             
     
-}
+}//END: LostSale class()
