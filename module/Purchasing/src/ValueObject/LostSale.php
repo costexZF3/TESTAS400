@@ -4,27 +4,26 @@ namespace Purchasing\ValueObject;
 use Zend\Db\Adapter\Adapter as MyAdapter;
 use Zend\Db\Sql\Sql;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 /**
  * Description of LostSale
- * -This class is a wrapper. This encapsulates main operatios through the LostSale file 
- *  depend on some criterias 
+ * - This class is a wrapper. This encapsulates main operations through the LostSale file 
+ *   depend on some criterias 
  * 
  * @author mojeda
  */
 class LostSale {
     /*
+     * dataSet: It saves the resultSet returned by runSql() method
+     */    
+    private $dataSet= null;
+    
+    /*
      * array with all COLUMN LABELS that will be rendered
      */
-    private $columnHeaders = ['Part Number', 'Description', 'Description 2','Description 3', 
-                              'Qty Quote', 'Times Quote', 'Sales Last12', 'VND No', 'Vendor Name','Pur. Agent', 
-                              'Caterpillar (P/L)', 'Wish List', 'Dev.Proj', 'Dev.Status', 'Loc.20', 'OEM VND', 'Major', 
-                              'Category', 'Minor', 'Description'];
+    private $columnHeaders = ['Part Number', 'Description', 'Description 2','Description 3', 'Qty Quote', 'Times Quote',
+                              'Sales Last12', 'VND No', 'Vendor Name','Pur. Agent', 'Caterpillar (P/L)', 'Wish List', 
+                              'Dev.Proj', 'Dev.Status', 'Loc.20', 'OEM VND', 'Major', 'Category', 'Minor', 'Description'];
     /*
      * rows: this array saves all <tr> elements generated running sql query..
      */
@@ -132,7 +131,8 @@ class LostSale {
         }
         catch (Exception $e){
            echo "Caught exception: ", $e->getMessage(), ""; 
-        }        
+        }      
+        $this->dataSet = $resultSet;
         return $resultSet;
     }
     
@@ -141,18 +141,41 @@ class LostSale {
      * value returned by the function runSql()
      */
     public function populateHtml(){
-       $resultSet = self::runSql();
-       // 
+       $resultSet = self::runSql();       
        return $resultSet;
+    }
+    
+    
+    private function dataSetReady(){
+        return ($this->dataSet!=null)?true:false;
     }
     
     /*
      * function: convertDataToHtml() 
      * -this return all processed data as a HTML file. This will be rendered by the view
-     */
-    
+     */    
     public function convertDataToHtml(){
+        //checking if the method: runSql() was invoked before...
+        $ranSQLQuery = self::dataSetReady();
         
+        if (!$ranSQLQuery) { return '';}
+        
+        //------------ creating table with all data from dataSet ----------------------------
+        $tableHeader = '<table><thead class=""><tr>';  
+        
+        //generating each column label dynamically
+        foreach ($this->columnHeaders as $field) {           
+            $tableHeader.='<th>'.$field.'</th>';
+        }
+        
+        /* concatening all header */
+        $tableHeader .= '</tr></thead>';
+
+        $tableBody = '<tbody>';
+        
+        $tableTotal = $tableHeader;
+        //$tableTotal = $tableHeader.$tableBody.$tableFooter;
+        return  $tableTotal;
     }
             
     
