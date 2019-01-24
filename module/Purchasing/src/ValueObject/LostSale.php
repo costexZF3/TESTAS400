@@ -151,7 +151,7 @@ class LostSale {
      * -this return all processed data as a HTML file. This will be rendered by the view
      */
     
-    public function convertDateToHtml(){
+    public function convertDataToHtml(){
         
     }
             
