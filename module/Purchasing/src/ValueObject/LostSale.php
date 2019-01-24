@@ -175,6 +175,7 @@ class LostSale {
         
         $tableTotal = $tableHeader;
         //$tableTotal = $tableHeader.$tableBody.$tableFooter;
+        
         return  $tableTotal;
     }
             
