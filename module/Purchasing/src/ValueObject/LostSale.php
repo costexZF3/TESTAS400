@@ -21,7 +21,7 @@ class LostSale {
     /*
      * array with all COLUMN LABELS that will be rendered
      */
-    private $columnHeaders = ['Part Number', 'Description', 'Description 2','Description 3', 'Qty Quote', 'Times Quote',
+    private $columnHeaders = ['Part Number', 'Description', 'Description 2','Description 3', 'Qty Quote', 'Times Quote','Custs. Quote',
                               'Sales Last12', 'VND No', 'Vendor Name','Pur. Agent', 'Caterpillar (P/L)', 'Wish List', 
                               'Dev.Proj', 'Dev.Status', 'Loc.20', 'OEM VND', 'Major', 'Category', 'Minor', 'Description'];
     /*
@@ -47,6 +47,7 @@ class LostSale {
         $this->timesQuote = $timesQuote;
         $this->db = new Sql($this->conn);
         $this->sqlStr = $this->getSqlStr();
+        $this->runSql();
     }
     
     /*
@@ -132,29 +133,28 @@ class LostSale {
         catch (Exception $e){
            echo "Caught exception: ", $e->getMessage(), ""; 
         }      
+        
         $this->dataSet = $resultSet;
         return $resultSet;
     }
-    
-    /*
-     * populateHTML : this method populate the table using the resultSet 
-     * value returned by the function runSql()
-     */
-    public function populateHtml(){
-       $resultSet = self::runSql();       
-       return $resultSet;
-    }
-    
     
     private function dataSetReady(){
         return ($this->dataSet!=null)?true:false;
     }
     
+    
+    /*
+     * populateHTML : this method populate the table using the resultSet 
+     * value returned by the function runSql()
+     */
+    public function getDataSet(){              
+       return $this->dataSet;
+    }  
     /*
      * function: dataToHtml() 
      * -this return all processed data as a HTML file. This will be rendered by the view
      */    
-    public function dataToHtml(){
+    public function getGridAsHtml(){
         //checking if the method: runSql() was invoked before...
         $ranSQLQuery = self::dataSetReady();
         
