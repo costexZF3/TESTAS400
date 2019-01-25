@@ -61,6 +61,8 @@ class LostsaleController extends AbstractActionController
     *  The IndexAction show the main Menu about all concerning to the Purchasing Menus
     */
    public function indexAction(){ 
+       
+       // $id = $this->params()->fromRoute('id');
 
     $this->flashMessenger()->addInfoMessage('The shown data are based on the following criteria: TimesQuote: +100, Vendors Assigned: YES ');
          
