@@ -43,8 +43,10 @@ class LostSale {
     /* filters */
     private $vendorAssigned = true;
     private $timesQuote= 0;
+    
+    
     /* constructor */
-    public  function __construct(MyAdapter $adaptConn, $timesQuote = 5, $vendorAssigned = true) {
+    public  function __construct( MyAdapter $adaptConn, $timesQuote = 5, $vendorAssigned = true ) {
         /* injection adapter connection from LostSaleController*/
         $this->conn = $adaptConn;
         $this->timesQuote = $timesQuote;
@@ -174,6 +176,54 @@ class LostSale {
         }        
         return $className;
     }/* END: getClassnameForTQ */
+    
+    private function getRowArray( $item, $iteration ){
+       /******************* creating rows *********************************/
+            $tq = "tq".$iteration;
+            
+             $record = ['Part Number'       => ['value'=> $item->IMPTN, 'class'=>"partnumber", 'id'=>""],
+                        'Description'       => ['value'=> $item->IMDSC, 'class'=>"description", 'id'=>""],
+                        'Description 2'     => ['value'=> $item->IMDS2, 'class'=>"description", 'id'=>""],
+                        'Description 3'     => ['value'=> $item->IMDS3, 'class'=>"description", 'id'=>""],
+                        'Qty Quote'         => ['value'=>($item->TQUOTE)??0, 'class'=>"", 'id'=>""],
+                        'Times Quote'       => ['value'=>($item->TIMESQ)??0, 'class'=>"timesq", 'id'=> $tq],
+                        'Custs. Quote'      => ['value'=>($item->NCUS)??0, 'class'=>"", 'id'=>""],           
+                        'Sales Last12'      => ['value'=>($item->QTYSOLD)??0, 'class'=>"", 'id'=>""],            
+                        'VND No'            => ['value'=>($item->VENDOR)??'N/A', 'class'=>"", 'id'=>""],            
+                        'Vendor Name'       => ['value'=> '--',              'class'=>"", 'id'=>""], 
+                        'Pur. Agent'        => ['value'=>'--',               'class'=>"", 'id'=>""],             
+                        'Caterpillar (P/L)' => ['value'=> number_format($item->IMPRC,2)?? 0, 'class'=>"money", 'id'=>""],            
+                        'Wish List'         => ['value'=>'--',               'class' => "", 'id'=>""],
+                        'Dev.Proj'          => ['value'=>'--',               'class' => "", 'id'=>""],
+                        'Dev.Status'        => ['value'=>'--',               'class'=>"", 'id'=>""],
+                        'Loc.20'            => ['value'=>($item->F20)?? 0,   'class'=>"", 'id'=>""],
+                        'OEM VND'           => ['value'=>($item->FOEM)??0,   'class'=>"", 'id'=>""],
+                        'Major'             => ['value'=>($item->IMPC1)??0,  'class'=>"", 'id'=>""],
+                        'Category'          => ['value'=>($item->IMCATA)??0, 'class'=>"", 'id'=>""],
+                        'Minor'             => ['value'=>($item->IMPC2)??0, 'class'=>"", 'id'=>""],
+                        'Minor Description'       => ['value'=>($item->mindsc)??'N/A', 'class'=>"description", 'id'=>""],                     
+              ];            
+           
+            return $record;
+    } //END: function getRow()
+    
+    /* this function creates a <TR> element and assigned the class and Id for each element */
+    private function rowToHTML( $row, $classNameTQ ):string{
+        $result ='<tr class="'.$classNameTQ.'">';
+        
+        foreach( $row as $item ){
+            /*retriving the classes and ids attribute values*/  
+            $classAttr = $item['class']??'';
+            $idAttr = $item['id']??'';
+            $value = $item['value']; 
+             
+            $result .= '<td class= "'.$classAttr.'" id="'.$idAttr.'">'.$value.'</td>';
+        }
+        
+        $result .= '</tr>';        
+        return $result;
+    }
+    
     /*
      * function: dataToHtml() 
      * -this return all processed data as a HTML file. This will be rendered by the view
@@ -182,50 +232,58 @@ class LostSale {
         //checking if the method: runSql() was invoked before...
         $ranSQLQuery = self::dataSetReady();
         
-        if (!$ranSQLQuery) { return '';}
+        if (!$ranSQLQuery) { return '';}        
         
         //------------ creating table with all data from dataSet ----------------------------
         $tableHeader = '<table class="table_ctp table_filter display " id="table_toexcel"><thead class=""><tr>';  
         
-        /*********** generating each column label dynamically *****************/
-        foreach ($this->columnHeaders as $field) {           
-            $tableHeader.='<th>'.$field.'</th>';
-        }
-        
-        /* concatening  header */
-        $tableHeader .= '</tr></thead>';
-        
-        /*********** adding tbody element ***************/         
-        $tableBody = '<tbody>';
-        
-        $iteration = 1;
-        /************* dynamic body **********************/
-//        ['Part Number', 'Description', 'Description 2','Description 3', 'Qty Quote', 'Times Quote','Custs. Quote',
-//                              'Sales Last12', 'VND No', 'Vendor Name','Pur. Agent', 'Caterpillar (P/L)', 'Wish List', 
-//                              'Dev.Proj', 'Dev.Status', 'Loc.20', 'OEM VND', 'Major', 'Category', 'Minor', 'Description'];
-        foreach ($this->dataSet as $item) { 
-            //checking is there is vendorAssigned
-            if ($this->vendorAssigned and (trim($item->VENDOR)==="" || trim($item->VENDOR)==="000000" )){ continue; } 
-            
-            /* retriving the className adde to each <tr> element */
-            $className = getClassNameForTQ( $item->TIMESQ );
-              
-           // $this->row['Part Number'] = $item->;
-           
-            
-                                    
-            $tableBody .="<tr><td>".$name."</td><td>".$lastname."</td><td>".$age."</td></tr>"; 
-        }    
+            /*********** generating each column label dynamically *****************/
+            foreach ($this->columnHeaders as $field) {           
+                $tableHeader.='<th>'.$field.'</th>';            }
 
-        
-        $tableFooter = '';
-        
-        $this->tableAsHtml = $tableHeader.$tableBody.$tableFooter;
-        
+            /* concatening  header */
+            $tableHeader .= '</tr></thead>';
+
+            $iteration = 1;
+            /*********** adding tbody element ***************/       
+            $tableBody = '<tbody>';        
+            
+            /************* dynamic body **********************/        
+            foreach ($this->dataSet as $item) { 
+                //checking is there is vendorAssigned
+                if ($this->vendorAssigned and (trim($item->VENDOR)==="" || trim($item->VENDOR)==="000000" )){ continue; } 
+
+                /* retriving the className added to each <tr> element 
+                 * this classify each row attending 
+                 */
+                $className = $this->getClassNameForTQ( $item->TIMESQ );
+
+                /* retriving a ROW */
+                $row = $this->getRowArray( $item, $iteration );
+
+                /* conver row to HTML: $row  */
+                $tableBody.= $this->rowToHTML( $row, $className ); 
+
+                $iteration++;
+
+               // $tableBody .="<tr><td>".$name."</td><td>".$lastname."</td><td>".$age."</td></tr>"; 
+            }//end: foreach    
+
+            $tableFooter = '<tfoot><tr>';
+
+            /*********** generating each column label dynamically *****************/
+            foreach ($this->columnHeaders as $field) {           
+                $tableFooter.='<td>'.$field.'</td>';
+            }
+
+            $tableFooter.='</tr></tfoot>';       
+              
+        $this->tableAsHtml = $tableHeader.$tableBody.$tableFooter;        
         $this->countItems = --$iteration;
         
         return  $this->tableAsHtml;
-    }/* END: getGridAsHtml()*/
+    }/* END: getGridAsHtml()*/    
+    
             
     
 }//END: LostSale class()
