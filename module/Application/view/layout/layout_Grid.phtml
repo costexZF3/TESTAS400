@@ -1,0 +1,106 @@
+<?= $this->doctype() ?>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <?= $this->headTitle('CTPSYSTEM')->setSeparator(' - ')->setAutoEscape(false) ?>
+
+        <?= $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+
+        <!-- Default styles -->
+        <?= $this->headLink([
+                      'rel' => 'shortcut icon', 
+                      'type' => 'image/vnd.microsoft.icon', 
+                      'href' => $this->basePath().'/img/logo.png'])
+            ->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
+            ->prependStylesheet($this->basePath('css/bootstrap.min.css'))
+            ->prependStylesheet($this->basePath('css/style.css'))
+             ->prependStylesheet( $this->basePath('DataTables-1.10.18/css/jquery.dataTables.css'))
+        ?>
+       
+       <!-------------------------------------------------------------------------------------------- 
+           - Kristof styles 
+           - All the icons in the icon libraries below, are scalable vector icons that can be customized with
+             CSS (size, color, shadow, etc.)
+        -------------------------------------------------------------------------------------------------->
+        <?= $this->headLink([
+                      'rel' => 'stylesheet',                        
+                      'href' => 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css']);      
+             
+        ?>
+        
+        <!-- Scripts -->
+        <?= $this->headScript()                
+            ->prependFile($this->basePath('ctpJS/ctp_functionsJS.js'))  
+            ->prependFile($this->basePath('js/bootstrap.js'))    
+            ->prependFile($this->basePath('js/jquery-2.2.4.min.js'))  //needed for menu
+           // ->prependFile('https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')     
+        ?>
+        
+        <!-- ******************  SCRIPTS DEFINED BY KRISTOFER FOR DATATABLE -->         
+        <?php $bannerPath = $this->basePath().'/img/banner.png'; ?>        
+               
+        <link rel="stylesheet" type="text/css"  href="<?=$this->basePath()."/";?>DataTables-1.10.18/css/dataTables.semanticui.min.css">      
+       
+              
+        <script type="text/javascript"  src="<?=$this->basePath()."/";?>DataTables-1.10.18/js/dataTables.js"></script>
+        <script type="text/javascript"  src="<?=$this->basePath()."/";?>js/jquery.table2excel.min.js"></script>
+       
+    </head>
+    
+    <body>
+       <!-- ************************************** PAGE HEADER BANNER *************************************-->        
+        
+        <div class="header">
+            <div class="row">                    
+                <div>    
+                    <a href="<?= $this->url('home')?>">
+                        <img class="header-img" src="<?= $this->basePath().'/img/LOGO.PNG' ?>" height="80" alt="Zend Framework <?= \Application\Module::VERSION ?>"/>
+                    </a>
+                </div>   
+                <div class="ctp_title">
+                    <h1> Information System</h1>
+                </div>
+            </div>
+        </div> 
+
+       <!---------------------------------------- NAVIGATION BAR ---------------------------------------------->
+        <div class="navbar">
+            <div class="container-fluid"> 
+                <div class="row">
+                    <!-- Menu -->
+                    <div class="col-md-12">                    
+                        <!-- Navigation bar -->
+                        <?php
+                            // Check if the activeMenuItemId passed to layout view model
+                            // and if so, use it for setting active navbar item.
+                            if (isset($activeMenuItemId)) {
+                                $this->mainMenu()->setActiveItemId($activeMenuItemId);
+                            }
+                            // Render the navbar
+                            echo $this->mainMenu()->render();
+                        ?>
+                    </div>   
+                    <!-- Breadcrumbs -->
+                    <?= $this->pageBreadcrumbs()->render(); ?>
+                </div>
+            </div>  
+       </div>
+    
+        <!--------------------------------  CONTENT TO BE RENDER ----------------------------------------->
+        <div class="container-fluid">       
+            <div class="row">
+                <div class="ctp-content">
+                    <!-- Page content placeholder -->
+                    <?= $this->content; ?>                   
+                </div>
+            </div>
+        </div>
+
+    <hr>
+    <?= $this->inlineScript() ?>     
+    </body>
+</html>
