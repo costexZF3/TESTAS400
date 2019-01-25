@@ -9,18 +9,15 @@
             ->appendName('viewport', 'width=device-width, initial-scale=1.0')
             ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
         ?>
-
-        <!-- Le styles -->
+        
+        <!-- default -->
         <?= $this->headLink([
                       'rel' => 'shortcut icon', 
                       'type' => 'image/vnd.microsoft.icon', 
                       'href' => $this->basePath().'/img/logo.png']
                   )->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
                    ->prependStylesheet($this->basePath('css/bootstrap.min.css'))
-                    ->prependStylesheet($this->basePath('css/style.css'))
-                    ->prependStylesheet($this->basePath('css/ctpstyle.css'))
-                   
-                                           
+                   ->prependStylesheet($this->basePath('css/style.css')) //by kristov                   
         ?>
         
         <!-------------------------------------------------------------------------------------------- 
@@ -38,7 +35,7 @@
         <?= $this->headScript()
             ->prependFile($this->basePath('js/bootstrap.js')) 
             ->prependFile($this->basePath('js/jquery-2.2.4.min.js'))
-            ->prependFile('https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')              
+           // ->prependFile('https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')              
         ?>
         
       
@@ -70,7 +67,7 @@
 
        <!---------------------------------------- NAVIGATION BAR ---------------------------------------------->
         <div class="navbar">
-            <div class="container"> 
+            <div class="container-fluid"> 
                 <div class="row">
                     <!-- Menu -->
                     <div class="col-md-12">                    
@@ -127,7 +124,6 @@
                 <p> Costex Tractor Parts. All rights reserved.</p>
             </footer>
         </div>   
-        <?= $this->inlineScript() ?>
-         
+        <?= $this->inlineScript() ?>         
     </body>
 </html>
