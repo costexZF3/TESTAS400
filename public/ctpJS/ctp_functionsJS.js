@@ -64,3 +64,5 @@ const hideElement = ( classElement )=> { $('.' + classElement).fadeOut();};
 
   /* function to show an Element */
 const showElement = ( classElement )=> { $('.' + classElement).fadeIn();};
+
+const filterTable= ( tableName)=> { $('.' + tableName ).dataTable();};
