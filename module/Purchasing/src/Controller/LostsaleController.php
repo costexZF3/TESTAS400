@@ -6,8 +6,8 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 use Zend\Db\Adapter\Adapter;
-use Zend\Db\TableGateway\TableGateway;
-use Zend\Db\Sql\Sql;
+//use Zend\Db\TableGateway\TableGateway;
+
 use Purchasing\ValueObject\LostSale;
 
 
@@ -20,8 +20,7 @@ class LostsaleController extends AbstractActionController
      */
     private $entityManager;
     
-    /* DB2 connection */
-    
+    /* DB2 connection */    
     private $conn; //it's the adapter
     //private $db;
     
@@ -29,13 +28,12 @@ class LostsaleController extends AbstractActionController
     
    /* constructor for claimsController. It will be injected 
     * with the entityManager with all Entities mapped 
+    * by dependency injection 
     */
    public function __construct( $entityManager, Adapter $adapter ){
        //entitymanager
-       $this->entityManager = $entityManager;
-       
-       $this->conn = $adapter; // by dependency injection
-      // $this->db = new Sql($this->conn);
+       $this->entityManager = $entityManager;       
+       $this->conn = $adapter;      
    }   
    
    /*
@@ -65,7 +63,7 @@ class LostsaleController extends AbstractActionController
    public function indexAction(){ 
 
     $this->flashMessenger()->addInfoMessage('The shown data are based on the following criteria: TimesQuote: +100, Vendors Assigned: YES ');
-     
+         
     //getting the loggin user object
     $user = self::getUser();  
               
@@ -73,22 +71,24 @@ class LostsaleController extends AbstractActionController
        $especial = ($this->access('special.access'))?'TRUE':'FALSE';
        
        //Initicial Value for TimesQuote 
-       $timesQuote = "50";       
-       /*
-        * LostSale: It's an Object that will be the core of LostSales
-        */
+       $timesQuote = "100";       
+       /* LostSale: It's an Object that will be the core of LostSales  */
        $LostSale = new LostSale($this->conn, $timesQuote);
+       
        /* this method retrives all items and return a resultSet or data as HTML tableGrid */
        $resultSet = $LostSale->getDataSet(); 
-       $tableHeader = $LostSale->getGridAsHtml();
+       $tableHTML= $LostSale->getGridAsHtml();
        
-       $this->layout()->setTemplate('layout/layoutLostSale');
-      //  $this->layout()->setTemplate('layout/layout');
+       $this->layout()->setTemplate('layout/layout_Grid');
+//       $this->layout()->setTemplate('layout/layoutLostSale');
+//     $this->layout()->setTemplate('layout/layout');
        return new ViewModel([
+                    'tableHeader' => $tableHTML,
                     'lostsalelist' => $resultSet,                                            
                            'user'  => $user,
                    'specialAccess' => $especial,
-                   'tableHeader' => $tableHeader,
+                   
             ]);
     }//END: indexAction method
+    
 } //END: LostsaleController
