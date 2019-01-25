@@ -120,11 +120,12 @@
         });
          
         /* hidding all Elements with less than 100 times quotes*/ 
-        hideElement('tq50plus');
-        hideElement('tq30plus');
-        hideElement('tq10plus');
-        hideElement('tq5plus');
-       
+//        hideElement('tq50plus');
+//        hideElement('tq30plus');
+//        hideElement('tq10plus');
+//        hideElement('tq5plus');
+        filterTable('table_filter');
+        //$('.table_filter').dataTable();
         /* call a function which it  fills an array with items rendered on the screen */
          //const LostSales = fillArray_partsLostSales();
         }); 
@@ -170,88 +171,14 @@
             <div class="col-sm-offset-4 col-sm-8">
                 <input class="btn btn-info" id="convert" type="button" name="btnexcel" value="Convert to Excel">
                 <input class="btn btn-danger" id="topdf" type="button" name="btnpdf" value="Convert to PDF">
+                <input class="btn btn-success" id="towishlist" type="button" name="towishlist" value="Save to Wish List">
             </div>
         </div>
        <br>
    </div>
+   <?=$tableHeader;?>
 <?php endif; ?>
 
-        <?=$tableHeader;?>
-        <?php            
-            $iteration = 1; 
-        
-             foreach ($lostSales as $list){   
-                 
-                 if (trim($list->VENDOR)=="" || trim($list->VENDOR)=="000000" ){ continue; }
-                 
-                 $className="tq5plus";    
-                //code snippet to add a sort of classification to the row
-                $timesQuotes = $list->TIMESQ; 
-                
-                /* clasifying all rows of the table according the times quotes: */
-                if ( $timesQuotes >= 100 ){
-                    $className="tq100plus";  
-                } else if ( $timesQuotes >= 50 ){
-                    $className="tq50plus";
-                } else if ( $timesQuotes >= 30 ){
-                    $className="tq30plus";
-                } else if ( $timesQuotes >= 10 ){
-                    $className="tq10plus";
-                }           
-             ?>
-                <tr class="<?=$className;?>">                 
-                    <td class="partnumber"><?=$list->IMPTN;?></td> <!-- PART NUMBER -->              
-                    <td class="description"><?=$list->IMDSC;?></td>        <!-- DESCRIPTION -->
-                    <td class="description"><?=$list->IMDS2;?></td> <!--DESCRIPTION 2 -->
-                    <td class="description"><?=$list->IMDS3;?></td>        <!-- DESCRIPTION 3 -->
-                    <td><?=($list->TQUOTE)??0;?></td>  <!-- QUANTITY QUOTE  -->
-                    <td class="timesq" id="tq<?=$iteration?>"><?=($list->TIMESQ)??0;?></td>  <!-- TIMES QUOTE  -->
-                    <td><?=($list->NCUS)??0;?></td>    <!-- CUSTOMERS QUOTE  -->
-                    <td><?=($list->QTYSOLD)??0;?></td> <!-- CUSTOMERS QUOTE  -->
-                    <td><?=($list->VENDOR)??'N/A';?></td>  <!-- VENDOR NUMBER  -->                    
-                    <td>---</td>  <!-- VENDOR NAME  -->
-                    <td>--</td>  <!-- PURCHASING AGENT NAME  -->
-                    <td class="money">$<?=(floatval($list->IMPRC))??0;?></td>  <!-- PRICE LIST CATERPILLAR  -->
-                    <td>--</td>  <!-- WISH LIST  -->
-                    <td>--</td>  <!-- DEVELOPMENT PROJECT  -->
-                    <td>--</td>  <!-- DEVELOPMENT STATUS  -->                    
-                    <td><?=($list->F20)??0;?></td>          <!-- LOCATION 20  -->
-                    <td><?=($list->FOEM)??0;?></td>         <!-- OEM VND  -->
-                    <td><?=($list->IMPC1)??0;?></td>        <!-- MAYOR  -->
-                    <td><?=($list->IMCATA)??0;?></td>       <!-- CATEGORY  -->
-                    <td><?=($list->IMPC2)??0;?></td>        <!-- MINOR  -->
-                    <td class="description"><?=($list->mindsc)??"N/A";?></td>   <!-- MINOR DESCRIPTION -->   
-                <tr>                
-         <?php
-            $iteration++;
-            //if ($iteration==100) break;
-            }; 
-         ?> 
-     </tbody>
-     <tfoot>
-         <tr id="countItem_<?=--$iteration;?>"> 
-             <td>Part Number </td>
-             <td>Description </td>
-             <td> Description 2</td>
-             <td>Description 3</td>                
-             <td>Qty Quote </td>
-             <td>Times Quote </td>
-             <td>Custs. Quote</td>
-             <td>Sales Las 12</td>
-             <td>Vendor NO.</td>
-             <td>Vendor Name</td>
-             <td>Pur. Agent</td>
-             <td>Caterpillar (P/L)</td>
-             <td>Wish List</td>
-             <td>Dev. Proj</td>
-             <td>Dev. Status</td>
-             <td>Loc.20</td>
-             <td>OEM VND</td>
-             <td>Mayor</td> 
-             <td>Category</td>
-             <td>Minor</td>
-             <td>Description</td>
-         </tr>
-     </tfoot>
- </table>
+
+       
 
