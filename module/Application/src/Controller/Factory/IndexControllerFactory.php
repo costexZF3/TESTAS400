@@ -15,13 +15,12 @@ class IndexControllerFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $entityManager = $container->get('doctrine.entitymanager.orm_default');
-        
+              
         // retrieving an instance of MyAdapter Service from the Service Manager
         $dbconnection = $container->get( MyAdapter::class );
         $connAdapter = $dbconnection->getAdapter();
         
         // Instantiate the controller and inject dependencies
-        return new IndexController($entityManager, $connAdapter);
+        return new IndexController( $connAdapter);
     }
 }
