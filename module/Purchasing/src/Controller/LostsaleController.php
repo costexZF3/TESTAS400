@@ -79,13 +79,15 @@ class LostsaleController extends AbstractActionController
        /* this method retrives all items and return a resultSet or data as HTML tableGrid */
        $resultSet = $LostSale->getDataSet(); 
        $tableHTML= $LostSale->getGridAsHtml();
+       $countItems = $LostSale->getCountItems();
        
        $this->layout()->setTemplate('layout/layout_Grid');
        return new ViewModel([
-                    'tableHeader' => $tableHTML,
+                     'tableHeader' => $tableHTML,
                     'lostsalelist' => $resultSet,                                            
-                           'user'  => $user,
+                            'user' => $user,
                    'specialAccess' => $especial,
+                      'countItems' => $countItems,
                    
             ]);
     }//END: indexAction method
