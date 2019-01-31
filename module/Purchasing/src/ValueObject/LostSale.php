@@ -29,12 +29,12 @@ class LostSale {
      */
     private $rows = [];
     /*  
-     * $conn: it's the adapter injected from LostSaleController 
-     * $db: it's and instance from  Zend\Db\Sql\Sql;
+     * $adapter: it's the adapter injected from LostSaleController 
+     * sqlObj: it's and instance from  Zend\Db\Sql\Sql;
      * sqlStr: it contains the Sql STRING that will be excecuted  
      */
-    private $conn; 
-    private $db;
+    private $adapter; 
+    private $sqlObj;
     /* helpful attributes */
     private $sqlStr= '';      
     private $countItems = 0;
@@ -43,23 +43,22 @@ class LostSale {
     /* filters */
     private $vendorAssigned = true;
     private $timesQuote= 0;
-    
-    
+        
     /* constructor */
-    public  function __construct( MyAdapter $adaptConn, $timesQuote = 5, $vendorAssigned = true ) {
-        /* injection adapter connection from LostSaleController*/
-        $this->conn = $adaptConn;
+    public  function __construct( MyAdapter $adapter, $timesQuote = 5, $vendorAssigned = true ) {
+        /* injection adapter adapterection from LostSaleController*/
+        $this->adapter = $adapter;
         $this->timesQuote = $timesQuote;
         $this->vendorAssigned = $vendorAssigned;
         
-        $this->db = new Sql($this->conn);
+        $this->sqlObj = new Sql( $adapter );
         $this->sqlStr = $this->getSqlStr();
         $this->runSql();
-    }
+    }//constructor 
     
-    /*
-     * this method return the SqlString generatered by the constructor
-     */
+   /*
+    * this method return the SqlString generatered by the constructor
+    */
     private function getSqlString():string{
        return $this->sqlStr;             
     }    
@@ -67,7 +66,7 @@ class LostSale {
     /*
      * getSqlStr: It returns and STRING tha will be used to execute the SQL query.
      */
-    private function getSqlStr():String{
+    private function getSqlStr():String {
        /* getting date of one year before as string */    
        $fromDate = $this->dateOneYearBefore();
        
@@ -117,7 +116,7 @@ class LostSale {
                . "(select dvpart from dvinva where dvlocn in ('01', '05', '07'))";    
        
         return $sqlStr;  
-    }
+    }//END: getSqlString()
     
     /*
      * Return date as String (one year before) 
@@ -135,7 +134,7 @@ class LostSale {
     private function  runSql(){
         try
         {
-          $resultSet = $this->conn->query( $this->sqlStr, MyAdapter::QUERY_MODE_EXECUTE );   
+          $resultSet = $this->adapter->query( $this->sqlStr, MyAdapter::QUERY_MODE_EXECUTE );   
         }
         catch (Exception $e){
            echo "Caught exception: ", $e->getMessage(), ""; 
@@ -177,47 +176,158 @@ class LostSale {
         return $className;
     }/* END: getClassnameForTQ */
     
+    private function convertPAId( $PaID ) {
+        $Pa_id ="".$PaID;
+        $PaidLen = strlen( $Pa_id );
+        $hasCeros = ($PaidLen < 3 )? 3 - $PaidLen : 0;
+
+        if  ($hasCeros!=0) { 
+            if ( $hasCeros ===1 ){
+                  $Pa_id="0".$Pa_id;
+            } else {
+                 $Pa_id="00".$Pa_id;
+            }                                      
+        } //end if   
+        
+        return $Pa_id;
+    } //END: convertPAid() : convert purchasing Agent Id 
+    
+    /* getting Vendor Name, Purchasing Agent Name */
+    private function getVendorData( $vendorNumber ) { 
+        
+       $VendorData =['name'=>'',
+                     'pagent' =>''   
+                    ]; 
+       
+       /* getting the Purchasing Agent's ID */ 
+       $strSql = "SELECT VMNAME, VM#POY AS VENDN FROM VNMAS WHERE VMVNUM = ".$vendorNumber;
+       try
+        {
+         $resultSet = $this->adapter->query( $strSql, MyAdapter::QUERY_MODE_EXECUTE );   
+         $resultAsArray = $resultSet->toArray();
+         
+         $PaID = $resultAsArray[0]['VENDN'];
+         
+         /* $PaID: we need to convert this to a String with 3 characters
+          * for use it as parameter on the Control Table CNTRLL, parameter: '216':
+          * which it's used for Purchasing Agents 
+          */
+                  
+         $PAgentToStr = $this->convertPAId($PaID);
+         $strSqlCNTRLL = " SELECT CNTDE1 FROM CNTRLL WHERE CNT01 ='216' AND CNT03 = '".$PAgentToStr."'";
+         $RS_PAgentName = $this->adapter->query( $strSqlCNTRLL, MyAdapter::QUERY_MODE_EXECUTE );
+         
+         $resultAsArray1 = $RS_PAgentName->toArray(); 
+         $VendorData['name'] = $resultAsArray[0]['VMNAME'];  /* vendor name */ 
+         $VendorData['pagent'] = $resultAsArray1[0]['CNTDE1'];  /* purchasing Agent's Name */
+        }
+        catch (Exception $e){
+           echo "Caught exception: ", $e->getMessage(), ""; 
+        }
+        
+        return $VendorData;
+    }//End: getVendorData()
+    
+    //getWishListValue(): it returns It this part exist in the wish list      
+    private function getWishListValue( $PartNumber ) {
+       /* getting the Purchasing Agent's ID */ 
+       $strSql = "SELECT 'X' WL  From PRDWL1 WHERE PRWPTN = '".$PartNumber."'";
+       try
+        {
+          $resultSet = $this->adapter->query( $strSql, MyAdapter::QUERY_MODE_EXECUTE ); 
+          $resultSet = $resultSet->toArray();
+          /* $isInWL: this returns X if the PartNumber is in the WishList File: PRDWL1 */
+          $isInWL = ($resultSet[0]['WL']) ?? '--';  // if it's in WL return X else returns --      
+        }
+        catch (Exception $e){
+           echo "Caught exception: ", $e->getMessage(), ""; 
+        }         
+        return $isInWL;
+    }//end: getWishListValue()
+
+    
+    /* Product Development */
+    private function getProdDev( $PartNumber ) {         
+       $ProdDevData =['isdev'=>'',
+                     'status' =>''   
+                    ]; 
+       
+       /* getting the Purchasing Agent's ID */ 
+       $strSql = "SELECT prhcod, prdsts FROM PRDVLD4 where prdptn = '".$PartNumber."'";
+       try
+        {
+         $resultSet = $this->adapter->query( $strSql, MyAdapter::QUERY_MODE_EXECUTE );         
+         
+         $resultSet = $resultSet->toArray();
+         $ProdDevData['isdev'] = ($resultSet[0]['PRHCOD'])?? "--";
+         $ProdDevData['status'] = ($resultSet[0]['PRDSTS'])?? "--";
+        }
+        catch (Exception $e){
+           echo "Caught exception: ", $e->getMessage(), ""; 
+        }
+        
+        return $ProdDevData; 
+    }//End: product development 
+    
+    
     private function getRowArray( $item, $iteration ){
        /******************* creating rows *********************************/
-            $tq = "tq".$iteration;
-            
-             $record = ['Part Number'       => ['value'=> $item->IMPTN, 'class'=>"partnumber", 'id'=>""],
-                        'Description'       => ['value'=> $item->IMDSC, 'class'=>"description", 'id'=>""],
-                        'Description 2'     => ['value'=> $item->IMDS2, 'class'=>"description", 'id'=>""],
-                        'Description 3'     => ['value'=> $item->IMDS3, 'class'=>"description", 'id'=>""],
-                        'Qty Quote'         => ['value'=>($item->TQUOTE)??0, 'class'=>"", 'id'=>""],
-                        'Times Quote'       => ['value'=>($item->TIMESQ)??0, 'class'=>"timesq", 'id'=> $tq],
-                        'Custs. Quote'      => ['value'=>($item->NCUS)??0, 'class'=>"", 'id'=>""],           
-                        'Sales Last12'      => ['value'=>($item->QTYSOLD)??0, 'class'=>"", 'id'=>""],            
-                        'VND No'            => ['value'=>($item->VENDOR)??'N/A', 'class'=>"", 'id'=>""],            
-                        'Vendor Name'       => ['value'=> '--',              'class'=>"", 'id'=>""], 
-                        'Pur. Agent'        => ['value'=>'--',               'class'=>"", 'id'=>""],             
-                        'Caterpillar (P/L)' => ['value'=> number_format($item->IMPRC,2)?? 0, 'class'=>"money", 'id'=>""],            
-                        'Wish List'         => ['value'=>'--',               'class' => "", 'id'=>""],
-                        'Dev.Proj'          => ['value'=>'--',               'class' => "", 'id'=>""],
-                        'Dev.Status'        => ['value'=>'--',               'class'=>"", 'id'=>""],
-                        'Loc.20'            => ['value'=>($item->F20)?? 0,   'class'=>"", 'id'=>""],
-                        'OEM VND'           => ['value'=>($item->FOEM)??0,   'class'=>"", 'id'=>""],
-                        'Major'             => ['value'=>($item->IMPC1)??0,  'class'=>"", 'id'=>""],
-                        'Category'          => ['value'=>($item->IMCATA)??0, 'class'=>"", 'id'=>""],
-                        'Minor'             => ['value'=>($item->IMPC2)??0, 'class'=>"", 'id'=>""],
-                        'Minor Description'       => ['value'=>($item->mindsc)??'N/A', 'class'=>"description", 'id'=>""],                     
-              ];            
-           
-            return $record;
+        $tq = "tq".$iteration;
+
+        /* the method getVendorName()
+         * -it returns the Purchasing Agent's name associated with a vendor. 
+         */            
+        $VendorData = $this->getVendorData( $item->VENDOR );
+
+        /* taking Wish List values */
+        $WishList = $this->getWishListValue( trim($item->IMPTN) );
+
+        /*Looking for Product Development Data */
+        $ProDevData = $this->getProdDev( trim( $item->IMPTN) );
+
+
+        $record = ['Part Number'       => ['value'=> $item->IMPTN, 'class'=>"partnumber", 'id'=>''],
+                    'Description'       => ['value'=> $item->IMDSC, 'class'=>"description", 'id'=>''],
+                    'Description 2'     => ['value'=> $item->IMDS2, 'class'=>"description", 'id'=>''],
+                    'Description 3'     => ['value'=> $item->IMDS3, 'class'=>"description", 'id'=>''],
+                    'Qty Quote'         => ['value'=>($item->TQUOTE)??0,  'class'=>'', 'id'=>''],
+                    'Times Quote'       => ['value'=>($item->TIMESQ)??0,  'class'=>"timesq", 'id'=> $tq],
+                    'Custs. Quote'      => ['value'=>($item->NCUS)??0,    'class'=>'', 'id'=>''],           
+                    'Sales Last12'      => ['value'=>($item->QTYSOLD)??0, 'class'=>'', 'id'=>'', 'title'=>'Qty Sold Last 12 Month'],            
+                    'VND No'            => ['value'=>($item->VENDOR)??'N/A', 'class'=>'', 'id'=>'', 'title'=>'Vendor Number'], 
+
+                    'Vendor Name'       => ['value'=> $VendorData['name'],   'class'=>"description", 'id'=>''], 
+                    'Pur. Agent'        => ['value' => $VendorData['pagent'], 'class'=>"description", 'id'=>''],             
+                    'Caterpillar (P/L)' => ['value'=> number_format($item->IMPRC,2)?? 0, 'class'=>"money", 'id'=>''],            
+                    'Wish List'         => ['value'=> $WishList,               'class' => "", 'id'=>''],
+                    'Dev.Proj'          => ['value'=> $ProDevData['isdev'],          'class' => "", 'id'=>'', 'title'=>'Cod. Dev. Proj'],
+                    'Dev.Status'        => ['value'=> $ProDevData['status'],         'class' => "", 'id'=>'', 'title'=>'Prod. Dev. Status'],
+                    'Loc.20'            => ['value'=> ($item->F20)?? 0,   'class'=>'', 'id'=>''],
+                    'OEM VND'           => ['value'=> ($item->FOEM)??0,   'class'=>'', 'id'=>'', 'title'=>'X->OEM Vendor'],
+                    'Major'             => ['value'=> ($item->IMPC1)??0,  'class'=>'', 'id'=>'', 'title'=>'Mayor Code'],
+                    'Category'          => ['value'=> ($item->IMCATA)??0, 'class'=>'', 'id'=>'', 'title'=>'Category'],
+                    'Minor'             => ['value'=> ($item->IMPC2)??0, 'class'=>'', 'id'=>'', 'title'=>'Minor'],
+                    'Minor Description' => ['value'=> ($item->mindsc)??'N/A', 'class'=>"description", 'id'=>'', 'title'=>'Minor'],                     
+          ];            
+
+        return $record;
     } //END: function getRow()
     
-    /* this function creates a <TR> element and assigned the class and Id for each element */
+    /* this function creates a <TR> element and assigned the CLASS, ID, and TITLE attributes for each <TD> element */
     private function rowToHTML( $row, $classNameTQ ):string{
-        $result ='<tr class="'.$classNameTQ.'">';
+        //$result ='<tr class="'.$classNameTQ.'">';
+        
+        $trClass= ($classNameTQ!=='')? ' class="'.$classNameTQ.'">' : '>';
+        $result ='<tr'.$trClass;
         
         foreach( $row as $item ){
             /*retriving the classes and ids attribute values*/  
             $classAttr = $item['class']??'';
             $idAttr = $item['id']??'';
-            $value = $item['value']; 
-             
-            $result .= '<td class= "'.$classAttr.'" id="'.$idAttr.'">'.$value.'</td>';
+            $value = $item['value']??''; 
+            $title = $item['title']??'';
+            
+            $result .= '<td class= "'.$classAttr.'" id="'.$idAttr.'" title = "'.$title.'">'.$value.'</td>';
         }
         
         $result .= '</tr>';        
@@ -232,14 +342,18 @@ class LostSale {
         //checking if the method: runSql() was invoked before...
         $ranSQLQuery = self::dataSetReady();
         
-        if (!$ranSQLQuery) { return '';}        
+        if (!$ranSQLQuery) { return '';}      
         
-        //------------ creating table with all data from dataSet ----------------------------
-        $tableHeader = '<table class="table_ctp table_filter display " id="table_toexcel"><thead class=""><tr>';  
+        /*------------ creating table with all data from dataSet ----------------------------
+         *  TABLE INITIAL TAG 
+        */
+        $tableHeader = '<table class="table_ctp table_filtered display" id="table_toexcel"><thead class=""><tr>';  
         
             /*********** generating each column label dynamically *****************/
             foreach ($this->columnHeaders as $field) {           
-                $tableHeader.='<th>'.$field.'</th>';            }
+                $tableHeader.='<th>'.$field.'</th>';            
+                
+            }
 
             /* concatening  header */
             $tableHeader .= '</tr></thead>';
@@ -253,8 +367,9 @@ class LostSale {
                 //checking is there is vendorAssigned
                 if ($this->vendorAssigned and (trim($item->VENDOR)==="" || trim($item->VENDOR)==="000000" )){ continue; } 
 
-                /* retriving the className added to each <tr> element 
-                 * this classify each row attending 
+                /*
+                 *  retriving the className added to each <tr> element 
+                 * this classify each row attending THE TIMES QUOTES: tq10plus, tq100plus, etc
                  */
                 $className = $this->getClassNameForTQ( $item->TIMESQ );
 
