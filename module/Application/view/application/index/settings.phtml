@@ -19,19 +19,19 @@
                 <table class="table table-striped table-bordered">
                      <tr class="info">
                         <th>ID:</th>
-                        <td><?= $this->escapeHtml($user->getId()) ?></th>
+                        <td><?= $this->escapeHtml($user->getId()) ?></td>
                     </tr>
                     <tr>
                         <th>E-mail:</th>
-                        <td><?= $this->escapeHtml($user->getEmail()) ?></th>
+                        <td><?= $this->escapeHtml($user->getEmail()) ?></td>
                     </tr>
                     <tr class="info">
                         <th>Full Name:</th>
-                        <td><?= $this->escapeHtml($user->getFullName()) ?></th>
+                        <td><?= $this->escapeHtml($user->getFullName()) ?></td>
                     </tr>
                     <tr>
                         <th>Date Created:</th>
-                        <td><?= $this->escapeHtml($user->getDateCreated()) ?></th>
+                        <td><?= $this->escapeHtml($user->getDateCreated()) ?></td>
                     </tr>
                 </table>
                 
@@ -39,7 +39,7 @@
                 <p>
                     <!-- BUTTON CHANGE PASSWORD -->
                     <a class="btn btn-warning" href="<?= $this->url('users',
-                            ['action'=>'change-password', 'id'=>$user->getId()]); ?>">
+                                                                 ['action'=>'change-password', 'id'=>$user->getId()]); ?>">
                         <span class="glyphicon glyphicon-asterisk"></span> Change Password
                     </a>    
                 </p> 
