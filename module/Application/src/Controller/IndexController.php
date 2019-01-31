@@ -7,10 +7,6 @@ use User\Entity\User;
 use Zend\Mvc\MvcEvent;
 
 use Zend\Db\Adapter\Adapter;
-use Zend\Db\TableGateway\TableGateway;
-use Zend\Db\Sql\Sql;
-
-
 
 /**
  * This is the main controller class of the User Demo application. It contains
