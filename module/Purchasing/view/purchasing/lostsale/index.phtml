@@ -14,6 +14,7 @@
     $specialAccess = $this->specialAccess;
     $lostSales = $this->lostsalelist;    
     $tableHeader = $this->tableHeader;
+    $countItems = $this->countItems;
  ?>  
  	 
 <script language="JavaScript">          
@@ -143,9 +144,12 @@
     <div class ="ctp-panel">
        <div class="ctp-panel-header">
             <h3 class="ctp_subtitle"> Tuning your Choice </h3>
-       </div>     
+       </div>    
+        <!-- PANEL BODY -->
         <div class = "row ctp-panel-body">          
-            <div class="col-md-2">                   
+            <div class="col-md-2"> 
+                
+               
                 <p> Times Quotes[10+, 30+, 50+, 100+]: </p>
                 <form>
                     <div class="alert alert-warning">                        
@@ -173,6 +177,7 @@
         </div>
        <br>
     </div>
+<h2>COUNT ITEMS: <?=$countItems?></h2>
    <?= $tableHeader; ?>
 <?php endif; ?>
 
