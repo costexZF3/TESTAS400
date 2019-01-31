@@ -6,7 +6,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 use Zend\Db\Adapter\Adapter;
-//use Zend\Db\TableGateway\TableGateway;
+
 
 use Purchasing\ValueObject\LostSale;
 
@@ -61,8 +61,6 @@ class LostsaleController extends AbstractActionController
     *  The IndexAction show the main Menu about all concerning to the Purchasing Menus
     */
    public function indexAction(){ 
-       
-       // $id = $this->params()->fromRoute('id');
 
     $this->flashMessenger()->addInfoMessage('The shown data are based on the following criteria: TimesQuote: +100, Vendors Assigned: YES ');
          
@@ -73,7 +71,8 @@ class LostsaleController extends AbstractActionController
        $especial = ($this->access('special.access'))?'TRUE':'FALSE';
        
        //Initicial Value for TimesQuote 
-       $timesQuote = "100";       
+       $timesQuote = "50"; 
+       
        /* LostSale: It's an Object that will be the core of LostSales  */
        $LostSale = new LostSale($this->conn, $timesQuote);
        
@@ -82,8 +81,6 @@ class LostsaleController extends AbstractActionController
        $tableHTML= $LostSale->getGridAsHtml();
        
        $this->layout()->setTemplate('layout/layout_Grid');
-//       $this->layout()->setTemplate('layout/layoutLostSale');
-//     $this->layout()->setTemplate('layout/layout');
        return new ViewModel([
                     'tableHeader' => $tableHTML,
                     'lostsalelist' => $resultSet,                                            
@@ -94,3 +91,4 @@ class LostsaleController extends AbstractActionController
     }//END: indexAction method
     
 } //END: LostsaleController
+
