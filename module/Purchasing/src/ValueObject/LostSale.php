@@ -29,12 +29,11 @@ class LostSale {
      */
     private $rows = [];
     /*  
-     * $adapter: it's the adapter injected from LostSaleController 
-     * sqlObj: it's and instance from  Zend\Db\Sql\Sql;
+     * $adapter: it's the adapter injected from LostSaleController      
      * sqlStr: it contains the Sql STRING that will be excecuted  
      */
-    private $adapter; 
-    private $sqlObj;
+    private $adapter;     
+    
     /* helpful attributes */
     private $sqlStr= '';      
     private $countItems = 0;
@@ -45,13 +44,12 @@ class LostSale {
     private $timesQuote= 0;
         
     /* constructor */
-    public  function __construct( MyAdapter $adapter, $timesQuote = 5, $vendorAssigned = true ) {
+    public  function __construct( MyAdapter $adapter, $timesQuote = 100, $vendorAssigned = true ) {
         /* injection adapter adapterection from LostSaleController*/
         $this->adapter = $adapter;
         $this->timesQuote = $timesQuote;
-        $this->vendorAssigned = $vendorAssigned;
+        $this->vendorAssigned = $vendorAssigned;       
         
-        $this->sqlObj = new Sql( $adapter );
         $this->sqlStr = $this->getSqlStr();
         $this->runSql();
     }//constructor 
