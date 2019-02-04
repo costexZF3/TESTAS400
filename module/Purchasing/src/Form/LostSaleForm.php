@@ -27,7 +27,9 @@ class LostSaleForm extends Form{
         parent::__construct('lostsale-form');
         
         // Set POST method for this form
-        $this->setAttribute('method', 'post');        
+        $this->setAttribute('method', 'post');  
+        // (Optionally) set action for this form
+        //$this->setAttribute('action', '/lostsale');
         
         $this->addElements();
         $this->addFilters();        
@@ -41,33 +43,42 @@ class LostSaleForm extends Form{
     private function addElements() {
         //add a text Edit for : TIMES QUOTE 
         $this->add([
-            'name'=>'edNumTimesQuote',
-            'type'=>'numeric',                     
-            'options' =>['label' => 'Times Quote:'],                     
+            'name'=>'num-tq',         //Field name
+            'type'=>'number',        //element type
+            'value' => 100,
+            'attributes' =>[          //array of attributes
+                   'id'=>'tqId',
+                   'min' => "10",
+                   'max' => "150",
+                   'required' => true, 
+            ],
+            'options' =>[                   //array of options
+                'label' => 'Times Quote'   //Text Label
+            ],                     
         ]);        
         
-        // Add the CSRF field
+       
+         // Add "status" field : tqvalues 
+        $this->add([            
+            'type'  => 'select',
+            'name' => 'sel-vndassigned',
+            'options' => [
+                'label' => 'Vendors Assigned',
+                'value_options' => [
+                    1 => 'YES',
+                    2 => 'NO',                                                         
+                ]
+            ],
+        ]);
+        
+        
+         // Add the CSRF field
         $this->add([
             'type' => 'csrf',
             'name' => 'csrf',
             'options' => [
                 'csrf_options' => [
                     'timeout' => 600
-                ]
-            ],
-        ]);
-        
-         // Add "status" field
-        $this->add([            
-            'type'  => 'select',
-            'name' => 'timesqvalues',
-            'options' => [
-                'label' => 'Times Quote',
-                'value_options' => [
-                    1 => '10 +',
-                    2 => '30 +',                    
-                    3 => '50 +',                    
-                    4 => '100 +',                    
                 ]
             ],
         ]);
@@ -89,7 +100,28 @@ class LostSaleForm extends Form{
     private function addFilters() {
        $inputFilter = new InputFilter();
        $this->setInputFilter($inputFilter);
+       
+       $inputFilter->add(
+        [
+            'name'=>'num-tq',         //Field name                        
+            'filter'   => [      //array with filters
+                ['name' => 'ToInt'],    
+                ['name' => 'StripTags'],
+                ['name' => 'StringTrim'],
+                ['name' => 'StripNewlines'],
+            ],
+            
+//            'validators' => [
+//                   // ['name'=>'GreaterThan', 'options'=>['min'=>0]],
+//                    ['name'=>'NotEmpty'],
+//                    ['name'=>'Between', 'options' => ['min'=>10, 'max'=>150]],                    
+//            ],            
+       ]);
+       
+//       $inputFilter->add(
+//               
+//        );
     }
     
     
-}
+}//END CLASS
