@@ -194,6 +194,7 @@ table {
 /* ctp_subtitle */
 .ctp_subtitle, ctp_title {
     margin: 0px 0px 20px 0px;
+    justify-content: left;
 }
 
 /*  All a h1, h2, h3 elements with class (.ctp_subtitle) */
@@ -357,6 +358,25 @@ table.minimalistBlack tfoot td {
 }
 
 .ctp-btn:hover { opacity: 0.75 }
+
+.ctp-buttons {    
+    margin-left: 80%;
+}
+
+/*select options styling */
+select, input[type="number"]:hover,
+select, input[type="number"]:focus,
+select, input[type="number"]:active
+{
+  background: linear-gradient(#E9E2D1, #FFFFFF);
+  border-radius: 5px;
+}
+
+select {
+    height:  30px;
+    width: 130px;
+    
+}
 
 
 
