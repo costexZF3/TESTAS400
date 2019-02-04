@@ -2,8 +2,6 @@
 namespace Purchasing\ValueObject;
 
 use Zend\Db\Adapter\Adapter as MyAdapter;
-use Zend\Db\Sql\Sql;
-
 
 /**
  * Description of LostSale
@@ -53,6 +51,14 @@ class LostSale {
         $this->sqlStr = $this->getSqlStr();
         $this->runSql();
     }//constructor 
+    
+    /*
+     * getTimesQuoted()
+    */
+    
+    public function getTimesQuoted() {
+        return $this->timesQuote;
+    }
     
    /*
     * this method return the SqlString generatered by the constructor
