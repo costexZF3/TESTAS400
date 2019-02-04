@@ -15,6 +15,21 @@
     $lostSales = $this->lostsalelist;    
     $tableHeader = $this->tableHeader;
     $countItems = $this->countItems;
+    $timesquoted = $this->timesquoted;
+       
+    //prepering form
+    $form = $this->form;
+    
+    $form->get('num-tq')->setAttributes([
+        'class' => 'form-control',
+        'placeholder' => 'Enter time quote [10..150]'
+    ]);
+    
+    $form->get('submit')->setAttributes(['class'=>'btn btn-warning'])
+            ->setValue(' Submit ');
+
+    $form->prepare();
+    
  ?>  
  	 
 <script language="JavaScript">          
@@ -26,7 +41,7 @@
             case 'tq100plus' :                 
                 hideElement('tq50plus'); hideElement('tq30plus'); hideElement('tq10plus'); hideElement('tq5plus');                
                 
-                color = "#E6CAE6";
+                color = "#D1E9E1";
                 
                 //hide all items with class under tq50plus
                 showElement('tq100plus'); 
@@ -40,7 +55,7 @@
                 //hide all items with class under tq50plus
                 hideElement('tq30plus'); hideElement('tq10plus'); hideElement('tq5plus');
                 
-                color = "#ffff80"; 
+                color = "#DBF3EB"; 
                 
                 //Show elements with classes: tq100plus and tq50plus                
                 showElement('tq100plus'); showElement('tq50plus'); 
@@ -58,7 +73,7 @@
                 hideElement('tq10plus'); hideElement('tq5plus');
                 
                 /* background color for elements with class: tq30plus*/
-                color = "#CDCD6E";                 
+                color = "#E9E2D1";                 
                 
                 showElement('tq100plus'); showElement('tq50plus'); showElement('tq30plus'); 
                 
@@ -75,7 +90,7 @@
                 hideElement('tq5plus');
                 
                 /* background color for elements with class: tq10plus*/
-                color = "#CAE6E6";                 
+                color = "#DCDCDC";                 
                 
                 /* rendering elements */
                 showElement('tq100plus'); showElement('tq50plus'); showElement('tq30plus'); showElement('tq10plus'); 
@@ -117,67 +132,90 @@
             convertToExcel('LostSales','lost sales');
         });
          
-        /* hidding all Elements with less than 100 times quotes*/ 
-//        hideElement('tq50plus');
-//        hideElement('tq30plus');
-//        hideElement('tq10plus');
-//        hideElement('tq5plus');
-        filterTable('table_filtered');
-        //$('.table_filter').dataTable();
-        /* call a function which it  fills an array with items rendered on the screen */
-         //const LostSales = fillArray_partsLostSales();
-        }); 
+    filterTable('table_filtered');
+       
+    /* call a function which it  fills an array with items rendered on the screen */
+     //const LostSales = fillArray_partsLostSales();
+    }); 
 
 </script>
         
 <!-- HTML RENDER-->
 
 <!-- **************************************** FLASH MESSENGER RENDER ***************************************************--> 
-<?= $this->flashMessenger()->render('error', ['alert', 'alert-warning']); ?>
-<?= $this->flashMessenger()->render('success', ['alert', 'alert-success']); ?>
-<?= $this->flashMessenger()->render('info', ['alert', 'alert-info']); ?>
 
 <?php if ($specialAccess): ?>
-    <div class="ctp_title"> 
-       <h1> Quoted Items no Stock no Order ( LostSales ) </h1>
-    </div>   
+     
     <div class ="ctp-panel">
        <div class="ctp-panel-header">
             <h3 class="ctp_subtitle"> Tuning your Choice </h3>
        </div>    
         <!-- PANEL BODY -->
-        <div class = "row ctp-panel-body">          
-            <div class="col-md-2"> 
+        <div class = "row ctp-panel-body">  
+            <?=$this->form()->openTag($form); ?>
+                <div class="col-md-2"> 
+                    <div class="form-group ctp-subtitle">
+                        <p> <b>Times Quotes </b>[actual value]:<?=$timesquoted; ?> </span> </p>                    
+                        <div class=""> 
+                            <input type="hidden" name="oldtimesquoted" value="<?=$timesquoted;?>">
+
+                            <input onclick="timesQuote('tq10plus')" type="radio" name="timesquote" id="tqr10"  >
+                            <label for="tqr10"><span> 10+ </span></label>
+
+                            <input onclick="timesQuote('tq30plus')" type="radio" name="timesquote" id="tqr30" >
+                            <label for="tqr30"><span> 30+ </span></label>
+
+                            <input onclick="timesQuote('tq50plus')" type="radio" name="timesquote" id="tqr50">
+                            <label for="tqr50"><span> 50+ </span></label>
+
+                            <input onclick="timesQuote('tq100plus')"type="radio" name="timesquote" id="tqr100" checked="checked" >
+                            <label for="tqr100"><span> 100+ </span></label>
+                        </div>  
+                    </div>    
+                </div>     
+                <div class="form-group ">
+                    <div class="col-md-2">
+                       <?= $this->formLabel($form->get('num-tq')); ?>
+                       <?= $this->formElement($form->get('num-tq')); ?>
+                       <?= $this->formElementErrors($form->get('num-tq')); ?>                  
+                   </div>
+                </div>   
+            
+                <div class="form-group ">
+                    <div class="col-md-1">
+                       <?= $this->formLabel($form->get('sel-vndassigned')); ?>
+                       <?= $this->formElement($form->get('sel-vndassigned')); ?>
+                       <?= $this->formElementErrors($form->get('sel-vndassigned')); ?>                  
+                   </div>
+                </div>    
+                <div class="">                   
+                       <?= $this->formElement($form->get('csrf')); ?>
+                       <?= $this->formElementErrors($form->get('csrf')); ?>  
+                </div>    
+        
+                <!--boton submit-->    
+                <div class="col-md-2">
+                    <br>
+                    <?= $this->formElement($form->get('submit')); ?>                         
+                </div>
                 
-               
-                <p> Times Quotes[10+, 30+, 50+, 100+]: </p>
-                <form>
-                    <div class="alert alert-warning">                        
-                        <input onclick="timesQuote('tq10plus')" type="radio" name="timesquote" id="tqr10" required >
-                        <label for="tqr10"><span> 10+ </span></label>
-
-                        <input onclick="timesQuote('tq30plus')" type="radio" name="timesquote" id="tqr30" required>
-                        <label for="tqr30"><span> 30+ </span></label>
-
-                        <input onclick="timesQuote('tq50plus')" type="radio" name="timesquote" id="tqr50" required>
-                        <label for="tqr50"><span> 50+ </span></label>
-
-                        <input onclick="timesQuote('tq100plus')"type="radio" name="timesquote" id="tqr100" required>
-                        <label for="tqr100"><span> 100+ </span></label>
-                    </div>                
-                </form>
-            </div>            
+            <?=$this->form()->closeTag(); ?>
         </div>
-       <div class="row">
-            <div class="col-sm-offset-4 col-sm-8">
-                <input class="btn btn-info" id="convert" type="button" name="btnexcel" value="Convert to Excel">
-                <input class="btn btn-danger" id="topdf" type="button" name="btnpdf" value="Convert to PDF">
-                <input class="btn btn-success" id="towishlist" type="button" name="towishlist" value="Save to Wish List">
-            </div>
-        </div>
+      
        <br>
     </div>
-<h2>COUNT ITEMS: <?=$countItems?></h2>
-   <?= $tableHeader; ?>
+
+<div class="">    
+    <div class="row">
+        <div class="col-md-2"> <h3 class="ctp_subtitle">COUNT ITEMS: <?=$countItems?></h3></div>
+<!--         <div class="ctp_title"> <h1> Quoted Items no Stock no Order ( LostSales ) </h1></div> -->
+        <div class ="col-sm-offset-9 ctp-buttons">
+            <input class="btn btn-info" id="convert" type="button" name="btnexcel" value="Convert to Excel">
+            <input class="btn btn-danger" id="topdf" type="button" name="btnpdf" value="Convert to PDF">
+            <input class="btn btn-success" id="towishlist" type="button" name="towishlist" value="Save to Wish List">   
+        </div>    
+    </div> 
+</div>
+   <?=$tableHeader?>
 <?php endif; ?>
 
