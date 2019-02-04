@@ -45,8 +45,8 @@ const convertToExcel = (fileName, sheetName) =>{
      * @returns {[]}
      */
 const createArrayFromNodeList = ( nodeList )=> {
-    var myArrayFromNodeList = []; // empty at first  
-      for (var i = 0; i < nodeList.length; i++) {
+    let myArrayFromNodeList = []; // empty at first  
+      for (let i = 0; i < nodeList.length; i++) {
             myArrayFromNodeList.push(nodeList[i]); // ahhh, push it            
         }  
         
