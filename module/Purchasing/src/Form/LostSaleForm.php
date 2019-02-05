@@ -54,8 +54,7 @@ class LostSaleForm extends Form{
             'options' =>[                   //array of options
                 'label' => 'Times Quote'   //Text Label
             ],                     
-        ]);        
-        
+        ]);    
        
          // Add "status" field : tqvalues 
         $this->add([            
