@@ -14,7 +14,6 @@ namespace Purchasing\Form;
  */
 
 use Zend\Form\Form;
-use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\ArrayInput;
 use Zend\Validator;
@@ -67,7 +66,8 @@ class LostSaleForm extends Form{
                 'value_options' => [
                     1 => 'YES',
                     2 => 'NO',                                                         
-                ]
+                    3 => 'BOTH',                                                         
+                ],
             ],
         ]);
         
@@ -85,10 +85,10 @@ class LostSaleForm extends Form{
         
         // Add the Submit button
         $this->add([
-            'type'  => 'submit',
-            'name' => 'submit',
+                 'type'  => 'submit',
+                  'name' => 'submit',
             'attributes' => [                
-                'value' => 'Report'
+                 'value' => 'Report'
             ],
         ]);
         
@@ -117,11 +117,7 @@ class LostSaleForm extends Form{
 //                    ['name'=>'Between', 'options' => ['min'=>10, 'max'=>150]],                    
 //            ],            
        ]);
-       
-//       $inputFilter->add(
-//               
-//        );
-    }
+       }
     
     
 }//END CLASS
