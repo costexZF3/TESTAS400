@@ -374,11 +374,8 @@ select, input[type="number"]:active
 
 select {
     height:  30px;
-    width: 130px;
-    
+    width: 130px;    
 }
-
-
 
 .top-buffer {    
     margin-top:20px;
