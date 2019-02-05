@@ -67,7 +67,8 @@ class LostsaleController extends AbstractActionController
      //-- checking if the logged user has SPECIAL ACCESS: he/she would be an Prod. Specialist
         $especial = ($this->access('special.access'))?'TRUE':'FALSE';
        
-        $changeData = true;
+        $changeData = true;        
+        $vndAssignedOptionSelected = 1;
 
       //create LostSaleForm
         $form = new LostSaleForm();
@@ -75,7 +76,8 @@ class LostsaleController extends AbstractActionController
         //check if user has submitted the form
 
         if ($this->getRequest()->isPost()) {
-            //fill in the form with POST data        
+            
+            /* getting DATA from the FORM where times quotes was selected */        
             $data = $this->params()->fromPost();            
 //            
 //            $form->setData($data);
@@ -85,6 +87,12 @@ class LostsaleController extends AbstractActionController
 //                echo "valid data";  
 //            }
             $timesQuote = (int)$data['num-tq'];  //getting times quoted   
+            /* getting: vendors assigned option: 1, 2, 3 */
+            $vndAssignedOptionSelected = (int)$data['sel-vndassigned']; 
+            
+            /* assigning value seleted to the ListBox */
+            $form->get('sel-vndassigned')->setValue( $vndAssignedOptionSelected );
+           
             $changeData =  ($data['oldtimesquoted']!= $timesQuote)?? false;
             
             if ($changeData) {
@@ -94,15 +102,15 @@ class LostsaleController extends AbstractActionController
         } else {
            $msg = 'The shown data are based on the following criteria: TimesQuote: +100, Vendors Assigned: YES ';            
            //Initicial Value for TimesQuote 
-           $timesQuote = 100;  
-           
+           $timesQuote = 100;             
         }
          
        /* this method retrives all items and return a resultSet or data as HTML tableGrid */   
-       $LostSale = new LostSale( $this->conn, $timesQuote );
-       $tableHTML = $LostSale->getGridAsHtml();
+       $LostSale = new LostSale( $this->conn, $timesQuote, $vndAssignedOptionSelected );
+       $tableHTML = $LostSale->getGridAsHtml();     
        $countItems = $LostSale->getCountItems();
-       $timesQuote = $LostSale->getTimesQuoted(); 
+       $timesQuote = $LostSale->getTimesQuoted();
+      
        
        $this->layout()->setTemplate('layout/layout_Grid');
        return new ViewModel([
