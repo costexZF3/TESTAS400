@@ -40,13 +40,15 @@ class LostSale {
     /* filters */
     private $vendorAssigned = true;
     private $timesQuote= 0;
-        
+    private $both = false;
+            
     /* constructor */
-    public  function __construct( MyAdapter $adapter, $timesQuote = 100, $vendorAssigned = true ) {
+    public  function __construct( MyAdapter $adapter, $timesQuote = 100, $vndAssignedOptionSelected = 1 ) {
         /* injection adapter adapterection from LostSaleController*/
         $this->adapter = $adapter;
         $this->timesQuote = $timesQuote;
-        $this->vendorAssigned = $vendorAssigned;       
+        $this->vendorAssigned = ($vndAssignedOptionSelected==1 )?? false;  
+        $this->both = ( $vndAssignedOptionSelected==3 )?? false;
         
         $this->sqlStr = $this->getSqlStr();
         $this->runSql();
@@ -135,7 +137,7 @@ class LostSale {
     /*
      * runSql: run the query associated with the sqlStr 
      */
-    private function  runSql(){
+    private function  runSql() {
         try
         {
           $resultSet = $this->adapter->query( $this->sqlStr, MyAdapter::QUERY_MODE_EXECUTE );   
@@ -146,10 +148,11 @@ class LostSale {
         
         $this->dataSet = $resultSet;
         return $resultSet;
-    }
+    } /* END: runSql */
+    
     
     private function dataSetReady(){
-        return ($this->dataSet!=null)?true:false;
+        return ($this->dataSet!=null)??false;
     }
         
     /*
@@ -198,11 +201,12 @@ class LostSale {
     
     /* getting Vendor Name, Purchasing Agent Name */
     private function getVendorData( $vendorNumber ) { 
-        
-       $VendorData =['name'=>'',
-                     'pagent' =>''   
+       if (!$this->vendorAssigned and ($vendorNumber=="" || $vendorNumber=="000000")) { 
+       $VendorData =['name'=>'--',
+                     'pagent' =>'--'   
                     ]; 
-       
+          return $VendorData;           
+       }
        /* getting the Purchasing Agent's ID */ 
        $strSql = "SELECT VMNAME, VM#POY AS VENDN FROM VNMAS WHERE VMVNUM = ".$vendorNumber;
        try
@@ -290,10 +294,10 @@ class LostSale {
         $ProDevData = $this->getProdDev( trim( $item->IMPTN) );
 
 
-        $record = ['Part Number'       => ['value'=> $item->IMPTN, 'class'=>"partnumber", 'id'=>''],
-                    'Description'       => ['value'=> $item->IMDSC, 'class'=>"description", 'id'=>''],
-                    'Description 2'     => ['value'=> $item->IMDS2, 'class'=>"description", 'id'=>''],
-                    'Description 3'     => ['value'=> $item->IMDS3, 'class'=>"description", 'id'=>''],
+        $record = [ 'Part Number'       => ['value'=> $item->IMPTN,        'class'=>"partnumber", 'id'=>''],
+                    'Description'       => ['value'=> $item->IMDSC,       'class'=>"description", 'id'=>''],
+                    'Description 2'     => ['value'=> $item->IMDS2,       'class'=>"description", 'id'=>''],
+                    'Description 3'     => ['value'=> $item->IMDS3,       'class'=>"description", 'id'=>''],
                     'Qty Quote'         => ['value'=>($item->TQUOTE)??0,  'class'=>'', 'id'=>''],
                     'Times Quote'       => ['value'=>($item->TIMESQ)??0,  'class'=>"timesq", 'id'=> $tq],
                     'Custs. Quote'      => ['value'=>($item->NCUS)??0,    'class'=>'', 'id'=>''],           
@@ -344,9 +348,8 @@ class LostSale {
      */    
     public function getGridAsHtml(){
         //checking if the method: runSql() was invoked before...
-        $ranSQLQuery = self::dataSetReady();
-        
-        if (!$ranSQLQuery) { return '';}      
+             
+        if (!$this->dataSetReady()) { return '';}      
         
         /*------------ creating table with all data from dataSet ----------------------------
          *  TABLE INITIAL TAG 
@@ -355,8 +358,7 @@ class LostSale {
         
             /*********** generating each column label dynamically *****************/
             foreach ($this->columnHeaders as $field) {           
-                $tableHeader.='<th>'.$field.'</th>';            
-                
+                $tableHeader.='<th>'.$field.'</th>';    
             }
 
             /* concatening  header */
@@ -369,7 +371,10 @@ class LostSale {
             /************* dynamic body **********************/        
             foreach ($this->dataSet as $item) { 
                 //checking is there is vendorAssigned
-                if ($this->vendorAssigned and (trim($item->VENDOR)==="" || trim($item->VENDOR)==="000000" )){ continue; } 
+                if ($this->vendorAssigned and (trim($item->VENDOR)==="" || trim($item->VENDOR)==="000000" )){ continue; }
+                if (!$this->both ) {
+                  if (!$this->vendorAssigned and (trim($item->VENDOR)!='' and trim($item->VENDOR)!="000000")) { continue;}                  
+                }
 
                 /*
                  *  retriving the className added to each <tr> element 
@@ -377,7 +382,9 @@ class LostSale {
                  */
                 $className = $this->getClassNameForTQ( $item->TIMESQ );
 
-                /* retriving a ROW */
+                /* 
+                 * Retriving a ROW... 
+                 */
                 $row = $this->getRowArray( $item, $iteration );
 
                 /* conver row to HTML: $row  */
