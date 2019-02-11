@@ -19,6 +19,7 @@
             ->prependStylesheet($this->basePath('css/bootstrap.min.css'))
             ->prependStylesheet($this->basePath('css/style.css'))
              ->prependStylesheet( $this->basePath('DataTables-1.10.18/css/jquery.dataTables.css'))
+//             ->prependStylesheet( $this->basePath('/css/materialize.min.css'))
         ?>
        
        <!-------------------------------------------------------------------------------------------- 
@@ -37,6 +38,7 @@
             ->prependFile($this->basePath('ctpJS/ctp_functionsJS.js'))  
             ->prependFile($this->basePath('js/bootstrap.js'))    
             ->prependFile($this->basePath('js/jquery-2.2.4.min.js'))  //needed for menu
+//            ->prependFile($this->basePath('js/materialize.min.js'))  
            // ->prependFile('https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')     
         ?>
         
@@ -67,10 +69,10 @@
             </div>
         </div> 
 
-       <!---------------------------------------- NAVIGATION BAR ---------------------------------------------->
-        <div class="navbar">
+       <!-- ************************************** NAVIGATION BAR **************************************-->
+        <div class="navbar sticky">
             <div class="container-fluid"> 
-                <div class="row">
+                <div class="row ">
                     <!-- Menu -->
                     <div class="col-md-12">                    
                         <!-- Navigation bar -->
@@ -90,7 +92,7 @@
             </div>  
        </div>
     
-        <!--------------------------------  CONTENT TO BE RENDER ----------------------------------------->
+        <!-- CONTENT TO BE RENDER -->
         <div class="container-fluid">       
             <div class="row">
                 <div class="ctp-content">
