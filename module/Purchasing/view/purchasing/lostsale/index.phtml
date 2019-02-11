@@ -139,44 +139,41 @@
     
     const columsToHide = (tempCol.length!==0)? tempCol:[];
     
-   
-    
     console.log( columsToHide );
     
     //Initial Objet to config my table_filtered
-    const initialConfig = {
-        
-                            "columnDefs" : [
-                                        {
-                                            "targets": columsToHide,
-                                            "visible": false,
-                                            "searchable": false
-                                        }                                      
-                                    ],
-                                    
-                            "lengthMenu" :  [ [10, 25, 50, 100,  -1], 
-                                              [10, 25, 50, 100, "All"]
-                                            ],
-                             initComplete: function () {
-                                            this.api().columns().every( function () {
-                                                var column = this;
-                                                var select = $('<select><option value=""></option></select>')
-                                                    .appendTo( $(column.footer()).empty() )
-                                                    .on( 'change', function () {
-                                                        var val = $.fn.dataTable.util.escapeRegex(
-                                                            $(this).val()
-                                                        );
-                                 
-                                                        column
-                                                            .search( val ? '^'+val+'$' : '', true, false )
-                                                            .draw();
-                                                    } );
-                                 
-                                                column.data().unique().sort().each( function ( d, j ) {
-                                                    select.append( '<option value="'+d+'">'+d+'</option>' );
-                                                } );
-                                            } );
-                                        } //end property InitComplete                 
+    const initialConfig = {        
+        "columnDefs" : [
+                    {
+                        "targets": columsToHide,
+                        "visible": false,
+                        "searchable": false
+                    }                                      
+                ],
+
+        "lengthMenu" :  [ [10, 25, 50, 100,  -1], 
+                          [10, 25, 50, 100, "All"]
+                        ],
+        initComplete: function () {
+                        this.api().columns().every( function () {
+                            var column = this;
+                            var select = $('<select><option value=""></option></select>')
+                                .appendTo( $(column.footer()).empty() )
+                                .on( 'change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                    );
+
+                                    column
+                                        .search( val ? '^'+val+'$' : '', true, false )
+                                        .draw();
+                                } );
+
+                            column.data().unique().sort().each( function ( d, j ) {
+                                select.append( '<option value="'+d+'">'+d+'</option>' );
+                            } );
+                        } );
+        } //end property InitComplete                 
     };
     
    /* filterTable:  
