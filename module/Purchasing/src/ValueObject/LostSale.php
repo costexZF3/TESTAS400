@@ -202,10 +202,8 @@ class LostSale {
     /* getting Vendor Name, Purchasing Agent Name */
     private function getVendorData( $vendorNumber ) { 
        if (!$this->vendorAssigned and ($vendorNumber=="" || $vendorNumber=="000000")) { 
-       $VendorData =['name'=>'--',
-                     'pagent' =>'--'   
-                    ]; 
-          return $VendorData;           
+          $vendorData =['name'=>'--', 'pagent' =>'--' ]; 
+          return $vendorData;           
        }
        /* getting the Purchasing Agent's ID */ 
        $strSql = "SELECT VMNAME, VM#POY AS VENDN FROM VNMAS WHERE VMVNUM = ".$vendorNumber;
@@ -226,14 +224,14 @@ class LostSale {
          $RS_PAgentName = $this->adapter->query( $strSqlCNTRLL, MyAdapter::QUERY_MODE_EXECUTE );
          
          $resultAsArray1 = $RS_PAgentName->toArray(); 
-         $VendorData['name'] = $resultAsArray[0]['VMNAME'];  /* vendor name */ 
-         $VendorData['pagent'] = $resultAsArray1[0]['CNTDE1'];  /* purchasing Agent's Name */
+         $vendorData['name'] = $resultAsArray[0]['VMNAME'];  /* vendor name */ 
+         $vendorData['pagent'] = $resultAsArray1[0]['CNTDE1'];  /* purchasing Agent's Name */
         }
         catch (Exception $e){
            echo "Caught exception: ", $e->getMessage(), ""; 
         }
         
-        return $VendorData;
+        return $vendorData;
     }//End: getVendorData()
     
     //getWishListValue(): it returns It this part exist in the wish list      
@@ -242,8 +240,8 @@ class LostSale {
        $strSql = "SELECT 'X' WL  From PRDWL1 WHERE PRWPTN = '".$PartNumber."'";
        try
         {
-          $resultSet = $this->adapter->query( $strSql, MyAdapter::QUERY_MODE_EXECUTE ); 
-          $resultSet = $resultSet->toArray();
+          $resultSet = $this->adapter->query( $strSql, MyAdapter::QUERY_MODE_EXECUTE )->toArray(); 
+          //$resultSet = $resultSet->toArray();
           /* $isInWL: this returns X if the PartNumber is in the WishList File: PRDWL1 */
           $isInWL = ($resultSet[0]['WL']) ?? '--';  // if it's in WL return X else returns --      
         }
@@ -264,9 +262,9 @@ class LostSale {
        $strSql = "SELECT prhcod, prdsts FROM PRDVLD4 where prdptn = '".$PartNumber."'";
        try
         {
-         $resultSet = $this->adapter->query( $strSql, MyAdapter::QUERY_MODE_EXECUTE );         
+         $resultSet = $this->adapter->query( $strSql, MyAdapter::QUERY_MODE_EXECUTE )->toArray();         
          
-         $resultSet = $resultSet->toArray();
+//         $resultSet = $resultSet->toArray();
          $ProdDevData['isdev'] = ($resultSet[0]['PRHCOD'])?? "--";
          $ProdDevData['status'] = ($resultSet[0]['PRDSTS'])?? "--";
         }
@@ -285,7 +283,7 @@ class LostSale {
         /* the method getVendorName()
          * -it returns the Purchasing Agent's name associated with a vendor. 
          */            
-        $VendorData = $this->getVendorData( $item->VENDOR );
+        $vendorData = $this->getVendorData( $item->VENDOR );
 
         /* taking Wish List values */
         $WishList = $this->getWishListValue( trim($item->IMPTN) );
@@ -304,8 +302,8 @@ class LostSale {
                     'Sales Last12'      => ['value'=>($item->QTYSOLD)??0, 'class'=>'', 'id'=>'', 'title'=>'Qty Sold Last 12 Month'],            
                     'VND No'            => ['value'=>($item->VENDOR)??'N/A', 'class'=>'', 'id'=>'', 'title'=>'Vendor Number'], 
 
-                    'Vendor Name'       => ['value'=> $VendorData['name'],   'class'=>"description", 'id'=>''], 
-                    'Pur. Agent'        => ['value' => $VendorData['pagent'], 'class'=>"description", 'id'=>''],             
+                    'Vendor Name'       => ['value'=> $vendorData['name'],   'class'=>"description", 'id'=>''], 
+                    'Pur. Agent'        => ['value' => $vendorData['pagent'], 'class'=>"description", 'id'=>''],             
                     'Caterpillar (P/L)' => ['value'=> number_format($item->IMPRC,2)?? 0, 'class'=>"money", 'id'=>''],            
                     'Wish List'         => ['value'=> $WishList,               'class' => "", 'id'=>''],
                     'Dev.Proj'          => ['value'=> $ProDevData['isdev'],          'class' => "", 'id'=>'', 'title'=>'Cod. Dev. Proj'],
