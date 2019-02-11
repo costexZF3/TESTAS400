@@ -14,10 +14,17 @@
     src: url(../fonts/Amaranth-Medium.ttf);     
 }
  
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto'), local('Roboto-Regular'), url(https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu72xKOzY.woff2) format('woff2');  
+}
+
 
 /* CLEANING ALL PARAMETERS AND POSSIBLE VALUES OF THE HTML ELEMENTS */
 
-    html, body, div, span, applet, object, iframe,
+html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
 del, dfn, em, img, ins, kbd, q, s, samp,
@@ -42,6 +49,53 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+
+/* RADIO BUTTONS */
+
+.form-radio
+{
+     -webkit-appearance: none;
+     -moz-appearance: none;
+     appearance: none;
+     display: inline-block;
+     position: relative;
+     background-color: #F8CB58;
+     color: #DCC96D;
+     top: 10px;
+     height: 30px;
+     width: 30px;
+     border: 0;
+     border-radius: 50px;
+     cursor: pointer;     
+     margin-right: 7px;
+     outline: none;
+}
+.form-radio:checked::before
+{
+     position: absolute;
+     font: 13px/1 'Open Sans', sans-serif;
+     left: 11px;
+     top: 7px;
+     content: '\02143';
+     transform: rotate(40deg);
+}
+.form-radio:hover
+{
+     background-color: #DBE968;
+}
+.form-radio:checked
+{
+     background-color: #F3EA6C;
+     border: none;
+}
+
+label1
+{
+     font: 300 16px/1.7 'Open Sans', sans-serif;
+     color: #666;
+     cursor: pointer;
+} 
+
 
 /* the main content inside pages with grids */
 .main-content {
@@ -84,6 +138,7 @@ body {
     margin-bottom: 10px;   
     background: rgba(250, 193, 96, 0.30);     
     border-radius: 15px; 
+    height: auto;
 }
 
 /* select all elements h3 inside  elements with class: .box-buttons: */
@@ -92,12 +147,13 @@ body {
     border-radius: 15px 15px 0 0;
 }
 .ctp-panel-body{
-    padding: 10px 10px;
+    padding: 15px 15px;
+    
+    height: auto;
 }
 
 .ctp-panel-body > p  {
-    font-family: MyOswaldRegular, arial, helvetica;
-    
+    font-family: MyOswaldRegular, arial, helvetica;    
 }
 
 /* grid */
@@ -193,7 +249,7 @@ table {
 
 /* ctp_subtitle */
 .ctp_subtitle, ctp_title {
-    margin: 0px 0px 20px 0px;
+    margin: 0px 0px 5px 0px;
     justify-content: left;
 }
 
@@ -216,7 +272,7 @@ h3.ctp_subtitle {
     font-family: MyOswald, MyOswaldMedium, Helvetica, sans-serif;       
     font-stretch: expanded;
     color: #57a900;     
-    margin: 0px 0px 20px 10px;       
+    margin: 0px 0px 5px 10px;       
     text-transform: capitalize;
 }
 
@@ -230,9 +286,7 @@ h3.ctp_subtitle {
     display: block;    
 }
 
-.ctp-content{
-    margin: 10px 30px;
-}
+
   
 /*** hidding all items with less than 100 TIMES QUOTE ***/ 
 [class~=tq10plus111]{
@@ -246,7 +300,8 @@ h3.ctp_subtitle {
     font-family: Verdana, Arial, Helvetica, sans-serif;	
 }
 
-.table_ctp thead, tfoot {    
+.table_ctp thead, tfoot {   
+    font-family: Tahoma, Roboto, Arial;
     font-size: 12px;
     text-align: left;   
     padding: 2px 2px;
@@ -257,12 +312,12 @@ td {
     padding: 1px 1px;
     margin: 1px 1px;
 }
+
 .table_ctp > tbody{    	
     font-size : 10px;
     padding: 1px 1px;
     margin: 1px 1px;
 }
-
 
 /* highlighter columns */
 .table_ctp .description,.partnumber {    	    
@@ -363,6 +418,19 @@ table.minimalistBlack tfoot td {
     margin-left: 80%;
 }
 
+.ctp-content{
+    margin: 8px 10px;
+}
+
+.sticky
+{
+     position: sticky;
+     position: -webkit-sticky;
+     height: 140px;
+     top: 0;
+}
+
+
 /*select options styling */
 select, input[type="number"]:hover,
 select, input[type="number"]:focus,
@@ -372,19 +440,31 @@ select, input[type="number"]:active
   border-radius: 5px;
 }
 
+
 select {
     height:  30px;
     width: 130px;    
 }
 
+#tqId {
+   width:  130px;
+}
+
+
+#table_toexcel_length, input[type="search"] {
+    font-family: Roboto, MyOswald;
+    font-stretch: ultra-expanded;
+}
 .top-buffer {    
     margin-top:20px;
     margin-bottom: 20px;
 }
+
 .ctp-span {
     color: #57a900;
     font-size: 15px;
 }
+
 .ctp-green {
     color: #68b604;
 }
@@ -398,18 +478,18 @@ select {
     color: white;
 }
 .ctp-red {
-	color: #C70039;
+    color: #C70039;
 }
 
 .ctp-blue {
-	color: #0338C6;
+    color: #0338C6;
 }
 .ctp-role {
-	color: #F39C12;
+    color: #F39C12;
 }
 
 .ctp-black {
-	color: #000000;
+    color: #000000;
 }
 
 h1, h2, h3 {
@@ -431,7 +511,7 @@ h1, h2, h3 {
   background-image: -webkit-linear-gradient(top, #70d900, #57a900);
   background-image: -o-linear-gradient(top, #70d900, #57a900);
   background-image: linear-gradient(top, #70d900, #57a900);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#70d900', endColorstr='#57a900', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#70d900', endColorstr='#57a900', GradientType=0 );
 }
 
 .btn-success:hover,
