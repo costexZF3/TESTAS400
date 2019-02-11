@@ -209,8 +209,8 @@ class LostSale {
        $strSql = "SELECT VMNAME, VM#POY AS VENDN FROM VNMAS WHERE VMVNUM = ".$vendorNumber;
        try
         {
-         $resultSet = $this->adapter->query( $strSql, MyAdapter::QUERY_MODE_EXECUTE );   
-         $resultAsArray = $resultSet->toArray();
+         $resultSet = $this->adapter->query( $strSql, MyAdapter::QUERY_MODE_EXECUTE )->toArray();   
+         $resultAsArray = $resultSet;
          
          $PaID = $resultAsArray[0]['VENDN'];
          
@@ -221,9 +221,9 @@ class LostSale {
                   
          $PAgentToStr = $this->convertPAId($PaID);
          $strSqlCNTRLL = " SELECT CNTDE1 FROM CNTRLL WHERE CNT01 ='216' AND CNT03 = '".$PAgentToStr."'";
-         $RS_PAgentName = $this->adapter->query( $strSqlCNTRLL, MyAdapter::QUERY_MODE_EXECUTE );
+         $RS_PAgentName = $this->adapter->query( $strSqlCNTRLL, MyAdapter::QUERY_MODE_EXECUTE )->toArray();
          
-         $resultAsArray1 = $RS_PAgentName->toArray(); 
+         $resultAsArray1 = $RS_PAgentName; 
          $vendorData['name'] = $resultAsArray[0]['VMNAME'];  /* vendor name */ 
          $vendorData['pagent'] = $resultAsArray1[0]['CNTDE1'];  /* purchasing Agent's Name */
         }
