@@ -111,7 +111,7 @@ class LostSaleForm extends Form{
             ],
             
 //            'validators' => [
-//                   // ['name'=>'GreaterThan', 'options'=>['min'=>0]],
+//                    ['name'=>'GreaterThan', 'options'=>['min'=>0]],
 //                    ['name'=>'NotEmpty'],
 //                    ['name'=>'Between', 'options' => ['min'=>10, 'max'=>150]],                    
 //            ],            
