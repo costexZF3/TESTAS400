@@ -1,4 +1,8 @@
 <?= $this->doctype() ?>
+<?php
+             //----- getting PATH for banner.png inside the document root ---------------
+    $bannerPath = $this->basePath().'/img/banner.png'; 
+?>
 
 <html lang="en">
     <head>
@@ -12,21 +16,14 @@
 
         <!-- CSS FILES -->
         <?= $this->headLink([
-                      'rel' => 'shortcut icon', 
+                      'rel'  => 'shortcut icon', 
                       'type' => 'image/vnd.microsoft.icon', 
                       'href' => $this->basePath().'/img/logo.png']
                   )->prependStylesheet($this->basePath('css/style.css'))
                    ->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
                    ->prependStylesheet($this->basePath('css/bootstrap.min.css'))                   
         ?>
-        
-         <!-------------------------------------------------------------------------------------------- 
-           Link remote defined by Kristofer. 
-           - All the icons in the icon libraries below, are scalable vector icons that can be customized with
-             CSS (size, color, shadow, etc.)
-        
-        
-        -------------------------------------------------------------------------------------------------->
+
         <?= $this->headLink([
                       'rel' => 'stylesheet',                        
                       'href' => 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css']
@@ -39,10 +36,7 @@
             ->prependFile($this->basePath('js/jquery-2.2.4.min.js'))
         ?>
         
-        <?php
-             //----- getting PATH for banner.png inside the document root ---------------
-             $bannerPath = $this->basePath().'/img/banner.png'; 
-        ?>
+        
         
         
     </head>
