@@ -13,7 +13,7 @@
     $user = $this->user;
     $specialAccess = $this->specialAccess;
     $lostSales = $this->lostsalelist;    
-    $tableHeader = $this->tableHeader;
+    $table = $this->tableHeader;
     $countItems = $this->countItems;
     $timesquoted = $this->timesquoted;
     $columnsToHide = $this->columnsToHide;
@@ -55,7 +55,7 @@
                 
                 /* changing color to Elements for being redered */
                 NodeList['tq100plus'] = queryAllElement('.tq100plus');
-                NodeList['tq100plus'].forEach(item=>{ changeBGColor(item, color);});                
+                NodeList['tq100plus'].forEach( item =>{ changeBGColor(item, color);});                
             break;
             
             case 'tq50plus' :                 
@@ -70,8 +70,8 @@
                 NodeList['tq50plus'] = queryAllElement('.tq50plus');
                 
                 //change background color                
-                 NodeList['tq50plus'].forEach(item=>{ changeBGColor(item, color);});
-                 NodeList['tq100plus'].forEach(item=>{ changeBGColor(item, color);});                  
+                 NodeList['tq50plus'].forEach( item => { changeBGColor(item, color);});
+                 NodeList['tq100plus'].forEach( item => { changeBGColor(item, color);});                  
             break;
             
             case 'tq30plus' :
@@ -144,12 +144,12 @@
     //Initial Objet to config my table_filtered
     const initialConfig = {        
         "columnDefs" : [
-                    {
-                        "targets": columsToHide,
-                        "visible": false,
-                        "searchable": false
-                    }                                      
-                ],
+                        {
+                            "targets": columsToHide,
+                            "visible": false,
+                            "searchable": false
+                        }                                      
+                      ],
 
         "lengthMenu" :  [ [10, 25, 50, 100,  -1], 
                           [10, 25, 50, 100, "All"]
@@ -198,56 +198,51 @@
 <?=$this->form()->openTag($form); ?>
     <div class ="ctp-panel">
        <div class="ctp-panel-header">
-            <h3 class="ctp_subtitle"> Filters </h3>
+         <h3 class="ctp_subtitle"> Filters </h3>
        </div>    
         <!-- PANEL BODY -->
-        <div class = "row ctp-panel-body">  
-            
-                <div class="col-md-2">                     
-                    <p class=" ctp-subtitle"> <b>Times Quotes </b>[actual value]:<span class=""><?=$timesquoted; ?> </span> </p>                    
-                    <div class="form-group"> 
-                        <input type="hidden" name="oldtimesquoted" value="<?=$timesquoted;?>">
+        <div class = "row ctp-panel-body">              
+            <div class="col-md-2">                     
+                <p class=" ctp-subtitle"> <b>Times Quotes </b>[actual value]:<span class=""><?=$timesquoted; ?> </span> </p>                    
+                <div class="form-group"> 
+                    <input type="hidden" name="oldtimesquoted" value="<?=$timesquoted;?>">
 
-                        <input class="form-radio"onclick="timesQuote('tq10plus')" type="radio" name="timesquote" id="tqr10"  >
-                        <label for="tqr10"><span> 10+ </span></label> 
+                    <input class="form-radio"onclick="timesQuote('tq10plus')" type="radio" name="timesquote" id="tqr10"  >
+                    <label for="tqr10"><span> 10+ </span></label> 
 
-                        <input class="form-radio"onclick="timesQuote('tq30plus')" type="radio" name="timesquote" id="tqr30" >
-                        <label  for="tqr30"><span> 30+ </span></label>
+                    <input class="form-radio"onclick="timesQuote('tq30plus')" type="radio" name="timesquote" id="tqr30" >
+                    <label  for="tqr30"><span> 30+ </span></label>
 
-                        <input class="form-radio" onclick="timesQuote('tq50plus')" type="radio" name="timesquote" id="tqr50">
-                        <label for="tqr50"><span> 50+ </span></label> 
+                    <input class="form-radio" onclick="timesQuote('tq50plus')" type="radio" name="timesquote" id="tqr50">
+                    <label for="tqr50"><span> 50+ </span></label> 
 
-                        <input  class="form-radio" onclick="timesQuote('tq100plus')"type="radio" name="timesquote" id="tqr100" checked="checked" >
-                        <label for="tqr100"><span> 100+ </span></label>
-                    </div>                        
-                </div>                
-            
-                <div class="col-md-8">
-                    <!--times quote : rendering--> 
-                    <div class="form-group">
-                        <?= $this->formLabel($form->get('num-tq')); ?>
-                        <?= $this->formElement($form->get('num-tq')); ?>
-                        <?= $this->formElementErrors($form->get('num-tq')); ?> 
-                   </div>
-                
-                    <!--dropdownlist: vendors assigned or not: or both-->
-                    <div class="form-group">                        
-                        <?= $this->formLabel($form->get('sel-vndassigned')); ?> <br>
-                        <?= $this->formElement($form->get('sel-vndassigned')); ?>
-                        <?= $this->formElementErrors($form->get('sel-vndassigned')); ?> 
-                    </div>
-                </div>    
+                    <input  class="form-radio" onclick="timesQuote('tq100plus')"type="radio" name="timesquote" id="tqr100" checked="checked" >
+                    <label for="tqr100"><span> 100+ </span></label>
+                </div>                        
+            </div>                
+
+            <div class="col-md-8">
+                <!--times quote : rendering--> 
+                <div class="form-group">
+                    <?= $this->formLabel($form->get('num-tq')); ?>
+                    <?= $this->formElement($form->get('num-tq')); ?>
+                    <?= $this->formElementErrors($form->get('num-tq')); ?> 
+               </div>
+
+                <!--dropdownlist: vendors assigned or not: or both-->
+                <div class="form-group">                        
+                    <?= $this->formLabel($form->get('sel-vndassigned')); ?> <br>
+                    <?= $this->formElement($form->get('sel-vndassigned')); ?>
+                    <?= $this->formElementErrors($form->get('sel-vndassigned')); ?> 
+                </div>
+            </div>    
                
             <!--boton submit-->    
-                <div class="col-md-2">
-                    <br>
-<!--                 $this->formElement($form->get('csrf')); ?>
-                     $this->formElementErrors($form->get('csrf')); ?>-->
-                    <?= $this->formHidden($form->get('csrf')); ?>
-                                            
-                </div>
-        </div>
-      
+            <div class="col-md-2">
+                <br>
+                <?= $this->formHidden($form->get('csrf')); ?>                                            
+            </div>
+        </div>      
        <br>
     </div>
 
@@ -263,8 +258,10 @@
             <input class="btn btn-success" id="towishlist" type="button" name="towishlist" value="Save to Wish List">   
         </div>    
     </div> 
-<?=$this->form()->closeTag(); ?>
-
-   <?=$tableHeader?>
+<?=$this->form()->closeTag(); 
+            ?>
+    <div class="ctp-grid">
+       <?=$table?>
+    </div>    
 <?php endif; ?>
 
