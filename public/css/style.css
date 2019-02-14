@@ -415,11 +415,13 @@ table.minimalistBlack tfoot td {
 .ctp-btn:hover { opacity: 0.75 }
 
 .ctp-buttons {    
-    margin-left: 80%;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .ctp-content{
-    margin: 8px 10px;   
+    margin: 8px 10px;       
+        
 }
 
 .sticky {
@@ -472,7 +474,7 @@ input[type="password"] {
 }
 
 .ctp-grid {
-   width: 95%;
+   width: 100%;
    
 }
 
