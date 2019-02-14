@@ -139,7 +139,7 @@
     
     const columsToHide = (tempCol.length!==0)? tempCol:[];
     
-    console.log( columsToHide );
+//    console.log( columsToHide );
     
     //Initial Objet to config my table_filtered
     const initialConfig = {        
@@ -154,34 +154,109 @@
         "lengthMenu" :  [ [10, 25, 50, 100,  -1], 
                           [10, 25, 50, 100, "All"]
                         ],
-        initComplete: function () {
-                        this.api().columns().every( function () {
-                            var column = this;
-                            var select = $('<select><option value=""></option></select>')
-                                .appendTo( $(column.footer()).empty() )
-                                .on( 'change', function () {
-                                    var val = $.fn.dataTable.util.escapeRegex(
-                                        $(this).val()
-                                    );
-
-                                    column
-                                        .search( val ? '^'+val+'$' : '', true, false )
-                                        .draw();
-                                } );
-
-                            column.data().unique().sort().each( function ( d, j ) {
-                                select.append( '<option value="'+d+'">'+d+'</option>' );
-                            } );
-                        } );
-        } //end property InitComplete                 
+                        
+       dom: '<"ctp-buttons"l Bfr<t>ip>',
+       
+            /* see: exportOptions Object. This is an object. It help you to set up all concerning to BUTTONS */
+            buttons: [ 
+                    /* obj: BUTTON TO EXCEL */
+                        { 
+                            extend: 'excel', 
+                            className: 'btn btn-info', 
+                            title: 'lostsales-EXCEL'+'_2_07_2019', 
+                            titleAttr : 'Convert to EXCEL',
+                            text: 'E<u>X</u>CEL',                           
+                            key: {
+                                  key:'x',
+                                  altKey: true
+                                }
+                        },
+                        
+                    /* OBJ: BUTTON to PDF */
+                        {
+                            extend: 'pdf',   
+                            className: 'btn btn-warning', 
+                            title: 'lostsales-pdf'+'_2_07_2019',
+                            titleAttr : 'Convert to PDF',
+                            orientation: 'landscape',  //it's portrait by default 
+                            pageSize: 'TABLOID', //this can be A3, A4, A5, LEGAL, LETTER or TABLOID  : all are STRINGS 
+                            text: '<u>P</u>DF',                           
+                            key: {
+                                  key:'p',
+                                  altKey: true
+                                }
+                            
+                        },   
+                    /* OBJ: BUTTON to COPY to clicboard */
+                        { 
+                            extend: 'copy', 
+                            titleAttr: 'Alt+C: copy to Clickboard',
+                            className: 'btn btn-danger', 
+                            text: '<u>C</u>opy',                           
+                            key: {
+                                  key:'c',
+                                  altKey: true
+                                }
+                        }, 
+                  
+                        /* How do I can add a new button and create something associated to this 
+                         *     - e : ( object ): Event object that triggered the event
+                         *     - dt: ( DataTables.Api ): A DataTables API instance for the host DataTable
+                         *    -node: (jQuery): jQuery instance for the button nod that was clicked on
+                         *  -config: ( object ): The button's configuration object
+                         */
+                        
+                        {
+                            text        : 'Export to Wish List', 
+                            className   : 'btn btn-danger',
+                            action      : function ( e, dt, node, config ) {
+                                alert('Activated!');
+                                this.disable(); //disable button
+                            }                            
+                        }                                           
+                     ]
+//        initComplete: function () {
+//                        this.api().columns().every( function () {
+//                            var column = this;
+//                            var select = $('<select><option value=""></option></select>')
+//                                .appendTo( $(column.footer()).empty() )
+//                                .on( 'change', function () {
+//                                    var val = $.fn.dataTable.util.escapeRegex(
+//                                        $(this).val()
+//                                    );
+//
+//                                    column
+//                                        .search( val ? '^'+val+'$' : '', true, false )
+//                                        .draw();
+//                                } );
+//
+//                            column.data().unique().sort().each( function ( d, j ) {
+//                                select.append( '<option value="'+d+'">'+d+'</option>' );
+//                            } );
+//                        } );
+//        } //end property InitComplete                 
     };
-    
+  
+
+//    "processing" : true 
    /* filterTable:  
    *  - param1: name of the table.
    *  - param2: InitialConfig is an OBJECT with the configuration  
    *  
    */ 
-    var table = filterTable('table_filtered', initialConfig );
+    var tables = filterTable('table_filtered', initialConfig );
+    
+    /* apply an order to the second table in the API's context */
+//    tables.table(1).order().draw();
+    
+    /* the line below get the current page and number of records in the table */
+//    var info = table.page.info();
+    
+//    info.pages
+//    info.start
+//    info.end
+//    info.length
+//    info.recordsTotal
        
     /* call a function which it  fills an array with items rendered on the screen */
      //const LostSales = fillArray_partsLostSales();
@@ -254,8 +329,8 @@
             <?= $this->formElement($form->get('submit')); ?> 
             
             <input class="btn btn-info" id="convert" type="button" name="btnexcel" value="Convert to Excel">
-            <input class="btn btn-danger" id="topdf" type="button" name="btnpdf" value="Convert to PDF">
-            <input class="btn btn-success" id="towishlist" type="button" name="towishlist" value="Save to Wish List">   
+<!--            <input class="btn btn-danger" id="topdf" type="button" name="btnpdf" value="Convert to PDF">-->
+            <!--<input class="btn btn-success" id="towishlist" type="button" name="towishlist" value="Save to Wish List">-->   
         </div>    
     </div> 
 <?=$this->form()->closeTag(); 
