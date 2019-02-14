@@ -20,7 +20,7 @@ class LostSale {
      * array with all COLUMN LABELS that will be rendered
      */
     private $columnHeaders = ['Part Number', 'Description', 'Description 2','Description 3', 'Qty Quote', 'Times Quote','Custs. Quote',
-                              'Sales Last12', 'VND No', 'Vendor Name','Pur. Agent', 'Caterpillar (P/L)', 'Wish List', 
+                              'Sales Last12', 'VND No', 'Vendor Name','Pur. Agent', 'List Price', 'Wish List', 
                               'Dev.Proj', 'Dev.Status', 'Loc.20', 'OEM VND', 'Major', 'Category', 'Minor', 'Description'];
     /*
      * rows: this array saves all <tr> elements generated running sql query..
@@ -263,8 +263,7 @@ class LostSale {
        try
         {
          $resultSet = $this->adapter->query( $strSql, MyAdapter::QUERY_MODE_EXECUTE )->toArray();         
-         
-//         $resultSet = $resultSet->toArray();
+
          $ProdDevData['isdev'] = ($resultSet[0]['PRHCOD'])?? "--";
          $ProdDevData['status'] = ($resultSet[0]['PRDSTS'])?? "--";
         }
@@ -274,8 +273,7 @@ class LostSale {
         
         return $ProdDevData; 
     }//End: product development 
-    
-    
+        
     private function getRowArray( $item, $iteration ){
        /******************* creating rows *********************************/
         $tq = "tq".$iteration;
@@ -289,7 +287,7 @@ class LostSale {
         $WishList = $this->getWishListValue( trim($item->IMPTN) );
 
         /*Looking for Product Development Data */
-        $ProDevData = $this->getProdDev( trim( $item->IMPTN) );
+        $ProDevData = $this->getProdDev( trim( $item->IMPTN ) );
 
 
         $record = [ 'Part Number'       => ['value'=> $item->IMPTN,        'class'=>"partnumber", 'id'=>''],
@@ -304,7 +302,7 @@ class LostSale {
 
                     'Vendor Name'       => ['value'=> $vendorData['name'],   'class'=>"description", 'id'=>''], 
                     'Pur. Agent'        => ['value' => $vendorData['pagent'], 'class'=>"description", 'id'=>''],             
-                    'Caterpillar (P/L)' => ['value'=> number_format($item->IMPRC,2)?? 0, 'class'=>"money", 'id'=>''],            
+                    'List Price'        => ['value'=> number_format($item->IMPRC,2)?? 0, 'class'=>"money", 'id'=>''],            
                     'Wish List'         => ['value'=> $WishList,               'class' => "", 'id'=>''],
                     'Dev.Proj'          => ['value'=> $ProDevData['isdev'],          'class' => "", 'id'=>'', 'title'=>'Cod. Dev. Proj'],
                     'Dev.Status'        => ['value'=> $ProDevData['status'],         'class' => "", 'id'=>'', 'title'=>'Prod. Dev. Status'],
