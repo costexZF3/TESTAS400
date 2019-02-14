@@ -64,15 +64,15 @@ class AuthManager
             
         // Authenticate with login/password.
         $authAdapter = $this->authService->getAdapter();
-        $authAdapter->setEmail($email);
-        $authAdapter->setPassword($password);
+        $authAdapter->setEmail( $email );
+        $authAdapter->setPassword( $password );
         $result = $this->authService->authenticate();
 
         // If user wants to "remember him", we will make session to expire in 
         // one month. By default session expires in 1 hour (as specified in our 
         // config/global.php file).
         if ($result->getCode()==Result::SUCCESS && $rememberMe) {
-            // Session cookie will expire in 1 month (30 days).
+            //Session cookie will expire in 1 month (30 days).
             //$this->sessionManager->rememberMe(60*60*24*30);
             $this->sessionManager->rememberMe(60*60*24*1);
         }

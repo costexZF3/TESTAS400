@@ -76,19 +76,19 @@ class UserManager
 
         // Encrypt password and store the password in encrypted state.
         $bcrypt = new Bcrypt();
-        $passwordHash = $bcrypt->create($data['password']);        
-        $user->setPassword($passwordHash);
+        $passwordHash = $bcrypt->create( $data['password'] );        
+        $user->setPassword( $passwordHash );
         
-        $user->setStatus($data['status']);
+        $user->setStatus( $data['status'] );
         
         $currentDate = date('Y-m-d H:i:s');
-        $user->setDateCreated($currentDate);        
+        $user->setDateCreated( $currentDate );        
         
         // Assign roles to user.
-        $this->assignRoles($user, $data['roles']);        
+        $this->assignRoles( $user, $data['roles'] );        
         
         // Add the entity to the entity manager.
-        $this->entityManager->persist($user);
+        $this->entityManager->persist( $user );
                        
         // Apply changes to database.
         $this->entityManager->flush();
@@ -181,9 +181,9 @@ class UserManager
      * return an Instance of an user with email = $email
      * in other case it return NULL
      */
-    public function getUser($email){
+    public function getUser( $email ){
         $user = $this->entityManager->getRepository(User::class)
-                ->findOneByEmail($email);
+                ->findOneByEmail( $email );        
         return ($user!==null)?$user:null;
     }
     
@@ -212,12 +212,12 @@ class UserManager
         
         // Encrypt the token before storing it in DB.
         $bcrypt = new Bcrypt();
-        $tokenHash = $bcrypt->create($token);  
+        $tokenHash = $bcrypt->create( $token );  
         
         // Save token to DB
         //So far, I'll be using $token, insted $tokenHash due to the token field size is only 32 bytes so
         // I need to increment it to 128 bytes at least.
-        $user->setPasswordResetToken($tokenHash); 
+        $user->setPasswordResetToken( $tokenHash ); 
         
         // Save token creation date to DB.
         $currentDate = date('Y-m-d H:i:s');
@@ -265,24 +265,21 @@ class UserManager
      /**
      * Checks that the given password is correct.
      */
-    public function validatePassword($user, $password) 
-    {
+    public function validatePassword( $user, $password ) {
         $bcrypt = new Bcrypt();
         $passwordHash = $user->getPassword();
-        
+
         if ($bcrypt->verify($password, $passwordHash)) {
             return true;
         }
-        
+
         return false;
     }
     /**
      * Checks whether the given password reset token is a valid one.
      */
-    public function validatePasswordResetToken($email, $passwordResetToken)
-    {
-        // Find user by email.
-               
+    public function validatePasswordResetToken( $email, $passwordResetToken ) {
+        // Find user by email.               
         $user = $this->getUser($email);
               
         if($user==null || $user->getStatus() != User::STATUS_ACTIVE) {
@@ -293,13 +290,13 @@ class UserManager
         $bcrypt = new Bcrypt();
         $tokenHash = $user->getPasswordResetToken();
         
-        if (!$bcrypt->verify($passwordResetToken, $tokenHash)) {        
+        if ( !$bcrypt->verify( $passwordResetToken, $tokenHash ) ) {        
             return false; // mismatch
         }
         
         // Check that token was created not too long ago.
-        $tokenCreationDate = $user->getPasswordResetTokenCreationDate();
-        $tokenCreationDate = strtotime($tokenCreationDate);
+        $tokenCreationDate = strtotime( $user->getPasswordResetTokenCreationDate() );
+//        $tokenCreationDate = strtotime($tokenCreationDate);
         
         $currentDate = strtotime('now');
               
@@ -367,8 +364,8 @@ class UserManager
         
         // Set new password for user        
         $bcrypt = new Bcrypt();
-        $passwordHash = $bcrypt->create($newPassword);
-        $user->setPassword($passwordHash);
+        $passwordHash = $bcrypt->create( $newPassword );
+        $user->setPassword( $passwordHash );
         
         // Apply changes
         $this->entityManager->flush();
