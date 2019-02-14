@@ -18,8 +18,8 @@
             ->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
             ->prependStylesheet($this->basePath('css/bootstrap.min.css'))
             ->prependStylesheet($this->basePath('css/style.css'))
-             ->prependStylesheet( $this->basePath('DataTables-1.10.18/css/jquery.dataTables.css'))
-//             ->prependStylesheet( $this->basePath('/css/materialize.min.css'))
+//             ->prependStylesheet( $this->basePath('DataTables-1.10.18/css/jquery.dataTables.css'))
+//      
         ?>
        
        <!-------------------------------------------------------------------------------------------- 
@@ -37,19 +37,27 @@
         <?= $this->headScript()                
             ->prependFile($this->basePath('ctpJS/ctp_functionsJS.js'))  
             ->prependFile($this->basePath('js/bootstrap.js'))    
-            ->prependFile($this->basePath('js/jquery-2.2.4.min.js'))  //needed for menu
-//          ->prependFile($this->basePath('js/materialize.min.js'))  
-           // ->prependFile('https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')     
+            ->prependFile($this->basePath('js/jquery-2.2.4.min.js'))  //needed for menu      
+            ->prependFile('https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')     
+//            ->prependFile('https://nightly.datatables.net/js/jquery.dataTables.js')     
         ?>
         
         <!-- ******************  SCRIPTS DEFINED BY KRISTOFER FOR DATATABLE -->         
         <?php $bannerPath = $this->basePath().'/img/banner.png'; ?>        
                
-        <link rel="stylesheet" type="text/css"  href="<?=$this->basePath()."/";?>DataTables-1.10.18/css/dataTables.semanticui.min.css">      
+        <!--<link rel="stylesheet" type="text/css"  href="<?=$this->basePath()."/";?>DataTables-1.10.18/css/dataTables.semanticui.min.css">-->      
        
               
         <script type="text/javascript"  src="<?=$this->basePath()."/";?>DataTables-1.10.18/js/dataTables.js"></script>
         <script type="text/javascript"  src="<?=$this->basePath()."/";?>js/jquery.table2excel.min.js"></script>
+        
+        <!-- added for buttons to export   -->
+        <link href="https://nightly.datatables.net/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+        <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>  
+
+        <link href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />   
+        <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.js"></script> 
+        <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
        
     </head>
     
