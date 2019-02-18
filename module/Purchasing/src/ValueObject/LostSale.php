@@ -258,7 +258,6 @@ class LostSale {
                      'status' =>''   
                     ]; 
        
-       /* getting the Purchasing Agent's ID */ 
        $strSql = "SELECT prhcod, prdsts FROM PRDVLD4 where prdptn = '".$PartNumber."'";
        try
         {
@@ -273,6 +272,26 @@ class LostSale {
         
         return $ProdDevData; 
     }//End: product development 
+    
+    /* it returns the resultset from a sqlString passed as parameter */
+    private function getResultSet( $strSql ) {
+       return $this->adapter->query( $strSql,  MyAdapter::QUERY_MODE_EXECUTE )->toArray();              
+    }
+    
+    /* getCatDescription(): it convert abbrevations of the category to its description 
+     */
+    private function getCatDescription( $catAbbreviation ) {
+        if (!isset( $catAbbreviation )) {
+            return 'N/A';
+        }
+        
+        $strSql = "SELECT INDESC FROM INMCAT where INCATA = '".strtoupper( $catAbbreviation )."'";        
+        
+//        echo $strSql; exit();
+        $resultSet = $this->getResultSet( $strSql );
+        
+        return  ($resultSet[0]['INDESC'])?? "--";       
+    }//End: getCatDescription
         
     private function getRowArray( $item, $iteration ){
        /******************* creating rows *********************************/
@@ -288,6 +307,8 @@ class LostSale {
 
         /*Looking for Product Development Data */
         $ProDevData = $this->getProdDev( trim( $item->IMPTN ) );
+        
+        $catDescription = $this->getCatDescription( $item->IMCATA );
 
 
         $record = [ 'Part Number'       => ['value'=> $item->IMPTN,        'class'=>"partnumber", 'id'=>''],
@@ -298,7 +319,7 @@ class LostSale {
                     'Times Quote'       => ['value'=>($item->TIMESQ)??0,  'class'=>"timesq", 'id'=> $tq],
                     'Custs. Quote'      => ['value'=>($item->NCUS)??0,    'class'=>'', 'id'=>''],           
                     'Sales Last12'      => ['value'=>($item->QTYSOLD)??0, 'class'=>'', 'id'=>'', 'title'=>'Qty Sold Last 12 Month'],            
-                    'VND No'            => ['value'=>($item->VENDOR)??'N/A', 'class'=>'', 'id'=>'', 'title'=>'Vendor Number'], 
+                    'VND No'            => ['value'=>($item->VENDOR)??'N/A', 'class'=>'description', 'id'=>'', 'title'=>'Vendor Number'], 
 
                     'Vendor Name'       => ['value'=> $vendorData['name'],   'class'=>"description", 'id'=>''], 
                     'Pur. Agent'        => ['value' => $vendorData['pagent'], 'class'=>"description", 'id'=>''],             
@@ -309,7 +330,7 @@ class LostSale {
                     'Loc.20'            => ['value'=> ($item->F20)?? 0,   'class'=>'', 'id'=>''],
                     'OEM VND'           => ['value'=> ($item->FOEM)??0,   'class'=>'', 'id'=>'', 'title'=>'X->OEM Vendor'],
                     'Major'             => ['value'=> ($item->IMPC1)??0,  'class'=>'', 'id'=>'', 'title'=>'Mayor Code'],
-                    'Category'          => ['value'=> ($item->IMCATA)??0, 'class'=>'', 'id'=>'', 'title'=>'Category'],
+                    'Category'          => ['value'=> $catDescription, 'class'=>'description', 'id'=>'', 'title'=>'Category'],
                     'Minor'             => ['value'=> ($item->IMPC2)??0, 'class'=>'', 'id'=>'', 'title'=>'Minor'],
                     'Minor Description' => ['value'=> ($item->mindsc)??'N/A', 'class'=>"description", 'id'=>'', 'title'=>'Minor'],                     
           ];            
