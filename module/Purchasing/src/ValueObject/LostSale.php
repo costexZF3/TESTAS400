@@ -330,8 +330,8 @@ class LostSale {
                     'Loc.20'            => ['value'=> ($item->F20)?? 0,   'class'=>'', 'id'=>''],
                     'OEM VND'           => ['value'=> ($item->FOEM)??0,   'class'=>'', 'id'=>'', 'title'=>'X->OEM Vendor'],
                     'Major'             => ['value'=> ($item->IMPC1)??0,  'class'=>'', 'id'=>'', 'title'=>'Mayor Code'],
-                    'Category'          => ['value'=> $catDescription, 'class'=>'description', 'id'=>'', 'title'=>'Category'],
-                    'Minor'             => ['value'=> ($item->IMPC2)??0, 'class'=>'', 'id'=>'', 'title'=>'Minor'],
+                    'Category'          => ['value'=> $catDescription,    'class'=>'description', 'id'=>'', 'title'=>'Category'],
+                    'Minor'             => ['value'=> ($item->IMPC2)??0,  'class'=>'description', 'id'=>'', 'title'=>'Minor'],
                     'Minor Description' => ['value'=> ($item->mindsc)??'N/A', 'class'=>"description", 'id'=>'', 'title'=>'Minor'],                     
           ];            
 
