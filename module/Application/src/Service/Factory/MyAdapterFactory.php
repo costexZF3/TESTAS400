@@ -19,12 +19,12 @@ class MyAdapterFactory implements FactoryInterface
 
            $dbconnection = [
                         'driver'         => 'IbmDb2',
-                        'database'       => 'COSTEX1',// COSTEXM15  DEVELOPMENT
-                        'hostname'      =>  'COSTEXM15',
+                        'database'       => 'COSTEX1', // COSTEXM15  DEVELOPMENT
+                        'hostname'      =>  'COSTEXM15', 
                         'username'       => 'mojeda',
                         'password'       => '1978M1ch3l',
                         'driver_options' => [
-                            //'i5_commit' => DB2_I5_TXN_READ_UNCOMMITTED,
+                            'i5_commit' => DB2_I5_TXN_READ_UNCOMMITTED,
                             'autocommit' => DB2_AUTOCOMMIT_OFF,
                             'i5_lib' => "QS36F",
                         ],
