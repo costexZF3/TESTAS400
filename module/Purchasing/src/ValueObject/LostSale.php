@@ -209,23 +209,23 @@ class LostSale {
        $strSql = "SELECT VMNAME, VM#POY AS VENDN FROM VNMAS WHERE VMVNUM = ".$vendorNumber;
        try
         {
-         $resultSet = $this->adapter->query( $strSql, MyAdapter::QUERY_MODE_EXECUTE )->toArray();   
-         $resultAsArray = $resultSet;
-         
-         $PaID = $resultAsArray[0]['VENDN'];
-         
-         /* $PaID: we need to convert this to a String with 3 characters
-          * for use it as parameter on the Control Table CNTRLL, parameter: '216':
-          * which it's used for Purchasing Agents 
-          */
-                  
-         $PAgentToStr = $this->convertPAId($PaID);
-         $strSqlCNTRLL = " SELECT CNTDE1 FROM CNTRLL WHERE CNT01 ='216' AND CNT03 = '".$PAgentToStr."'";
-         $RS_PAgentName = $this->adapter->query( $strSqlCNTRLL, MyAdapter::QUERY_MODE_EXECUTE )->toArray();
-         
-         $resultAsArray1 = $RS_PAgentName; 
-         $vendorData['name'] = $resultAsArray[0]['VMNAME'];  /* vendor name */ 
-         $vendorData['pagent'] = $resultAsArray1[0]['CNTDE1'];  /* purchasing Agent's Name */
+            $resultSet = $this->adapter->query( $strSql, MyAdapter::QUERY_MODE_EXECUTE )->toArray();   
+            $resultAsArray = $resultSet;
+
+            $PaID = $resultAsArray[0]['VENDN'];
+
+            /* $PaID: we need to convert this to a String with 3 characters
+             * for use it as parameter on the Control Table CNTRLL, parameter: '216':
+             * which it's used for Purchasing Agents 
+             */
+
+            $PAgentToStr = $this->convertPAId($PaID);
+            $strSqlCNTRLL = " SELECT CNTDE1 FROM CNTRLL WHERE CNT01 ='216' AND CNT03 = '".$PAgentToStr."'";
+            $RS_PAgentName = $this->adapter->query( $strSqlCNTRLL, MyAdapter::QUERY_MODE_EXECUTE )->toArray();
+
+            //$resultAsArray1 = $RS_PAgentName; 
+            $vendorData['name'] = $resultAsArray[0]['VMNAME'];  /* vendor name */ 
+            $vendorData['pagent'] = $RS_PAgentName[0]['CNTDE1'];  /* purchasing Agent's Name */
         }
         catch (Exception $e){
            echo "Caught exception: ", $e->getMessage(), ""; 
@@ -235,7 +235,7 @@ class LostSale {
     }//End: getVendorData()
     
     //getWishListValue(): it returns It this part exist in the wish list      
-    private function getWishListValue( $PartNumber ) {
+    private function getWishListValue( $PartNumber ) {  
        /* getting the Purchasing Agent's ID */ 
        $strSql = "SELECT 'X' WL  From PRDWL1 WHERE PRWPTN = '".$PartNumber."'";
        try
