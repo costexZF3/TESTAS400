@@ -424,21 +424,21 @@ table.minimalistBlack tfoot td {
         
 }
 
-.sticky {
-     position: sticky;
-     position: -webkit-sticky;
-     height: 140px;
-     top: 0;
-}
+/* DT-BUTTONS : ACTIONS AND OPERATIONS LIKE CONVERT TO EXCEL, PDF, AND COPY TO CLICK BOARD */
+.dt-buttons {
+    margin-left: 50px;
+    
+} 
 
 
 /*select options styling */
-select, input[type="number"]:hover,
-select, input[type="number"]:focus,
-select, input[type="number"]:active
+input[type="number"]:hover,
+input[type="number"]:focus,
+input[type="number"]:active,
+select, input[type="search"]:focus
 {
-  background: linear-gradient(#E9E2D1, #FFFFFF);
-  border-radius: 5px;
+  background: linear-gradient(#E9E2E0, #FFFFFF);
+  border-radius: 3px;
 }
 
 
@@ -451,10 +451,10 @@ select {
    width:  130px;
 }
 
-
 #table_toexcel_length, 
 input[type="search"], 
 input[type="text"], 
+input[type="checkbox"],
 input[type="password"] {
     font-family: Arial, Roboto, MyOswald;
     font-stretch: ultra-expanded;
