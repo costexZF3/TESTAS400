@@ -129,11 +129,18 @@
     */    
     
     $(document).ready( function(){ 
+        /* getting date() as String */
+        
+        const strDate = dateToStr();
+        const timesQuote = <?php echo $timesquoted?>;
+        
            //------------------ function to convert to EXCEL FILE THE LOGGED CONTENT TO SCREEN ---------------------------------------- 
         $("#convert").click( function() {
             convertToExcel('LostSales','lost sales');
         });
         
+//        taking off CLASS dt-button to the buttons EXCEL, PDF, AND COPY
+    $("button.dt-button").removeClass("dt-button");
         
     let tempCol = <?php echo '[' . implode(', ', $columnsToHide) . ']';?>;
     
@@ -163,7 +170,7 @@
                         { 
                             extend: 'excel', 
                             className: 'btn btn-info', 
-                            title: 'lostsales-EXCEL'+'_2_07_2019', 
+                            title: 'lostsales-EXCEL'+strDate+'__'+'--TQ('+timesQuote+')', 
                             titleAttr : 'Convert to EXCEL',
                             text: 'E<u>X</u>CEL',                           
                             key: {
@@ -176,7 +183,7 @@
                         {
                             extend: 'pdf',   
                             className: 'btn btn-warning', 
-                            title: 'lostsales-pdf'+'_2_07_2019',
+                            title: 'lostsales-pdf'+strDate+'__'+'--TQ('+timesQuote+')',
                             titleAttr : 'Convert to PDF',
                             orientation: 'landscape',  //it's portrait by default 
                             pageSize: 'TABLOID', //this can be A3, A4, A5, LEGAL, LETTER or TABLOID  : all are STRINGS 
@@ -214,27 +221,27 @@
                                 this.disable(); //disable button
                             }                            
                         }                                           
-                     ]
-//        initComplete: function () {
-//                        this.api().columns().every( function () {
-//                            var column = this;
-//                            var select = $('<select><option value=""></option></select>')
-//                                .appendTo( $(column.footer()).empty() )
-//                                .on( 'change', function () {
-//                                    var val = $.fn.dataTable.util.escapeRegex(
-//                                        $(this).val()
-//                                    );
-//
-//                                    column
-//                                        .search( val ? '^'+val+'$' : '', true, false )
-//                                        .draw();
-//                                } );
-//
-//                            column.data().unique().sort().each( function ( d, j ) {
-//                                select.append( '<option value="'+d+'">'+d+'</option>' );
-//                            } );
-//                        } );
-//        } //end property InitComplete                 
+                     ],
+        initComplete: function () {
+                        this.api().columns([0,1,8,10]).every( function () {
+                            var column = this;
+                            var select = $('<select><option value=""></option></select>')
+                                .appendTo( $(column.footer()).empty() )
+                                .on( 'change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                    );
+
+                                    column
+                                        .search( val ? '^'+val+'$' : '', true, false )
+                                        .draw();
+                                } );
+
+                            column.data().unique().sort().each( function ( d, j ) {
+                                select.append( '<option value="'+d+'">'+d+'</option>' );
+                            } );
+                        } );
+        } //end property InitComplete                 
     };
   
 
@@ -321,7 +328,7 @@
        <br>
     </div>
 
-   
+   <!-- ROW THAT ARE SHOWING COUNT OF ITEMS, SUBMIT BUTTON AND CONVERT TO EXCEL THE ACTUAL PAGE --> 
     <div class="row">
         <div class="col-md-2"> <h3 class="ctp_subtitle">COUNT ITEMS: <?=$countItems?></h3></div>
 <!--         <div class="ctp_title"> <h1> Quoted Items no Stock no Order ( LostSales ) </h1></div> -->
