@@ -55,30 +55,20 @@ class Menu extends AbstractHelper
     {
         if (count($this->items)==0){
             return ''; // Do nothing if there are no items.
-        }        
-        $result = '<nav class="navbar box">';
-        $result .= '<div class="navbar-header>';
-        $result .= '<button type="button" class="navbar-toggle" data-toggle="collapse"';
-        $result .= 'data-target=".navbar-ex1-collapse">';
-        $result .= '<span class="sr-only">Toggle navigation</span>';
-        $result .= '<span class="icon-bar"></span>';
-        $result .= '<span class="icon-bar"></span>';
-        $result .= '<span class="icon-bar"></span>';
-        $result .= '</button>';
-        $result .= '</div>';
-        
-        $result .= '<div class="collapse navbar-collapse navbar-ex1-collapse">';  
-        
-        $result .= '<ul class="nav navbar-nav">';
+        }                       
                 
+        $result = '<ul class="navbar-nav" id="primary-menu">';
+         //navbar- nav       
         // Render items
         foreach ($this->items as $item) {
-            if(!isset($item['float']) || $item['float']=='left')
-            {$result .= $this->renderItem($item);}
+            if(!isset($item['float']) || $item['float']=='left') {
+                $result .= $this->renderItem($item);
+                
+            }
         }
         
-        $result .= '</ul>';
-        $result .= '<ul class="nav navbar-nav navbar-right">';
+      //  $result .= '</ul>';
+        //$result .= '<ul class="nav-item navbar-right">';
         
         // Render items
         foreach ($this->items as $item) {
@@ -88,8 +78,8 @@ class Menu extends AbstractHelper
         }
         
         $result .= '</ul>';
-        $result .= '</div>';
-        $result .= '</nav>';
+//        $result .= '</div>';
+//        $result .= '</nav>';
         
         return $result;        
     }
@@ -114,37 +104,31 @@ class Menu extends AbstractHelper
             
             $dropdownItems = $item['dropdown'];
             
-            $result .= '<li class="dropdown ' . ($isActive?'active':'') . '">';
-            $result .= '<a href="#" class="dropdown-toggle" data-toggle="dropdown">';
-            $result .= $escapeHtml($label) . ' <b class="caret"></b>';
+            //creating Menu TAG (HEADER )
+            $result .= '<li class="nav-item dropdown ' . ($isActive?'active':'') . '">';
+            $result .= '<a href="#" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true"';
+            $result .= ' aria-expanded="false">';
+            $result .= $escapeHtml($label);
             $result .= '</a>';
            
-            $result .= '<ul class="dropdown-menu">';
+           $result .= '<div class="dropdown-menu">';
             foreach ($dropdownItems as $item) {                
                 // adding a divider if it's defined 
-                if ($item['id']==='-') {
-                    $result .= '<li class ="divider">';                    
-                    $result .= '</li>';
-                } else {
-                    $link = $item['link'] ?? '';
-                    $label = $item['label'] ?? '';
-                    $result .= '<li>';
-                    $result .= '<a href="'.$escapeHtml($link).'">'.$escapeHtml($label).'</a>';
-                    $result .= '</li>';
-                }
-            }
-            $result .= '</ul>';
-            $result .= '</li>';
-            
+                $link = $item['link'] ?? '';
+                $label = $item['label'] ?? '';                   
+                $result .= '<a  class="dropdown-item" href="'.$escapeHtml($link).'">'.$escapeHtml($label).'</a>';                   
+              }            
+            $result .= '</div>';
+            $result.='</li>';
         } 
       else {        
         $link = $item['link']??'#';
         //Some Menu==[] and it does not need be rendered
-        if ($link!='#') {
-            $result .= $isActive?'<li class="active">':'<li>';
-            $result .= '<a href="'.$escapeHtml($link).'">'.$escapeHtml($label).'</a>';
-            $result .= '</li>';
-            }
+        if ($link!='#') {    
+            $result.='<li class="nav-item">';
+            $result .= '<a class="nav-link" href="'.$escapeHtml($link).'">'.$escapeHtml($label).'</a>';   
+            $result.='</li>';
+        }
       }    
       return $result;
     } //END: function renderItem($item)
