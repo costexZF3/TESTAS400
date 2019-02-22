@@ -88,7 +88,7 @@ class LostsaleController extends AbstractActionController
             $timesQuote = (int)$data['num-tq'];  //getting times quoted   
             /* getting: vendors assigned option: 1, 2, 3 */
             $vndAssignedOptionSelected = (int)$data['sel-vndassigned']; 
-            /* defining if vendors columns will be shown or not */
+            /* if not vendor Assigned then decide with columns will be shown or not */
             $hideVnds = ( $vndAssignedOptionSelected==2 )?[8, 9,10]:[];
             
             /* assigning value seleted to the ListBox */
