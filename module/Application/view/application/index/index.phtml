@@ -1,56 +1,81 @@
 <?php
     $this->mainMenu()->setActiveItemId('home');
-    $this->headTitle('CTP-System');
+    $this->headTitle('HOME');
 ?>    
 
-
-    <h1 class="ctp_subtitle"> Welcome to <span class="zf-green">CTP SYSTEM</span></h1>
-    <div class="ctp_subtitle">    
-      <p><em>Congratulations!</em> You have successfully using the New <em>CTP SYSTEM APPLICATION</em> VER:<?= \Application\Module::VERSION?></p>
+<div class="faq-page-content-area">
+    <div class="title">
+        <h1 class="title"> Welcome to <span class="base-color">CTP SYSTEM</span></h1>
+         
+        <p><em>Congratulations!</em> You have successfully using the New <em>CTP SYSTEM APPLICATION</em></p> 
     </div>
 
-<div class="ctp_subtitle">
-    <h3 class="ctp_subtitle">WE ARE COMMITTED TO DELIVERING EXCELLENCE</h3>
-    <p class="">
-        Costex Tractor Parts CTP® is a worldwide quality supplier of New Replacement Parts for Caterpillar® and
-        Komatsu® Equipment and Engines. At CTP, we not only offer you  premium parts  but  also an exceptional 
-        service, outstanding savings and the support you need to get your order quickly and accurately. At CTP, 
-        our focus is to provide you with great quality parts at a good value. Our new replacement parts undergo
-        strenuous and strict inspection procedures to ensure the quality of  our product. Our basic  principle: 
-        Quality with Value Guaranteed. Whether you are mining copper ore at high altitudes in the Chilean Andes,
-        or digging an irrigation canal on the family farm, you can be rest assured that our whole team is 
-        behind you every step of the way.              
-    
-        <a class="label label-success bottom-right" href="https://www.costex.com" target="_blank">Costex Online Site &raquo;</a>
-    </p>
+    <div class="">
+        <h3 class="title1">WE ARE COMMITTED TO DELIVERING EXCELLENCE</h3>
+        <p>       
+            Costex Tractor Parts CTP® is a worldwide quality supplier of New Replacement Parts for Caterpillar® and
+            Komatsu® Equipment and Engines. At CTP, we not only offer you  premium parts  but  also an exceptional 
+            service, outstanding savings and the support you need to get your order quickly and accurately. At CTP, 
+            our focus is to provide you with great quality parts at a good value. Our new replacement parts undergo
+            strenuous and strict inspection procedures to ensure the quality of  our product. Our basic  principle: 
+            Quality with Value Guaranteed. Whether you are mining copper ore at high altitudes in the Chilean Andes,
+            or digging an irrigation canal on the family farm, you can be rest assured that our whole team is 
+            behind you every step of the way.              
+
+            <a class="base-color nav-link" href="https://www.costex.com" target="_blank">Costex Online Site &raquo;</a>         
+        </p>
+    </div>
+
+    <div class="row"> 
+        <div class="col-lg-6">
+            <div class="accordion-wrapper">
+                <div id="accordion">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">  
+                                <a class="collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                                 Inside Track
+                                </a>   
+                            </h5>
+                        </div> 
+
+                        <!--ACCORDION CONTENT-->                                                  
+                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                             <div class="card-body">
+                                The Insidetrack is a monthly publication that CTP creates and distributes to its customers in order to provide them with
+                                the latest information regarding new products, product improvements and industry news. Subscribe today.
+                                <p><a class="base-color nav-link" href="https://www.costex.com/insidetrack-index/" target="_blank">Explore ZF Modules &raquo;</a></p>
+                             </div>                        
+                        </div> <!-- COLLAPSE CONTENT END -->               
+                    </div> <!-- CARD END -->            
+                </div> <!-- ACCORDION END -->
+            </div> <!-- ACCORDION WRAPPER -->
+        </div> <!-- COLUMN: END -->
+
+        <div class="col-lg-6">
+            <div class="accordion-wrapper">
+                <div id="accordion_2">
+                    <div class="card">
+                        <div class="card-header" id="headingOne_2">
+                                <h5 class="mb-0">
+                                    <a  class="collapsed" data-toggle="collapse" data-target="#collapseOne_2" aria-expanded="false" aria-controls="collapseOne_2">
+                                        News &amp; Events
+                                </a>
+                            </h5>
+                        </div> 
+
+                        <!--ACCORDION CONTENT--> 
+                       <div id="collapseOne_2" class="collapse" aria-labelledby="headingOne_2" data-parent="#accordion_2">
+                             <div class="card-body">
+                                <p> Stay Informed with the Latest CTP News and Events. </p>
+                                <p><a class="base-color nav-link" href="https://www.costex.com/news-and-events/" target="_blank">News &raquo;</a></p>
+                             </div>                        
+                        </div> <!-- COLLAPSE CONTENT END -->               
+                    </div> <!-- CARD END -->            
+                </div> <!-- ACCORDION END -->
+            </div> <!-- ACCORDION WRAPPER -->
+        </div> <!-- COLUMN: END -->
+    </div> <!-- ROW END-->
 </div>
 
-<div class="row"> 
-    <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Inside Track</h3>
-            </div>
-            <div class="panel-body">
-                <p>
-                   The Insidetrack is a monthly publication that CTP creates and distributes to its customers in order to provide them with the latest information regarding new products, product improvements and industry news. Subscribe today.
-                </p>
-
-                <p><a class="" href="https://www.costex.com/insidetrack-index/" target="_blank">Explore ZF Modules &raquo;</a></p>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">News &amp; Events</h3>
-            </div>
-            <div class="panel-body">
-                <p> Stay Informed with the Latest CTP News and Events. </p>
-                <p><a class="" href="https://www.costex.com/news-and-events/" target="_blank">News &raquo;</a></p>
-            </div>
-        </div>
-    </div>
-</div>
 
