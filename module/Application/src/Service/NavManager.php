@@ -106,7 +106,7 @@ class NavManager
                     /* Options: CLAIMS */
                     if ($this->rbacManager->isGranted(null, 'purchasing.option.claims')) {                   
                         $options[] = $this->setOptions('claims', 'Claims', 'claims','');
-                        $options[] = $this->setDivider($options); 
+                       // $options[] = $this->setDivider($options); 
                     }//end if: granted +option.purchasing.claims 
 
                     /* Options: Product Developments */
@@ -138,7 +138,7 @@ class NavManager
                     
                     /* Options: Sales Backorders */
                     if ($this->rbacManager->isGranted(null, 'purchasing.option.backorders')) {                        
-                        $options[] = $this->setDivider($options); 
+                        //$options[] = $this->setDivider($options); 
 
                         $options[] = $this->setOptions('salesbackorders', 'Sales Backorders', 'pagebuilding','');                                                 
                         $options[] = $this->setOptions('followbackorders', 'Follow Backorders', 'pagebuilding',''); 
@@ -146,7 +146,7 @@ class NavManager
 
                     /* Options: Vendors */
                     if ($this->rbacManager->isGranted(null, 'purchasing.option.vendors')) {
-                        $options[] = $this->setDivider($options);  
+                       // $options[] = $this->setDivider($options);  
                         
                         $options[] = $this->setOptions('partvendorcomments', 'Part/Vendor Comments', 'pagebuilding','');                           
                         $options[] = $this->setOptions('emailvendors', 'Email Vendors', 'pagebuilding','');                        
@@ -157,7 +157,7 @@ class NavManager
 
                     /* Options: parts */
                     if ($this->rbacManager->isGranted(null, 'purchasing.option.parts')) {                        
-                        $options[] = $this->setDivider($options); 
+                      //  $options[] = $this->setDivider($options); 
                        
                         $options[] = $this->setOptions('suspendedparts', 'Suspended Parts', 'pagebuilding','');
                         $options[] = $this->setOptions('partvendorcomments', 'Purchasing Quote', 'pagebuilding','');
@@ -166,19 +166,19 @@ class NavManager
 
                     /* Options: AGENTS */
                     if ($this->rbacManager->isGranted(null, 'purchasing.option.agents')) {                        
-                        $options[] = $this->setDivider($options);                                                  
+                      //  $options[] = $this->setDivider($options);                                                  
                         $options[] = $this->setOptions('changeagentpersonincharge', 'Change Pur. Agent/Person in charge', 'pagebuilding','');                          
                     }//end if: AGENTS                         
 
                     /* Options: UPLOAD OEM PICS */
                     if ($this->rbacManager->isGranted(null, 'purchasing.option.uploadoem')) {                        
-                        $options[] = $this->setDivider($options); 
+                        //$options[] = $this->setDivider($options); 
                         $options[] = $this->setOptions('uploadoempictures', 'Upload OEM Pictures', 'pagebuilding','');
                     }//end if: UPLOAD OEM PICS
 
                     /* Options: REPORTS */
                     if ($this->rbacManager->isGranted(null, 'purchasing.option.reports')) {                        
-                        $options[] = $this->setDivider($options);                         
+                       // $options[] = $this->setDivider($options);                         
                         $options[] = $this->setOptions('reports', 'Reports', 'pagebuilding','');                                
                     }//end if: REPORTS
                     
@@ -196,7 +196,7 @@ class NavManager
                         $options[] = $this->setOptions('sales1', 'Option 1', 'pagebuilding','');
                         $options[] = $this->setOptions('sales2', 'Option 2', 'pagebuilding','');
                         
-                        $options[] = $this->setDivider($options);                         
+                       // $options[] = $this->setDivider($options);                         
                         
                         $options[] = $this->setOptions('sales3', 'Option 3', 'pagebuilding','');
                         $options[] = $this->setOptions('sales4', 'Option 4', 'pagebuilding','');
@@ -210,7 +210,7 @@ class NavManager
                         $options[] = $this->setOptions('rec2', 'Receiving 1', 'pagebuilding','');
                         $options[] = $this->setOptions('rec3', 'Receiving 2', 'pagebuilding','');
                         
-                        $options[] = $this->setDivider($options);                         
+                       // $options[] = $this->setDivider($options);                         
                         
                         $options[] = $this->setOptions('rec4', 'Receiving 3', 'pagebuilding','');
                         $options[] = $this->setOptions('rec5', 'Receiving 4', 'pagebuilding','');
@@ -254,7 +254,7 @@ class NavManager
                         $options[] = $this->setOptions('warehouse6', 'Kits Info', 'pagebuilding','');
                     }    
                         
-                    $options[] = $this->setDivider($options);  
+                   // $options[] = $this->setDivider($options);  
                     
                     $options[] = $this->setOptions('warehouse7', 'Picked up Process (Productivity)', 'pagebuilding','');
                     $options[] = $this->setOptions('warehouse8', 'Assembled', 'pagebuilding','');
