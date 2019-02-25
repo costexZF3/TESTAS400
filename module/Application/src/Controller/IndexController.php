@@ -53,7 +53,8 @@ class IndexController extends AbstractActionController
      * This is the "about" action. It is used to display the "About" page.
      */
     public function aboutAction() 
-    {                      
+    {    
+       $this->layout()->setTemplate('layout/layoutCommond'); 
        return new ViewModel();
     }  
     
