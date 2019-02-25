@@ -87,7 +87,7 @@ class NavManager
                         $options[] = $this->setOptions('management1', 'Option 1', 'pagebuilding','');
                         $options[] = $this->setOptions('management2', 'Option 2', 'pagebuilding','');
                         
-                        $options[] = $this->setDivider($options);                         
+                       // $options[] = $this->setDivider($options);                         
                         
                         $options[] = $this->setOptions('management3', 'Option 3', 'pagebuilding','');
                         $options[] = $this->setOptions('management4', 'Option 4', 'pagebuilding','');
