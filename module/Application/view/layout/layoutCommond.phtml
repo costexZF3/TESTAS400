@@ -1,0 +1,244 @@
+<?= $this->doctype() ?>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <?= $this->headTitle('CTPSYSTEM')->setSeparator(' - ')->setAutoEscape(false) ?>
+
+    <?= $this->headMeta()
+        ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+        ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+    ?>
+
+    <!-- default -->
+    <?= $this->headLink([
+                  'rel' => 'shortcut icon', 
+                  'type' => 'image/vnd.microsoft.icon', 
+                  'href' => $this->basePath().'/img/logo.png']) 
+               //added from the new template   
+               ->prependStylesheet($this->basePath('assets/css/style.css'))
+               ->prependStylesheet($this->basePath('assets/css/bootstrap.min.css')) 
+               ->prependStylesheet($this->basePath('assets/css/fontawesome.all.css')) 
+               ->prependStylesheet($this->basePath('assets/css/flaticon.css'))
+               ->prependStylesheet($this->basePath('assets/css/animate.css'))
+               ->prependStylesheet($this->basePath('assets/css/owl.carousel.min.css'))
+               ->prependStylesheet($this->basePath('assets/css/magnific-popup.css'))               
+               ->prependStylesheet($this->basePath('assets/css/responsive.css'))
+
+    ?>
+
+    <!-- Scripts -->
+    <?= $this->headScript()       
+        ->prependFile($this->basePath('assets/js/bootstrap.min.js'))        
+        ->prependFile($this->basePath('assets/js/popper.min.js'))        
+        ->prependFile($this->basePath('assets/js/owl.carousel.min.js'))
+        ->prependFile($this->basePath('assets/js/jquery.magnific-popup.js'))
+        ->prependFile($this->basePath('assets/js/contact.js'))
+        ->prependFile($this->basePath('assets/js/wow.min.js'))
+        ->prependFile($this->basePath('assets/js/waypoints.min.js'))
+        ->prependFile($this->basePath('assets/js/imagesloaded.pkgd.min.js'))
+        ->prependFile($this->basePath('assets/js/isotope.pkgd.min.js'))
+        ->prependFile($this->basePath('assets/js/jquery.counterup.min.js'))
+        ->prependFile($this->basePath('assets/js/main.js')) 
+        ->prependFile($this->basePath('assets/js/jquery.js'))        
+       // ->prependFile($this->basePath('js/jquery-2.2.4.min.js'))         
+    ?>
+
+
+    <!-- SCRIPTS DEFINED BY KRISTOFER FOR DATATABLE -->
+
+    <?php
+       //----- getting PATH for banner.png inside the document root ---------------
+        $bannerPath = $this->basePath().'/assets/img/logo.png'; 
+    ?>
+
+</head>
+     <!-- PAGE BODY: MAIN LAYOUT  -->
+
+    <body>
+        <!-- 2:  NEW!!! -->
+        <!-- preloader area start -->
+         <div class="preloader" id="preloader">
+            <div class="preloader-inner">
+                    <div class="lds-ripple"><div></div><div></div></div>
+            </div>
+        </div> 
+
+        <!-- 3: NEW !!!  -->
+        <!-- support bar area start ************************** show  -->
+        <div class="support-bar-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="left-content-area"><!-- left content area -->
+                            <ul>
+                                <li>Mon – Fri: 8.00 – 17.35</li>
+                                <li>Saturday, Sunday: Closed </li>
+                                <li>Emergency: 24hr / 7days</li>
+                            </ul>
+                        </div><!-- //.left conten tarea -->
+                        <div class="right-content-area"><!-- left content area -->
+                            <ul>
+                                <li><a href="#"> <i class="fab fa-facebook-f"></i> </a></li>
+                                <li><a href="#"> <i class="fab fa-twitter"></i> </a></li>
+                                <li><a href="#"> <i class="fab fa-instagram"></i> </a></li>
+                                <li><a href="#"> <i class="fab fa-linkedin-in"></i> </a></li>
+                            </ul>
+                        </div><!-- //.left conten tarea -->
+                    </div>
+                </div>
+            </div>
+        </div>  <!-- support bar area -->
+    
+       <!-- ************************************** PAGE HEADER BANNER *************************************-->        
+    <nav class="navbar navbar-area navbar-expand-lg ">
+        <div class="container">
+            <a class="navbar-brand logo" href="<?= $this->url('home')?>">
+                <img src="<?= $bannerPath;?>" class="black" alt="logo">
+            </a>
+            <div class="navbar-collapse collapse" id="apptidy">
+                <!-- Navigation bar generated dynamically -->
+                <?php
+                    // Check if the activeMenuItemId passed to layout view model
+                    // and if so, use it for setting active navbar item.
+                    if (isset( $activeMenuItemId )) {
+                        $this->mainMenu()->setActiveItemId( $activeMenuItemId );
+                    }
+                    // Render the navbar
+                    echo $this->mainMenu()->render();
+                ?>
+            </div>
+            <!-- /.navbar btn wrapper -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#apptidy" aria-controls="apptidy" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- navbar collapse end -->
+        </div>
+    </nav>
+        
+   <!-- breadcrumb area start -->
+    <section class="breadcrumb-area breadcrumb-bg">
+        <div class="container">
+            <div class="row">
+               <div class="col-lg-12">
+                    <div class="breadcrumb-inner">
+<!--                        <h1 class="title">About Us</h1>
+                        <div class="page-list">
+                            <a href="index.html"><span>Home</span></a>
+                            -
+                            <span class="current-item">About Us</span>
+                        </div>-->
+                        <?= $this->pageBreadcrumbs()->render(); ?>
+                    </div>
+               </div>
+            </div>
+        </div>
+    </section>
+    <!-- breadcrumb area end -->   
+     
+<!--********************* CONTENT TO RENDER ********************************************--> 
+        <div class="container">        
+            <div class="row">
+                <div class="col-lg-12">
+                    <!-- Page content -->
+                    <?= $this->content; ?>
+                </div>
+            </div>
+        </div>
+    
+<!-- ************************************* FOOTER SECCION ****************************** -->       
+        
+        <footer class="footer-area footer-bg">
+            <div class="footer-top"><!-- footer top -->
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6">
+                            <div class="footer-widget about_widget"><!-- footer widget -->
+                                <div class="footer-logo">
+                                    <a href="<?=$this->url('home'); ?>"><img src="assets/img/footer-logo.png" alt="footer logo"></a>
+                                </div>
+                                <p>Costex Tractor Parts CTP® is a worldwide quality supplier of New Replacement Parts for Caterpillar® and Komatsu™ Equipment and Engines. At CTP, we not only offer you premium parts but also an exceptional service, outstanding savings and the support you need to get your order quickly and accurately.</p>
+                                <ul class="social-icons">
+                                    <li><a href="https://www.facebook.com/ctpparts" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a> </li>
+                                    <li><a href="#"><i class="fab fa-twitter"></i></a> </li>
+                                    <li><a href="#"><i class="fab fa-linkedin-in"></i></a> </li>
+                                    <li><a href="https://www.instagram.com/costexctp/" id="sfsiid_instagram" alt="Instagram"><i class="fab fa-instagram"></i></a> </li>
+                                </ul>
+                            </div><!-- //. footer widget-->
+                        </div>
+                        <div class="col-lg-2 col-md-6">
+                            <div class="footer-widget widget_nav_menu"><!-- footer widget -->
+                                <h2 class="widget-title">Usefull Links</h2>
+                                <ul>
+                                    <li><a href="#">- Blog</a></li>
+                                    <li><a href="<?= $this->url('home');?>">- About Us</a></li>
+                                    <li><a href="#">- Our Story</a></li>
+                                    <li><a href="#">- Forum</a></li>
+                                    <li><a href="#">- Career</a></li>
+                                    <li><a href="#">- Shop</a></li>
+                                </ul>
+                            </div><!-- //. footer widget-->
+                        </div>
+                        <div class="col-lg-2 col-md-6">
+                            <div class="footer-widget widget_nav_menu"><!-- footer widget -->
+                                <h2 class="widget-title">Other Pages</h2>
+                                <ul>
+                                    <li><a href="#">- Terms & Conditions</a></li>
+                                    <li><a href="#">- Privacy Policy</a></li>
+                                    <li><a href="#">- Contact Us</a></li>
+                                    <li><a href="#">- Support</a></li>
+                                    <li><a href="#">- Career</a></li>
+                                    <li><a href="#">- Shop</a></li>
+                                </ul>
+                            </div><!-- //. footer widget-->
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="footer-widget instagram_feed"><!-- footer widget -->
+                                <h2 class="widget-title">instagram feed</h2>
+                                <ul class="instagram_feed-list">
+                                    <li><a href="#"><img src="assets/img/instagram/01.jpg" alt="instagram feed"></a></li>
+                                    <li><a href="#"><img src="assets/img/instagram/02.jpg" alt="instagram feed"></a></li>
+                                    <li><a href="#"><img src="assets/img/instagram/03.jpg" alt="instagram feed"></a></li>
+                                    <li><a href="#"><img src="assets/img/instagram/04.jpg" alt="instagram feed"></a></li>
+                                    <li><a href="#"><img src="assets/img/instagram/05.jpg" alt="instagram feed"></a></li>
+                                    <li><a href="#"><img src="assets/img/instagram/06.jpg" alt="instagram feed"></a></li>
+                                </ul>
+                            </div><!-- //. footer widget-->
+                        </div>
+                    </div>
+                </div>
+            </div><!-- //. footer top -->
+            <div class="footer-bottom"><!-- footer bottom -->
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="footer-bottom-inner"><!-- footer bottom inner -->
+                                <div class="copyright-area">
+                                    <span class="copyright-text">COSTEX  &copy; Design & Developing by MIS</span>
+                                </div>
+                               <div class="footer-menu">
+                                    <div class="widget_nav_menu"><!-- footer menu --> 
+                                        <ul>
+                                            <li><a href="<?= $this->url('home');?>">Home</a></li>
+                                            <li><a href="#">Blog</a></li>
+                                            <li><a href="<?= $this->url('about');?>">About Us</a></li>
+                                            <li><a href="<?= $this->url('about');?>">Contact</a></li>
+                                            <li><a href="#">Terms & Conditions</a></li>
+                                        </ul>
+                                    </div><!-- //. footer menu -->
+                               </div>
+                            </div><!-- //. footer bottom inner -->
+                        </div>
+                    </div>
+                </div>
+            </div><!-- //. footer bottom --> 
+        </footer>
+
+  <!-- back to top area start -->
+  <div class="back-to-top">
+        <i class="fas fa-angle-up"></i>
+  </div>
+  <!-- back to top area end --> 
+        <?= $this->inlineScript() ?>         
+    </body>
+</html>
