@@ -38,20 +38,29 @@ class Breadcrumbs extends AbstractHelper
      */
     public function render() 
     {
-        if (count($this->items)==0)
+        if (count($this->items)==0) {
             return ''; // Do nothing if there are no items.
+        }    
         
         // Resulting HTML code will be stored in this var
-        $result = '<ol class="breadcrumb">';
-        
+        $result = '<section class="">';
+        $result.= '<div class="container">';
+        $result.= '<div class="row">';
+        $result.= '<div class="col-lg-12">';
+        $result.= '<div class="bread-crumb-inner">';
+                
         // Get item count
         $itemCount = count($this->items); 
         
         $itemNum = 1; // item counter
-        
+               
+        $result.= '<div class="page-list">';
+                
         // Walk through items
         foreach ($this->items as $label=>$link) {
-            
+            if ($itemNum == 1) {
+                 $result.= '<h1 class="title">'.$label.'</h1>';
+            }
             // Make the last item inactive
             $isActive = ($itemNum==$itemCount?true:false);
                         
@@ -62,7 +71,12 @@ class Breadcrumbs extends AbstractHelper
             $itemNum++;
         }
         
-        $result .= '</ol>';
+        $result .= '</div>'; //closing: page-list div
+        $result .= '</div>'; //closing: breadcrumb div
+        $result .= '</div>'; //closing: col-lg-12  div
+        $result .= '</div>'; //closing: row  div
+        $result .= '</div>'; //closing: container  div
+        $result .= '</section>'; //closing: section
         
         return $result;
         
@@ -77,16 +91,18 @@ class Breadcrumbs extends AbstractHelper
      */
     protected function renderItem($label, $link, $isActive) 
     {
-        $escapeHtml = $this->getView()->plugin('escapeHtml');
-        
-        $result = $isActive?'<li class="active">':'<li>';
-        
-        if (!$isActive)
-            $result .= '<a href="'.$escapeHtml($link).'">'.$escapeHtml($label).'</a>';
-        else
-            $result .= $escapeHtml($label);
+        $escapeHtml = $this->getView()->plugin('escapeHtml');        
+               
+        if (!$isActive) {
+            $result = '<a href="'.$escapeHtml($link).'">'.$escapeHtml($label).'</a>';
+            $result.= ' - ';
+            
+        } else {
+            $result= '<span class="">'.$escapeHtml($label).'</span>';
+//            $result= '<span class="current-item">'.$escapeHtml($label).'</span>';
+        }           
                     
-        $result .= '</li>';
+       
     
         return $result;
     }
