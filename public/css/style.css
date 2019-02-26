@@ -135,9 +135,9 @@ body1 {
 *  -ctp-panel-body    
 */
 .ctp-panel {
-    margin-bottom: 10px;   
+    margin-bottom: 15px;   
     background: rgba(250, 193, 96, 0.30);     
-    border-radius: 15px; 
+    border-radius: 10px; 
     height: auto;
 }
 
@@ -150,22 +150,6 @@ body1 {
     padding: 15px 15px;
     
     height: auto;
-}
-
-.ctp-panel-body > p  {
-    font-family: MyOswaldRegular, arial, helvetica;    
-}
-
-/* grid */
-
-.grid {
-  border: 2px blue solid;
-  width: 100%;
-  height: 400px;
-  display: grid;  
-  grid-template: repeat(3, 1fr) / 1fr 1fr;
-  grid-gap: 10px;  
-  padding: 5px;  
 }
 
 /* panels: panels headings */
@@ -211,20 +195,6 @@ table {
     background-image: url(/ctpsystem/public/img/avatar.png); 
 }
 
-.header {     
-    height: 90%;
-    width: 100%;
-    
-    /* borders - properties */
-    border-bottom: 20px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border-bottom-color: #ebc14b; 
-    background-image: url(/ctpsystem/public/img/banner.png); 
-    opacity: 0.90;        
-    z-index: 10;
-}
-
 .ctp-form-loggin {
     width: 20%;
     margin-left: 470px;
@@ -241,51 +211,37 @@ table {
 .ctp_title h1{
     /* font properties */
     font-family: MyOswald, Arial, Helvetica, sans-serif; 
-    font-size: 32px;
+    font-size: 24px;
     font-weight: 200;    
     color: #ebc14b;     
     text-combine-upright: all;
 }
 
 /* ctp_subtitle */
-.ctp_subtitle, ctp_title {
-    margin: 0px 0px 5px 0px;
-    justify-content: left;
-}
 
+.ctp_subtitle {
+    color: white;
+}
 /*  All a h1, h2, h3 elements with class (.ctp_subtitle) */
 h1.ctp_subtitle {
-    font-family: MyOswald, Helvetica, sans-serif; 
-    /*font-weight: 200;*/
-    font-stretch: condensed;
+    font-family: MyOswald, Helvetica, sans-serif;        
     color: #ebc14b; 
 }
 
 h2.ctp_subtitle {
-    font-family: MyAmaranta, Arial,Helvetica, sans-serif; 
-    font-weight: 200;
-    color: #57a900;    
+    font-family: MyOswald, Arial; 
+    font-size: 25px;
+    padding-left: 5px;   
+    color: white;    
 }
 
-h3.ctp_subtitle {
-    padding: 5px 5px;
-    font-family: MyOswald, MyOswaldMedium, Helvetica, sans-serif;       
-    font-stretch: expanded;
-    color: #57a900;     
-    margin: 0px 0px 5px 10px;       
+ h3.ctp_subtitle {
+    padding-bottom: 10px;
+    font-family: MyOswald, Helvetica, sans-serif;          
+    font-size: 20px;
+    color: #57a900;               
     text-transform: capitalize;
 }
-
-#navbar1 {  
-  background-color: #333;
-  overflow: hidden;  
-}
-
-.header-img {
-    margin: 20px auto;    
-    display: block;    
-}
-
 
   
 /*** hidding all items with less than 100 TIMES QUOTE ***/ 
@@ -296,27 +252,17 @@ h3.ctp_subtitle {
 
 /*******************   TABLE CTP PROPERTIES ***********************************/
 .table_ctp {
-    text-align: center;
-    font-family: Verdana, Arial, Helvetica, sans-serif;	
+    text-align: center;  
+    font-size : 9px;
+    padding: 1px 1px;
+    margin: 1px 1px; 
 }
 
-.table_ctp thead, tfoot {   
-    font-family: Tahoma, Roboto, Arial;
-    font-size: 12px;
-    text-align: left;   
-    padding: 2px 2px;
+.table_ctp thead, tfoot,th {   
+    font-family: Roboto, Arial;
+    font-size: 11px;
+    text-align: left;    
     background-color: #ffdf80; /*#F9C05F*/
-}
-
-td {
-    padding: 1px 1px;
-    margin: 1px 1px;
-}
-
-.table_ctp > tbody{    	
-    font-size : 10px;
-    padding: 1px 1px;
-    margin: 1px 1px;
 }
 
 /* highlighter columns */
@@ -330,7 +276,7 @@ td {
 }
 
 .table_ctp .partnumber {
-    font-size: 11px;
+    font-size: 10px;
     color: #593a78;
 }
 
@@ -398,30 +344,13 @@ table.minimalistBlack tfoot td {
     border-radius: 40px 40px 40px 40px;
 }
 
-.ctp-btn {
-  color: white;  
-  background-color: #33cc33;  
-  border: none;
-  border-radius: 4px; 
-  height: 40px;
-  padding: 5px 15px;
-  margin: 5px 5px;
-  text-align: center;
-  font-size: 16px; 
-  opacity: 0.6;
-  transition: 0.3s;
-}
 
 .ctp-btn:hover { opacity: 0.75 }
 
 .ctp-buttons {    
     padding-left: 10px;
     padding-right: 10px;
-}
-
-.ctp-content{
-    margin: 8px 10px;       
-        
+    padding-bottom: 10px;
 }
 
 /* DT-BUTTONS : ACTIONS AND OPERATIONS LIKE CONVERT TO EXCEL, PDF, AND COPY TO CLICK BOARD */
@@ -435,6 +364,7 @@ table.minimalistBlack tfoot td {
 input[type="number"]:hover,
 input[type="number"]:focus,
 input[type="number"]:active,
+input[type="search"]:active, hover,
 select, input[type="search"]:focus
 {
   background: linear-gradient(#E9E2E0, #FFFFFF);
@@ -448,7 +378,7 @@ select {
 }
 
 #tqId {
-   width:  130px;
+   width:  100px;
 }
 
 #table_toexcel_length, 
@@ -501,46 +431,15 @@ input[type="password"] {
     color: #000000;
 }
 
-h1, h2, h3 {
-	color: #68b604;	
-}
-
 .ctp-container {
-    border-radius: 5px;
-    background-color: #f2f2f2;
-    padding: 20px;
+    padding-top: 15px;
+    padding-bottom: 15px;      
 }
 
+/*
 
-.btn-success {
-  background-color: #57a900;
-  background-image: -moz-linear-gradient(top, #70d900, #57a900);
-  background-image: -ms-linear-gradient(top, #70d900, #57a900);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#70d900), to(#57a900));
-  background-image: -webkit-linear-gradient(top, #70d900, #57a900);
-  background-image: -o-linear-gradient(top, #70d900, #57a900);
-  background-image: linear-gradient(top, #70d900, #57a900);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#70d900', endColorstr='#57a900', GradientType=0 );
-}
 
-.btn-success:hover,
-.btn-success:active,
-.btn-success.active,
-.btn-success.disabled,
-.btn-success[disabled] {
-  background-color: #57a900;
-}
-
-.btn-success:active, .btn-success.active {
-  background-color: #57a900;
-}
-
-div.container a.navbar-brand > img {
-    display: inline;
-    margin-right: 4px;
-}
-
-div.app-caption {
+*/div.app-caption {
     padding: 25px 0px;    
     font-size:3.0em;
     font-weight: bold;
@@ -565,7 +464,7 @@ form ul li {
 
 .imgicon {
     opacity: 0.5;
-    filter: alpha(opacity=50); /* For IE8 and earlier */
+    filter: alpha(opacity=50); /* For IE8 and earlier 
 }
 
 .imgicon:hover {
