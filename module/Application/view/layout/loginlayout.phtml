@@ -1,72 +1,102 @@
 <?= $this->doctype() ?>
-<?php
-             //----- getting PATH for banner.png inside the document root ---------------
-    $bannerPath = $this->basePath().'/img/banner.png'; 
-?>
 
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <?= $this->headTitle('CTPSYSTEM')->setSeparator(' - ')->setAutoEscape(false) ?>
+<head>
+    <meta charset="utf-8">
+    <?= $this->headTitle('CTPSYSTEM')->setSeparator(' - ')->setAutoEscape(false) ?>
 
-        <?= $this->headMeta()
-            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
-            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
-        ?>
+    <?= $this->headMeta()
+        ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+        ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+    ?>
 
-        <!-- CSS FILES -->
-        <?= $this->headLink([
-                      'rel'  => 'shortcut icon', 
-                      'type' => 'image/vnd.microsoft.icon', 
-                      'href' => $this->basePath().'/img/logo.png']
-                  )->prependStylesheet($this->basePath('css/style.css'))
-                   ->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
-                   ->prependStylesheet($this->basePath('css/bootstrap.min.css'))                   
-        ?>
+    <!-- default -->
+    <?= $this->headLink([
+                  'rel' => 'shortcut icon', 
+                  'type' => 'image/vnd.microsoft.icon', 
+                  'href' => $this->basePath().'/img/logo.png']) 
+               //added from the new template   
+               ->prependStylesheet($this->basePath('assets/css/style.css'))
+               ->prependStylesheet($this->basePath('assets/css/bootstrap.min.css')) 
+               ->prependStylesheet($this->basePath('assets/css/fontawesome.all.css')) 
+               ->prependStylesheet($this->basePath('assets/css/flaticon.css'))
+               ->prependStylesheet($this->basePath('assets/css/animate.css'))
+               ->prependStylesheet($this->basePath('assets/css/owl.carousel.min.css'))
+               ->prependStylesheet($this->basePath('assets/css/magnific-popup.css'))               
+               ->prependStylesheet($this->basePath('assets/css/responsive.css'))
 
-        <?= $this->headLink([
-                      'rel' => 'stylesheet',                        
-                      'href' => 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css']
-                  );
-        ?>
+    ?>
 
-        <!-- Scripts -->
-        <?= $this->headScript()
-            ->prependFile($this->basePath('js/bootstrap.min.js'))
-            ->prependFile($this->basePath('js/jquery-2.2.4.min.js'))
-        ?>
+    <!-- Scripts -->
+    <?= $this->headScript()       
+        ->prependFile($this->basePath('assets/js/bootstrap.min.js'))        
+        ->prependFile($this->basePath('assets/js/popper.min.js'))        
+        ->prependFile($this->basePath('assets/js/owl.carousel.min.js'))
+        ->prependFile($this->basePath('assets/js/jquery.magnific-popup.js'))
+        ->prependFile($this->basePath('assets/js/contact.js'))
+        ->prependFile($this->basePath('assets/js/wow.min.js'))
+        ->prependFile($this->basePath('assets/js/waypoints.min.js'))
+        ->prependFile($this->basePath('assets/js/imagesloaded.pkgd.min.js'))
+        ->prependFile($this->basePath('assets/js/isotope.pkgd.min.js'))    
+        ->prependFile($this->basePath('assets/js/main.js')) 
+        ->prependFile($this->basePath('assets/js/jquery.js'))    
+    ?>
+
+    <?php $bannerPath = $this->basePath().'/assets/img/logo.png'; ?>
         
-        
-        
-        
-    </head>
-    
-    <body>        
+</head>
+
+<!--LOGGIN BODY--> 
+<body>        
         <!-- Page header -->
         <!-- ************************************** PAGE HEADER BANNER *************************************-->        
-        
-        <div class="header">
-            <div class="row">                    
-                <div>    
-                    <a href="<?= $this->url('home')?>">
-                        <img class="header-img" src="<?= $this->basePath().'/img/LOGO.PNG' ?>" height="80" alt="Zend Framework <?= \Application\Module::VERSION ?>"/>
-                    </a>
-                </div>   
-                <div class="ctp_title">
-                    <h1> Information System</h1>
-                </div>
+         <!-- 2:  NEW!!! -->
+        <!-- preloader area start -->
+         <div class="preloader" id="preloader">
+            <div class="preloader-inner">
+                    <div class="lds-ripple"><div></div><div></div></div>
             </div>
         </div> 
+
+        <!-- 3: NEW !!!  -->
+        <!-- support bar area start ************************** show  -->
+        <div class="support-bar-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="left-content-area"><!-- left content area -->
+                            <ul>
+                                <li>Mon – Fri: 8.30 – 17.35</li>
+                                <li>Saturday, Sunday: Closed </li>
+                                <li>Emergency: 24hr / 7days</li>
+                            </ul>
+                        </div><!-- //.left conten tarea -->
+                        <div class="right-content-area"><!-- left content area -->
+                            <ul>
+                                <li><a href="#"> <i class="fab fa-facebook-f"></i> </a></li>
+                                <li><a href="#"> <i class="fab fa-twitter"></i> </a></li>
+                                <li><a href="#"> <i class="fab fa-instagram"></i> </a></li>
+                                <li><a href="#"> <i class="fab fa-linkedin-in"></i> </a></li>
+                            </ul>
+                        </div><!-- //.left contentarea -->
+                    </div>
+                </div>
+            </div>
+        </div>  <!-- support bar area -->
         
+                
         <!-- Page Content from here -->
+        <div class="">
         <div class="container">             
-            <div class="row">
-                <div class="ctp-form-loggin">
-                    <!-- Page content placeholder -->
-                    <?= $this->content;?>
+            <div class="row">   
+                <div class="col-lg-12">
+                    <div class="col-md-4 offset-md-8 text-center">            
+                        <?= $this->content;?>
+                    </div>     
                 </div>
-            </div>
+            </div> 
         </div> 
+        </div>    
      
       
         <?= $this->inlineScript() ?>
