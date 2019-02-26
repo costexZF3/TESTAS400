@@ -23,8 +23,8 @@
     
     $form->get('num-tq')->setAttributes([
         'class' => 'form-control',
-        'placeholder' => '[10..150]',
-        'title' => 'Enter TIMES QUOTE',
+        'placeholder' => '',
+        'title' => 'TIMES QUOTE:10-150',
     ]);
     
     $form->get('sel-vndassigned')->setAttributes([
@@ -32,9 +32,8 @@
         'title' => 'Both: It shows Parts with vendors assigned and without vendors assigned at the same time.',
     ]);
     
-    $form->get('submit')->setAttributes(['class'=>'btn btn-warning'])
+    $form->get('submit')->setAttributes(['class'=>'submit-btn'])
             ->setValue(' Submit ');
-
     $form->prepare();
     
  ?>  
@@ -223,7 +222,7 @@
                         }                                           
                      ],
         initComplete: function () {
-                        this.api().columns([0,1,8,10,18,19]).every( function () {
+                        this.api().columns([0,8,10,18,19]).every( function () {
                             var column = this;
                             var select = $('<select><option value=""></option></select>')
                                 .appendTo( $(column.footer()).empty() )
@@ -277,73 +276,119 @@
 
 <?php if ($specialAccess): ?>
      
-<?=$this->form()->openTag($form); ?>
-    <div class ="ctp-panel">
-       <div class="ctp-panel-header">
-         <h3 class="ctp_subtitle"> Filters </h3>
-       </div>    
-        <!-- PANEL BODY -->
-        <div class = "row ctp-panel-body">              
-            <div class="col-md-2">                     
-                <p class=" ctp-subtitle"> <b>Times Quotes </b>[actual value]:<span class=""><?=$timesquoted; ?> </span> </p>                    
-                <div class="form-group"> 
-                    <input type="hidden" name="oldtimesquoted" value="<?=$timesquoted;?>">
 
-                    <input class="form-radio"onclick="timesQuote('tq10plus')" type="radio" name="timesquote" id="tqr10"  >
-                    <label for="tqr10"><span> 10+ </span></label> 
+<!--create an ACCODION FILTERS--> 
 
-                    <input class="form-radio"onclick="timesQuote('tq30plus')" type="radio" name="timesquote" id="tqr30" >
-                    <label  for="tqr30"><span> 30+ </span></label>
+<!--filters PANELS--> 
 
-                    <input class="form-radio" onclick="timesQuote('tq50plus')" type="radio" name="timesquote" id="tqr50">
-                    <label for="tqr50"><span> 50+ </span></label> 
+<div class="container">
+    <div class ="row">
+        <!--DEFAUL VALUES ACCORDION--> 
+        <div class="col-lg-6">
+            <div class="accordion-wrapper">
+                <div id="accordion">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">  
+                                <a class="collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    <span class=""> DEFAUL VALUES </span>
+                                </a>   
+                            </h5>
+                        </div> 
 
-                    <input  class="form-radio" onclick="timesQuote('tq100plus')"type="radio" name="timesquote" id="tqr100" checked="checked" >
-                    <label for="tqr100"><span> 100+ </span></label>
-                </div>                        
-            </div>                
+                        <!--ACCORDION CONTENT-->                                                  
+                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card-body">
+                                <ul>
+                                    <li> COUNT ITEMS: <?=$countItems?><li>
+                                    <li> TIMES QUOTE: (Actual Value): <span class=""><?=$timesquoted; ?> </span> <li>
+                                </ul>  
+                            </div>                        
+                        </div> <!-- COLLAPSE CONTENT END -->               
+                    </div> <!-- CARD END -->            
+                </div> <!-- ACCORDION END -->
+            </div> <!-- ACCORDION WRAPPER -->
+        </div> <!-- COLUMN: END -->
+        
+        
+        <!--FILTER ACCORDION-->
+        <div class="col-lg-6">
+            <div class="accordion-wrapper">
+                <div id="accordion_2">
+                    <div class="card">
+                        <div class="card-header" id="headingOne_2">
+                            <h5 class="mb-0">
+                                <a  class="collapsed" data-toggle="collapse" data-target="#collapseOne_2" aria-expanded="false" aria-controls="collapseOne_2">
+                                    <span class=""> FILTER DATA  </span>
+                            </a>
+                            </h5>
+                        </div> 
+                        
+                        <!--FORM TO GET DATA FOR FILTERING DATA-->
+                        <?=$this->form()->openTag($form); ?>
+                            <!--ACCORDION CONTENT--> 
+                            <div id="collapseOne_2" class="collapse" aria-labelledby="headingOne_2" data-parent="#accordion_2">
+                                <div class="card-body">
+                                    <div class = "row">
+                                        <div class="form-group col-md-4"> 
+                                            <input type="hidden" name="oldtimesquoted" value="<?=$timesquoted;?>">
 
-            <div class="col-md-8">
-                <!--times quote : rendering--> 
-                <div class="form-group">
-                    <?= $this->formLabel($form->get('num-tq')); ?>
-                    <?= $this->formElement($form->get('num-tq')); ?>
-                    <?= $this->formElementErrors($form->get('num-tq')); ?> 
-               </div>
+                                            <input class="form-radio"onclick="timesQuote('tq10plus')" type="radio" name="timesquote" id="tqr10"  >
+                                            <label for="tqr10"><span> 10+ </span></label> <br>
 
-                <!--dropdownlist: vendors assigned or not: or both-->
-                <div class="form-group">                        
-                    <?= $this->formLabel($form->get('sel-vndassigned')); ?> <br>
-                    <?= $this->formElement($form->get('sel-vndassigned')); ?>
-                    <?= $this->formElementErrors($form->get('sel-vndassigned')); ?> 
-                </div>
-            </div>    
-               
-            <!--boton submit-->    
-            <div class="col-md-2">
-                <br>
-                <?= $this->formHidden($form->get('csrf')); ?>                                            
-            </div>
-        </div>      
-       <br>
-    </div>
+                                            <input class="form-radio"onclick="timesQuote('tq30plus')" type="radio" name="timesquote" id="tqr30" >
+                                            <label  for="tqr30"><span> 30+ </span></label> <br>
 
-   <!-- ROW THAT ARE SHOWING COUNT OF ITEMS, SUBMIT BUTTON AND CONVERT TO EXCEL THE ACTUAL PAGE --> 
-    <div class="row">
-        <div class="col-md-2"> <h3 class="ctp_subtitle">COUNT ITEMS: <?=$countItems?></h3></div>
-<!--         <div class="ctp_title"> <h1> Quoted Items no Stock no Order ( LostSales ) </h1></div> -->
-        <div class ="col-sm-offset-9 ctp-buttons">
-            <?= $this->formElement($form->get('submit')); ?> 
-            
-            <input class="btn btn-info" id="convert" type="button" name="btnexcel" value="Convert to Excel">
-<!--            <input class="btn btn-danger" id="topdf" type="button" name="btnpdf" value="Convert to PDF">-->
-            <!--<input class="btn btn-success" id="towishlist" type="button" name="towishlist" value="Save to Wish List">-->   
-        </div>    
-    </div> 
-<?=$this->form()->closeTag(); 
-            ?>
-    <div class="ctp-grid">
+                                            <input class="form-radio" onclick="timesQuote('tq50plus')" type="radio" name="timesquote" id="tqr50">
+                                            <label for="tqr50"><span> 50+ </span></label>  <br>
+
+                                            <input  class="form-radio" onclick="timesQuote('tq100plus')"type="radio" name="timesquote" id="tqr100" checked="checked" >
+                                            <label for="tqr100"><span> 100+ </span></label> <br>
+                                        </div> 
+
+                                        
+                                        <div class="form-group">
+                                            <!--SHORT WAY-->
+                                             <!--times quote : rendering-->
+                                            <?= $this->FormRow($form->get('num-tq')); ?> 
+                                            
+                                            <!--LONG WAY-->  <!--vendor assigned : rendering-->
+                                            <?= $this->FormLabel($form->get('sel-vndassigned')); ?>                                                
+                                            <?= $this->FormElement($form->get('sel-vndassigned')); ?>                                                
+                                            <?= $this->formElementErrors($form->get('sel-vndassigned')); ?>                                                
+                                        </div>
+                                    </div>    
+
+                                     <!-- cross site forgery's attack avoiding -->    
+                                    <div class="col-md-2">
+                                        <?= $this->formHidden($form->get('csrf')); ?>                                            
+                                    </div>
+                                 </div> 
+
+                                <!-- SUBMIT BUTTON AND CONVERT TO EXCEL THE ACTUAL PAGE --> 
+                                <div class="row">
+                                    <div class ="col-md-12">
+                                        <?= $this->formElement($form->get('submit')); ?> 
+                                        <input class="submit-btn" id="convert" type="button" name="btnexcel" value="Convert to Excel">
+                                    </div>    
+                                </div>
+                            
+                            <?=$this->form()->closeTag();?>
+                        </div>   <!-- COLLAPSE CONTENT END -->                          
+                    </div> <!-- CARD END -->            
+                </div> <!-- ACCORDION END -->           
+            </div>  <!-- ACCORDION WRAPPER -->            
+        </div>  <!-- COLUMN: END -->
+    </div>  <!-- ROW: END -->   
+</div> <!-- CONTAINER: END -->
+
+<br>
+
+
+<div class="row">
+    <div class="co-lg-12 col-md-12">
        <?=$table?>
-    </div>    
+    </div> 
+</div>
 <?php endif; ?>
-
+ 
