@@ -330,28 +330,30 @@
                             <div id="collapseOne_2" class="collapse" aria-labelledby="headingOne_2" data-parent="#accordion_2">
                                 <div class="card-body">
                                     <div class = "row">
-                                        <div class="form-group col-md-4"> 
+                                        <div class="form-group col-md-12"> 
                                             <input type="hidden" name="oldtimesquoted" value="<?=$timesquoted;?>">
 
                                             <input class="form-radio"onclick="timesQuote('tq10plus')" type="radio" name="timesquote" id="tqr10"  >
-                                            <label for="tqr10"><span> 10+ </span></label> <br>
+                                            <label for="tqr10"><span> 10+ </span></label> 
 
                                             <input class="form-radio"onclick="timesQuote('tq30plus')" type="radio" name="timesquote" id="tqr30" >
-                                            <label  for="tqr30"><span> 30+ </span></label> <br>
+                                            <label  for="tqr30"><span> 30+ </span></label>
 
                                             <input class="form-radio" onclick="timesQuote('tq50plus')" type="radio" name="timesquote" id="tqr50">
-                                            <label for="tqr50"><span> 50+ </span></label>  <br>
+                                            <label for="tqr50"><span> 50+ </span></label> 
 
-                                            <input  class="form-radio" onclick="timesQuote('tq100plus')"type="radio" name="timesquote" id="tqr100" checked="checked" >
-                                            <label for="tqr100"><span> 100+ </span></label> <br>
+                                            <input  class="form-radio" onclick="timesQuote('tq100plus')"type="radio" name="timesquote" id="tqr100">
+                                            <label for="tqr100"><span> 100+ </span></label> 
                                         </div> 
-
+                                    </div>    
+                                    <div class = "row">
                                         
-                                        <div class="form-group">
+                                        <div class="col-md-6">
                                             <!--SHORT WAY-->
-                                             <!--times quote : rendering-->
+                                            <!--times quote : rendering-->
                                             <?= $this->FormRow($form->get('num-tq')); ?> 
-                                            
+                                        </div>
+                                        <div class="col-md-6">    
                                             <!--LONG WAY-->  <!--vendor assigned : rendering-->
                                             <?= $this->FormLabel($form->get('sel-vndassigned')); ?>                                                
                                             <?= $this->FormElement($form->get('sel-vndassigned')); ?>                                                
