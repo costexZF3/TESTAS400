@@ -56,12 +56,12 @@ class Breadcrumbs extends AbstractHelper
                
         $result.= '<div class="page-list">';
                 
+        $last_key = key( array_slice( $this->items, -1, 1, TRUE ) );        
+        $result.= '<h1 class="title">'.$last_key.'</h1>';
+                
         // Walk through items
         foreach ($this->items as $label=>$link) {
-            if ($itemNum == 1) {
-                 $result.= '<h1 class="title">'.$label.'</h1>';
-            }
-            // Make the last item inactive
+                       // Make the last item inactive
             $isActive = ($itemNum==$itemCount?true:false);
                         
             // Render current item
