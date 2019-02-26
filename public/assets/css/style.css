@@ -2864,8 +2864,8 @@ select:focus {
         position: absolute;
         right: 30px;
         top: 20px;
-        content: "";
-        font-family: "Font Awesome 5 Free";
+        content: "\f107";
+        font-family: "Font Awesome\ 5 Free";
         font-weight: 900;
         -webkit-transition: all 0.3s ease-in;
         -moz-transition: all 0.3s ease-in;
@@ -2874,8 +2874,8 @@ select:focus {
       .accordion-wrapper .card .card-header h5 a[aria-expanded="true"] {
         margin-bottom: 0; }
         .accordion-wrapper .card .card-header h5 a[aria-expanded="true"]:after {
-          content: "";
-          font-family: "Font Awesome 5 Free";
+          content: "\f106";
+          font-family: "Font Awesome\ 5 Free";
           font-weight: 900; }
   .accordion-wrapper .card .card-body {
     padding: 6px 30px 26px 30px;
