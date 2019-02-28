@@ -1,0 +1,61 @@
+<!--GETTING VALUES PASSED FROM THE ABOUT VIEW--> 
+<?PHP
+    $CompletedProjects = $this->completedProjects; //3700
+    $HappyCustomers = $this->HappyCustomers; //4048
+    $OurEngineer = $this->OurEngineer; //387
+    $Followers = $this->Followers; // 3700k+
+?>
+
+
+<!-- counter up area start -->
+<section class="counterup-area counterup-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <div class="single-counterup-item"><!-- single coutner up item -->
+                    <div class="icon">
+                        <i class="flaticon-briefcase"></i>
+                    </div>
+                    <div class="content">
+                        <div class="count-num"><?=$CompletedProjects; ?></div>
+                        <h5 class="name">Project Completed</h5>
+                    </div>
+                </div><!-- ///. single counter up item -->
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="single-counterup-item"><!-- single coutner up item -->
+                    <div class="icon">
+                        <i class="flaticon-face"></i>
+                    </div>
+                    <div class="content">
+                        <div class="count-num"><?=$HappyCustomers; ?></div>
+                        <h5 class="name">Happy Customer</h5>
+                    </div>
+                </div><!-- ///. single counter up item -->
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="single-counterup-item"><!-- single coutner up item -->
+                    <div class="icon">
+                        <i class="flaticon-team"></i>
+                    </div>
+                    <div class="content">
+                        <div class="count-num"><?= $OurEngineer; ?></div>
+                        <h5 class="name">Our Engnieer</h5>
+                    </div>
+                </div><!-- ///. single counter up item -->
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="single-counterup-item"><!-- single coutner up item -->
+                    <div class="icon">
+                        <i class="flaticon-team-1"></i>
+                    </div>
+                    <div class="content">
+                        <div class="count-wrap"> <span class="count-num"><?= $Followers; ?></span></div>
+                        <h5 class="name">Follower</h5>
+                    </div>
+                </div><!-- ///. single counter up item -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- counter up area end -->
