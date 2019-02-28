@@ -69,6 +69,13 @@
    background-color:  #FACB4C;  
 }
 
+
+/*adding by Kristov*/
+.ctp-p-justify {
+    text-align: justify;
+}
+    
+
 /* ctp-panel, -ctp-panel-header  -ctp-panel-body  */
 .ctp-panel {
     margin-bottom: 15px;   
