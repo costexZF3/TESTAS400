@@ -37,7 +37,7 @@
             ->prependFile($this->basePath('assets/js/jquery.js'))    
         ?>
 
-        <?php $bannerPath = $this->basePath().'/assets/img/logo.png'; ?>
+        <?php $PathLogo = $this->basePath().'/assets/img/logo.png'; ?>
 
     </head>
 
@@ -45,7 +45,7 @@
     <body>        
     <!-- RENDERING PRELOADER USING PARTIAL VIEW -->
     <?php
-       echo $this->partial('application/particialview/preloader',['pathLogo'=>$this->basePath().'/img/LOGO.PNG']);
+       echo $this->partial('application/particialview/preloader',['pathLogo'=>$PathLogo]);
     ?>    
     <!-- Page Content from here -->
     <section class="ctp-container">

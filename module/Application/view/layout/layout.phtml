@@ -19,6 +19,7 @@
                   'href' => $this->basePath().'/img/logo.png']) 
                //added from the new template   
                ->prependStylesheet($this->basePath('assets/css/style.css'))
+               ->prependStylesheet($this->basePath('css/style.css'))
                ->prependStylesheet($this->basePath('assets/css/bootstrap.min.css')) 
                ->prependStylesheet($this->basePath('assets/css/fontawesome.all.css')) 
                ->prependStylesheet($this->basePath('assets/css/flaticon.css'))
@@ -42,8 +43,7 @@
         ->prependFile($this->basePath('assets/js/isotope.pkgd.min.js'))
         ->prependFile($this->basePath('assets/js/jquery.counterup.min.js'))
         ->prependFile($this->basePath('assets/js/main.js')) 
-        ->prependFile($this->basePath('assets/js/jquery.js'))        
-       // ->prependFile($this->basePath('js/jquery-2.2.4.min.js'))         
+        ->prependFile($this->basePath('assets/js/jquery.js'))                     
     ?>
 
 
@@ -51,7 +51,7 @@
 
     <?php
        //----- getting PATH for banner.png inside the document root ---------------
-        $bannerPath = $this->basePath().'/assets/img/logo.png'; 
+         $pathLogo = $this->basePath().'/img/LOGO.PNG'; //original  
     ?>
 
 </head>
@@ -59,14 +59,14 @@
     <body>                
         <!-- RENDERING PRELOADER USING PARTIAL VIEW -->
         <?php
-           echo $this->partial('application/particialview/preloader',['pathLogo'=>$this->basePath().'/img/LOGO.PNG']);
+           echo $this->partial('application/particialview/preloader',['pathLogo'=>$pathLogo]);
         ?>
             
        <!-- ************************************** PAGE HEADER BANNER *************************************-->        
     <nav class="navbar navbar-area navbar-expand-lg ">
         <div class="container">
             <a class="navbar-brand logo" href="<?= $this->url('home')?>">
-                <img src="<?= $bannerPath;?>" class="black" alt="logo">
+                <img height="80" src="<?= $pathLogo;?>" class="black" alt="logo">
             </a>
             <div class="navbar-collapse collapse" id="apptidy">
                 <!-- Navigation bar generated dynamically -->
@@ -82,7 +82,7 @@
             </div>
             <!-- /.navbar btn wrapper -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#apptidy" aria-controls="apptidy" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span> CONTACT US
             </button>
             <!-- navbar collapse end -->
         </div>
