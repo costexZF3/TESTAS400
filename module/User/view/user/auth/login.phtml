@@ -1,3 +1,7 @@
+<!--
+    STARTING SETTING: 
+    - getting settings
+--> 
 <?php
     $this->headTitle('Sign in');
 
@@ -5,7 +9,7 @@
 
     $form->get('email')->setAttributes([
         'class'=>'form-control', 
-        'placeholder'=>'Email address',
+        'placeholder'=>'Email Address',
         'required' => true,
         'autofocus' => true
         ])
@@ -26,36 +30,43 @@
 
 <!--************************************** HTML RENDER ********************************** -->
  
-    <br> 
-    <div class="alert alert-warning">
-        <img class="header-img" src="<?= $this->basePath().'/img/LOGO.PNG' ?>" height="80" alt="Zend Framework <?= \Application\Module::VERSION ?>"/>
-        <h3 class="subtitle">USER LOGIN </h3>
-   
-        <form class="" method="post">          
-            <!-- checking if there was some error while -->
-            <?php if ($isLoginError): ?>
-                <div class="alert alert-warning" role="alert">
-                    Incorrect login and/or password. 
-                    <a href="<?= $this->url('reset-password') ?>">Forgot password?</a>
-                </div>
-            <?php endif; ?>
+    
+<div class="alert alert-warning">
+    <div class ="img-wrapper">
+        <div class="hover">
+            <a href="https://www.costex.com" class="video-play-btn">
+                <img class="header-img" src="<?= $this->basePath().'/img/LOGO.PNG' ?>"  alt="Zend Framework <?= \Application\Module::VERSION ?>"/>
+            </a>
+        </div>
+    </div>
+    <br>
+    <h3 class="subtitle">USER LOGIN </h3>
 
-            <div class="form-group">
-                <i class="fas fa-user"></i> 
-                <?= $this->formLabel($form->get('email')); ?>
-                <?= $this->formElement($form->get('email')); ?>                
+    <form method="post">          
+        <!-- checking if there was some error while -->
+        <?php if ($isLoginError): ?>
+            <div class="alert alert-warning" role="alert">
+                Incorrect login and/or password. 
+                <a class ="" href="<?= $this->url('reset-password') ?>">Forgot password?</a>
             </div>
-            <div class="form-group">
-                <i class="fas fa-lock"></i>                
-                <?= $this->formElement($form->get('password')); ?>
-            </div>    
-            <div>
-                <label>
-                    <?= $this->formElement($form->get('remember_me')); ?> Remember me
-                </label>
-            </div>
-            <?= $this->formElement($form->get('redirect_url')); ?>
-            <?= $this->formElement($form->get('csrf')) ?>
-            <button class="submit-btn" type="submit">Sign in</button>
-        </form>
+        <?php endif; ?>
+
+        <div class="form-group">
+            <i class="fas fa-user"></i> 
+            <?= $this->formLabel($form->get('email')); ?>
+            <?= $this->formElement($form->get('email')); ?>                
+        </div>
+        <div class="form-group">
+            <i class="fas fa-lock"></i>                
+            <?= $this->formElement($form->get('password')); ?>
+        </div>    
+        <div>
+            <label>
+                <?= $this->formElement($form->get('remember_me')); ?> Remember me
+            </label>
+        </div>
+        <?= $this->formElement($form->get('redirect_url')); ?>
+        <?= $this->formElement($form->get('csrf')) ?>
+        <button class="submit-btn" type="submit">Sign in</button>
+    </form>
 </div>
