@@ -6,10 +6,6 @@
 }
 
 @font-face {
-    font-family: MyAmarantaReg;    
-    src: url(../fonts/Amaranth-Regular.otf);     
-}
-@font-face {
     font-family: MyOswaldMedium;    
     src: url(../fonts/Amaranth-Medium.ttf);     
 }
@@ -22,35 +18,7 @@
 }
 
 
-/* CLEANING ALL PARAMETERS AND POSSIBLE VALUES OF THE HTML ELEMENTS */
-
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-	display: block;
-}
-
-/* RADIO BUTTONS */
+/* RADIO BUTTONS - NOT IN STYLE TEMPLATE */
 
 .form-radio
 {
@@ -79,23 +47,13 @@ footer, header, hgroup, menu, nav, section {
      content: '\02143';
      transform: rotate(40deg);
 }
-.form-radio:hover
-{
+.form-radio:hover {
      background-color: #DBE968;
 }
-.form-radio:checked
-{
+.form-radio:checked {
      background-color: #F3EA6C;
      border: none;
 }
-
-label1
-{
-     font: 300 16px/1.7 'Open Sans', sans-serif;
-     color: #666;
-     cursor: pointer;
-} 
-
 
 /* the main content inside pages with grids */
 .main-content {
@@ -106,34 +64,12 @@ label1
     grid-auto-flow: row dense;
 }
 
-/* body */
-body1 {
-  padding-top: 0;}
-/*  body:before {
-    content: ' ';
-    background-image: url(/ctpsystem/public/img/bg.jpg);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    display: block;
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    opacity: 0.05; 
-  }*/
-
 /* boxes */
 .box {
    background-color:  #FACB4C;  
 }
 
-/* ctp-panel 
-*  -ctp-panel-header
-*  -ctp-panel-body    
-*/
+/* ctp-panel, -ctp-panel-header  -ctp-panel-body  */
 .ctp-panel {
     margin-bottom: 15px;   
     background: rgba(250, 193, 96, 0.30);     
@@ -142,13 +78,12 @@ body1 {
 }
 
 /* select all elements h3 inside  elements with class: .box-buttons: */
-.ctp-panel-header  {
+.ctp-panel-header {
     background: rgba(250, 193, 96, 0.80); 
     border-radius: 15px 15px 0 0;
 }
-.ctp-panel-body{
-    padding: 15px 15px;
-    
+.ctp-panel-body {
+    padding: 15px 15px;    
     height: auto;
 }
 
@@ -158,25 +93,6 @@ body1 {
     font-weight: 300;
     color: #F39C12;
 }
-
-ol, ul {
-	list-style: none;
-}
-
-blockquote, q {
-	quotes: none;
-}
-
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
-}
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-
 
 /*********************************************************************/
 
@@ -193,12 +109,6 @@ table {
     height: 50%;
     border-radius: 50%;   
     background-image: url(/ctpsystem/public/img/avatar.png); 
-}
-
-.ctp-form-loggin {
-    width: 20%;
-    margin-left: 470px;
-    alignment-adjust: central;
 }
 
 /* ctp titles */
@@ -254,21 +164,38 @@ h2.ctp_subtitle {
 .table_ctp {
     text-align: center;  
     font-size : 9px;
-    padding: 1px 1px;
-    margin: 1px 1px; 
+    width: 90%;
 }
 
 .table_ctp thead, tfoot,th {   
-    font-family: Roboto, Arial;
+    /*font-family: Roboto, Arial;*/
     font-size: 11px;
     text-align: left;    
-    background-color: #ffdf80; /*#F9C05F*/
+    background-color: #F7BC59; /*#F9C05F*/
 }
 
 /* highlighter columns */
 .table_ctp .description,.partnumber {    	    
     text-align: left;
 }
+
+/*table_ctp*/
+
+/*select elements inside a td element*/
+td select {
+    max-width: 50px;
+    min-width: 50px;
+}
+
+
+ /* modified by kristov */
+ 
+/*select, input[type="search"] {
+  position: relative;
+  height: auto; 
+  padding: 5px;
+  font-size: 16px;
+}*/
 
 .table_ctp .money {    	    
     text-align : right;
@@ -278,6 +205,7 @@ h2.ctp_subtitle {
 .table_ctp .partnumber {
     font-size: 10px;
     color: #593a78;
+    width: 80px;
 }
 
 .table_ctp .timesq {
@@ -337,61 +265,24 @@ table.minimalistBlack tfoot td {
   font-size: 14px;
 }
 
-/* button ctp-btn */
-#ctp-borderDemo {
-    -webkit-border-radius: 40px 40px 40px 40px;
-    -moz-border-radius: 40px 40px 40px 40px;
-    border-radius: 40px 40px 40px 40px;
-}
-
-
-.ctp-btn:hover { opacity: 0.75 }
 
 .ctp-buttons {    
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-bottom: 10px;
+    padding : auto;
 }
 
 /* DT-BUTTONS : ACTIONS AND OPERATIONS LIKE CONVERT TO EXCEL, PDF, AND COPY TO CLICK BOARD */
 .dt-buttons {
-    margin-left: 50px;
-    
+    margin-left: 20px;  
+    margin-right: 20px
 } 
 
-
-/*select options styling */
-input[type="number"]:hover,
-input[type="number"]:focus,
-input[type="number"]:active,
-input[type="search"]:active, hover,
-select, input[type="search"]:focus
-{
-  background: linear-gradient(#E9E2E0, #FFFFFF);
-  border-radius: 3px;
-}
-
-
-select {
-    height:  30px;
-    width: 130px;    
-}
-
 #tqId {
-   width:  100px;
+   max-width:  130px;
 }
 
-#table_toexcel_length, 
-input[type="search"], 
-input[type="text"], 
-input[type="checkbox"],
-input[type="password"] {
+#table_toexcel_length {
     font-family: Arial, Roboto, MyOswald;
     font-stretch: ultra-expanded;
-}
-.top-buffer {    
-    margin-top:20px;
-    margin-bottom: 20px;
 }
 
 .ctp-span {
@@ -403,9 +294,12 @@ input[type="password"] {
     color: #68b604;
 }
 
+.ctp-container {
+    margin-top: 10px;
+}
+
 .ctp-grid {
-   width: 100%;
-   
+   width: 100%;   
 }
 
 .ctp-footer {
@@ -431,29 +325,11 @@ input[type="password"] {
     color: #000000;
 }
 
-.ctp-container {
-    padding-top: 15px;
-    padding-bottom: 15px;      
-}
-
-/*
-
-
-*/div.app-caption {
+div.app-caption {
     padding: 25px 0px;    
     font-size:3.0em;
     font-weight: bold;
     color:#6aacaf
-}
-
-form ul {
-  list-style-type: none;
-  padding: 0px;
-  margin: 0px 5px;
-}
-
-form ul li {    
-  color: red;        
 }
 
 .alert ul {
@@ -464,7 +340,7 @@ form ul li {
 
 .imgicon {
     opacity: 0.5;
-    filter: alpha(opacity=50); /* For IE8 and earlier 
+    filter: alpha(opacity=50); /* For IE8 and earlier */
 }
 
 .imgicon:hover {
