@@ -55,18 +55,8 @@
             $users = $this->entityManager->getRepository(User::class)
                          ->findBy([], ['id'=>'ASC']);
             
-//            $query = $this->entityManager->getRepository(User::class)
-//                        ->findBy([], ['id'=>'ASC']);
-           
-//            
-//            $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
-//            $paginator = new Paginator($adapter);
-//            $paginator->setDefaultItemCountPerPage(5);        
-//            $paginator->setCurrentPageNumber($page);
-            
-            
             return new ViewModel([
-                'users' => $users //$paginator  //$users: got back before 
+                'users' => $users 
             ]);
         } 
 
@@ -223,8 +213,7 @@
         /**
          * This action displays a page allowing to change user's password.
          */
-        public function changePasswordAction() 
-        {
+        public function changePasswordAction() {
             $id = (int)$this->params()->fromRoute('id', -1);
             if ($id<1) {
                 $this->getResponse()->setStatusCode(404);
@@ -235,29 +224,28 @@
                     ->find($id);
 
             if ($user == null) {
-                $this->getResponse()->setStatusCode(404);
+                $this->getResponse()->setStatusCode( 404 );
                 return;
             }
 
             // checking access to +user.manage permission for the user logged in   
             $isUserManager = $this->access('manage.user');
             
-            $passwordChangeOrReset = ($this->access('manage.user'))?"reset":"change";
-            // Create "change password" form
-            $form = new PasswordChangeForm($passwordChangeOrReset);
-           
+            $passwordChangeOrReset = ( $isUserManager )?"reset":"change";
             
+            // Create "change password" form
+            $form = new PasswordChangeForm( $passwordChangeOrReset );
+                       
             // Check if user has submitted the form
             if ($this->getRequest()->isPost()) {
 
                 // Fill in the form with POST data
                 $data = $this->params()->fromPost();            
 
-                $form->setData($data);
+                $form->setData( $data );
 
                 // Validate form
                 if($form->isValid()) {
-
                     // Get filtered and validated data
                     $data = $form->getData();
                     

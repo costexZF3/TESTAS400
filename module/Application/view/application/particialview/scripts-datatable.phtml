@@ -1,0 +1,21 @@
+
+<!--PARTIAL VIEW CREATED FOR RENDERING SCRIPTS INSIDE A PHTML 
+    -you can render a personalized title invoking the code snipped below 
+    - (note: remove the number 1 in front each PHP TAG BEFORE USE IT )
+    <1?php echo $this->partial('application/particialview/scripts-datatable', 
+            []); 
+    ?1>
+-->
+
+
+<script type="text/javascript"  src="<?=$this->basePath()."/";?>DataTables-1.10.18/js/dataTables.js"></script>
+
+<script type="text/javascript"  src="<?=$this->basePath()."/";?>js/jquery.table2excel.min.js"></script>
+
+<!-- added for buttons to export   -->
+<link href="https://nightly.datatables.net/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+<script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>  
+
+<link href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />   
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.js"></script> 
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>

@@ -131,7 +131,7 @@ return [
                 ['actions' => ['resetPassword', 'message', 'setPassword'], 'allow' => '*'],
                 // Give access to "index", "add", "edit", "view", "changePassword" actions to users having the "user.manage" permission.
                 ['actions' => ['index', 'add', 'edit', 'view'], 'allow' => '+manage.user'],               
-                ['actions' => ['changePassword'], 'allow' => '@']
+                ['actions' => ['view','changePassword','changePassword', 'resetPassword'], 'allow' => '@']
             ],
             Controller\RoleController::class => [
                 // Allow access to authenticated users having the "role.manage" permission.

@@ -1,0 +1,22 @@
+
+<!--PARTIAL VIEW CREATED FOR RENDERING PRELOADER AREA
+    -you can render a personalized title invoking the code snipped below 
+    - (note: remove the number 1 in front each PHP TAG BEFORE USE IT )
+    <1?php echo $this->partial('application/particialview/section-title', 
+            ['titleRender'=>'CHANGE-RESET-PASSWORD']); 
+    ?1>
+-->
+
+<?php
+  /* getting PATH of image to render */ 
+  $title= $this->titleRender;
+?>
+
+<div class="section-title"><!-- section title -->
+    <h4 class=""><?= $title ?></h4>
+    <div class="separator">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</div>

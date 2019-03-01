@@ -1,30 +1,44 @@
 <?php
     $this->headTitle('Message');
-?>
 
-<!--***************************************** RENDERING HTML ********************************************-->
-<div class="row">
-    <div class="col-md-offset-4 col-md-5">
-         <div class="panel panel-primary">
-            <div class="panel-heading">
-                <span class="zf-green">Reset Password </span>
-            </div>            
-            <div class="panel-body zdt-toolbar-info">
+
+ $this->pageBreadcrumbs()->setItems([
+                'Home'=>$this->url('home'),
+                'Password Reset'=>$this->url('users'),                
+                ]);
+
+
+ ?>
+ <!--***************************************** RENDERING HTML ********************************************-->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-5 single-service-item">
+            <h4 class="title"> Message </h4>
+                        
+            <div class=" ">
                 <?php if ($id=='sent'): ?>
                         <p> A password reset link has been sent to your email address.</p>
                 <?php elseif ($id=='invalid-email'): ?>
                        <p> There is no user with such an email.</p>
                 <?php elseif ($id=='set'): ?>
-                       <p>Your new password has been <i>set</i> successfully </p>
+                       <p>Your new password has been <i>set</i> successfully. </p>
                         <p> 
-                            to <a href="<?= $this->url('login'); ?>">login page</a>.
+                            Click <a class="base-color" href="<?= $this->url('login'); ?>">HERE </a> to login page.
                         </p>
                 <?php elseif ($id=='failed'): ?>
                     Invalid reset key or it may have expired. Please return 
-                    <a href="<?= $this->url('reset-password') ?>">here</a> and try reset your password again.
-                </p>
+                    <a class="nav-link" href="<?= $this->url('reset-password') ?>">here</a> and try reset your password again.
+                
                 <?php endif; ?>
-            </div>    
+            </div>  
+             <!-- P TAG: THERE ARE TWO BUTTONS -->
+            <div class="btn-wrapper">
+                <!-- BUTTON CHANGE PASSWORD -->
+                <div class="btn-wrapper">
+                            <a href="<?=$this->url('home'); ?>" class="boxed-btn">Go Back To Home</a>
+                </div>    
+            </div> 
+            
          </div>         
     </div>
 </div>   <!-- row will be render on the CONTAINER --> 

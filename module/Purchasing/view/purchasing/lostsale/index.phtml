@@ -1,7 +1,7 @@
 <?php     
     /*getting values */
        
-    $this->headTitle('Lost Sales: Quoted Items no Stock no Order');	
+    $this->headTitle('Lost Sales');	
     $this->mainMenu()->setActiveItemId('lostsales'); 
    
     $this->pageBreadcrumbs()->setItems([
@@ -140,7 +140,7 @@
         
 //        taking off CLASS dt-button to the buttons EXCEL, PDF, AND COPY
     $("button.dt-button").removeClass("dt-button");
-        
+            
     let tempCol = <?php echo '[' . implode(', ', $columnsToHide) . ']';?>;
     
     const columsToHide = (tempCol.length!==0)? tempCol:[];
@@ -161,7 +161,7 @@
                           [10, 25, 50, 100, "All"]
                         ],
                         
-       dom: '<"ctp-buttons"l Bfr<t>ip>',
+        dom: '<"ctp-buttons"l Bfr<t>ip>',
        
             /* see: exportOptions Object. This is an object. It help you to set up all concerning to BUTTONS */
             buttons: [ 
@@ -301,9 +301,9 @@
                         <!--ACCORDION: CONTENT-->                                                  
                         <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                             <div class="card-body">
-                                <ul>
-                                    <li> COUNT ITEMS: <?=$countItems?></li>
-                                    <li> TIMES QUOTE: (Actual Value): <span class=""><?=$timesquoted; ?> </span> </li>
+                                <ul class="checklist">
+                                    <li><i class="fas fa-check"></i> COUNT ITEMS: <?=$countItems?></li>
+                                    <li><i class="fas fa-check"></i> TIMES QUOTE: (Current value): <span class=""><?=$timesquoted; ?> </span> </li>
                                 </ul>  
                             </div>                        
                         </div> <!-- COLLAPSE CONTENT END -->               

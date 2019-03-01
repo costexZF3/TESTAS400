@@ -1,10 +1,22 @@
 
 <?php 
     $this->headTitle('Out of Service');
+    
+    $this->pageBreadcrumbs()->setItems([
+                'Home'=>$this->url('home'),
+                'Out of Service'=>$this->url('users'),                
+                ]);
                     
 ?>
-<div class="jumbotron">
-    <h1>Sorry <span class="ctp-green">We are out of service.</span></h1>
+<div class="ctp-container content">
+    <div class="row justify-content-center">
+        <div class="col-md-6 single-service-item"> 
+            <h4 class="title"> Oops!!, This page is being BUILDING or Out of service </h4>
+            <p>The page or content you are looking for cannot be found! Please search or go back to home.</p>
 
-    <p> It coming soon.</p> 
+            <div class="btn-wrapper">
+                <a href="<?=$this->url('home'); ?>" class="boxed-btn">Go Back To Home</a>
+            </div>
+        </div>
+    </div>
 </div>

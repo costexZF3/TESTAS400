@@ -170,11 +170,10 @@ h2.ctp_subtitle {
 /*******************   TABLE CTP PROPERTIES ***********************************/
 .table_ctp {
     text-align: center;  
-    font-size : 9px;
-    width: 90%;
+    font-size : 9px;    
 }
 
-.table_ctp thead, tfoot,th {   
+.table_ctp thead, tfoot {   
     /*font-family: Roboto, Arial;*/
     font-size: 11px;
     text-align: left;    
@@ -197,12 +196,21 @@ td select {
 
  /* modified by kristov */
  
-/*select, input[type="search"] {
+select, input[type="search"] {
   position: relative;
   height: auto; 
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
   padding: 5px;
   font-size: 16px;
-}*/
+  border-radius: 5px;  
+}
+
+input[type="search"]:focus {
+   
+  z-index: 2;
+}
 
 .table_ctp .money {    	    
     text-align : right;
@@ -302,7 +310,8 @@ table.minimalistBlack tfoot td {
 }
 
 .ctp-container {
-    margin-top: 10px;
+    margin-top: 30px;
+    margin-bottom: 20px;
 }
 
 .ctp-grid {
@@ -321,9 +330,6 @@ table.minimalistBlack tfoot td {
     color: #C70039;
 }
 
-.ctp-blue {
-    color: #0338C6;
-}
 .ctp-role {
     color: #F39C12;
 }

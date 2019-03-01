@@ -9,12 +9,13 @@
             ->appendName('viewport', 'width=device-width, initial-scale=1.0')
             ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
         ?>
-
-        <!-- default -->
+        
+        <?php $PathLogo = $this->basePath().'/img/logo.png'; ?>
+        
         <?= $this->headLink([
                       'rel' => 'shortcut icon', 
                       'type' => 'image/vnd.microsoft.icon', 
-                      'href' => $this->basePath().'/img/logo.png']) 
+                      'href' => $PathLogo]) 
                    //added from the new template   
                    ->prependStylesheet($this->basePath('assets/css/style.css'))
                    ->prependStylesheet($this->basePath('css/style.css'))
@@ -32,32 +33,30 @@
             ->prependFile($this->basePath('assets/js/bootstrap.min.js'))        
             ->prependFile($this->basePath('assets/js/popper.min.js'))                   
             ->prependFile($this->basePath('assets/js/jquery.magnific-popup.js'))
-//            ->prependFile($this->basePath('assets/js/contact.js'))              
+            ->prependFile($this->basePath('assets/js/contact.js'))              
             ->prependFile($this->basePath('assets/js/main.js')) 
             ->prependFile($this->basePath('assets/js/jquery.js'))    
         ?>
-
-        <?php $PathLogo = $this->basePath().'/assets/img/logo.png'; ?>
 
     </head>
 
 <!--LOGGIN BODY--> 
     <body>        
-    <!-- RENDERING PRELOADER USING PARTIAL VIEW -->
-    <?php
-       echo $this->partial('application/particialview/preloader',['pathLogo'=>$PathLogo]);
-    ?>    
-    <!-- Page Content from here -->
-    <section class="ctp-container">
-        <div class="container">                         
-            <div class="row">                   
-                <div class="col-md-4 offset-md-8 text-center">            
+        <!-- RENDERING PRELOADER USING PARTIAL VIEW -->
+        <?php
+           echo $this->partial('application/particialview/preloader',['pathLogo'=>$PathLogo]);
+        ?>    
+        <!-- Page Content from here -->
+        <section class="ctp-container">
+            <div class="container">                         
+                <div class="row">                   
+                    <div class="col-md-4 offset-md-8 text-center">            
                         <?= $this->content;?>
-                </div>                    
-            </div>             
-        </div> 
-    </section>
+                    </div>                    
+                </div>             
+            </div> 
+        </section>
 
-    <?= $this->inlineScript() ?>
-</body>
+        <?= $this->inlineScript() ?>
+    </body>
 </html>

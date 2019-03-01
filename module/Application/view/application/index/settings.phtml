@@ -11,39 +11,38 @@
 ?>
 
 <!------------------------------------- RENDERING HTML  --------------------------------------->
-<div class="row">
-    <div class="col-md-6">
-        <div class="panel panel-primary">
-            <div class="panel-heading"> <span class="zf-green">Settings</span></div>            
-            <div class="panel-body">                       
-                <table class="table table-striped table-bordered">
-                     <tr class="info">
-                        <th>ID:</th>
-                        <td><?= $this->escapeHtml($user->getId()) ?></td>
-                    </tr>
-                    <tr>
-                        <th>E-mail:</th>
-                        <td><?= $this->escapeHtml($user->getEmail()) ?></td>
-                    </tr>
-                    <tr class="info">
-                        <th>Full Name:</th>
-                        <td><?= $this->escapeHtml($user->getFullName()) ?></td>
-                    </tr>
-                    <tr>
-                        <th>Date Created:</th>
-                        <td><?= $this->escapeHtml($user->getDateCreated()) ?></td>
-                    </tr>
-                </table>
-                
-                <!-- P TAG: THERE ARE TWO BUTTONS -->
-                <p>
-                    <!-- BUTTON CHANGE PASSWORD -->
-                    <a class="btn btn-warning" href="<?= $this->url('users',
-                                                                 ['action'=>'change-password', 'id'=>$user->getId()]); ?>">
-                        <span class="glyphicon glyphicon-asterisk"></span> Change Password
-                    </a>    
-                </p> 
-            </div> <!-- panel-body -->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-4 single-service-item"> 
+            <br>
+            <table class="table table-striped border">
+                 <tr class="info">
+                    <th>ID</th>
+                    <td><?= $this->escapeHtml( $user->getId() ) ?></td>
+                </tr>
+                <tr>
+                    <th>E-MAIL</th>
+                    <td><?= $this->escapeHtml($user->getEmail()) ?></td>
+                </tr>
+                <tr class="info">
+                    <th>FULL NAME</th>
+                    <td><?= $this->escapeHtml($user->getFullName()) ?></td>
+                </tr>
+                <tr>
+                    <th>DATE CREATED</th>
+                    <td><?= $this->escapeHtml($user->getDateCreated()) ?></td>
+                </tr>
+            </table>
+
+            <!-- P TAG: THERE ARE TWO BUTTONS -->
+            <div class="btn-wrapper">
+                <!-- BUTTON CHANGE PASSWORD -->
+                <a class="boxed-btn" 
+                   href="<?= $this->url('users', ['action'=>'change-password', 'id'=>$user->getId()]); ?>">
+                    CHANGE PWD                      
+                </a>    
+            </div> 
+          
         </div> <!-- panel -->
     </div> <!-- col-md-6 -->
 </div> <!-- row -->

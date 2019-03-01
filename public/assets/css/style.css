@@ -1376,7 +1376,7 @@ select:focus {
     padding-top: 100px; }
 
 .single-service-item {
-  border: 1px solid #e2e2e2;
+  border: 1px solid #e2e2e2;  
   margin-left: 35px;
   margin-bottom: 30px;
   -webkit-transition: all 0.3s ease-in;

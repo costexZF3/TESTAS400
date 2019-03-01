@@ -371,7 +371,8 @@ class LostSale {
         /*------------ creating table with all data from dataSet ----------------------------
          *  TABLE INITIAL TAG 
         */
-        $tableHeader = '<table class="table_ctp table_filtered display" id="table_toexcel"><thead class=""><tr>';  
+        $tableHeader = '<table class="table_ctp table_filtered display" id="table_toexcel">';
+        $tableHeader.='<thead><tr>';  
         
             /*********** generating each column label dynamically *****************/
             foreach ($this->columnHeaders as $field) {           
@@ -408,8 +409,7 @@ class LostSale {
                 $tableBody.= $this->rowToHTML( $row, $className ); 
 
                 $iteration++;
-
-               // $tableBody .="<tr><td>".$name."</td><td>".$lastname."</td><td>".$age."</td></tr>"; 
+              
             }//end: foreach    
 
             $tableFooter = '<tfoot><tr>';

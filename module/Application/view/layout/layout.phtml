@@ -1,8 +1,6 @@
 <?= $this->doctype() ?>
 
 <html lang="en">
-    
-<!--HEAD TAG-->    
 <head>
     <meta charset="utf-8">
     <?= $this->headTitle('CTPSYSTEM')->setSeparator(' - ')->setAutoEscape(false) ?>
@@ -23,18 +21,15 @@
                ->prependStylesheet($this->basePath('assets/css/bootstrap.min.css')) 
                ->prependStylesheet($this->basePath('assets/css/fontawesome.all.css')) 
                ->prependStylesheet($this->basePath('assets/css/flaticon.css'))
-               ->prependStylesheet($this->basePath('assets/css/animate.css'))
-               ->prependStylesheet($this->basePath('assets/css/owl.carousel.min.css'))
+               ->prependStylesheet($this->basePath('assets/css/animate.css'))            
                ->prependStylesheet($this->basePath('assets/css/magnific-popup.css'))               
                ->prependStylesheet($this->basePath('assets/css/responsive.css'))
-
     ?>
 
     <!-- Scripts -->
     <?= $this->headScript()       
         ->prependFile($this->basePath('assets/js/bootstrap.min.js'))        
-        ->prependFile($this->basePath('assets/js/popper.min.js'))        
-        ->prependFile($this->basePath('assets/js/owl.carousel.min.js'))
+        ->prependFile($this->basePath('assets/js/popper.min.js'))                
         ->prependFile($this->basePath('assets/js/jquery.magnific-popup.js'))
         ->prependFile($this->basePath('assets/js/contact.js'))
         ->prependFile($this->basePath('assets/js/wow.min.js'))
@@ -43,26 +38,27 @@
         ->prependFile($this->basePath('assets/js/isotope.pkgd.min.js'))
         ->prependFile($this->basePath('assets/js/jquery.counterup.min.js'))
         ->prependFile($this->basePath('assets/js/main.js')) 
-        ->prependFile($this->basePath('assets/js/jquery.js'))                     
+        ->prependFile($this->basePath('assets/js/jquery.js'))                      
     ?>
 
 
     <!-- SCRIPTS DEFINED BY KRISTOFER FOR DATATABLE -->
 
     <?php
-       //----- getting PATH for banner.png inside the document root ---------------
-         $pathLogo = $this->basePath().'/img/LOGO.PNG'; //original  
+       //----- getting PATH for banner.png inside the document root ---------------     
+        $pathLogo = $this->basePath().'/img/LOGO.PNG'; //original 
     ?>
 
 </head>
      <!-- PAGE BODY: MAIN LAYOUT  -->
-    <body>                
-        <!-- RENDERING PRELOADER USING PARTIAL VIEW -->
-        <?php
-           echo $this->partial('application/particialview/preloader',['pathLogo'=>$pathLogo]);
-        ?>
-            
-       <!-- ************************************** PAGE HEADER BANNER *************************************-->        
+
+<body>                      
+    <!--using particial view-->
+    <?php
+       echo $this->partial('application/particialview/preloader',['pathLogo'=>$pathLogo]);
+    ?>
+    
+    <!-- **************************** PAGE HEADER BANNER *********************************-->        
     <nav class="navbar navbar-area navbar-expand-lg ">
         <div class="container">
             <a class="navbar-brand logo" href="<?= $this->url('home')?>">
@@ -82,69 +78,35 @@
             </div>
             <!-- /.navbar btn wrapper -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#apptidy" aria-controls="apptidy" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span> CONTACT US
+                <span class="navbar-toggler-icon"></span>
             </button>
             <!-- navbar collapse end -->
         </div>
     </nav>
         
-     <!-- HEADER AREA START CAROUSEL   -->
-    <header class="header-area header-style-three" >
-        <div class="header-carousel-two"><!-- header carousel two -->
-            <div class="single-header-carosuel-two-item" style="background-image: url(assets/img/bg/header-bg-1.jpg)"><!-- single header caorusel two item -->
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <div class="header-inner">
-                                <h1 class="title">Quality with Value ...Guaranteed  <span class="base-color">few steps</span></h1>
-                                <p>We are commited to delivering excellence</p>
-                                <div class="btn-wrapper">
-                                    <a href="#" class="boxed-btn">Contacts Us</a>
-                                    <a href="#" class="boxed-btn blank">Service</a>
-                                </div>
-                            </div>
-                        </div>
+   <!-- breadcrumb area start -->
+    <section class="breadcrumb-area breadcrumb-bg">
+        <div class="container">
+            <div class="row">
+               <div class="col-lg-12">
+                    <div class="breadcrumb-inner">
+<!--                        <h1 class="title">About Us</h1>
+                        <div class="page-list">
+                            <a href="index.html"><span>Home</span></a>
+                            -
+                            <span class="current-item">About Us</span>
+                        </div>-->
+                        <?= $this->pageBreadcrumbs()->render(); ?>
                     </div>
-                </div>
-            </div><!-- //. single header carousel two item -->
-            <div class="single-header-carosuel-two-item" style="background-image: url(assets/img/bg/header-bg-2.jpg)"><!-- single header caorusel two item -->
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <div class="header-inner">
-                                 <h1 class="title">virtually build your dreams in  <span class="base-color">few steps</span></h1>
-                                <p>We are commited to delivering excellence</p>
-                                <div class="btn-wrapper">
-                                    <a href="#" class="boxed-btn">Contacts Us</a>
-                                    <a href="#" class="boxed-btn blank">Service</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div><!-- //. single header carousel two item -->
-            <div class="single-header-carosuel-two-item" style="background-image: url(assets/img/bg/header-bg-3.jpg)"><!-- single header caorusel two item -->
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <div class="header-inner">
-                                 <h1 class="title">virtually build your dreams in  <span class="base-color">few steps</span></h1>
-                                <p>We are commited to delivering excellence</p>
-                                <div class="btn-wrapper">
-                                    <a href="#" class="boxed-btn">Contacts Us</a>
-                                    <a href="#" class="boxed-btn blank">Service</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div><!-- //. single header carousel two item -->
-        </div><!-- //. header carousel two -->
-    </header>
-    <!-- HEADER AREA END : CAROUSEL   -->
+               </div>
+            </div>
+        </div>
+    </section>
+    <!-- breadcrumb area end -->   
      
 <!--********************* CONTENT TO RENDER ********************************************--> 
-        <div class="container">        
+     <section class="ctp-container">
+        <div class="container-fluid">        
             <div class="row">
                 <div class="col-lg-12">
                     <!-- Page content -->
@@ -152,100 +114,100 @@
                 </div>
             </div>
         </div>
-    
+     </section>
 <!-- ************************************* FOOTER SECCION ****************************** -->       
         
-        <footer class="footer-area footer-bg">
-            <div class="footer-top"><!-- footer top -->
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-4 col-md-6">
-                            <div class="footer-widget about_widget"><!-- footer widget -->
-                                <div class="footer-logo">
-                                    <a href="<?=$this->url('home'); ?>"><img src="assets/img/footer-logo.png" alt="footer logo"></a>
-                                </div>
-                                <p>Costex Tractor Parts CTP® is a worldwide quality supplier of New Replacement Parts for Caterpillar® and Komatsu™ Equipment and Engines. At CTP, we not only offer you premium parts but also an exceptional service, outstanding savings and the support you need to get your order quickly and accurately.</p>
-                                <ul class="social-icons">
-                                    <li><a href="https://www.facebook.com/ctpparts" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a> </li>
-                                    <li><a href="#"><i class="fab fa-twitter"></i></a> </li>
-                                    <li><a href="#"><i class="fab fa-linkedin-in"></i></a> </li>
-                                    <li><a href="https://www.instagram.com/costexctp/" id="sfsiid_instagram" alt="Instagram"><i class="fab fa-instagram"></i></a> </li>
-                                </ul>
-                            </div><!-- //. footer widget-->
-                        </div>
-                        <div class="col-lg-2 col-md-6">
-                            <div class="footer-widget widget_nav_menu"><!-- footer widget -->
-                                <h2 class="widget-title">Usefull Links</h2>
-                                <ul>
-                                    <li><a href="#">- Blog</a></li>
-                                    <li><a href="<?= $this->url('home');?>">- About Us</a></li>
-                                    <li><a href="#">- Our Story</a></li>
-                                    <li><a href="#">- Forum</a></li>
-                                    <li><a href="#">- Career</a></li>
-                                    <li><a href="#">- Shop</a></li>
-                                </ul>
-                            </div><!-- //. footer widget-->
-                        </div>
-                        <div class="col-lg-2 col-md-6">
-                            <div class="footer-widget widget_nav_menu"><!-- footer widget -->
-                                <h2 class="widget-title">Other Pages</h2>
-                                <ul>
-                                    <li><a href="#">- Terms & Conditions</a></li>
-                                    <li><a href="#">- Privacy Policy</a></li>
-                                    <li><a href="#">- Contact Us</a></li>
-                                    <li><a href="#">- Support</a></li>
-                                    <li><a href="#">- Career</a></li>
-                                    <li><a href="#">- Shop</a></li>
-                                </ul>
-                            </div><!-- //. footer widget-->
-                        </div>
-                        <div class="col-lg-4 col-md-6">
-                            <div class="footer-widget instagram_feed"><!-- footer widget -->
-                                <h2 class="widget-title">instagram feed</h2>
-                                <ul class="instagram_feed-list">
-                                    <li><a href="#"><img src="assets/img/instagram/01.jpg" alt="instagram feed"></a></li>
-                                    <li><a href="#"><img src="assets/img/instagram/02.jpg" alt="instagram feed"></a></li>
-                                    <li><a href="#"><img src="assets/img/instagram/03.jpg" alt="instagram feed"></a></li>
-                                    <li><a href="#"><img src="assets/img/instagram/04.jpg" alt="instagram feed"></a></li>
-                                    <li><a href="#"><img src="assets/img/instagram/05.jpg" alt="instagram feed"></a></li>
-                                    <li><a href="#"><img src="assets/img/instagram/06.jpg" alt="instagram feed"></a></li>
-                                </ul>
-                            </div><!-- //. footer widget-->
-                        </div>
+    <footer class="footer-area footer-bg">
+        <div class="footer-top"><!-- footer top -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="footer-widget about_widget"><!-- footer widget -->
+                            <div class="footer-logo">
+                                <a href="<?=$this->url('home'); ?>"><img src="<?=$this->basePath()?>/assets/img/footer-logo.png" alt="footer logo"></a>
+                            </div>
+                            <p>Costex Tractor Parts CTP® is a worldwide quality supplier of New Replacement Parts for Caterpillar® and Komatsu™ Equipment and Engines. At CTP, we not only offer you premium parts but also an exceptional service, outstanding savings and the support you need to get your order quickly and accurately.</p>
+                            <ul class="social-icons">
+                                <li><a href="https://www.facebook.com/ctpparts" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a> </li>
+                                <li><a href="#"><i class="fab fa-twitter"></i></a> </li>
+                                <li><a href="href="https://www.linkin.com/"><i class="fab fa-linkedin-in"></i></a> </li>
+                                <li><a href="https://www.instagram.com/costexctp/" id="sfsiid_instagram" alt="Instagram"><i class="fab fa-instagram"></i></a> </li>
+                            </ul>
+                        </div><!-- //. footer widget-->
+                    </div>
+                    <div class="col-lg-2 col-md-6">
+                        <div class="footer-widget widget_nav_menu"><!-- footer widget -->
+                            <h2 class="widget-title">Usefull Links</h2>
+                            <ul>
+                                <li><a href="#">- Blog</a></li>
+                                <li><a href="<?= $this->url('home');?>">- About Us</a></li>
+                                <li><a href="https://www.costex.com">- Our Story</a></li>
+                                <li><a href="#">- Forum</a></li>
+                                <li><a href="https://www.costex.com/careers/">- Career</a></li>
+                                <li><a href="#">- Shop</a></li>
+                            </ul>
+                        </div><!-- //. footer widget-->
+                    </div>
+                    <div class="col-lg-2 col-md-6">
+                        <div class="footer-widget widget_nav_menu"><!-- footer widget -->
+                            <h2 class="widget-title">Other Pages</h2>
+                            <ul>
+                                <li><a href="#">- Terms & Conditions</a></li>
+                                <li><a href="#">- Privacy Policy</a></li>
+                                <li><a href="#">- Contact Us</a></li>
+                                <li><a href="#">- Support</a></li>
+                                <li><a href="https://www.costex.com/careers/">- Career</a></li>
+                                <li><a href="#">- Shop</a></li>
+                            </ul>
+                        </div><!-- //. footer widget-->
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="footer-widget instagram_feed"><!-- footer widget -->
+                            <h2 class="widget-title">instagram feed</h2>
+                            <ul class="instagram_feed-list">
+                                <li><a href="#"><img src="assets/img/instagram/01.jpg" alt="instagram feed"></a></li>
+                                <li><a href="#"><img src="assets/img/instagram/02.jpg" alt="instagram feed"></a></li>
+                                <li><a href="#"><img src="assets/img/instagram/03.jpg" alt="instagram feed"></a></li>
+                                <li><a href="#"><img src="assets/img/instagram/04.jpg" alt="instagram feed"></a></li>
+                                <li><a href="#"><img src="assets/img/instagram/05.jpg" alt="instagram feed"></a></li>
+                                <li><a href="#"><img src="assets/img/instagram/06.jpg" alt="instagram feed"></a></li>
+                            </ul>
+                        </div><!-- //. footer widget-->
                     </div>
                 </div>
-            </div><!-- //. footer top -->
-            <div class="footer-bottom"><!-- footer bottom -->
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="footer-bottom-inner"><!-- footer bottom inner -->
-                                <div class="copyright-area">
-                                    <span class="copyright-text">COSTEX  &copy; Design & Developing by MIS</span>
-                                </div>
-                               <div class="footer-menu">
-                                    <div class="widget_nav_menu"><!-- footer menu --> 
-                                        <ul>
-                                            <li><a href="<?= $this->url('home');?>">Home</a></li>
-                                            <li><a href="#">Blog</a></li>
-                                            <li><a href="<?= $this->url('about');?>">About Us</a></li>
-                                            <li><a href="<?= $this->url('about');?>">Contact</a></li>
-                                            <li><a href="#">Terms & Conditions</a></li>
-                                        </ul>
-                                    </div><!-- //. footer menu -->
-                               </div>
-                            </div><!-- //. footer bottom inner -->
-                        </div>
+            </div>
+        </div><!-- //. footer top -->
+        <div class="footer-bottom"><!-- footer bottom -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="footer-bottom-inner"><!-- footer bottom inner -->
+                            <div class="copyright-area">
+                                <span class="copyright-text">COSTEX  &copy; Design & Developing by MIS</span>
+                            </div>
+                           <div class="footer-menu">
+                                <div class="widget_nav_menu"><!-- footer menu --> 
+                                    <ul>
+                                        <li><a href="<?= $this->url('home');?>">Home</a></li>
+                                        <li><a href="#">Blog</a></li>
+                                        <li><a href="<?= $this->url('about');?>">About Us</a></li>
+                                        <li><a href="<?= $this->url('about');?>">Contact</a></li>
+                                        <li><a href="#">Terms & Conditions</a></li>
+                                    </ul>
+                                </div><!-- //. footer menu -->
+                           </div>
+                        </div><!-- //. footer bottom inner -->
                     </div>
                 </div>
-            </div><!-- //. footer bottom --> 
-        </footer>
+            </div>
+        </div><!-- //. footer bottom --> 
+    </footer>
 
   <!-- back to top area start -->
   <div class="back-to-top">
-        <i class="fas fa-angle-up"></i>
+    <i class="fas fa-angle-up"></i>
   </div>
-  <!-- back to top area end --> 
-        <?= $this->inlineScript() ?>         
-    </body>
+     <!-- back to top area end --> 
+    <?= $this->inlineScript() ?>         
+</body>
 </html>

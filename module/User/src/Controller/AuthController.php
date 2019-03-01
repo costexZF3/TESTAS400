@@ -53,7 +53,7 @@ class AuthController extends AbstractActionController
       $response = parent::onDispatch($e);        
 
       // Set alternative layout
-      $this->layout()->setTemplate('layout/loginlayout');                
+      $this->layout()->setTemplate('layout/layout-loging');                
 
       // Return the responses
       return $response;

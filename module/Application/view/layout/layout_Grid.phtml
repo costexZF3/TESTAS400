@@ -10,20 +10,23 @@
             ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
         ?>
 
+               
+        <?php $PathLogo = $this->basePath().'/img/logo.png'; ?>
+        
         <!-- Default  -->
         <?= $this->headLink([
                       'rel' => 'shortcut icon', 
                       'type' => 'image/vnd.microsoft.icon', 
-                      'href' => $this->basePath().'/img/logo.png'])       
+                      'href' => $PathLogo ])       
          
-             ->prependStylesheet($this->basePath('assets/css/style.css'))
-               ->prependStylesheet($this->basePath('assets/css/bootstrap.min.css')) 
-               ->prependStylesheet($this->basePath('assets/css/fontawesome.all.css')) 
-               ->prependStylesheet($this->basePath('assets/css/flaticon.css'))
-               ->prependStylesheet($this->basePath('assets/css/animate.css'))
-               ->prependStylesheet($this->basePath('assets/css/owl.carousel.min.css'))
-               ->prependStylesheet($this->basePath('assets/css/magnific-popup.css'))               
-               ->prependStylesheet($this->basePath('assets/css/responsive.css'))
+             ->prependStylesheet($this->basePath('assets/css/style.css'))             
+             ->prependStylesheet($this->basePath('assets/css/bootstrap.min.css')) 
+             ->prependStylesheet($this->basePath('assets/css/fontawesome.all.css')) 
+             ->prependStylesheet($this->basePath('assets/css/flaticon.css'))
+             ->prependStylesheet($this->basePath('assets/css/animate.css'))
+             ->prependStylesheet($this->basePath('assets/css/owl.carousel.min.css'))
+             ->prependStylesheet($this->basePath('assets/css/magnific-popup.css'))               
+             ->prependStylesheet($this->basePath('assets/css/responsive.css'))
      
             ->prependStylesheet($this->basePath('css/style.css'))
         ?>
@@ -36,10 +39,10 @@
             ->prependFile($this->basePath('assets/js/bootstrap.min.js'))
             ->prependFile($this->basePath('assets/js/popper.min.js'))        
             ->prependFile($this->basePath('assets/js/jquery.magnific-popup.js'))
-//            ->prependFile($this->basePath('assets/js/contact.js'))
+            ->prependFile($this->basePath('assets/js/contact.js'))
             ->prependFile($this->basePath('assets/js/wow.min.js'))
             ->prependFile($this->basePath('assets/js/waypoints.min.js'))
-//            ->prependFile($this->basePath('assets/js/imagesloaded.pkgd.min.js'))
+           ->prependFile($this->basePath('assets/js/imagesloaded.pkgd.min.js'))
             ->prependFile($this->basePath('assets/js/isotope.pkgd.min.js'))
             ->prependFile($this->basePath('assets/js/jquery.counterup.min.js'))
             ->prependFile($this->basePath('assets/js/main.js')) 
@@ -47,23 +50,10 @@
                
         ?>
         
-        <!-- ******************  SCRIPTS DEFINED BY KRISTOFER FOR DATATABLE -->         
-        <?php
-        //----- getting PATH for banner.png inside the document root ---------------
-            $logoPath = $this->basePath().'img/logo.png';           
+       <!-- including all scripts for using DATATABLES -->               
+       <?php
+            echo $this->partial('application/particialview/scripts-datatable',[]);
         ?>
-                      
-        <script type="text/javascript"  src="<?=$this->basePath()."/";?>DataTables-1.10.18/js/dataTables.js"></script>
-        <script type="text/javascript"  src="<?=$this->basePath()."/";?>js/jquery.table2excel.min.js"></script>
-        
-        <!-- added for buttons to export   -->
-        <link href="https://nightly.datatables.net/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
-        <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>  
-
-        <link href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />   
-        <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.js"></script> 
-        <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
-       
     </head>
     
      <!-- PAGE BODY: MAIN LAYOUT  -->    
@@ -71,14 +61,14 @@
               
         <!--using particial view-->
         <?php
-           echo $this->partial('application/particialview/preloader',['pathLogo'=>$this->basePath().'/img/LOGO.PNG']);
+           echo $this->partial('application/particialview/preloader',['pathLogo'=>$PathLogo]);
         ?>   
         
     <!-- ************************************** PAGE HEADER BANNER *************************************-->        
     <nav class="navbar navbar-area navbar-expand-lg ">
         <div class="container">
             <a class="navbar-brand logo" href="<?= $this->url('home')?>">
-                <img src="<?= $bannerPath;?>" class="black" alt="logo">
+                <img height="80" src="<?= $PathLogo;?>" alt="logo">
             </a>
             <div class="navbar-collapse collapse" id="apptidy">
                 <!-- Navigation bar generated dynamically -->

@@ -42,19 +42,16 @@ class IndexController extends AbstractActionController
      * This is the default "index" action of the controller. It displays the 
      * Home page.
      */
-    public function indexAction() 
-    {
-                  
-        return new ViewModel();         
-        
+    public function indexAction() {  
+        $this->layout()->setTemplate('layout/layoutHome');
+        return new ViewModel();   
     }
 
     /**
      * This is the "about" action. It is used to display the "About" page.
      */
-    public function aboutAction() 
-    {    
-       $this->layout()->setTemplate('layout/layoutCommond'); 
+    public function aboutAction() {    
+//       $this->layout()->setTemplate('layout/layoutCommond'); 
        return new ViewModel();
     }  
     
@@ -71,8 +68,7 @@ class IndexController extends AbstractActionController
     /**
      * The "settings" action displays the info about currently logged in user.
      */
-    public function settingsAction()
-    {
+    public function settingsAction() {
         $id = $this->params()->fromRoute('id');
         
         if ($id!=null) {
@@ -95,12 +91,13 @@ class IndexController extends AbstractActionController
             return $this->redirect()->toRoute('not-authorized');
         }
         
-        //$this->layout()->setTemplate('layout/layout.phtml');
+        
         
         $viewModel = new ViewModel([
             'user' => $user
         ]);       
         
+//        $this->layout()->setTemplate('layout/layout_Grid');
         return  $viewModel;
     }
 }
