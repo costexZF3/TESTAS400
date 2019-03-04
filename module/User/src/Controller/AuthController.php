@@ -47,23 +47,25 @@ class AuthController extends AbstractActionController
    * We override the parent class' onDispatch() method to
    * set an alternative layout for all actions in this controller.
    */
-    public function onDispatch(MvcEvent $e) 
-    {
-      // Call the base class' onDispatch() first and grab the response
-      $response = parent::onDispatch($e);        
-
-      // Set alternative layout
-      $this->layout()->setTemplate('layout/layout-loging');                
-
-      // Return the responses
-      return $response;
-    }//END: onDispatch 
+//    public function onDispatch(MvcEvent $e) 
+//    {
+//      // Call the base class' onDispatch() first and grab the response
+//      $response = parent::onDispatch($e);        
+//
+//      // Set alternative layout
+//      $this->layout()->setTemplate('layout/layout-loging');                
+//
+//      // Return the responses
+//      return $response;
+//    }//END: onDispatch 
 
     /**
      * Authenticates user given email address and password credentials.
      */
     public function loginAction()
     {
+        
+         $this->layout()->setTemplate('layout/layout-loging');
         // Retrieve the redirect URL (if passed). We will redirect the user to this
         // URL after successfull login.
         $redirectUrl = (string)$this->params()->fromQuery('redirectUrl', '');
@@ -142,7 +144,7 @@ class AuthController extends AbstractActionController
     public function logoutAction()
     {
         $this->authManager->logout();
-
+        
         return $this->redirect()->toRoute('login');
     }
 
@@ -151,8 +153,9 @@ class AuthController extends AbstractActionController
      */
     public function notAuthorizedAction()
     {
+        $this->layout()->setTemplate('layout/layout');
         $this->getResponse()->setStatusCode(403);
-
+         
         return new ViewModel();
     }
 }

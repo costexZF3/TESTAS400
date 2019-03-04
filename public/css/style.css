@@ -173,7 +173,7 @@ h2.ctp_subtitle {
     font-size : 9px;    
 }
 
-.table_ctp thead, tfoot {   
+.table_ctp thead, tfoot, th {   
     /*font-family: Roboto, Arial;*/
     font-size: 11px;
     text-align: left;    

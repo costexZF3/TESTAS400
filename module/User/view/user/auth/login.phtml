@@ -31,10 +31,10 @@
 <!--************************************** HTML RENDER ********************************** -->
  
     
-<div class="alert alert-warning">
+<div class="alert alert-secondary single-service-item">
     <div class ="img-wrapper">
         <div class="hover">
-            <a href="https://www.costex.com" class="video-play-btn">
+            <a href="<?=$this->url('home')?>" class="video-play-btn">
                 <img class="header-img" src="<?= $this->basePath().'/img/LOGO.PNG' ?>"  alt="Zend Framework <?= \Application\Module::VERSION ?>"/>
             </a>
         </div>
@@ -47,7 +47,7 @@
         <?php if ($isLoginError): ?>
             <div class="alert alert-warning" role="alert">
                 Incorrect login and/or password. 
-                <a class ="" href="<?= $this->url('reset-password') ?>">Forgot password?</a>
+                <a class ="base-color" href="<?= $this->url('reset-password') ?>">Forgot password?</a>
             </div>
         <?php endif; ?>
 

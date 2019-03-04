@@ -1,4 +1,11 @@
-
+<?php
+    $this->headTitle("404-ERROR");
+    
+    $this->pageBreadcrumbs()->setItems([
+                    'Home'=>$this->url('home'),
+                    '404-PAGE NOT FOUND'=>$this->url('users')
+    ]);
+?>
 <!-- error 404 page content area start -->
 <section class="error-404-area">
     <div class="container">
