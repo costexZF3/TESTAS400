@@ -17,6 +17,21 @@
   src: local('Roboto'), local('Roboto-Regular'), url(https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu72xKOzY.woff2) format('woff2');  
 }
 
+/* FORM ELMENTS */
+
+/* un-order list: 
+   - <li> elements: styles. This will be used when formElementsError 
+*/
+form ul {
+  list-style-type: circle;
+  padding: 15px;
+  margin: 0px 5px;
+  font-size: 8px;
+}
+
+form ul li {    
+  color: #F8C05F;        
+}
 
 /* RADIO BUTTONS - NOT IN STYLE TEMPLATE */
 
@@ -54,6 +69,7 @@
      background-color: #F3EA6C;
      border: none;
 }
+
 
 /* the main content inside pages with grids */
 .main-content {

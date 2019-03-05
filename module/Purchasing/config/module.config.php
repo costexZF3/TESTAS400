@@ -31,6 +31,17 @@ return [
                     ],
                 ],                
             ],//end: lostsale route
+             'wishlist' => [
+                'type'    => Literal::class,
+                'options' => [
+                    // Change this to something specific to your module
+                    'route'    => '/wishlist',
+                    'defaults' => [
+                        'controller'    => Controller\WishListController::class,
+                        'action'        => 'index',
+                    ],
+                ],                
+            ],//end: wishlist route
             'watch' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -46,11 +57,13 @@ return [
                 ],
             ],//end: claims route
         ],
-    ],    
+    ],   
+    /* REGISTERING CONTROLES */
     'controllers' => [
         'factories' => [
             Controller\ClaimsController::class => Controller\Factory\ClaimsControllerFactory::class,
-            Controller\LostsaleController::class => Controller\Factory\LostsaleControllerFactory::class
+            Controller\LostsaleController::class => Controller\Factory\LostsaleControllerFactory::class,
+            Controller\WishListController::class => Controller\Factory\WishListControllerFactory::class
             
         ],
     ],
@@ -85,6 +98,17 @@ return [
                 ['actions' => ['lostsales'],      'allow' => '+option.purchasing.claims'],                 
             
             ], //END: access_filter for LostSaleController           
+            
+            Controller\WishListController::class => [
+                //Allowing routes access depending on the type of permission assigned to loggin user
+                // Give access to "index" actions to everyone with +menu.purchasing  
+                //+option.purchasing.claims 
+                
+                //Actions reponse to Roles associated to MENUS 
+                ['actions' => ['index'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
+                ['actions' => ['wishlist'],      'allow' => '+option.purchasing.claims'],                 
+            
+            ], //END: access_filter for LostSaleController    
             
         ]
     ],

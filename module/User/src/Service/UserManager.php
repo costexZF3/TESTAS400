@@ -249,17 +249,17 @@ class UserManager
         
         $mail = new Mail\Message();
         $mail->setEncoding('UTF-8');
-        $mail->setBody($body);
+        $mail->setBody( $body );
         $mail->setFrom('no-reply@example.com', 'CtpSystem-MIS DEPARTMENT');
         $mail->addTo($user->getEmail(), $user->getFullName());
-        $mail->setSubject($subject);
+        $mail->setSubject( $subject );
         
         //Setup SMTP transport layer 
         $transport = new SmtpTransport();       
-        $options   = new SmtpOptions($this->config);
-        $transport->setOptions($options);
+        $options   = new SmtpOptions( $this->config );
+        $transport->setOptions( $options );
         
-        $transport->send($mail);
+        $transport->send( $mail );
     }
     
      /**

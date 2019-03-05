@@ -1,0 +1,205 @@
+<?php     
+    /*getting values */
+       
+    $this->headTitle('Wish List');	
+    $this->mainMenu()->setActiveItemId('Wish List'); 
+   
+    $this->pageBreadcrumbs()->setItems([
+        'Home'=>$this->url('home'),
+        'Wish List'=>$this->url('wishlist')       
+        ]);       
+    
+    /*** getting params from IndexAction() inside LostsaleController ***/
+   
+    $wishList = $this->wishlist;        
+ ?>  
+ 	 
+<script language="JavaScript">          
+    
+    /*
+     * JQuery code:
+     * This occurs when the page has finished to load
+    */    
+    
+    $(document).ready( function(){ 
+        /* getting date() as String */
+        
+        const strDate = dateToStr();
+        
+        
+//   taking off CLASS dt-button to the buttons EXCEL, PDF, AND COPY
+    $("button.dt-button").removeClass("dt-button");
+            
+//    let tempCol = <1?php echo '[' . implode(', ', $columnsToHide) . ']';?>;
+    
+//    const columsToHide = (tempCol.length!==0)? tempCol:[];
+    
+//    console.log( columsToHide );
+    
+    //Initial Objet to config my table_filtered
+    const initialConfig = {        
+//        "columnDefs" : [
+//                        {
+//                            "targets": columsToHide,
+//                            "visible": false,
+//                            "searchable": false
+//                        }                                      
+//                      ],
+
+        "lengthMenu" :  [ [10, 25, 50, 100,  -1], 
+                          [10, 25, 50, 100, "All"]
+                        ],
+                        
+        dom: '<"ctp-buttons"l Bfr<t>ip>',
+       
+            /* see: exportOptions Object. This is an object. It help you to set up all concerning to BUTTONS */
+            buttons: [ 
+                    /* obj: BUTTON TO EXCEL */
+                        { 
+                            extend: 'excel', 
+                            className: 'submit-btn', 
+                            title: 'lostsales-EXCEL'+strDate+'__'+'--TQ('+timesQuote+')', 
+                            titleAttr : 'Convert to EXCEL',
+                            text: 'E<u>X</u>CEL',                           
+                            key: {
+                                  key:'x',
+                                  altKey: true
+                                }
+                        },
+                        
+                    /* OBJ: BUTTON to PDF */
+                        {
+                            extend: 'pdf',   
+                            className: 'submit-btn', 
+                            title: 'lostsales-pdf'+strDate+'__'+'--TQ('+timesQuote+')',
+                            titleAttr : 'Convert to PDF',
+                            orientation: 'landscape',  //it's portrait by default 
+                            pageSize: 'TABLOID', //this can be A3, A4, A5, LEGAL, LETTER or TABLOID  : all are STRINGS 
+                            text: '<u>P</u>DF',                           
+                            key: {
+                                  key:'p',
+                                  altKey: true
+                                }
+                            
+                        },   
+                    /* OBJ: BUTTON to COPY to clicboard */
+                        { 
+                            extend: 'copy', 
+                            titleAttr: 'Alt+C: copy to Clickboard',
+                            className: 'submit-btn', 
+                            text: '<u>C</u>opy',                           
+                            key: {
+                                  key:'c',
+                                  altKey: true
+                                }
+                        }, 
+                  
+                        /* How do I can add a new button and create something associated to this 
+                         *     - e : ( object ): Event object that triggered the event
+                         *     - dt: ( DataTables.Api ): A DataTables API instance for the host DataTable
+                         *    -node: (jQuery): jQuery instance for the button nod that was clicked on
+                         *  -config: ( object ): The button's configuration object
+                         */
+                        
+                        {
+                            text        : 'Export to Wish List', 
+                            className   : 'submit-btn',
+                            action      : function ( e, dt, node, config ) {
+                                alert('Activated!');
+                                this.disable(); //disable button
+                            }                            
+                        }                                           
+                     ],
+        initComplete: function () {
+            this.api().columns().every( function () { //[0,1, 8,10, 16, 18,19] : columns to apply 
+                var column = this;
+                var select = $('<select><option value=""></option></select>')
+                    .appendTo( $(column.footer()).empty() )
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+                        column.search( val ? '^'+val+'$' : '', true, false ).draw();
+                    } );
+
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' );
+                } );
+            } );
+        } //end property InitComplete                 
+    };
+  
+
+//    "processing" : true 
+   /* filterTable:  
+   *  - param1: name of the table.
+   *  - param2: InitialConfig is an OBJECT with the configuration  
+   *  
+   */ 
+    var tables = filterTable('table_filtered', initialConfig );
+    
+    //removing dt-button class to each HTMLElement (button) Associates to 
+   // a table
+    $('button').removeClass('dt-button');
+    
+  
+    }); 
+
+</script>
+        
+<!-- HTML RENDER-->
+    
+
+<div class="row">
+    <div class="col-lg-12">
+        <table class="table_ctp table_filtered display">
+            <thead>
+                <tr>
+                    <th>DOC</th>
+                    <th>DATE</th>
+                    <th>USER</th>
+                    <th>PART NO</th>
+                    <th>DESCRIPTION</th>
+                    <th>Q.S</th>
+                    <th>Qty Qted</th>
+                    <th>Times Qted</th>
+                    <th>OEM PRICE</th>
+                    <th>BIN LOC</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php            
+                $iteration = 1; 
+
+                 foreach ($wishList as $item){ ?>
+                    <tr class="">
+                        <td class="description"><?=$item->IMDSC;?></td>        <!-- DESCRIPTION -->
+                       
+                        <td class="description"><?=$item->IMDS3;?></td>        <!-- DESCRIPTION 3 -->
+                        <td><?=($item->TQUOTE)??0;?></td>  <!-- QUANTITY QUOTE  -->                      
+                    <tr>                
+             <?php
+                $iteration++;
+                //if ($iteration==100) break;
+                }; 
+             ?> 
+         </tbody>
+            <tfoot>
+                <tr id="countItem_<?=--$iteration;?>"> 
+                   <td>DOC</td>
+                   <td>DATE</td>
+                   <td>USER</td>
+                   <td>PART NO</th>
+                   <td>DESCRIPTION</td>
+                   <td>Q.S</td>
+                   <td>Qty Qted</td>
+                   <td>Times Qted</td>
+                   <td>OEM PRICE</td>
+                   <td>>BIN LOC</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div> 
+</div>
+
+ 
