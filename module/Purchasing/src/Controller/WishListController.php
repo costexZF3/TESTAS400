@@ -5,19 +5,15 @@ namespace Purchasing\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-//use Zend\Db\Adapter\Adapter;
-
 /* using Service: QueryRecover which let's take all data */
 use Application\Service\QueryRecover as MyQuery;
+use Purchasing\Entity\WishList;
 
 //use Purchasing\Form\LostSaleForm;
 
 class WishListController extends AbstractActionController
 {
-   /* DB2 connection */    
-    private $conn; //it's the adapter
-    
-    /*
+     /*
      * Service QueryRecover
      */
     private $queryRecover;
@@ -31,47 +27,23 @@ class WishListController extends AbstractActionController
    public function __construct( MyQuery $queryRecover ){   
        $this->queryRecover = $queryRecover;      
    }   
-   
-   /*
-    * getting the logged user 
-    */
-   private function getUser(){
-       $user = $this->currentUser();       
-       //validating the user
-       if ($user==null) {
-           $this->getResponse()->setStatusCode(404);
-           return;
-       } 
-       return $user;
-   }//End: getUser()
-                      
+  
    /**
     *  The IndexAction show the main Menu about all concerning to the Purchasing Menus
     */
-   public function indexAction() {
-                
-        $sqlStr = "SELECT * FROM PRDWL INNER JOIN INMSTA "
-                . "ON TRIM(UCASE(PRDWL.PRWPTN)) = TRIM(UCASE(INMSTA.IMPTN))"
-                . "LEFT JOIN INVPTYF ON TRIM(UCASE(INVPTYF.IPPART)) = TRIM(UCASE(PRDWL.PRWPTN)) "
-                . "ORDER BY CRDATE DESC";       
-              
+   public function indexAction() {              
        /* CALL THE WISHLIST CLASS */  
-        $wishlist = $this->queryRecover->runSql( $sqlStr );
-//        var_dump($wishlist); exit;
-        echo "count item: ".$this->queryRecover->CountItems()."<br>";
-        $fields = $this->queryRecover->getFields();
+//        $wishlist = $this->queryRecover->runSql( $sqlStr );
+//
+//        echo "count item: ".$this->queryRecover->CountItems()."<br>";
         
-        print_r ( $fields );
-        foreach ($wishlist as $item)
-        {
-            echo($item['PRWCOD']."--"); 
-            echo($item['CRDATE']."--");
-            echo($item['CRUSER']."--");
-            echo($item['PRWPTN']."--");
-            echo($item['IMDSC']);
-             echo "<br>";
-        }  
-        
+        $MyWishList = new WishList( $this->queryRecover );
+              
+//        var_dump($MyWishList); exit();
+        echo $MyWishList->CountItems()."<br>";
+        echo $MyWishList->getGridAsHtml(); exit();
+
+       
       
        /* this method retrives all items and return a resultSet or data as HTML tableGrid */   
 //         $LostSale = new LostSale( $this->conn, $timesQuote, $vndAssignedOptionSelected );      
