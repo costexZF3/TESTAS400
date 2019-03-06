@@ -40,8 +40,10 @@ class WishListController extends AbstractActionController
         $MyWishList = new WishList( $this->queryRecover );
               
 //        var_dump($MyWishList); exit();
-        echo $MyWishList->CountItems()."<br>";
-        echo $MyWishList->getGridAsHtml(); exit();
+//        echo $MyWishList->CountItems()."<br>";
+//        $MyWishList->TableAsHtml();
+//        print_r ($MyWishList->getRows()); exit();
+//        echo $MyWishList->TableAsHtml(); exit();
 
        
       
@@ -50,7 +52,7 @@ class WishListController extends AbstractActionController
               
        $this->layout()->setTemplate('layout/layout_Grid');
        return new ViewModel([                          
-                     'wishlist' => $wishlist
+                     'wishlist' => $MyWishList,
             ]);
     }//END: indexAction method
     

@@ -22,7 +22,7 @@ class WishList {
     /*
      * array with all COLUMN LABELS that will be rendered
      */
-    private $columnHeaders = ['CODE', 'DATE', 'USER','PART NUMBER', 'DESCRIPTION', 'YEAR SALES','QTY QUOTE',
+    private $columnHeaders = ['CODE', 'DATE', 'USER','PART NUMBER', 'DESCRIPTION', 'YEAR SALES','QTY QUOTED',
                               'TIMES QUOTED', 'OEM PRICE', 'LOCATION'];
     /*
      * rows: this array saves all <tr> elements generated running sql query..
@@ -32,7 +32,7 @@ class WishList {
      * SERVICE: it's the SERVICE injected from WishListController      
      * sqlStr: it contains the Sql STRING that will be excecuted  
      */
-    private $queryRecover;     
+    private $dbService;     
     
     /* helpful attributes */
     private $sqlStr= '';      
@@ -45,8 +45,9 @@ class WishList {
     public  function __construct( MyQueryRecover $dbService ) {
         /* injection adapter adapterection from WishListController*/
         
+        $this->dbService = $dbService;
         $sqlStr = $this->getSqlStr();
-        $this->dataSet = $dbService->runSql( $sqlStr );
+        $this->dataSet = $this->dbService->runSql( $sqlStr );
               
     }//END:constructor 
     
@@ -62,7 +63,7 @@ class WishList {
      * getSqlStr: It returns and STRING tha will be used to execute the SQL query.
      */
     private function getSqlStr():String {
-         $fields =' PRDWL.PRWCOD PRDWL.CRDATE PRDWL.CRUSER PRDWL.PRWPTN INMSTA.IMDSC INMSTA.IMPRC INVPTYF.IPYSLS INVPTYF.IPQQTE INVPTYF.IPTQTE ' ;
+//     $fields =' PRDWL.PRWCOD PRDWL.CRDATE PRDWL.CRUSER PRDWL.PRWPTN INMSTA.IMDSC INMSTA.IMPRC INVPTYF.IPYSLS INVPTYF.IPQQTE INVPTYF.IPTQTE ' ;
              
        $sqlStr = "SELECT * FROM PRDWL INNER JOIN INMSTA "
                 . "ON TRIM(UCASE(PRDWL.PRWPTN)) = TRIM(UCASE(INMSTA.IMPTN))"
@@ -111,31 +112,50 @@ class WishList {
         return $result;
     }
     
+    /* 
+     * RETURNS: all rows of the table will be returned as an ARRAY 
+     */
+    public function getRows() {
+        return ($this->rows)?? NULL;
+    }
     
     private function RowToArray( $row ) {
         $result = [];
         
-        array_push($result, $row['PRWCOD']);
+        array_push( $result, $row['PRWCOD'] );
         
-        array_push($result, $row['CRDATE']);
-        array_push($result, $row['CRUSER']);
-        array_push($result, $row['PRWPTN']);
-        array_push($result, $row['IMDSC']);
-        array_push($result, $row['IPYSLS']);
-        array_push($result, $row['IPQQTE']);
-        array_push($result, $row['IPTQTE']);
-        array_push($result, $row['IMPRC']);
-        array_push($result,'N/A');// $row['DVBIN#'];
+        array_push( $result, $row['CRDATE'] );
+        array_push( $result, $row['CRUSER'] );
+        array_push( $result, $row['PRWPTN'] );
+        array_push( $result, $row['IMDSC'] );
+        array_push( $result, $row['IPYSLS'] );
+        array_push( $result, $row['IPQQTE'] );
+        array_push( $result, $row['IPTQTE'] );
+        array_push( $result, number_format( $row['IMPRC'], 2 ));
+        
+        /* getting location from DVINVA */
+        
+        $strSql = "select DVBIN# from dvinva where UCASE(TRIM(dvpart))='". strtoupper(trim($row['PRWPTN'])).
+                "' and dvlocn ='20' and dvonh# > 0";
+        
+        
+        $dataSet = $this->dbService->runSql( $strSql );
+        
+//        print_r( $dataSet[0]['DVBIN#'] ); exit();
+        
+        $binLoc = $dataSet[0]['DVBIN#']?? 'Unkown';
+        array_push( $result, $binLoc );
         
        
         return $result;
     }
     
+    
     /*
      * function: dataToHtml() 
      * -this return all processed data as a HTML file. This will be rendered by the view
      */    
-    public function getGridAsHtml(){
+    public function TableAsHtml(){
         //checking if the method: runSql() was invoked before...
              
         if (!$this->dataSetReady()) { return '';}      
@@ -149,7 +169,7 @@ class WishList {
         
             /*********** generating each column label dynamically *****************/
             foreach ($this->columnHeaders as $field) {           
-                $tableHeader.='<th>'.$field.'</th>';    
+                $tableHeader.='<th class="description">'.$field.'</th>';    
             }
 
             /* concatening  header */

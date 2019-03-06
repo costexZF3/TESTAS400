@@ -37,7 +37,7 @@ return [
                     // Change this to something specific to your module
                     'route'    => '/wishlist',
                     'defaults' => [
-                        'controller'    => Controller\WishListController::class,
+                        'controller'    => Controller\WishlistController::class,
                         'action'        => 'index',
                     ],
                 ],                
@@ -63,7 +63,7 @@ return [
         'factories' => [
             Controller\ClaimsController::class => Controller\Factory\ClaimsControllerFactory::class,
             Controller\LostsaleController::class => Controller\Factory\LostsaleControllerFactory::class,
-            Controller\WishListController::class => Controller\Factory\WishListControllerFactory::class
+            Controller\WishlistController::class => Controller\Factory\WishlistControllerFactory::class
             
         ],
     ],
@@ -99,14 +99,14 @@ return [
             
             ], //END: access_filter for LostSaleController           
             
-            Controller\WishListController::class => [
+            Controller\WishlistController::class => [
                 //Allowing routes access depending on the type of permission assigned to loggin user
                 // Give access to "index" actions to everyone with +menu.purchasing  
                 //+option.purchasing.claims 
                 
                 //Actions reponse to Roles associated to MENUS 
                 ['actions' => ['index'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
-                ['actions' => ['wishlist'],      'allow' => '+option.purchasing.claims'],                 
+                ['actions' => ['wishlist'],       'allow' => '+option.purchasing.claims'],                 
             
             ], //END: access_filter for LostSaleController    
             

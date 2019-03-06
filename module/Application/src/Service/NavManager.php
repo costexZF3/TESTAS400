@@ -117,6 +117,7 @@ class NavManager
                     
                     if ($this->rbacManager->isGranted(null, 'purchasing.option.pd.wishlist')) {                                             
                          $options[] = $this->setOptions('pdwishlist', 'Product Dev. Wish List', 'pagebuilding','');
+                         $options[] = $this->setOptions('lostsales', 'Lost Sale', 'lostsales','');
                          $options[] = $this->setOptions('wishlist', 'Wish List', 'wishlist','');
                     }//end if: productdevelopments  wish list
                     
@@ -129,7 +130,7 @@ class NavManager
 
                     /* Options: Supplies */
                     if ($this->rbacManager->isGranted(null, 'purchasing.option.supplies')) {
-                        $options[] = $this->setDivider($options); 
+//                        $options[] = $this->setDivider($options); 
 
                         $options[] = $this->setOptions('supplies', 'Supplies', 'pagebuilding','');
                         $options[] = $this->setOptions('comments', 'Comments, New Supplies/Others', 'pagebuilding','');
