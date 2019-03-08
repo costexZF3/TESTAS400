@@ -42,7 +42,8 @@ class UserManager
     private $viewRenderer;
     
     /**
-     * App config.
+     * SMTP config it has the settings for sending email.
+     * and it will be injected from the UserManagerFactory
      * @var array 
      */
     private $config;

@@ -20,6 +20,12 @@ class UserManagerFactory
         $permissionManager = $container->get(PermissionManager::class);
         
         $viewRenderer = $container->get('ViewRenderer');
+        
+        /* initial configuracion for sent an email...
+         *  KRISTOV....YOU MUST CREATE A NEW SERVICE FOR SHARING THE sendEmail Logic 
+         *  with all Modules and Injected from anywhere
+         */
+
         $config = ['smtp' =>
                    [
                         'name' => 'mail.costex.com',
@@ -29,7 +35,7 @@ class UserManagerFactory
                                  'password' => 'sys61001', 
                                      'port' => 25],
                    ],
-        ];
+                  ];
                     
         
         $smtpMail = $config['smtp'];

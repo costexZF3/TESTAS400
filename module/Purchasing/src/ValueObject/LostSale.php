@@ -286,8 +286,7 @@ class LostSale {
         }
         
         $strSql = "SELECT INDESC FROM INMCAT where INCATA = '".strtoupper( $catAbbreviation )."'";        
-        
-//        echo $strSql; exit();
+
         $resultSet = $this->getResultSet( $strSql );
         
         return  ($resultSet[0]['INDESC'])?? "--";       

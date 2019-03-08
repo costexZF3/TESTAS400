@@ -132,7 +132,7 @@
 <div class="container-fluid">
 <div class="row reorder-sm">
     
-    <div class="col-md-4">  
+    <div class="col-md-2">  
             <!--FILTER ACCORDION-->       
         <div class="accordion-wrapper contact-form-inner">
             <div id="accordion_2">
@@ -140,40 +140,34 @@
                     <div class="card-header" id="headingOne_2">
                         <h5 class="mb-0">
                             <a  class="collapsed" data-toggle="collapse" data-target="#collapseOne_2" aria-expanded="false" aria-controls="collapseOne_2">
-                                <i class="fas fa-gears"></i> <span class="">OPTIONS  </span>
-                        </a>
+                                <span class="">ADD ITEM(S) TO WISH LIST  </span>
+                            </a>
                         </h5>
-                    </div> 
+                    </div>                  
+                  <!--ACCORDION CONTENT--> 
+                     <div id="collapseOne_2" class="collapse" aria-labelledby="headingOne_2" data-parent="#accordion_2">
+                         <div class="card-body">
+                             <div class = "row">                                        
+                                 <!--SHORT WAY-->
+                                 <!--times quote : rendering-->
+                                 <div class="col-md-6">                                            
 
-                    <!--FORM TO GET DATA FOR FILTERING DATA-->
-                    <!--<1?=$this->form()->openTag($form); ?>-->
-                        <!--ACCORDION CONTENT--> 
-                        <div id="collapseOne_2" class="collapse" aria-labelledby="headingOne_2" data-parent="#accordion_2">
-                            <div class="card-body">
+                                 </div>
 
-                                <div class = "row">                                        
-                                    <!--SHORT WAY-->
-                                    <!--times quote : rendering-->
-                                    <div class="col-md-6">                                            
+                                  <!--LONG WAY-->  <!--vendor assigned : rendering-->
+                                 <div class="col-md-6">
 
-                                    </div>
-
-                                     <!--LONG WAY-->  <!--vendor assigned : rendering-->
-                                    <div class="col-md-6">
-
-                                    </div>
-                                </div>    
-
+                                 </div>
                              </div> 
-
-                        </div>   <!-- COLLAPSE CONTENT END -->    
+                          </div> <!-- CARD-BODY --> 
+                     </div>   <!-- COLLAPSE CONTENT END -->    
                     <!--<1?=$this->form()->closeTag();?>-->
                 </div> <!-- CARD END -->            
             </div> <!-- ACCORDION END -->           
         </div>  <!-- ACCORDION WRAPPER -->         
     </div> 
     
-    <div class="col-md-8">
+    <div class="col-md-10">
        <?php 
          echo $table->TableAsHtml();
        ?>

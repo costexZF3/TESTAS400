@@ -230,6 +230,7 @@ input[type="search"]:focus {
 
 .table_ctp .money {    	    
     text-align : right;
+    padding-right: 20px;
     color: #C70039;
 }
 

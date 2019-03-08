@@ -5,8 +5,9 @@ use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Purchasing\Controller\WishListController;
 
-//use Application\Service\MyAdapter;
 use Application\Service\QueryRecover;
+use Application\Service\PartNumberManager;
+
 
 /**
  * This is the factory for IndexController. Its purpose is to instantiate the
@@ -15,10 +16,11 @@ use Application\Service\QueryRecover;
 class WishListControllerFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null) {       
-        /* recovering SERVICES QueryRecover */
-        $queryRecover = $container->get( QueryRecover::class );       
-        
+       /* retrieving SERVICES queryRecover */
+        $queryManager = $container->get( QueryRecover::class );       
+        $partNumberManager = $container->get( PartNumberManager::class );       
+                
         // Instantiate the controller and inject dependencies
-        return new WishListController( $queryRecover );
+        return new WishListController( $queryManager, $partNumberManager );
     }
 }

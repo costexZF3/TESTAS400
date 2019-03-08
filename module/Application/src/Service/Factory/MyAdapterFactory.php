@@ -20,7 +20,7 @@ class MyAdapterFactory implements FactoryInterface
            $dbconnection = [
                         'driver'         => 'IbmDb2',
                         'database'       => 'COSTEX1', // COSTEXM15  DEVELOPMENT
-                        'hostname'      =>  'COSTEXM15', 
+                        'hostname'      => 'COSTEXM15',// '172.0.0.21', 
                         'username'       => 'mojeda',
                         'password'       => '1978M1ch3l',
                         'driver_options' => [

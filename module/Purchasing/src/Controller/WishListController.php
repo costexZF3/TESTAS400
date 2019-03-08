@@ -5,27 +5,30 @@ namespace Purchasing\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-/* using Service: QueryRecover which let's take all data */
-use Application\Service\QueryRecover as MyQuery;
+/* SERVICES TO BE USED*/
+use Application\Service\QueryRecover as queryManager;
+use Application\Service\PartNumberManager;
+
 use Purchasing\Entity\WishList;
 
-//use Purchasing\Form\LostSaleForm;
 
-class WishListController extends AbstractActionController
-{
+class WishListController extends AbstractActionController {
      /*
      * Service QueryRecover
      */
-    private $queryRecover;
+    private $queryManager;
+    
+    private $partNumberManager;
      
     /**------------- Class Methods -----------------*/ 
     
-   /* constructor for WishList. It will be injected 
-    * with the queryRecover SERVICE for execute any queryString 
-    * by dependency injection 
+   /* 
+    * @var queryRecover queryManager
+    * @var $partNumberManager PartNumberManager
     */
-   public function __construct( MyQuery $queryRecover ){   
-       $this->queryRecover = $queryRecover;      
+   public function __construct( $queryRecover, $partNumberManager ) {   
+       $this->queryManager= $queryRecover;      
+       $this->partNumberManager = $partNumberManager;
    }   
   
    /**
@@ -34,10 +37,8 @@ class WishListController extends AbstractActionController
    public function indexAction() {              
        /* CALL THE WISHLIST CLASS */  
 //        $wishlist = $this->queryRecover->runSql( $sqlStr );
-//
-//        echo "count item: ".$this->queryRecover->CountItems()."<br>";
-        
-        $MyWishList = new WishList( $this->queryRecover );
+
+        $MyWishList = new WishList( $this->queryManager, $this->partNumberManager );
               
 //        var_dump($MyWishList); exit();
 //        echo $MyWishList->CountItems()."<br>";

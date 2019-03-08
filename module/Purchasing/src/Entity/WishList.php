@@ -2,7 +2,10 @@
 
 namespace Purchasing\Entity;
 
-use Application\Service\QueryRecover as MyQueryRecover;
+use Application\Service\QueryRecover as queryManager;
+use Application\Service\PartNumberManager;
+
+use Application\ObjectValue\PartNumber;
 
 
 /**
@@ -22,8 +25,8 @@ class WishList {
     /*
      * array with all COLUMN LABELS that will be rendered
      */
-    private $columnHeaders = ['CODE', 'DATE', 'USER','PART NUMBER', 'DESCRIPTION', 'YEAR SALES','QTY QUOTED',
-                              'TIMES QUOTED', 'OEM PRICE', 'LOCATION'];
+    private $columnHeaders = ['Code','WL No.','Date', 'User','Part Number', 'Description', 'Year Sales','Qty Quoted',
+                              'Times Quoted', 'OEM Price', 'Location', 'Model', 'Category'];
     /*
      * rows: this array saves all <tr> elements generated running sql query..
      */
@@ -31,37 +34,40 @@ class WishList {
     /*  
      * SERVICE: it's the SERVICE injected from WishListController      
      * sqlStr: it contains the Sql STRING that will be excecuted  
+     * @var $queryManager  queryManager
      */
-    private $dbService;     
+    private $queryManager;  
     
-    /* helpful attributes */
-    private $sqlStr= '';      
+    /*
+     * service to retrieve PartNumber details
+     * @var Application\Service\PartNumberManager
+     */
+    private $PartNumberManager;
+    
+    /* helpful attributes */        
     private $countItems = 0;
     private $tableAsHtml = '';
-    
-  
+     
               
     /* constructor */
-    public  function __construct( MyQueryRecover $dbService ) {
+    /*
+     * @var $dService queryManager 
+     * @var $PNManager PartNumberManager
+     */
+    public  function __construct( $queryManager, $PNManager) {
         /* injection adapter adapterection from WishListController*/
         
-        $this->dbService = $dbService;
-        $sqlStr = $this->getSqlStr();
-        $this->dataSet = $this->dbService->runSql( $sqlStr );
-              
+        $this->queryManager = $queryManager;
+        $this->PartNumberManager = $PNManager;
+        
+        $strSql =  $this->getSqlStr(); 
+        $this->dataSet = $this->queryManager->runSql( $strSql );
+        $this->countItems = count( $this->dataSet );      
     }//END:constructor 
-    
-      
-   /*
-    * this method return the SqlString generatered by the constructor
-    */
-    private function getSqlString():string{
-       return $this->sqlStr;             
-    }    
     
     /*
      * getSqlStr: It returns and STRING tha will be used to execute the SQL query.
-     */
+    */
     private function getSqlStr():String {
 //     $fields =' PRDWL.PRWCOD PRDWL.CRDATE PRDWL.CRUSER PRDWL.PRWPTN INMSTA.IMDSC INMSTA.IMPRC INVPTYF.IPYSLS INVPTYF.IPQQTE INVPTYF.IPTQTE ' ;
              
@@ -96,17 +102,27 @@ class WishList {
        return $this->dataSet;
     } 
     
-    public function CountItems(){
-        return count($this->dataSet);
+    public function CountItems() {
+        return count( $this->dataSet );
     }
      
  
     /* this function creates a <TR> element and assigned the CLASS, ID, and TITLE attributes for each <TD> element */
     private function rowToHTML( $row ):string{                
         
-        $result ='<tr>';        
-        foreach( $row as $item ){                                    
-            $result .= '<td>'.$item.'</td>';
+        $result ='<tr>';  
+        $col = 0;
+        $className = '';
+        $columns = [2, 3, 5, 11, 10];
+        foreach( $row as $item ){              
+           if (in_array( $col, $columns ) ) {
+              $className = "description";
+           } else if ( $col == 8){
+              $className = "money";
+           } else {$className = '';}
+              
+            $result .= '<td class="'.$className.'">'.$item.'</td>';
+          $col++;  
         }        
         $result .= '</tr>';        
         return $result;
@@ -121,12 +137,13 @@ class WishList {
     
     private function RowToArray( $row ) {
         $result = [];
+        $partNumberInWL = trim($row['PRWPTN']);
         
-        array_push( $result, $row['PRWCOD'] );
-        
+        array_push( $result, '@' );
+        array_push( $result, $row['PRWCOD'] );        
         array_push( $result, $row['CRDATE'] );
         array_push( $result, $row['CRUSER'] );
-        array_push( $result, $row['PRWPTN'] );
+        array_push( $result, $partNumberInWL );
         array_push( $result, $row['IMDSC'] );
         array_push( $result, $row['IPYSLS'] );
         array_push( $result, $row['IPQQTE'] );
@@ -135,18 +152,28 @@ class WishList {
         
         /* getting location from DVINVA */
         
-        $strSql = "select DVBIN# from dvinva where UCASE(TRIM(dvpart))='". strtoupper(trim($row['PRWPTN'])).
+        $strSql = "select DVBIN# from dvinva where UCASE(TRIM(dvpart))='". strtoupper( $partNumberInWL ).
                 "' and dvlocn ='20' and dvonh# > 0";
-        
-        
-        $dataSet = $this->dbService->runSql( $strSql );
+                
+        $dataSet = $this->queryManager->runSql( $strSql );
         
 //        print_r( $dataSet[0]['DVBIN#'] ); exit();
-        
-        $binLoc = $dataSet[0]['DVBIN#']?? 'Unkown';
+        $binLoc = $dataSet[0]['DVBIN#']?? 'N/A';
         array_push( $result, $binLoc );
         
+        /* adding MODEL */
+        array_push( $result, trim($row['IMMOD'])!=''? $row['IMMOD']:'N/A' );
+        
+        //passing an OBJECT
+//         $partNumberOBJ = $this->PartNumberManager->getPartNumber( $partNumberInWL );
+//         $CatDescription =  $this->PartNumberManager->getCategoryDescByStr( $partNumberOBJ );
+         
+        /*best CASE 5.3 S*/
+         $cat = $row['IMCATA'];
+         $CatDescription =  $this->PartNumberManager->getCategoryDescByStr( $cat );
        
+         array_push( $result, $CatDescription );
+        
         return $result;
     }
     
