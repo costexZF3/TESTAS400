@@ -76,22 +76,25 @@ class PartNumberManager {
                'deep'=> $partNumber->getDeep() 
        ];
     }
-    
-    
-//    /* this method returns the category description associated to a PartNumber */    
-//    public function getCategoryByObj( PartNumber $partNumber ): string {
-//       $validPartNumber = ( $partNumber!==null) ? true : false;
-//       
-//       if (!$validPartNumber) { return 'unknow';}
-//       
-//       $catAbbreviation = $partNumber->getCategory();
-//       
-//       $strSql = "SELECT INDESC FROM INMCAT where INCATA = '".strtoupper( trim($catAbbreviation ) )."'"; 
-//       $data = $this->queryManager->runSql( $strSql );
-//       
-//       return $data[0]['INDESC'];
-//    }
-    
+     
+    /*
+     * returns MAJOR AND MINOR CODE FROM a PartNumberID
+     */ 
+    public function getMajorMinor( $partNumberId ) {
+              
+       $strSql = "SELECT DVMJPC, DVMNPC FROM dvinva WHERE DVPART = '".strtoupper( trim( $partNumberId ) )."'"; 
+       $dataSet = $this->queryManager->runSql( $strSql );
+       
+       /* validating data */
+       $Major = ($dataSet[0]['DVMJPC'])??'N/A';
+       $Minor = ($dataSet[0]['DVMNPC'])??'N/A';
+       
+       $data = ['major'=>$Major, 
+                'minor'=>$Minor
+               ];
+                  
+       return $data;
+    }
     
      /* 
       * this method returns the category description associated PartNumber 
@@ -102,7 +105,6 @@ class PartNumberManager {
                     
        $category = (is_a( $param, 'Application\ObjectValue\PartNumber')) ? $param->getCategory(): $param;
        
-//       var_dump( $category ); exit();
        $validCategory = ( $category!=='') ? true : false;
        
        if (!$validCategory) { return 'unknow';}

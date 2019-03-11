@@ -26,7 +26,7 @@ class WishList {
      * array with all COLUMN LABELS that will be rendered
      */
     private $columnHeaders = ['Code','WL No.','Date', 'User','Part Number', 'Description', 'Year Sales','Qty Quoted',
-                              'Times Quoted', 'OEM Price', 'Location', 'Model', 'Category'];
+                              'Times Quoted', 'OEM Price', 'Location', 'Model', 'Category', 'SubCat', 'Major','Minor'];
     /*
      * rows: this array saves all <tr> elements generated running sql query..
      */
@@ -113,13 +113,12 @@ class WishList {
         $result ='<tr>';  
         $col = 0;
         $className = '';
-        $columns = [2, 3, 5, 11, 10];
+        $columns = [7, 8, 9];
         foreach( $row as $item ){              
-           if (in_array( $col, $columns ) ) {
+           if (!in_array( $col, $columns ) ) {
               $className = "description";
-           } else if ( $col == 8){
-              $className = "money";
-           } else {$className = '';}
+           } else if ( $col === 9 ) { $className = "money";}
+           else {$className = '';}
               
             $result .= '<td class="'.$className.'">'.$item.'</td>';
           $col++;  
@@ -134,6 +133,8 @@ class WishList {
     public function getRows() {
         return ($this->rows)?? NULL;
     }
+    
+    
     
     private function RowToArray( $row ) {
         $result = [];
@@ -150,8 +151,7 @@ class WishList {
         array_push( $result, $row['IPTQTE'] );
         array_push( $result, number_format( $row['IMPRC'], 2 ));
         
-        /* getting location from DVINVA */
-        
+        /*  getting location from DVINVA  */        
         $strSql = "select DVBIN# from dvinva where UCASE(TRIM(dvpart))='". strtoupper( $partNumberInWL ).
                 "' and dvlocn ='20' and dvonh# > 0";
                 
@@ -168,12 +168,19 @@ class WishList {
 //         $partNumberOBJ = $this->PartNumberManager->getPartNumber( $partNumberInWL );
 //         $CatDescription =  $this->PartNumberManager->getCategoryDescByStr( $partNumberOBJ );
          
-        /*best CASE 5.3 S*/
+        /* ADDING CATEGORY DESCRIPTION BEST CASE 5.3 S*/
          $cat = $row['IMCATA'];
-         $CatDescription =  $this->PartNumberManager->getCategoryDescByStr( $cat );
-       
+         $CatDescription =  $this->PartNumberManager->getCategoryDescByStr( $cat );       
          array_push( $result, $CatDescription );
-        
+         
+         /* SUB-CATEGORY */
+         array_push( $result, $row['IMSBCA'] );
+         
+         /* mayor and minor */
+         $mayorMinor = $this->PartNumberManager->getMajorMinor( $partNumberInWL );
+         array_push( $result, $mayorMinor['major'] );
+         array_push( $result, $mayorMinor['minor'] );
+         
         return $result;
     }
     
