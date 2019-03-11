@@ -9,7 +9,7 @@ use Zend\View\Model\ViewModel;
 use Application\Service\QueryRecover as queryManager;
 use Application\Service\PartNumberManager;
 
-use Purchasing\Entity\WishList;
+use Purchasing\Service\WishListManager;
 
 
 class WishListController extends AbstractActionController {
@@ -38,22 +38,15 @@ class WishListController extends AbstractActionController {
        /* CALL THE WISHLIST CLASS */  
 //        $wishlist = $this->queryRecover->runSql( $sqlStr );
 
-        $MyWishList = new WishList( $this->queryManager, $this->partNumberManager );
-              
-//        var_dump($MyWishList); exit();
-//        echo $MyWishList->CountItems()."<br>";
-//        $MyWishList->TableAsHtml();
-//        print_r ($MyWishList->getRows()); exit();
-//        echo $MyWishList->TableAsHtml(); exit();
-
-       
+        $MyWishList = new WishListManager( $this->queryManager, $this->partNumberManager );
+        
       
        /* this method retrives all items and return a resultSet or data as HTML tableGrid */   
 //         $LostSale = new LostSale( $this->conn, $timesQuote, $vndAssignedOptionSelected );      
               
        $this->layout()->setTemplate('layout/layout_Grid');
        return new ViewModel([                          
-                     'wishlist' => $MyWishList,
+                     'wishlist' => $MyWishList->TableAsHtml(),
             ]);
     }//END: indexAction method
     

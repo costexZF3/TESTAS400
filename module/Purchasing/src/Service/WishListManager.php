@@ -1,6 +1,6 @@
 <?php
 
-namespace Purchasing\Entity;
+namespace Purchasing\Service;
 
 use Application\Service\QueryRecover as queryManager;
 use Application\Service\PartNumberManager;
@@ -16,7 +16,7 @@ use Application\ObjectValue\PartNumber;
  * @author mojeda
  */
 
-class WishList {
+class WishListManager {
     /*
      * dataSet: It saves the resultSet returned by runSql() method
      */    
@@ -113,7 +113,9 @@ class WishList {
         $result ='<tr>';  
         $col = 0;
         $className = '';
-        $columns = [7, 8, 9];
+        
+        /*exclude or discard the following COLUMNS to use the CLASS description */
+        $columns = [6, 7, 8, 9];
         foreach( $row as $item ){              
            if (!in_array( $col, $columns ) ) {
               $className = "description";
@@ -154,12 +156,9 @@ class WishList {
         /*  getting location from DVINVA  */        
         $strSql = "select DVBIN# from dvinva where UCASE(TRIM(dvpart))='". strtoupper( $partNumberInWL ).
                 "' and dvlocn ='20' and dvonh# > 0";
-                
+               
         $dataSet = $this->queryManager->runSql( $strSql );
-        
-//        print_r( $dataSet[0]['DVBIN#'] ); exit();
-        $binLoc = $dataSet[0]['DVBIN#']?? 'N/A';
-        array_push( $result, $binLoc );
+        array_push( $result, $dataSet[0]['DVBIN#']?? 'N/A' );
         
         /* adding MODEL */
         array_push( $result, trim($row['IMMOD'])!=''? $row['IMMOD']:'N/A' );

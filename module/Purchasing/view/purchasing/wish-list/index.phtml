@@ -130,9 +130,8 @@
     
 
 <div class="container-fluid">
-<div class="row reorder-sm">
-    
-    <div class="col-md-2">  
+   <div class="row"> 
+       <div class="col-md-6">  
             <!--FILTER ACCORDION-->       
         <div class="accordion-wrapper contact-form-inner">
             <div id="accordion_2">
@@ -140,7 +139,7 @@
                     <div class="card-header" id="headingOne_2">
                         <h5 class="mb-0">
                             <a  class="collapsed" data-toggle="collapse" data-target="#collapseOne_2" aria-expanded="false" aria-controls="collapseOne_2">
-                                <span class="">ADD ITEM(S) TO WISH LIST  </span>
+                                <span class="">ADD ITEM(S)</span>
                             </a>
                         </h5>
                     </div>                  
@@ -151,7 +150,7 @@
                                  <!--SHORT WAY-->
                                  <!--times quote : rendering-->
                                  <div class="col-md-6">                                            
-
+                                    
                                  </div>
 
                                   <!--LONG WAY-->  <!--vendor assigned : rendering-->
@@ -166,13 +165,15 @@
             </div> <!-- ACCORDION END -->           
         </div>  <!-- ACCORDION WRAPPER -->         
     </div> 
-    
-    <div class="col-md-10">
-       <?php 
-         echo $table->TableAsHtml();
-       ?>
-    </div> 
-    
-</div>
+   </div>
+   
+   </br>
+   
+   <!--rendering TABLE WISHLIST--> 
+   <div class="row ">
+       <div class="col-md-12">
+          <?php echo $table; ?>
+       </div> 
+   </div>
 </div>    
  
