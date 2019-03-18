@@ -1,0 +1,224 @@
+<?php     
+    /*getting values */
+       
+    $this->headTitle('Wish List');	
+    $this->mainMenu()->setActiveItemId('Wish List'); 
+   
+    $this->pageBreadcrumbs()->setItems([
+        'Home'=>$this->url('home'),
+        'Wish List'=>$this->url('wishlist')       
+        ]);       
+    
+    /*** getting params from IndexAction() inside LostsaleController ***/
+   
+    /*
+     * @var Purchasing\Service\WishListManager
+     */
+    $WLManager = $this->wishlist;        
+ ?>  
+ 	 
+<script language="JavaScript">          
+    
+    /*
+     * JQuery code:
+     * This occurs when the page has finished to load
+    */    
+    
+    $(document).ready( function(){ 
+        /* getting date() as String */
+        
+        const strDate = dateToStr();
+        
+        
+//   taking off CLASS dt-button to the buttons EXCEL, PDF, AND COPY
+    $("button.dt-button").removeClass("dt-button");
+            
+//    let tempCol = <1?php echo '[' . implode(', ', $columnsToHide) . ']';?>;
+    
+//    const columsToHide = (tempCol.length!==0)? tempCol:[];
+    
+//    console.log( columsToHide );
+    
+    //Initial Objet to config my table_filtered
+    const initialConfig = {        
+//        "columnDefs" : [
+//                        {
+//                            "targets": columsToHide,
+//                            "visible": false,
+//                            "searchable": false
+//                        }                                      
+//                      ],
+
+        "lengthMenu" :  [ [10, 25, 50, 100,  -1], 
+                          [10, 25, 50, 100, "All"]
+                        ],
+                        
+        dom: '<"ctp-buttons"l Bfr<t>ip>',
+       
+            /* see: exportOptions Object. This is an object. It help you to set up all concerning to BUTTONS */
+            buttons: [ 
+                    /* obj: BUTTON TO EXCEL */
+                        { 
+                            extend: 'excel', 
+                            className: 'submit-btn', 
+                            title: 'wishList-EXCEL-'+strDate+')', 
+                            titleAttr : 'Convert to EXCEL',
+                            text: 'E<u>X</u>CEL',                           
+                            key: {
+                                  key:'x',
+                                  altKey: true
+                                }
+                        },
+                        
+                    /* OBJ: BUTTON to PDF */
+                        {
+                            extend: 'pdf',   
+                            className: 'submit-btn', 
+                            title: 'wishList-pdf-('+strDate+')',
+                            titleAttr : 'Convert to PDF',
+                            orientation: 'landscape',  //it's portrait by default 
+                            pageSize: 'TABLOID', //this can be A3, A4, A5, LEGAL, LETTER or TABLOID  : all are STRINGS 
+                            text: '<u>P</u>DF',                           
+                            key: {
+                                  key:'p',
+                                  altKey: true
+                                }
+                            
+                        },   
+                  
+                  
+                        /* How do I can add a new button and create something associated to this 
+                         *     - e : ( object ): Event object that triggered the event
+                         *     - dt: ( DataTables.Api ): A DataTables API instance for the host DataTable
+                         *    -node: (jQuery): jQuery instance for the button nod that was clicked on
+                         *  -config: ( object ): The button's configuration object
+                         */
+                        
+                        {
+                            text        : 'IMPORT FROM EXCEL', 
+                            className   : 'submit-btn'      
+                        }                            
+                                                                  
+                     ],
+        initComplete: function () {
+            this.api().columns([0, 1, 2,3,4,6,7,8,9]).every( function () { //[0,1, 8,10, 16, 18,19] : columns to apply 
+                var column = this;
+                var select = $('<select><option value=""></option></select>')
+                    .appendTo( $(column.footer()).empty() )
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+                        column.search( val ? '^'+val+'$' : '', true, false ).draw();
+                    } );
+
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' );
+                } );
+            } );
+        } //end property InitComplete                 
+    };
+
+    var tables = filterTable('table_filtered', initialConfig );
+    
+    //removing dt-button class to each HTMLElement (button) Associates to 
+   // a table
+    $('button').removeClass('dt-button');    
+  
+    }); 
+
+</script>
+        
+<!-- HTML RENDER-->
+    
+
+<div class="container-fluid">
+   <div class="row"> 
+       <div class="col-md-6">  
+            <!--FILTER ACCORDION-->       
+        <div class="accordion-wrapper contact-form-inner">
+            <div id="accordion_2">
+                <div class="card">
+                    <div class="card-header" id="headingOne_2">
+                        <h5 class="mb-0">
+                            <a  class="collapsed" data-toggle="collapse" data-target="#collapseOne_2" aria-expanded="false" aria-controls="collapseOne_2">
+                                <span class="">ADD ITEM(S)</span>
+                            </a>
+                        </h5>
+                    </div>                  
+                  <!--ACCORDION CONTENT--> 
+                     <div id="collapseOne_2" class="collapse" aria-labelledby="headingOne_2" data-parent="#accordion_2">
+                         <div class="card-body">
+                             <div class = "row">                                        
+                                 <!--SHORT WAY-->
+                                 <!--times quote : rendering-->
+                                 <div class="col-md-6">                                            
+                                    
+                                 </div>
+
+                                  <!--LONG WAY-->  <!--vendor assigned : rendering-->
+                                 <div class="col-md-6">
+
+                                 </div>
+                             </div> 
+                          </div> <!-- CARD-BODY --> 
+                     </div>   <!-- COLLAPSE CONTENT END -->    
+                    <!--<1?=$this->form()->closeTag();?>-->
+                </div> <!-- CARD END -->            
+            </div> <!-- ACCORDION END -->           
+        </div>  <!-- ACCORDION WRAPPER -->         
+    </div> 
+   </div>
+   
+   </br>
+   
+   <!--rendering TABLE WISHLIST--> 
+   <div class="row ">
+       <div class="col-md-12">
+          <?php
+            //rendering table 
+            $tableHeader = $WLManager->getFieldNames(); 
+            $tableData = $WLManager->getTableAsMatriz(); 
+         ?>
+            
+            <table class="table_ctp table_filtered display">
+              <thead>
+                 <tr>  
+        
+                <!--each field--> 
+                  <?php foreach ( $tableHeader as $field):?>            
+                           <th class="description"><?= $field;?></th>    
+                  <?php endforeach;?>
+                  </tr>
+               </thead>
+               
+               <!--rendering the table boddy-->
+               
+               <tbody>              
+                  <!-- dynamic body -->        
+                  <?php foreach ($tableData as $row) : ?> 
+                  <tr>
+                     
+                     <?php 
+                        $index = 0;
+                        $className = '';
+                        $columns = [6, 7, 8, 9];
+                        foreach ($row as $item):  
+                           if (!in_array( $index, $columns ) ) {
+                               $className = "description";                              
+                           }else if ( $index === 9 ) { $className = "money";}
+                        else {$className = '';}
+                        ?>      
+                        <td class="<?=$className;?>"><?=$item;?></td>
+                        <?php 
+                        $index++;
+                        endforeach;
+                        ?>                          
+                  </tr>
+                  <?php endforeach;?> 
+               </tbody>
+            </table>
+       </div> 
+   </div>
+</div>    
+ 
