@@ -42,34 +42,53 @@ class PartNumberManager {
       
      /* retrieving each FIELD VALUE */
 //         foreach ( dataSet as $record ) {
-            $data['id']              = $record['IMPTN'];
-            $data['description']     = $record['IMDSC'];            
-            $data['major']           = $record['IMPC1'];
-            $data['minor']           = $record['IMPC2'];
-            $data['unitCost']        = $record['IMCST'];
-            $data['listPrice']       = $record['IMPRC'];
-            $data['sellUnitMeasure'] = $record['IMUMS'];
-            $data['countryOriginal'] = $record['IMCNT'];
-            $data['model']           = $record['IMMOD'];
-            $data['length']          = $record['IMLENG'];
-            $data['width']           = $record['IMWIDT'];
-            $data['deep']            = $record['IMDPTH'];
-            $data['volumen']         = $record['IMVOLU'];
-            $data['category']        = $record['IMCATA'];
-            $data['subCategory']     = $record['IMSBCA'];
-//         } 
-         
-          /* creating and PartNumber */
+            $data['id']              = $record['IMPTN']; //part number
+            $data['description']     = $record['IMDSC']; //part number description            
+            $data['major']           = $record['IMPC1']; // major product code
+            $data['minor']           = $record['IMPC2']; // minor product code
+            $data['unitCost']        = $record['IMCST']; // unit cost
+            $data['listPrice']       = $record['IMPRC']; // OEM PRICE - LIST PRICE
+            $data['sellUnitMeasure'] = $record['IMUMS']; //  SELL UNIT/MEASURE 
+            $data['countryOriginal'] = $record['IMCNT']; //  COUNTRY ORIGINAL
+            $data['model']           = $record['IMMOD']; //MODEL
+            $data['length']          = $record['IMLENG'];// part length
+            $data['width']           = $record['IMWIDT']; // part width
+            $data['deep']            = $record['IMDPTH']; //part deep
+            $data['volumen']         = $record['IMVOLU']; //volumen of the part
+            $data['category']        = $record['IMCATA']; //category of the part
+            $data['subCategory']     = $record['IMSBCA']; //subcategory of the part
+                      
+            /* getting the last year Qty quoted*/
+            $strSql = "SELECT IPVNUM, IPQQTE, IPQONH, IPQONO FROM INVPTYF WHERE UCASE(IPPART) = '". trim(strtoupper($data['id']))."'";
+            $dataSet = $this->queryManager->runSql( $strSql );
+            $data['qtyquotedlastyear'] = $dataSet[0]['IPQQTE']?? 0;
+            $data['vendor'] = $dataSet[0]['IPVNUM']?? 'NO ASSIGNED';           
+            $data['onhand'] = $dataSet[0]['IPQONH']?? 0;
+            $data['onorder']= $dataSet[0]['IPQONO']?? 0; //qty on order
+            
+             //vendor of the part
+            
+            /* initial description for the vendor */
+            $data['vendordesc'] = 'no assigned ';
+            
+            if ($data['vendor'] != 'NO ASSIGNED' ) { 
+               $strSql = "SELECT VMNAME FROM vnmas WHERE VMVNUM = '".$data['vendor']."'";
+               
+               $vendorName = $this->queryManager->runSql( $strSql );
+               $data['vendordesc'] = $vendorName[0]['VMNAME'];
+            } 
+          
+         /* creating and PartNumber */
           $partNumber = new PartNumber( $data );
           
          return $partNumber;   
    }//END: populatePartNumber method
-   
+    
    /*---------------------------------------- getters ----------------------------------------------*/
     
     /* this method retrieves the measurements of a PartNumber Object */
     public function getMeasurements( PartNumber $partNumber ) {
-       if ($partNumber ==null) {return null;}
+       if ($partNumber == null) {return null;}
        
        return ['length'=>$partNumber->getLength(),
                'width'=>$partNumber->getWidth(),

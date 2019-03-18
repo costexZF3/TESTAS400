@@ -12,7 +12,9 @@
        <div class="lds-ripple">
        <div></div>
        <div class="img-wrapper">
-           <img src="<?=$pathLogo?>" height="50" alt="CTP lOGO"/>
+          <?php if ($pathLogo!=''): ?>
+             <img src="<?=$pathLogo?>" height="50" alt="CTP lOGO"/>
+          <?php endif;?>
        </div>
        </div>
    </div>

@@ -36,8 +36,13 @@ class PartNumber {
    private $category = ''; // IMCATA
    private $subCategory = ''; // IMSBCA
    
-   /* properties -> LOADING TO ANOTHER QUERIES */
+   private $onHand;
+   private $onOrder;
+   private $vendor;  
    
+   /* properties -> LOADING TO ANOTHER QUERIES */
+   private $vendorDesc;
+   private $qtyQuotedLastYear;
    
  /* constructor
  *  - this receives the SERVICE for recovering data from AS400
@@ -64,11 +69,38 @@ class PartNumber {
       $this->deep = $data['deep'];
       $this->volumen = $data['volumen'];
       $this->category = $data['category'];
-      $this->subCategory =  $data['subCategory'];  
+      $this->subCategory =  $data['subCategory']; 
+            
+      $this->onHand = $data['onhand'];
+      $this->onOrder = $data['onorder'];
+      $this->vendor = $data['vendor'];
+      $this->vendorDesc = $data['vendordesc'];
+      $this->qtyQuotedLastYear = $data['qtyquotedlastyear'];
    } //END: populate method
 
    /* getters */
    
+   public function getOnHand() {
+      return $this->onHand;
+   }
+   
+   public function getOnOrder() {
+      return $this->onOrder;
+   }
+   
+   public function getVendor() {
+      return $this->vendor;
+   }
+   
+   public function getVendorDescription() {
+      return $this->vendorDesc;
+   }
+   
+   
+   public function getQtyQuotedLastYear() {
+      return $this->qtyQuotedLastYear;
+   }
+
    public function getId() {
       return $this->id;
    }

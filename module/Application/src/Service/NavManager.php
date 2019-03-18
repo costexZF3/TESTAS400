@@ -115,8 +115,7 @@ class NavManager
                         $options[] = $this->setOptions('productdevelopment', 'Product Developments', 'pagebuilding','');
                     }//end if: option.purchasing.productdevelopments 
                     
-                    if ($this->rbacManager->isGranted(null, 'purchasing.option.pd.wishlist')) {                                             
-                         $options[] = $this->setOptions('pdwishlist', 'Product Dev. Wish List', 'pagebuilding','');
+                    if ($this->rbacManager->isGranted(null, 'purchasing.option.pd.wishlist')) {                                                                     
                          $options[] = $this->setOptions('lostsales', 'Lost Sale', 'lostsales','');
                          $options[] = $this->setOptions('wishlist', 'Wish List', 'wishlist','');
                     }//end if: productdevelopments  wish list
