@@ -8,14 +8,13 @@ use Zend\View\Model\ViewModel;
 /* SERVICES TO BE USED*/
 use Application\Service\QueryRecover as queryManager;
 use Application\Service\PartNumberManager;
+use Purchasing\Service\WishListManager;
 use Application\ObjectValue\PartNumber;
-
 use Purchasing\Form\WishListNewItemForm;
 
-use Purchasing\Service\WishListManager;
 
-
-class WishListController extends AbstractActionController {
+class WishListController extends AbstractActionController 
+{
      /*
      * Service QueryRecover
      */
@@ -25,11 +24,12 @@ class WishListController extends AbstractActionController {
      
     /**------------- Class Methods -----------------*/ 
     
-   /* 
-    * @var queryRecover queryManager
-    * @var $partNumberManager PartNumberManager
-    */
-   public function __construct( queryManager $queryRecover, PartNumberManager $partNumberManager ) {   
+   /**
+    * @param queryManager $queryRecover            - Service for running SQL
+    * @param PartNumberManager $partNumberManager  - Service for recovering       
+   */
+   public function __construct( queryManager $queryRecover, PartNumberManager $partNumberManager ) 
+   {   
       $this->queryManager= $queryRecover;      
       $this->partNumberManager = $partNumberManager;      
    }   
@@ -38,37 +38,28 @@ class WishListController extends AbstractActionController {
     /*
     * getting the logged user 
     */
-   private function getUser(){
+   private function getUser()
+   {
        $user = $this->currentUser();       
        //validating the user
-       if ($user==null) {
+       if ($user == null) {
            $this->getResponse()->setStatusCode(404);
            return;
        } 
        return $user;
    }//End: getUser()
-   
-   /* this method returns the max code that will be insert in the WL */
-   private function getMax( $code, $table ) {
-      $strSql = "SELECT MAX(".$code.") as MAXCOD FROM ".$table;
-        
-      $data = $this->queryManager->runSql( $strSql );
       
-      $result = $data[0]['MAXCOD']++; 
-      
-      return $result+1 ;
-   }//END: getMax
-   
-   private function getWishListItem( $partNumberID ) {
+   private function getWishListItem( $partNumberID ) 
+   {
       /*
        * @var $parNumberObj \Application\ObjectValue\PartNumber
        */
-      $partNumberObj = ( $this->partNumberManager->getPartNumber( $partNumberID ) )?? NULL;
+      $partNumberObj =  $this->partNumberManager->getPartNumber( $partNumberID ) ?? null;
 
-      if ( $partNumberObj != NULL ) { 
-         $data['code'] = $this->getMax('PRWCOD', 'PRDWL');
-//         $data['user'] = str_replace('@costex.com', '', $this->getUser()->getEmail());
-         $data['user'] = $this->getUser()->getEmail();
+      if ( $partNumberObj !== null ) {         
+         $data['code'] = $this->queryManager->getMax('WHLCODE', 'PRDWL');
+         $data['user'] = str_replace('@costex.com', '', $this->getUser()->getEmail());
+//       $data['user'] = $this->getUser()->getEmail();
 
          $data['date'] = date('Y-m-d');
          /* - if the partNumber exist NOT NULL then return it back
@@ -97,63 +88,76 @@ class WishListController extends AbstractActionController {
    /**
     *  The IndexAction show the main Menu about all concerning to the Purchasing Menus
     */
-   public function indexAction() {            
-      //create instance of the form
+   public function indexAction() 
+   {            
+       //create instance of the form
       $data = [];      
       $renderAllForm = false;
+      $form = new WishListNewItemForm('initial', $this->queryManager ) ;
+      
       //check if user has submitted the form
 
-      if ($this->getRequest()->isPost()) {
-            
-            /* getting DATA from the FORM where times quotes was selected */        
-            $data = $this->params()->fromPost();    
-            
-            if ($data['submit']=='SUBMIT') { //CHECKING IF ITS THE FIRT PARTNUMBER
-                $form = new WishListNewItemForm('initial', $this->queryManager ) ;
-                $form->setData($data);
-                
-                if ($form->isValid()) { //validating PartNumber
-                   // retrieving all data associated to this partnumber 
-                   $dataItem = $this->getWishListItem( $data['partnumber'] ); 
-                   /* creating the form instance */
-                   $form = new WishListNewItemForm( 'entered', $this->queryManager ) ;
-                   $form->setData( $dataItem );                    
-                   $renderAllForm = true;
-                }//END: isValid() checking 
-            }//END: IF WITH SUBMIT 
-            
-            else {  //IT's trying to insert data to wishlits
-                
-               $form = new WishListNewItemForm('entered', $this->queryManager ) ;
-               //fill the form with all data 
-               $form->setData($data);
-                
+      if ($this->getRequest()->isPost()) {            
+         /* getting DATA from the FORM where times quotes was selected */        
+         $data = $this->params()->fromPost();  
+         $form->setData( $data );
+
+         if ($data['submit'] == 'SUBMIT') { //CHECKING IF ITS THE FIRT PARTNUMBER             
+
+             if ( $form->isValid() ) { //validating PartNumber
+                // retrieving all data associated to this partnumber 
+                $dataItem = $this->getWishListItem( $data['partnumber'] ); 
+                /* creating the form instance */
+                $form = new WishListNewItemForm( 'entered', $this->queryManager ) ;
+                $form->setData( $dataItem );                    
                 $renderAllForm = true;
-               //check valid data
-                if ($form->isValid()) {
-                   //getting back all filtered data 
-                   
-                   $data = $form->getData(); 
-                   //INSERT DATA TO WISHLIST
-                   echo "VALUE OF COMMENT---".$data['comment'];
-                   print_r($data);
-                }
-               
-            }//END: IF ELSE (TRUE: ADD TO WISHLIST
-           
-        } else {
-           $form = new WishListNewItemForm( 'initial', $this->queryManager ) ;
-           $renderAllForm = false;
-        } //END: if post()
+                $this->flashMessenger()->addSuccessMessage(
+                             'Data of the part number are being recovered successfully.');
+             } //END: isValid() checking 
+             else {
+               $this->flashMessenger()->addErrorMessage(
+                             'Oops!!! Data of the part number COULD NOT BE loaded to update the Wish List. Check errors'); 
+             }
+         } else { // this occurr if data are ready for being inserted to wishlits ( ADD BUTTON )
+
+            //creating an Object NewItem to wishlist with all fields associated 
+            $form = new WishListNewItemForm( 'entered', $this->queryManager ) ;
+
+            //fill the form with all data 
+            $form->setData( $data );
+
+            $renderAllForm = true;
+
+            //checking if all data in the form are validated 
+            if ($form->isValid()) {                  
+
+                //getting back all filtered data  from the FORM Object                   
+                $data = $form->getData(); 
+
+                //INSERT DATA TO WISHLIST                   
+                $WLManager = new WishListManager( $this->queryManager, $this->partNumberManager );
+                $inserted = $WLManager->insert( $data );
+                
+                if ( $inserted ) {
+                    $this->flashMessenger()->addSuccessMessage(
+                             "The new part has been inserted into the Wish List: (".$data['code'].")");
+                    return $this->redirect()->toRoute('wishlist', 
+                                                       ['action'=>'index']);                          
+                }//endif: inserted??  
+            } else { //inserting validated
+                   $this->flashMessenger()->addErrorMessage(
+                                'Oops!!! Could not insert the new part number in the Wish List.');
+            }
+         }//endelse: SUBMITTED CHECK          
+      } //endif: CHECK IF POST ()
       
+      $WLManager = new WishListManager( $this->queryManager, $this->partNumberManager );
       
-      $WLManager = new WishListManager( $this->queryManager, $this->partNumberManager );              
       $this->layout()->setTemplate('layout/layout_Grid');
       return new ViewModel([                          
-//                   'wishlist' => $WLManager,    //rendering on the phtml
-                     'wishlist' => $WLManager->TableAsHtml(),
+                     'wishlist'      => $WLManager->TableAsHtml(),
                      'formNewItemWL' => $form,
-                     'renderAll'  => $renderAllForm
+                     'renderAll'     => $renderAllForm
             ]);
    }//END: indexAction method
     
@@ -161,7 +165,9 @@ class WishListController extends AbstractActionController {
    /* 
     * adding: Adding a new Item to WishList
     */
-   public function addAction() {
+   public function addAction() 
+   {
+          
        
    }
     

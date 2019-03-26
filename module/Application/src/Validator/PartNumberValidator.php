@@ -38,15 +38,15 @@ class PartNumberValidator extends AbstractValidator {
   const INVALID_PARTNUMBER  = 'invalidPartNumber';
   const INVALID_PARTNUMBER_IN_TABLE = 'invalidPartNumberInTable';
   const INVALID_PARTNUMBER_LENGTH = 'invalidPartNumberLength';
-  const INVALID_PARTNUMBER_IN_WISHLIST = 'invalidPartNumberExist';
+  const INVALID_PARTNUMBER_ALREADY_EXIST = 'invalidPartNumberExist';
     
   // Validation failure messages.
   protected $messageTemplates = [
     self::NOT_SCALAR  => "The part number must be a scalar value",
     self::INVALID_PARTNUMBER_LENGTH => "Invalid Part Number: Length Must be between 4-19 characters", 
-    self::INVALID_PARTNUMBER => "it NOT EXIT in our INVENTORY",
+    self::INVALID_PARTNUMBER => "it does NOT EXIT in our INVENTORY",
     self::INVALID_PARTNUMBER_IN_TABLE => "The part number can not be found in the table",
-    self::INVALID_PARTNUMBER_IN_WISHLIST => "This PART already exist in the WL",
+    self::INVALID_PARTNUMBER_ALREADY_EXIST => "This PART NUMBER already exist",
           
   ];
     
@@ -92,7 +92,7 @@ class PartNumberValidator extends AbstractValidator {
       }
 
       // Convert the value to string.
-      $value = (string)$value;
+      $value = strtoupper( $value );
 
       // Retrieve the Table Name      
       $table = $this->options['table'];
@@ -119,26 +119,24 @@ class PartNumberValidator extends AbstractValidator {
       // LOOKING FOR THE PART EXIST IN THE TABLE
       // retrieving the queryManager
       $queryManager = $this->options['queryManager'];
-      $strSql = "SELECT ".$fieldName." FROM ".$table." WHERE ".$fieldName." = '".$value."'"; 
+      $strSql = "SELECT IMPTN FROM ".self::TABLE_BY_DEFAULT." WHERE UCASE(IMPTN) = '".$value."'"; 
 
       $data = $queryManager->runSql( $strSql ); 
       
-      $isValid = isset( $data[0][$fieldName] ) ? true : false;
-
+      $isValid = isset( $data[0]['IMPTN'] ) ? true : false;
+       
       // If there was an error, set error message.
-     if( !$isValid ) {            
-        if ($table == self::TABLE_BY_DEFAULT){       
-          $this->error( self::INVALID_PARTNUMBER );
-          } else {
-             $this->error( self::INVALID_PARTNUMBER_IN_TABLE );
-        }    
-     } //check if not need to be in table 
-     else {
-        if (isset($this->options['notInTable']) && $table == self::TABLE_WISHLIST) {
-           $isValid = false;
-           $this->error(self::INVALID_PARTNUMBER_IN_WISHLIST );
+      if( !$isValid ) {
+        $this->error(self::INVALID_PARTNUMBER);                
+      } else if (isset($this->options['notInTable'])) {
+           $strSql = "SELECT ".$fieldName." FROM ".$table." WHERE ".$fieldName." = '".$value."'"; 
+           $data = $queryManager->runSql( $strSql );       
+           $isValid = !isset( $data[0][$fieldName] ) ? true : false;       
+           if (!$isValid ) {              
+              $this->error(self::INVALID_PARTNUMBER_ALREADY_EXIST);
+           }
         }
-     }
+              
 
       // Return validation result.
      return $isValid;

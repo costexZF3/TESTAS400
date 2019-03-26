@@ -196,7 +196,7 @@
                     $userRoleIds[] = $role->getId();
                 }
 
-                $form->setData(array(
+                $form->setData( array(
                         'full_name' => $user->getFullName(),
                             'email' => $user->getEmail(),
                             'status'=>$user->getStatus(), 
@@ -204,7 +204,7 @@
                     ));
             } //end: else
 
-            return new ViewModel(array(
+            return new ViewModel( array(
                 'user' => $user,
                 'form' => $form
             ));

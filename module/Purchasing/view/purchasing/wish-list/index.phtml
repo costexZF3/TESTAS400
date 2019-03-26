@@ -83,14 +83,7 @@
                                 }
                             
                         }, //END: PDF BUTTON  OBJECT  
-                                    
-            /*   How do I can add a new button and create something associated to this 
-             *     - e : ( object ): Event object that triggered the event
-             *     - dt: ( DataTables.Api ): A DataTables API instance for the host DataTable
-             *    -node: (jQuery): jQuery instance for the button nod that was clicked on
-             *  -config: ( object ): The button's configuration object
-             */
-                        
+                                     
                         {
                             text        : 'IMPORT FROM EXCEL', 
                             className   : 'submit-btn'      
@@ -127,7 +120,9 @@
 </script>
         
 <!-- HTML RENDER-->
-    
+<?= $this->flashMessenger()->render('success', ['alert', 'alert-success']); ?>
+<?= $this->flashMessenger()->render('error', ['alert', 'alert-warning']); ?>
+<?= $this->flashMessenger()->render('info', ['alert', 'alert-info']); ?>    
 
 <div class="container-fluid">
    <div class="row"> 
@@ -147,21 +142,17 @@
                   <!--ACCORDION CONTENT--> 
                      <div id="collapseOne_2" class="collapse" aria-labelledby="headingOne_2" data-parent="#accordion_2">
                          <div class="card-body">
-                             <div class = "row">                                     
-                                 
-                                     
+                             <div class = "row">                                      
                                     <?php 
                                        if ($renderAll) {
-                                         echo '<div class="col-lg-6">'; 
+                                           echo '<div class="col-lg-6">'; 
                                              /*rendering code */
-                                             echo $this->FormRow($form->get('code'))."<br>";                                              
-
+                                             echo $this->FormRow($form->get('code'))."<br>";   
                                              echo $this->FormRow($form->get('user'))."<br>";
                                              echo $this->FormRow($form->get('date'))."<br>";
                                              echo $this->FormRow($form->get('partnumber'));
                                              echo $this->FormRow($form->get('partnumberdesc'));
                                              echo "<br>";
-
                                          
                                        } else {
                                            echo '<div class="col-lg-8">'; 

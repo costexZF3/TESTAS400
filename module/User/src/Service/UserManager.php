@@ -157,7 +157,7 @@ class UserManager
             $user->setFullName('Admin');
             $bcrypt = new Bcrypt();
             $passwordHash = $bcrypt->create('Secur1ty');        
-            $user->setPassword($passwordHash);
+            $user->setPassword( $passwordHash );
             $user->setStatus(User::STATUS_ACTIVE);
             $user->setDateCreated(date('Y-m-d H:i:s'));
             

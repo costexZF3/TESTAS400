@@ -4,7 +4,6 @@ namespace Purchasing\Service;
 
 use Application\Service\QueryRecover as queryManager;
 use Application\Service\PartNumberManager;
-
 use Application\ObjectValue\PartNumber;
 
 
@@ -16,7 +15,14 @@ use Application\ObjectValue\PartNumber;
  * @author mojeda
  */
 
-class WishListManager {
+class WishListManager 
+{
+   const FIELDS = ['WHLCODE', 'WHLDATE', 'WHLUSER', 'WHLPARTN','WHLMODEL', 'WHLMAJORCD', 'WHLMINORCD',
+                   'WHLCATEGOR', 'WHLSUBCATE', 'WHLSTATUSD', 'WHLSTATUSU',  'WHLREASONT', 'WHLFROM',
+                   'WHLCOMMENT'
+                  ];
+   
+   const TABLE_NAME = 'PRDWL';
     /*
      * dataSet: It saves the resultSet returned by runSql() method
      */    
@@ -25,22 +31,23 @@ class WishListManager {
     /*
      * array with all COLUMN LABELS that will be rendered
      */
-    private $columnHeaders = ['Code','WL No.','Date', 'User','Part Number', 'Description', 'Year Sales','Qty Quoted',
-                              'Times Quoted', 'OEM Price', 'Loc20-stock', 'Model', 'Category', 'SubCat', 'Major','Minor'];
+    private $columnHeaders = ['Code','WL No.','Date', 'User','Part Number', 'Description', 'Year Sales',
+                              'Qty Quoted','Times Quoted', 'OEM Price', 'Loc20-stock', 'Model', 'Category',
+                              'SubCat', 'Major','Minor'];
     /*
      * rows: this array saves all <tr> elements generated running sql query..
      */
     private $rows = [];    
     private $rawTable = [];    
     
-    /*  
+    /**  
      * SERVICE: it's the SERVICE injected from WishListController      
      * sqlStr: it contains the Sql STRING that will be excecuted  
-     * @var $queryManager  queryManager
+     * @var queryManager
      */
     private $queryManager;  
     
-    /*
+    /**
      * service to retrieve PartNumber details
      * @var Application\Service\PartNumberManager
      */
@@ -51,56 +58,65 @@ class WishListManager {
     private $tableAsHtml = '';
      
               
-    /* constructor */
-    /*
-     * @var $dService queryManager 
-     * @var $PNManager PartNumberManager
+    
+    /**
+     * @param  queryManager $queryManager  
+     * @param  PartNumberManager $PNManager
      */
-    public  function __construct( $queryManager, $PNManager) {
+    public  function __construct( $queryManager, $PNManager ) 
+    {
         /* injection adapter adapterection from WishListController*/
         
         $this->queryManager = $queryManager;
         $this->PartNumberManager = $PNManager;
         
-        $strSql =  $this->getSqlStr(); 
-        $this->dataSet = $this->queryManager->runSql( $strSql );       
-        $this->countItems = count( $this->dataSet );      
+        $this->refreshWishList();           
     }//END:constructor 
+        
+    private function refreshWishList()
+    {
+       $strSql =  $this->getSqlStr();         
+       $this->dataSet = $this->queryManager->runSql( $strSql );       
+       
+       $this->countItems = count( $this->dataSet ); 
+    }
     
     /*populate all data */
-    private function populateDataMatriz() {
-     /* 
-      * getting data dinamically
-      * Pushing on the first ROW the Header of each column
-      */        
+    private function populateDataMatriz() 
+    {
+      /* 
+       * getting data dinamically
+       * Pushing on the first ROW the Header of each column
+       */        
             
-      foreach ( $this->dataSet as $row ) { 
+      foreach ($this->dataSet as $row) { 
          /* gettin row */
-         $rowAsArray = $this->RowToArray( $row );
+         $rowAsArray = $this->rowToArray( $row );
          /* each row pushing to the rows (body to render)*/
          array_push( $this->rawTable, $rowAsArray );                
          
       }//end: foreach         
       
-    }//END: populateDataMatriz() method...
+    }//END METHOD: populateDataMatriz() method...
     
    
     /* returns all fields defined for the table */
-    public function getFieldNames() {
-      return $this->columnHeaders;   
+    public function getFieldNames() 
+    {
+       return $this->columnHeaders;   
     }
     
     /* this method returns the RawTable. this can be used to render */
-    public function getTableAsMatriz() {
+    public function getTableAsMatriz() 
+    {
        return $this->rawTable;
     }
     
-    /*
-     * getSqlStr: It returns and STRING tha will be used to execute the SQL query.
-    */
-    private function getSqlStr():String {
-//     $fields =' PRDWL.PRWCOD PRDWL.CRDATE PRDWL.CRUSER PRDWL.PRWPTN INMSTA.IMDSC INMSTA.IMPRC INVPTYF.IPYSLS INVPTYF.IPQQTE INVPTYF.IPTQTE ' ;
-             
+    /**
+     * @return STRING : It returns and STRING that will be used to execute the SQL query.
+     */
+    private function getSqlStr():String 
+    {        
        $sqlStr = "SELECT * FROM PRDWL INNER JOIN INMSTA "
                 . "ON TRIM(UCASE(PRDWL.PRWPTN)) = TRIM(UCASE(INMSTA.IMPTN))"
                 . "LEFT JOIN INVPTYF ON TRIM(UCASE(INVPTYF.IPPART)) = TRIM(UCASE(PRDWL.PRWPTN)) "
@@ -112,7 +128,8 @@ class WishListManager {
     /*
      * Return date as String (one year before) 
      */
-    private function dateOneYearBefore(){
+    private function dateOneYearBefore()
+    {
         $year = date('y')-1; 
         $month = date('m'); 
         $day= date('d');
@@ -120,33 +137,60 @@ class WishListManager {
     }
     
     
-    private function dataSetReady(){
-        return ($this->dataSet!=null)??false;
+    private function dataSetReady()
+    {
+        return ($this->dataSet != null) ?? false;
     }
         
     /*
      * populateHTML : this method populate the table using the resultSet 
      * value returned by the function runSql()
      */
-    public function getDataSet(){              
+    public function getDataSet()
+    {              
        return $this->dataSet;
     } 
     
-    public function CountItems() {
+    public function countItems() 
+    {
         return count( $this->dataSet );
     }
-     
+    
+    /**
+     * - This method insert data into the PRDWL ( file: WISHLIST )
+     * @param array() $data | An associative array with all needed data inside a WL row.
+     * @return object | it returns null is could not insert the field 
+     */ 
+    public function insert( $data ) 
+    {   
+        if (is_array( $data )) {         
+           foreach (self::FIELDS as $index) {
+              $dataSet[$index] = $data[$index] ?? '';
+           } 
+        } 
+           
+        // inserting in TABLE WL: PRDWL the set of data 
+        $this->dataSet = $this->queryManager->insert( self::TABLE_NAME , $dataSet );
+       
+       return $this->dataSet ?? null;             
+    } //END: AddItem method
  
-    /* this function creates a <TR> element and assigned the CLASS, ID, and TITLE attributes for each <TD> element */
-    private function rowToHTML( $row ):string{                
-        
+    
+    /**
+     * This function creates a <TR> element and assigned the CLASS, ID, 
+     * and TITLE attributes for each <TD> element
+     * @param array $row
+     * @return string
+     */
+    private function rowToHTML( $row ):string
+    {   
         $result ='<tr>';  
         $col = 0;
         $className = '';
         
         /*exclude or discard the following COLUMNS to use the CLASS description */
         $columns = [6, 7, 8, 9, 10];
-        foreach( $row as $item ){              
+        foreach( $row as $item ) {              
            if (!in_array( $col, $columns ) ) {
               $className = "description";
            } else if ( $col === 9 ) { $className = "money";}
@@ -154,16 +198,19 @@ class WishListManager {
               
             $result .= '<td class="'.$className.'">'.$item.'</td>';
           $col++;  
-        }        
+        }//endforeach 
+        
         $result .= '</tr>';        
         return $result;
-    }
+    }//END METHOD: rowToHTML()
     
-    /* 
-     * RETURNS: all rows of the table will be returned as an ARRAY 
-     */
+    /**
+     *  RETURNS: all rows of the table will be returned as an ARRAY 
+     * @return array
+     */ 
+     
     public function getRows() {
-        return ($this->rows)?? NULL;
+        return ($this->rows)?? null;
     }
     
     

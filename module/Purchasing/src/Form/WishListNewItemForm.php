@@ -37,52 +37,45 @@ class WishListNewItemForm extends Form {
      */
    
     private $queryManager; 
-    /** 
-     * @var $scenario  string  //: attribute for the form name
-     * @var $data  []
-     *   - it's an Associative array 
-     *     with all data associated to the PartNumber
-    */
     
-    public function __construct( $scenario, queryManager $queryManager ) {
-//    public function __construct( $data, $scenario, queryManager $queryManager ) {
+    /**
+     * 
+     * @param string $scenario  | it defines if the user is looking for ADD or SUBMIT data 
+     * @param queryManager $queryManager | service manager with connection to out database
+     */
+        
+    public function __construct( $scenario, queryManager $queryManager ) 
+    {      
+           
+        $this->scenario = $scenario;
+        $this->queryManager = $queryManager;
+     
+        // Defined form name 
+        parent::__construct('wl-newitem-form');
       
-//      $this->dataForm = $data;
-      $this->scenario = $scenario;
-      $this->queryManager = $queryManager;
-      
-      /* defining attribu tes for the form */       
-      // Defined form name 
-      parent::__construct('wl-newitem-form');
-      
-      // form -- method 
-      $this->setAttribute('method', 'post');  
-      // ( Optionally ) set action for this form
-      //$this->setAttribute('action', '/newItem');
-      
-      /* method for add items to the form */
-      
-      $this->addElements();
-      $this->addInputFilters();        
-    }
+         // form -- method 
+        $this->setAttribute('method', 'post');  
+         // ( Optionally ) set action for this form
+         //$this->setAttribute('action', '/newItem');
+
+         /* method for add items to the form */
+        $this->addElements();
+        $this->addInputFilters();        
+    }//END CONSTRUCTOR
     
-    /* method used for adding FORM ELEMENTS
-     * for convention:
-     *  - name: (text)-> edText+name
-     *          (numeric) -> edNum+name 
-     *  */
-    private function addElements() {
+    
+    private function addElements() 
+    {
        /* only create partnumber for show and submit button */        
        
-       if ($this->scenario=='initial') {
+       if ($this->scenario == 'initial') {
           $textSubmit = 'SUBMIT';
           
          /* part number */       
             $this->add([
                 'name'=>'partnumber',    
                 'type'=>'text',                              
-                'attributes' => [          //array of attributes
-//                       'class' => 'form-control',
+                'attributes' => [          //array of attributes                       
                        'id'=>'partnumber',
                        'minlength' => "6",
                        'maxlength' => "19",                   
@@ -101,7 +94,7 @@ class WishListNewItemForm extends Form {
             $this->add([
                 'name'=>'code',    
                 'type'=>'text',        
-                'value' =>$this->dataForm['code'], 
+//                'value' =>$this->dataForm['code'], 
                 'attributes' =>[      
                        'class' =>'form-control',
                        'id'       => 'code',                                          
@@ -130,22 +123,20 @@ class WishListNewItemForm extends Form {
             //created date (current date)
             $this->add([
                 'name'=>'date',    
-                'type'=>'text',      
-//                'value' =>$this->dataForm['date'],
-                   'attributes' =>[
+                'type'=>'text',                      
+                   'attributes' => [
                    'class' =>'form-control',
                               'id'=>'created-user',                                      
                        'readonly' => true,
                 ],
-                'options' =>[              
+                'options' => [              
                     'label' => 'DATE'
                 ],                     
             ]);             
             
              $this->add([
                 'name'=>'partnumber',    
-                'type'=>'text',      
-//                'value' => $this->dataForm['partnumber'],
+                'type'=>'text',                      
                 'attributes' =>[          
                        'class' => 'form-control',
                       'readonly' => true,                     
@@ -157,8 +148,7 @@ class WishListNewItemForm extends Form {
              //part number description
             $this->add([
                 'name'=>'partnumberdesc',    
-                'type'=>'text',      
-//                'value' => $this->dataForm['partnumberdesc'],          //It'll read from file passed as parameter        
+                'type'=>'text',           
                 'attributes' =>[          //array of attributes
                        'class' => 'form-control', 
                       'readonly' => true,
@@ -173,8 +163,7 @@ class WishListNewItemForm extends Form {
             
             $this->add([
                 'name'=>'vendor',    
-                'type'=>'text',      
-//                'value' => $this->dataForm['vendor'],                
+                'type'=>'text',                              
                 'attributes' =>[         
                       'class' => 'form-control',
                       'readonly' => true,                     
@@ -186,8 +175,7 @@ class WishListNewItemForm extends Form {
              //part number description
             $this->add([
                 'name'=>'vendordesc',    
-                'type'=>'text',      
-//                'value' => $this->dataForm['vendordesc'],
+                'type'=>'text',                      
                 'attributes' =>[          
                       'class' => 'form-control',
                       'readonly' => true,                     
@@ -254,12 +242,13 @@ class WishListNewItemForm extends Form {
     /*
      *  This method creates input filters (used for form filtering/validation ).
      */
-   private function addInputFilters() { 
+   private function addInputFilters() 
+   { 
        // Create main input filter
         $inputFilter = new InputFilter();        
         $this->setInputFilter( $inputFilter );
       
-      $inputFilter->add([
+       $inputFilter->add([
          'name'     => 'partnumber',
          'required' => true,
          'filters'  => [

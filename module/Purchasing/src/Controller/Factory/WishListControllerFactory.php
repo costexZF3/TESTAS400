@@ -15,11 +15,12 @@ use Application\Service\PartNumberManager;
  */
 class WishListControllerFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) {       
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) 
+    {       
        /* retrieving SERVICES queryRecover */
         $queryManager = $container->get( QueryRecover::class );       
         $partNumberManager = $container->get( PartNumberManager::class );       
-                
+
         // Instantiate the controller and inject dependencies
         return new WishListController( $queryManager, $partNumberManager );
     }
