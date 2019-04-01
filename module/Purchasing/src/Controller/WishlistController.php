@@ -145,7 +145,7 @@ class WishlistController extends AbstractActionController
                             return new ViewModel(['form' => $form ]);
                             /* the part number is already valided at this point */                
                         } //not error getting info from IMSTA
-                   }
+                   }//
 
                } elseif ( $form->isValid() ) {
                     /* get data filtered*/
