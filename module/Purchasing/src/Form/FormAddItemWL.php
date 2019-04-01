@@ -50,13 +50,7 @@ class FormAddItemWL extends Form
          // form -- method 
         $this->setAttribute('method', 'post');  
         
-        /* changing the default route when the user click in submit */
-//        if ($scenario == 'initial') {
-//            // ( Optionally ) set action for this form
-//            $this->setAttribute('action', 'wishlist/add/0');
-//        }      
-
-         /* method for add items to the form */
+      /* method for add items to the form */
         $this->selectElements();
               
     }//END CONSTRUCTOR
