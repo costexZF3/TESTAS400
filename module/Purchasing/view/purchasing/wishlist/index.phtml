@@ -11,20 +11,19 @@
     
     /*** getting params from IndexAction() inside LostsaleController ***/
    
-    $table = $this->wishlist; 
-    $form = $this->formNewItemWL;
-    $renderAll = $this->renderAll;
-    
+    $table = $this->wldata; 
+//    $form = $this->formNewItemWL;
+        
     /* adding attributes to the form elements */
-     $form->get('partnumber')->setAttributes([
-        'class' => 'form-control',        
-    ]);
+//     $form->get('partnumber')->setAttributes([
+//        'class' => 'form-control',        
+//    ]);
     
         
-    $form->get('submit')->setAttributes(['class'=>'submit-btn']);
-  
-    /* prepare for before rendering */
-    $form->prepare();
+//    $form->get('submit')->setAttributes(['class'=>'submit-btn']);
+//  
+//    /* prepare for before rendering */
+//    $form->prepare();
     
  ?>  
  	 
@@ -126,62 +125,38 @@
 
 <div class="container-fluid">
    <div class="row"> 
-       <div class="col-md-auto">  
-            <!--FILTER ACCORDION-->       
+        <div class="col-md-auto">  
+        <!--FILTER ACCORDION-->       
         <div class="accordion-wrapper contact-form-inner">
             <div id="accordion_2">               
                 <div class="card">
-                  <?=$this->form()->openTag($form);?> 
+                 
                     <div class="card-header" id="headingOne_2">
                         <h5 class="mb-0">
                             <a  class="collapsed" data-toggle="collapse" data-target="#collapseOne_2" aria-expanded="false" aria-controls="collapseOne_2">
-                                <span class="">ADD ITEM(S)</span>
+                                <span class="">ACTIONS</span>
                             </a>
                         </h5>
                     </div>                  
                   <!--ACCORDION CONTENT--> 
-                     <div id="collapseOne_2" class="collapse" aria-labelledby="headingOne_2" data-parent="#accordion_2">
-                         <div class="card-body">
-                             <div class = "row">                                      
-                                    <?php 
-                                       if ($renderAll) {
-                                           echo '<div class="col-lg-6">'; 
-                                             /*rendering code */
-                                             echo $this->FormRow($form->get('code'))."<br>";   
-                                             echo $this->FormRow($form->get('user'))."<br>";
-                                             echo $this->FormRow($form->get('date'))."<br>";
-                                             echo $this->FormRow($form->get('partnumber'));
-                                             echo $this->FormRow($form->get('partnumberdesc'));
-                                             echo "<br>";
-                                         
-                                       } else {
-                                           echo '<div class="col-lg-8">'; 
-                                           echo $this->FormRow($form->get('partnumber'));
-                                       } 
-                                       echo $this->formHidden($form->get('csrf')); 
-                                       echo '<br>'.$this->FormElement($form->get('submit'));
-                                       echo '</div>';
-                                    ?> 
-                                 
-
-                                  <!-- second column -->
-                                 <div class="col-lg-auto">
-                                    <?php
-                                       if ($renderAll) {
-                                          echo $this->FormRow($form->get('vendor'));
-                                          echo $this->FormRow($form->get('vendordesc'));
-                                          echo "<br>";
-                                          echo $this->FormRow($form->get('type'));
-
-                                          echo "<br>";
-                                          echo $this->FormRow($form->get('comment'));                                                                                     
-                                       }
-                                    ?>
-                                 </div>
-                             </div><!-- row defining body of ADD ITEM -->
-                          </div> <!-- CARD-BODY --> 
-                     </div>   <!-- COLLAPSE CONTENT END -->    
-                    <?=$this->form()->closeTag();?>
+                    <div id="collapseOne_2" class="collapse" aria-labelledby="headingOne_2" data-parent="#accordion_2">
+                        <div class="card-body">
+                            <div class = "row">                                      
+                                <a class="boxed-btn" href="<?= $this->url('wishlist', ['action'=>'add']); ?>">
+                                    <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> NEW ITEM
+                                </a>
+                                <a class="boxed-btn" href="<?= $this->url('wishlist', ['action'=>'add']); ?>">
+                                    <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> UPDATE
+                                </a> 
+                                
+                                <a class="boxed-btn" href="<?= $this->url('wishlist', ['action'=>'add']); ?>">
+                                    <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> DELETE
+                                </a>
+                                
+                            </div>                           
+                        </div> <!-- CARD-BODY --> 
+                    </div>   <!-- COLLAPSE CONTENT END -->    
+                    
                 </div> <!-- CARD END -->            
             </div> <!-- ACCORDION END -->           
         </div>  <!-- ACCORDION WRAPPER -->         
@@ -193,7 +168,13 @@
    <!--rendering TABLE WISHLIST--> 
    <div class="row ">
        <div class="col-md-12">
-          <?php echo $table; ?>
+          <?php 
+           if ($table !=='') {
+               echo $table; 
+           } else {
+               echo"wish list is empty";
+           }    
+          ?>
        </div> 
    </div>
 </div>    

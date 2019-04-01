@@ -31,31 +31,22 @@ return [
                     ],
                 ],                
             ],//end: lostsale route
-             'wishlist' => [
-                'type'    => Literal::class,
+             
+            'wishlist' => [
+                'type'    => Segment::class,
                 'options' => [
                     // Change this to something specific to your module
-                    'route'    => '/wishlist',
+                    'route'    => '/wishlist[/:action[/:id]]',
+                    'constraints' => [
+                       'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[a-zA-Z0-9_-]*',
+                    ],
                     'defaults' => [
                         'controller'    => Controller\WishlistController::class,
                         'action'        => 'index',
                     ],
-                ],                
-            ],//end: wishlist route
-            'watch' => [
-                'type'    => Segment::class,
-                'options' => [
-                    // Change this to something specific to your module
-                    'route'    => '/watch[/:action]',
-                    'constraints' => [
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                    ],
-                    'defaults' => [
-                        'controller'    => Controller\ClaimsController::class,
-                        'action'        => 'watch',
-                    ],
                 ],
-            ],//end: claims route
+            ],//end: wishlist route
         ],
     ],   
     /* REGISTERING CONTROLES */
@@ -71,48 +62,55 @@ return [
     // access to certain controller actions for unauthorized visitors.
     'access_filter' => [      
         'controllers' => [
-        Controller\ClaimsController::class => [
-                //Allowing routes access depending on the type of permission assigned to loggin user
-                // Give access to "index" actions to everyone with +menu.purchasing  
-                //+option.purchasing.claims 
-                
-                //Actions reponse to Roles associated to MENUS 
-                ['actions' => ['index'],               'allow' => '+menu.purchasing'],  //every body logged in with this permission
-                ['actions' => ['claims'],              'allow' => '+option.purchasing.claims'],                 
-            
-                //Actions response to Roles associated to OPERATION
-                // an user with Entry Level will be permissions to 
-                ['actions' => ['watch'],               'allow' => '+purchasing.entry.level'],
-                ['actions' => ['export','print',],     'allow' => '+purchasing.regular.level'],
-                ['actions' => ['create', 'update', ],  'allow' => '+purchasing.high.level'],
-                ['actions' => ['delete', ],           'allow' => '+purchasing.power.level'],
-            ], //END: access_filter for ClaimsController       
-            
+            Controller\ClaimsController::class => [
+                    //Allowing routes access depending on the type of permission assigned to loggin user
+                    // Give access to "index" actions to everyone with +menu.purchasing  
+                    //+option.purchasing.claims 
+
+                    //Actions reponse to Roles associated to MENUS 
+                    ['actions' => ['index'],               'allow' => '+menu.purchasing'],  //every body logged in with this permission
+                    ['actions' => ['claims'],              'allow' => '+option.purchasing.claims'],                 
+
+                    //Actions response to Roles associated to OPERATION
+                    // an user with Entry Level will be permissions to 
+                    ['actions' => ['watch'],               'allow' => '+purchasing.entry.level'],
+                    ['actions' => ['export','print',],     'allow' => '+purchasing.regular.level'],
+                    ['actions' => ['create', 'update', ],  'allow' => '+purchasing.high.level'],
+                    ['actions' => ['delete', ],           'allow' => '+purchasing.power.level'],
+                ], //END: access_filter for ClaimsController       
+
             Controller\LostsaleController::class => [
                 //Allowing routes access depending on the type of permission assigned to loggin user
                 // Give access to "index" actions to everyone with +menu.purchasing  
                 //+option.purchasing.claims 
-                
+
                 //Actions reponse to Roles associated to MENUS 
                 ['actions' => ['index'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
                 ['actions' => ['lostsales'],      'allow' => '+option.purchasing.claims'],                 
-            
+
             ], //END: access_filter for LostSaleController           
-            
+
             Controller\WishlistController::class => [
                 //Allowing routes access depending on the type of permission assigned to loggin user
                 // Give access to "index" actions to everyone with +menu.purchasing  
                 //+option.purchasing.claims 
-                
+
                 //Actions reponse to Roles associated to MENUS 
                 ['actions' => ['index'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
-                ['actions' => ['wishlist'],       'allow' => '+option.purchasing.claims'],                 
-            
+                ['actions' => ['add'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
+                ['actions' => ['wishlist'],       'allow' => '+menu.purchasing'],                 
+
             ], //END: access_filter for LostSaleController    
             
-        ]
+        ],
+    ], //END: ACCESS FILTERS
+    
+    'service_manager' => [
+        'factories' => [
+            Service\WishListManager::class    => Service\Factory\WishListManagerFactory::class
+        ],
     ],
-     'view_manager' => [
+    'view_manager' => [
         'template_path_stack' => [
             'purchasing' => __DIR__ . '/../view',
         ],

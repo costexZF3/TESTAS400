@@ -2,7 +2,7 @@
 
 namespace Purchasing\Service;
 
-use Application\Service\QueryRecover as queryManager;
+use Application\Service\QueryManager as queryManager;
 use Application\Service\PartNumberManager;
 use Application\ObjectValue\PartNumber;
 
@@ -17,13 +17,31 @@ use Application\ObjectValue\PartNumber;
 
 class WishListManager 
 {
-   const FIELDS = ['WHLCODE', 'WHLDATE', 'WHLUSER', 'WHLPARTN','WHLMODEL', 'WHLMAJORCD', 'WHLMINORCD',
-                   'WHLCATEGOR', 'WHLSUBCATE', 'WHLSTATUSD', 'WHLSTATUSU',  'WHLREASONT', 'WHLFROM',
+   /* reason type */
+   const NEWVENDOR = 'newvendor';  
+   const NEWPART =  'newpart';  
+   
+   /* status in the wishlist for an item */
+   const STATUS_OPEN = '1';
+   const STATUS_CLOSE = '2';
+   const STATUS_CLOSEBYDEVELOPMENT = '3';
+   
+   const FROM_MANUAL ='manual';
+   const FROM_LOSTSALE ='lostsale';
+   const FROM_EXCEL_FILE = 'excel';
+   
+  
+   const FIELDS = ['WHLCODE', 'WHLUSER', 'WHLPARTN', 'WHLSTATUS', 'WHLSTATUSU',  'WHLREASONT', 'WHLFROM',
                    'WHLCOMMENT'
                   ];
    
    const TABLE_NAME = 'PRDWL';
-    /*
+    
+   protected $reasontype = [ self::NEWVENDOR => "New Vendor", self::NEWPART => "New Part"];
+   protected $from = [ self::FROM_MANUAL => "1", self::FROM_LOSTSALE => "2", self::FROM_EXCEL_FILE => "3"];
+   
+   
+   /*
      * dataSet: It saves the resultSet returned by runSql() method
      */    
     private $dataSet= [];
@@ -31,8 +49,8 @@ class WishListManager
     /*
      * array with all COLUMN LABELS that will be rendered
      */
-    private $columnHeaders = ['Code','WL No.','Date', 'User','Part Number', 'Description', 'Year Sales',
-                              'Qty Quoted','Times Quoted', 'OEM Price', 'Loc20-stock', 'Model', 'Category',
+    private $columnHeaders = ['Info','Code','Date', 'User','Part Number', 'Description', 'Year Sales',
+                              'Qty Quoted','Times Quoted', 'OEM Price', 'Loc20-STK', 'Model', 'Category',
                               'SubCat', 'Major','Minor'];
     /*
      * rows: this array saves all <tr> elements generated running sql query..
@@ -51,13 +69,11 @@ class WishListManager
      * service to retrieve PartNumber details
      * @var Application\Service\PartNumberManager
      */
-    private $PartNumberManager;
+    private $partNumberManager;
     
     /* helpful attributes */        
     private $countItems = 0;
     private $tableAsHtml = '';
-     
-              
     
     /**
      * @param  queryManager $queryManager  
@@ -68,7 +84,8 @@ class WishListManager
         /* injection adapter adapterection from WishListController*/
         
         $this->queryManager = $queryManager;
-        $this->PartNumberManager = $PNManager;
+        $this->partNumberManager = $PNManager;
+        
         
         $this->refreshWishList();           
     }//END:constructor 
@@ -117,10 +134,10 @@ class WishListManager
      */
     private function getSqlStr():String 
     {        
-       $sqlStr = "SELECT * FROM PRDWL INNER JOIN INMSTA "
-                . "ON TRIM(UCASE(PRDWL.PRWPTN)) = TRIM(UCASE(INMSTA.IMPTN))"
-                . "LEFT JOIN INVPTYF ON TRIM(UCASE(INVPTYF.IPPART)) = TRIM(UCASE(PRDWL.PRWPTN)) "
-                . "ORDER BY PRDWL.CRDATE DESC";
+       $sqlStr = "SELECT * FROM PRDWL LEFT JOIN INMSTA "
+                . "ON TRIM(UCASE(PRDWL.WHLPARTN)) = TRIM(UCASE(INMSTA.IMPTN))"
+                . "LEFT JOIN INVPTYF ON TRIM(UCASE(INVPTYF.IPPART)) = TRIM(UCASE(PRDWL.WHLPARTN)) "
+                . "ORDER BY PRDWL.WHLCODE ASC";
        
         return $sqlStr;  
     }//END: getSqlString()
@@ -161,14 +178,17 @@ class WishListManager
      * @param array() $data | An associative array with all needed data inside a WL row.
      * @return object | it returns null is could not insert the field 
      */ 
-    public function insert( $data ) 
-    {   
-        if (is_array( $data )) {         
-           foreach (self::FIELDS as $index) {
-              $dataSet[$index] = $data[$index] ?? '';
-           } 
-        } 
-           
+    public function insert( $data, $from ) 
+    {              
+        $dataSet['WHLCODE'] = $data['code'];
+        $dataSet['WHLUSER'] = strtoupper($data['user']);
+        $dataSet['WHLPARTN'] = strtoupper($data['partnumber']);
+        $dataSet['WHLSTATUS'] = self::STATUS_OPEN;
+        $dataSet['WHLSTATUSU'] = strtoupper($data['user']);
+        $dataSet['WHLREASONT'] = $data['type'];        
+        $dataSet['WHLFROM'] =  $this->from[$from];
+        $dataSet['WHLCOMMENT'] = $data['comment'];
+       
         // inserting in TABLE WL: PRDWL the set of data 
         $this->dataSet = $this->queryManager->insert( self::TABLE_NAME , $dataSet );
        
@@ -216,12 +236,12 @@ class WishListManager
     
     private function RowToArray( $row ) {
         $result = [];
-        $partNumberInWL = trim($row['PRWPTN']);
+        $partNumberInWL = trim($row['WHLPARTN']);
         
         array_push( $result, '@' );   // index: 0 : code
-        array_push( $result, $row['PRWCOD'] );         //index: 1 WL No
-        array_push( $result, $row['CRDATE'] );  // index: 2 DATE
-        array_push( $result, $row['CRUSER'] );  // index: 3 - USER IN CHARGE
+        array_push( $result, $row['WHLCODE'] );         //index: 1 WL No
+        array_push( $result, $row['WHLDATE'] );  // index: 2 DATE
+        array_push( $result, $row['WHLUSER'] );  // index: 3 - USER IN CHARGE
         array_push( $result, $partNumberInWL ); // index: 4 - PART NUMBER IN WL
         array_push( $result, $row['IMDSC'] );   // index: 5 - description
         array_push( $result, $row['IPYSLS'] );  // index: 6 - year sales
@@ -232,7 +252,7 @@ class WishListManager
         /*  getting location from DVINVA  where the part has STOCK in  ( DVBIN#: if you need the bin location) 
          *  - location: 20
          *  - dvonh#: (qty on hand) > 0  ( hay alguna on hand ) */        
-        $strSql = "select DVONH# from dvinva where UCASE(TRIM(dvpart))='". strtoupper( $partNumberInWL ).
+        $strSql = "SELECT DVONH# FROM DVINVA WHERE UCASE(TRIM(DVPART))='". strtoupper( $partNumberInWL ).
                 "' and dvlocn ='20' and DVONH# > 0";
                
         $dataSet = $this->queryManager->runSql( $strSql );
@@ -240,22 +260,22 @@ class WishListManager
         array_push( $result, $dataSet[0]['DVONH#']?? '0' ); // index: 10 location
         
         /* adding MODEL */
-        array_push( $result, trim($row['IMMOD'])!=''? $row['IMMOD']:'N/A' ); //index: 11 model
+        array_push( $result, trim($row['IMMOD']) != '' ? $row['IMMOD']:'N/A' ); //index: 11 model
         
         //passing an OBJECT
 //         $partNumberOBJ = $this->PartNumberManager->getPartNumber( $partNumberInWL );
 //         $CatDescription =  $this->PartNumberManager->getCategoryDescByStr( $partNumberOBJ );
          
         /* ADDING CATEGORY DESCRIPTION BEST CASE 5.3 S*/
-         $cat = $row['IMCATA'];
-         $CatDescription =  $this->PartNumberManager->getCategoryDescByStr( $cat );       
-         array_push( $result, $CatDescription ); // index: 12 - Category Description 
+        $cat = $row['IMCATA'];         
+        $CatDescription =  $this->partNumberManager->getCategoryDescByStr( $cat );           
+        array_push( $result, $CatDescription ); // index: 12 - Category Description 
          
          /* SUB-CATEGORY */
          array_push( $result, $row['IMSBCA'] ); //index: 13 - Subcategory
          
          /* mayor and minor */
-         $mayorMinor = $this->PartNumberManager->getMajorMinor( $partNumberInWL );
+         $mayorMinor = $this->partNumberManager->getMajorMinor( $partNumberInWL );
          array_push( $result, $mayorMinor['major'] ); // index; 14 - Major code
          array_push( $result, $mayorMinor['minor'] ); // index: 15 - Minor code 
          
@@ -346,6 +366,41 @@ class WishListManager
         return  $this->tableAsHtml;
     }/* END: getGridAsHtml()*/    
     
+    
+    /**
+     * 
+     * @param string $partNumberID | The Part Number will be used to retrieve data from INMSTA  
+     * @return array() | RETURN AN ASSOCIATIVE ARRAY WITH THE PART 
+     */
+    public function getDataItem( $partNumberID ) 
+    {
+        $partNumberObj =  $this->partNumberManager->getPartNumber( $partNumberID );
+       
+        if ( $partNumberObj !== null ) {         
+            $data['code'] = $this->queryManager->getMax('WHLCODE', 'PRDWL');
+            $data['date'] = date('Y-m-d');
+            /* - if the partNumber exist NOT NULL then return it back
+             *   other case it returns UNKNOW string*/
+
+            $data['partnumber'] = $partNumberObj->getId(); 
+
+            $data['partnumberdesc']= $partNumberObj->getDescription();
+
+            $data['vendor'] = $partNumberObj->getVendor();
+            $data['vendordesc'] = $partNumberObj->getVendorDescription(); 
+
+            $data['tqLastYear'] = $partNumberObj->getQtyQuotedLastYear();
+
+            $data['comment'] = '';
+            $data['type'] = '';
+
+            return $data;
+         }
+
+         // return 'error' if the PartNumber not exits in the DATABASE 
+         return $data['error'] = $partNumberObj['error'];    
+
+      } //END: getWishListItem()
             
     
 }//END: WishList class()

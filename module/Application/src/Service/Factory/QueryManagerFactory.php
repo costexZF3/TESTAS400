@@ -4,14 +4,14 @@ namespace Application\Service\Factory;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
-use Application\Service\QueryRecover;
+use Application\Service\QueryManager;
 use Application\Service\MyAdapter;
 
 /**
  * This is the factory for IndexController. Its purpose is to instantiate the
  * controller and inject dependencies into it.
  */
-class QueryRecoverFactory implements FactoryInterface
+class QueryManagerFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
@@ -20,6 +20,6 @@ class QueryRecoverFactory implements FactoryInterface
         $connAdapter = $dbconnection->getAdapter();
         
         // Instantiate the controller and inject dependencies
-        return new QueryRecover( $connAdapter );
+        return new QueryManager( $connAdapter );
     }
 }

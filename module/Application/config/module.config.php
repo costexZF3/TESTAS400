@@ -106,7 +106,7 @@ return [
             Service\MyAdapter::class            => Service\Factory\MyAdapterFactory::class,
             Service\NavManager::class           => Service\Factory\NavManagerFactory::class,            
             Service\RbacAssertionManager::class => Service\Factory\RbacAssertionManagerFactory::class,
-            Service\QueryRecover::class         => Service\Factory\QueryRecoverFactory::class,
+            Service\QueryManager::class         => Service\Factory\QueryManagerFactory::class,
             Service\PartNumberManager::class    => Service\Factory\PartNumberManagerFactory::class
         ],
     ],

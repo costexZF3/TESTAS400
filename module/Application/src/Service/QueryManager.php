@@ -19,7 +19,7 @@ use Zend\Db\Sql\Sql;
  *
  * @author mojeda
  */
-class QueryRecover 
+class QueryManager 
 {    
      /*
      * dataSet: It saves the resultSet returned by runSql() method
@@ -66,8 +66,7 @@ class QueryRecover
     {
         try {
           $resultSet = $this->adapter->query( $sqlStr, MyAdapter::QUERY_MODE_EXECUTE )->toArray();   
-          var_dump( $resultSet ); exit; 
-          
+                    
           $this->dataSet = $resultSet;          
           return $this->dataSet;
           
@@ -108,7 +107,7 @@ class QueryRecover
    */
    private function dataSetReady() 
    {
-      return ( $this->dataSet!=null )?? false;
+      return ( $this->dataSet !== null ) ?? false;
    }
     
    /* ---------------------------- getters -------------------------------*/    

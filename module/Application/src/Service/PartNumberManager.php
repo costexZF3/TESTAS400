@@ -13,8 +13,9 @@
 namespace Application\Service;
 
 
-use Application\Service\QueryRecover as queryManager;
+use Application\Service\QueryManager as queryManager;
 use Application\ObjectValue\PartNumber;
+use Application\Validator\PartNumberValidator;
 
 /**
  * Description of PartRecover 
@@ -60,33 +61,40 @@ class PartNumberManager {
             $data['deep']            = $record['IMDPTH']; //part deep
             $data['volumen']         = $record['IMVOLU']; //volumen of the part
             $data['category']        = $record['IMCATA']; //category of the part
-            $data['subCategory']     = $record['IMSBCA']; //subcategory of the part
-                      
+            $data['subCategory']     = $record['IMSBCA']; //subcategory of the part             
+            
             /*  getting the last year Qty quoted
              *  IPPART
              */
-            $strSql = "SELECT * FROM INVPTYF WHERE UCASE(IPPART) = '". trim(strtoupper($data['id']))."'";
+            
+            
+            $strSql = "SELECT * FROM INVPTYF WHERE UCASE(IPPART) = '". trim($data['id'])."'";
             $dataSet = $this->queryManager->runSql( $strSql );
             
-            $data['qtyquotedlastyear'] = $dataSet[0]['IPQQTE']?? 0;
-            $data['vendor'] = $dataSet[0]['IPVNUM']?? 'NA' ;           
-            $data['onhand'] = $dataSet[0]['IPQONH']?? 0;
-            $data['onorder']= $dataSet[0]['IPQONO']?? 0; //qty on order
+          
+            if ($dataSet!==null) {
+                $data['qtyquotedlastyear'] = $dataSet[0]['IPQQTE']?? 0;
+                $data['vendor'] = trim($dataSet[0]['IPVNUM']) !=='' ? $dataSet[0]['IPVNUM'] : 'NA' ;           
+                $data['onhand'] = $dataSet[0]['IPQONH']?? 0;
+                $data['onorder']= $dataSet[0]['IPQONO']?? 0; //qty on order
+
+                 //vendor of the part
+
+                /* initial description for the vendor */
+                $data['vendordesc'] = 'NA';
             
-             //vendor of the part
-           
-            /* initial description for the vendor */
-            $data['vendordesc'] = 'NA';
             
-            if ( !in_array($data['vendor'],['','NA'])) { 
-               $strSql = "SELECT * FROM vnmas WHERE VMVNUM = ".$data['vendor']."";
-              
-               $vendorName = $this->queryManager->runSql( $strSql );
-               $data['vendordesc'] = $vendorName[0]['VMNAME']??'';
-            } else {
-               $data['vendor'] ='NA';
-            } 
-           
+          
+                if ( strlen($data['vendor']) > 2 ) { 
+                   $strSql = "SELECT * FROM VNMAS WHERE VMVNUM = ".$data['vendor']."";
+
+                   $vendorName = $this->queryManager->runSql( $strSql );
+                   $data['vendordesc'] = $vendorName[0]['VMNAME']??'';
+
+                } else {
+                   $data['vendor'] ='NA';
+                } 
+            }
          /* creating a PartNumber Object */
           $partNumberObj = new PartNumber( $data );
           
@@ -118,12 +126,13 @@ class PartNumberManager {
     public function getMajorMinor( $partNumberId ) 
     {
               
-       $strSql = "SELECT DVMJPC, DVMNPC FROM dvinva WHERE DVPART = '".strtoupper( trim( $partNumberId ) )."'"; 
+       $strSql = "SELECT IMPC1, IMPC2 FROM INMSTA WHERE IMPTN = '".strtoupper( trim( $partNumberId ) )."'"; 
        $dataSet = $this->queryManager->runSql( $strSql );
        
        /* validating data */
-       $major = ($dataSet[0]['DVMJPC']) ?? 'N/A';
-       $minor = ($dataSet[0]['DVMNPC']) ?? 'N/A';
+       
+       $major = ($dataSet[0]['IMPC1']) ?? 'N/A';
+       $minor = ($dataSet[0]['IMPC2']) ?? 'N/A';
        
        $data = [
                 'major' => $major, 
@@ -155,20 +164,20 @@ class PartNumberManager {
     /**
      * This METHOD retrieve all data from a given PartNumber if it exists inside INMSTA 
      * @param string $partNumberID  | This parameter is an string 
-     * @return PartNumber
+     * @return array()
      */
-    public function getPartNumber( $partNumberID ): PartNumber 
+    public function getPartNumber( $partNumberID )
     {
+       /* Loading all from INMSTA */
        $strSql = "SELECT * FROM INMSTA WHERE TRIM(UCASE(IMPTN)) = '". strtoupper( trim( $partNumberID ))."'";
        
        try {
-         $dataSet = $this->queryManager->runSql( $strSql );        
-        
-         $ExistPartNumber = ($dataSet[0]['IMPTN'] !== null) ? true : false; 
+           $dataSet = $this->queryManager->runSql( $strSql ); 
+           $ExistPartNumber = ($dataSet[0]['IMPTN'] !== null) ? true : false; 
          
          //if exist the part Number then recover all its data
          if ( $ExistPartNumber ) {
-            $result = $this->populatePartNumber( $dataSet[0] ) ?? null;
+           $result = $this->populatePartNumber( $dataSet[0] ) ?? null;
          }
        } catch ( Exception $e ) {
          echo 'Caught exception: '.$e->getMessage(),"\n"; 

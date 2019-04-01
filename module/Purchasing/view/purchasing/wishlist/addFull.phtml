@@ -1,0 +1,63 @@
+<?php     
+    /*getting values */
+       
+    $this->headTitle('NEW ITEM-WISHLIST');	
+    $this->mainMenu()->setActiveItemId('Wish List'); 
+   
+    $this->pageBreadcrumbs()->setItems([
+        'Home' => $this->url('home'),
+        'Wish List' => $this->url('wishlist'),
+        'Add' => $this->url('wishlist/add')       
+        ]);       
+    
+    /*** getting params from IndexAction() inside LostsaleController ***/
+  
+    $form = $this->form;
+//    $renderAll = $this->renderAll;
+    
+    /* adding attributes to the form elements */
+     $form->get('partnumber')->setAttributes([
+        'class' => 'form-control',        
+    ]);
+    
+        
+    $form->get('submit')->setAttributes(['class'=>'submit-btn']);
+  
+    /* prepare for before rendering */
+    $form->prepare();
+    
+ ?>  
+         
+<!-- HTML RENDER-->
+<?= $this->flashMessenger()->render('success', ['alert', 'alert-success']); ?>
+<?= $this->flashMessenger()->render('error', ['alert', 'alert-warning']); ?>
+<?= $this->flashMessenger()->render('info', ['alert', 'alert-info']); ?>    
+
+<div class="container-fluid">
+  <div class="row"> 
+    <div class="col-md-auto">         
+      <?=$this->form()->openTag($form);?> 
+        <div class="">
+          <h5><span class="">ADD ITEM(S)</span></h5>
+        </div>                  
+
+        <div> 
+            <?= $this->FormRow($form->get('code')); ?><br>   
+            <?= $this->FormRow($form->get('user')); ?><br>
+            <?= $this->FormRow($form->get('date')); ?><br>
+            <?= $this->FormRow($form->get('partnumber')); ?><br>
+            <?= $this->FormRow($form->get('partnumberdesc')); ?><br>
+
+            <?= $this->FormRow( $form->get('vendor') ); ?>
+            <?= $this->FormRow($form->get('vendordesc')); ?>
+            <?= $this->FormRow($form->get('type')); ?> <br>
+            <?= $this->FormRow($form->get('comment')); ?>
+            <?= $this->formHidden($form->get('csrf')); ?><br> 
+            <?= $this->FormElement($form->get('submit')); ?><br>
+         </div>   <!-- COLLAPSE CONTENT END -->    
+        <?=$this->form()->closeTag();?>
+                 
+        </div> <!-- COLUMN AUTO(INSIDE THIS IS THE ACCORDION --> 
+    </div>   
+</div>
+ 

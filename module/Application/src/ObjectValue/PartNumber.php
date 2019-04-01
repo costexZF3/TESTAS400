@@ -9,7 +9,7 @@ namespace Application\ObjectValue;
  * and open the template in the editor.
  */
 
-use Application\Service\QueryRecover;
+use Application\Service\QueryManager;
 
 
 /**
