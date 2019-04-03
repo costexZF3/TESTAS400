@@ -375,7 +375,7 @@ class WishListManager
     public function getDataItem( $partNumberID ) 
     {
         $partNumberObj =  $this->partNumberManager->getPartNumber( $partNumberID );
-       
+        
         if ( $partNumberObj !== null ) {         
             $data['code'] = $this->queryManager->getMax('WHLCODE', 'PRDWL');
             $data['date'] = date('Y-m-d');

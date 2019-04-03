@@ -15,7 +15,7 @@ namespace Application\Service;
 
 use Application\Service\QueryManager as queryManager;
 use Application\ObjectValue\PartNumber;
-use Application\Validator\PartNumberValidator;
+
 
 /**
  * Description of PartRecover 
@@ -23,7 +23,7 @@ use Application\Validator\PartNumberValidator;
  * 
  * @author mojeda
  */
-class PartNumberManager {         
+class Control {         
     /*
      * @var $queryManager queryManager
      */   
@@ -40,7 +40,7 @@ class PartNumberManager {
       */
     public  function __construct( queryManager $queryManager ) {        
         $this->queryManager = $queryManager;        
-//        $this->options = $options;
+        
     }// END: constructor 
    
    /*-------------------------------------- setters ---------------------------------------------*/   

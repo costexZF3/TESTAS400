@@ -1,0 +1,90 @@
+<?php     
+    /*getting values */
+       
+    $this->headTitle('NEW ITEM-WISHLIST');	
+    $this->mainMenu()->setActiveItemId('Wish List'); 
+   
+    $this->pageBreadcrumbs()->setItems([
+        'Home' => $this->url('home'),
+        'Wish List' => $this->url('wishlist'),
+        'Add' => $this->url('wishlist')       
+        ]);       
+    
+    /*** getting params from IndexAction() inside LostsaleController ***/
+  
+    /**
+    * @var Zend\Form  
+    */  
+    $form = $this->form;
+    //determining whether show all data from de part or not
+   
+    
+    ; 
+     
+    /* adding attributes to the form elements */
+     $form->get('partnumber')->setAttributes([
+        'class' => 'form-control',        
+    ]);
+    
+        
+    $form->get('submit')->setAttributes(['class'=>'submit-btn']);
+  
+    /* prepare for before rendering */
+    $form->prepare();
+    
+ ?>  
+         
+<!-- HTML RENDER-->
+<?= $this->flashMessenger()->render('success', ['alert', 'alert-success']); ?>
+<?= $this->flashMessenger()->render('error', ['alert', 'alert-warning']); ?>
+<?= $this->flashMessenger()->render('info', ['alert', 'alert-info']); ?>    
+
+<!--/********************************* CONTAINER TO BE RENDER ************************************************************/-->
+<div class="container">
+        
+    <div class="row justify-content-center">
+        <div class="col-md-6 single-service-item">                 
+            <h4 class="title"> NEW ITEM </h4> 
+            <br>
+            <!-- Open Form Tag -->
+            <?= $this->form()->openTag($form); ?>
+                <!-- EDIT: OLD PASSWORD -->
+                
+                    <div class="form-group"> 
+                        <div class="row">
+                          <div class="col-md-12">
+                            <?= $this->FormRow($form->get('code')); ?><br>   
+                            <?= $this->FormRow($form->get('user')); ?><br>
+                            <?= $this->FormRow($form->get('date')); ?><br>
+                            <?= $this->FormRow($form->get('partnumber')); ?><br>
+                            <?= $this->FormRow($form->get('partnumberdesc')); ?><br>
+                          </div>
+                        </div>    
+                            
+                        <div class ="row">
+                          <div class="col-md-12">  
+                           
+                            <?= $this->FormRow($form->get('model')); ?> <br>
+                            <?= $this->FormRow($form->get('majorcode')); ?> <br>
+                            <?= $this->FormRow($form->get('minor')); ?> <br>
+                            <?= $this->FormRow($form->get('category')); ?> <br>
+                            <?= $this->FormRow($form->get('subcategory')); ?> <br>
+                            <?= $this->FormRow($form->get('type')); ?> <br>
+                            <?= $this->FormRow($form->get('comment')); ?>
+                          </div>
+                        </div>
+                    </div>
+                           
+                <!-- CROSS SITE REQUEST FORGERY CHECKING -->    
+                <?= $this->formElement($form->get('csrf')); ?>
+
+                <div class="btn-wrapper">
+                    <?= $this->formElement($form->get('submit')); ?>
+                </div>
+            <?= $this->form()->closeTag(); ?>
+                       
+        </div><!-- offset... -->
+    </div>
+</div>
+
+ 

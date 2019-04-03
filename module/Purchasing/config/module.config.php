@@ -98,6 +98,9 @@ return [
                 //Actions reponse to Roles associated to MENUS 
                 ['actions' => ['index'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
                 ['actions' => ['add'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
+                ['actions' => ['create'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
+                ['actions' => ['update'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
+                ['actions' => ['delete'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
                 ['actions' => ['wishlist'],       'allow' => '+menu.purchasing'],                 
 
             ], //END: access_filter for LostSaleController    

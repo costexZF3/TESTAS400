@@ -50,7 +50,13 @@ class FormAddItemWL extends Form
          // form -- method 
         $this->setAttribute('method', 'post');  
         
-      /* method for add items to the form */
+        /* changing the default route when the user click in submit */
+//        if ($scenario == 'initial') {
+//            // ( Optionally ) set action for this form
+//            $this->setAttribute('action', 'wishlist/add/0');
+//        }      
+
+         /* method for add items to the form */
         $this->selectElements();
               
     }//END CONSTRUCTOR
@@ -63,13 +69,22 @@ class FormAddItemWL extends Form
     {
         switch ( $this->scenario ) {
             case 'initial' :  
+                
                 $this->addElementSC1(); 
                 $this->addCommonElements();
                 $this->addInputFiltersSC1(); 
+                 
             break;
-            case 'insert' : //there are data inside INMSTA  
+            case 'insert' : //there are data                   
                 $this->addElementSC2(); 
+                $this->addSubElementsVendors();
                 $this->addCommonElements('ADD');
+                $this->addInputFiltersSC2(); 
+            break;            
+            case 'create' : //there are data    
+                $this->addElementSC2();
+                $this->addElementSC3(); 
+                $this->addCommonElements('CREATE');
                 $this->addInputFiltersSC2(); 
             break;            
         }//END: SWITCH
@@ -114,6 +129,32 @@ class FormAddItemWL extends Form
                 'text' => 'PartNumber MUST BE exist'
             ],
             'options' =>['label' => 'PART NUMBER'],                     
+        ]);
+    }
+    
+    private function addSubElementsVendors()
+    {
+        // ------------------------------ VENDOR ------------------------
+
+        $this->add([
+            'name'=>'vendor',    
+            'type'=>'text',                              
+            'attributes' =>[         
+                  'class' => 'form-control',
+                  'readonly' => true,                     
+            ],
+            'options' =>['label' => 'VENDOR'],                     
+        ]);
+        
+        //part number description
+        $this->add([
+            'name'=>'vendordesc',    
+            'type'=>'text',                      
+            'attributes' =>[          
+                  'class' => 'form-control',
+                  'readonly' => true,                     
+            ],
+            'options' =>['label' => 'VENDOR DESCRIPTION'],                     
         ]);
     }
     
@@ -178,29 +219,7 @@ class FormAddItemWL extends Form
             'options' =>['label' => 'DESCRIPTION '],                     
         ]);
 
-        // ------------------------------ VENDOR ------------------------
-
-        $this->add([
-            'name'=>'vendor',    
-            'type'=>'text',                              
-            'attributes' =>[         
-                  'class' => 'form-control',
-                  'readonly' => true,                     
-            ],
-            'options' =>['label' => 'VENDOR'],                     
-        ]);
         
-        //part number description
-        $this->add([
-            'name'=>'vendordesc',    
-            'type'=>'text',                      
-            'attributes' =>[          
-                  'class' => 'form-control',
-                  'readonly' => true,                     
-            ],
-            'options' =>['label' => 'VENDOR DESCRIPTION'],                     
-        ]);
-
         // comment about the ITEM 
         $this->add([
             'name'=>'comment',    
@@ -227,8 +246,84 @@ class FormAddItemWL extends Form
                 ],
             ],
         ]);
+        
+        
     }//End: SCENARIO 1
     
+     private function addElementSC3() 
+    {
+        /* data that will be inserted into PRDWLADD (FILE) and this will be inserted into the
+         * INMSTA file when the part will be picked up for development
+         */
+        $this->add([
+            'name'=>'model',    
+            'type'=>'text',                    
+            'attributes' =>[      
+                'class' =>'form-control',
+                'id'       => 'code',                                          
+//                'readonly' => true,
+            ],
+            'options' =>['label' => 'MODEL'],                     
+        ]);
+        
+        /* MAJOR CODE */
+        $this->add([
+            'name'=>'majorcode',    
+            'type'=>'text',                    
+            'attributes' =>[      
+                'class' =>'form-control',
+                'id'       => 'majorcode',                                          
+                'minlength' => "2",
+                'maxlength' => "2",                   
+                'required' => true, 
+                'placeholder' => 'eg. 99',
+            ],
+            'options' =>['label' => 'MAJOR'],                     
+        ]);
+        
+         /* MINOR CODE */
+        $this->add([
+            'type'  => 'select',
+            'name' => 'minor',
+            'options' => [
+                'label' => 'MINOR CODE',
+                'value_options' => [
+//                    1 => 'New Part',
+//                    2 => 'New Vendor',                                                                                                                                    
+                ],
+            ],                   
+        ]);
+        
+        /* CATEGORY */
+        $this->add([
+            'name'=>'category',    
+            'type'=>'text',                    
+            'attributes' =>[      
+                'class' =>'form-control',
+                'id'       => 'category',                                          
+                'minlength' => "3",
+                'maxlength' => "3",                   
+                'required' => true, 
+                'placeholder' => 'eg. GEN',
+            ],
+            'options' =>['label' => 'CATEGORY'],                     
+        ]);
+        
+        /* SUB-CATEGORY*/
+        $this->add([
+            'name'=>'subcategory',    
+            'type'=>'text',                    
+            'attributes' =>[      
+                'class' =>'form-control',
+                'id'       => 'subcategory',                                          
+                'minlength' => "3",
+                'maxlength' => "3",                   
+                'required' => true, 
+                'placeholder' => 'eg. N01',
+            ],
+            'options' =>['label' => 'SUB-CATEGORY'],                     
+        ]);
+    }
     /*
      *  This method creates input filters (used for form filtering/validation ).
      */
