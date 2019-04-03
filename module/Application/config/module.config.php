@@ -136,6 +136,9 @@ return [
             __DIR__ . '/../view',
         ],
     ],
+    'session_containers' => [
+        'WishListSeccion'
+    ],
     // The following key allows to define custom styling for FlashMessenger view helper.
     'view_helper_config' => [
         'flashmessenger' => [

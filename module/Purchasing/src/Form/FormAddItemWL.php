@@ -43,7 +43,7 @@ class FormAddItemWL extends Form
     {                 
         $this->scenario = $scenario;
         $this->queryManager = $queryManager;
-        
+       
         // Defined form name 
         parent::__construct('form-additem-wl');
       
@@ -51,9 +51,10 @@ class FormAddItemWL extends Form
         $this->setAttribute('method', 'post');  
         
         /* changing the default route when the user click in submit */
-//        if ($scenario == 'initial') {
+//        if ($scenario == 'create') {
 //            // ( Optionally ) set action for this form
-//            $this->setAttribute('action', 'wishlist/add/0');
+//            
+//            $this->setAttribute('action', 'wishlist/insert');
 //        }      
 
          /* method for add items to the form */
@@ -85,7 +86,7 @@ class FormAddItemWL extends Form
                 $this->addElementSC2();
                 $this->addElementSC3(); 
                 $this->addCommonElements('CREATE');
-                $this->addInputFiltersSC2(); 
+                //$this->addInputFiltersSC2(); 
             break;            
         }//END: SWITCH
     }//END: selectElements
@@ -287,10 +288,7 @@ class FormAddItemWL extends Form
             'name' => 'minor',
             'options' => [
                 'label' => 'MINOR CODE',
-                'value_options' => [
-//                    1 => 'New Part',
-//                    2 => 'New Vendor',                                                                                                                                    
-                ],
+                
             ],                   
         ]);
         

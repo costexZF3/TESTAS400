@@ -4,6 +4,7 @@ namespace Purchasing;
 use Zend\ServiceManager\Factory\InvokableFactory;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
+use Zend\Session;
 
 return [   
     'router' => [
@@ -31,7 +32,8 @@ return [
                     ],
                 ],                
             ],//end: lostsale route
-             
+            
+                        
             'wishlist' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -101,6 +103,7 @@ return [
                 ['actions' => ['create'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
                 ['actions' => ['update'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
                 ['actions' => ['delete'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
+                ['actions' => ['insert'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
                 ['actions' => ['wishlist'],       'allow' => '+menu.purchasing'],                 
 
             ], //END: access_filter for LostSaleController    

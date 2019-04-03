@@ -8,8 +8,9 @@ use Zend\View\Model\ViewModel;
 /* services injected from the FACTORY: WishListControllerFactory */
 use Purchasing\Service\WishListManager;
 use Application\Service\QueryManager;
-use \Application\Validator\PartNumberValidator;
+use Application\Validator\PartNumberValidator;
 
+use Zend\Session\Container as SM;
 
 /* MODEL: forms classes */
 use Purchasing\Form\FormAddItemWL as FormAddItemWL;
@@ -27,16 +28,25 @@ class WishlistController extends AbstractActionController
       * @var queryManager
       */
       private $queryManager; 
+      
+      /**
+       *
+       * @var Zend\Session\Container
+       */
+      private $session;
      
       /**
       * @param WishListManager $wlManager  | WishList service injected from the Factory
       * @param QueryManager $queryManager  | WishList service injected from the Factory
       * 
       */
-      public function __construct( WishListManager $wlManager, QueryManager $queryManager ) 
+      public function __construct( WishListManager $wlManager, 
+                                   QueryManager $queryManager,
+                                   SM $sessionManager ) 
       {           
          $this->WLManager = $wlManager;   
          $this->queryManager = $queryManager;
+         $this->session = $sessionManager;
       }   
     
       /*
@@ -65,52 +75,53 @@ class WishlistController extends AbstractActionController
         return new ViewModel(['wldata' => $this->WLManager->TableAsHtml()]);
       }//END: indexAction method
 
-          
-    public function createAction() 
-    {       
-        //RETRIEVING PARTNUMBER FROM ROUTE: 
-        $partnumber = $this->params()->fromRoute('id',-1);        
         
+    public function createAction() 
+    {   
         //creating an instance of form to Map data
         $form = new FormAddItemWL( 'create', $this->queryManager );
-         
-        //scenario 3
-        //checking the partnumber is valid 
-        if ( $partnumber !== -1 ){           
-            
-            //recover data from CATER
-            $data = $this->getCATER( $partnumber );               
-            $minors = $this->getMinors();
-            
-            $data['user'] = str_replace('@costex.com', '', $this->getUser()->getEmail());
-            $data['date'] = date('Y-m-d');
-            $data['code'] = $this->queryManager->getMax('WHLCODE', 'PRDWL');
-            
-            //injecting all minor codes into the HTML SELECT ELEMENT
-            $form->get('minor')->setValueOptions($minors);
-            
-            $form->setData($data);
-         
-            
-            return new ViewModel([ 'form'=>$form ]);
-             
-//            $data = $this->WLManager->TableAsHtml();
-        }//ENDIF: checking data 
-        
-        //CHECKING IF DATA WAS SEND BY POST
         
         if ($this->getRequest()->isPost() ) {
             /* getting data from the form*/
             $data = $this->params()->fromPost();
             
+            $form->setData($data);
+            
+            //var_dump($data); exit;
             //all data are ok then they are ready for being inserted
-            if ($form->isValid()) {
-               $data = $form->getData(); //retrieving filtered data
+//            if ($form->isValid()) {
+            if (5==5) {
+//               $data = $form->getData(); //retrieving filtered data
                $this->WLManager->insert($data, WishListManager::FROM_MANUAL );
+               $this->session->part = null;
+               $this->redirect()->toRoute('wishlist');               
             }
-            
-            
         }
+        
+        $partnumber = $this->session->part ?? null; 
+        //var_dump($partnumber);
+        
+        //RETRIEVING PARTNUMBER FROM ROUTE: 
+//        $partnumber = $this->params()->fromRoute('id',-1);        
+        if ($partnumber==null) {
+            $this->redirect()->toRoute('wishlist');
+        }
+                 
+            
+        //recover data from CATER
+        $data = $this->getCATER( $partnumber );               
+        $minors = $this->getMinors();
+
+        $data['user'] = str_replace('@costex.com', '', $this->getUser()->getEmail());
+        $data['date'] = date('Y-m-d');
+        $data['code'] = $this->queryManager->getMax('WHLCODE', 'PRDWL');
+
+        //injecting all minor codes into the HTML SELECT ELEMENT
+        $form->get('minor')->setValueOptions($minors);
+
+        $form->setData($data);
+        
+        return new ViewModel(['form'=>$form]);
         
     }//END: METHOD create
     
@@ -191,7 +202,11 @@ class WishlistController extends AbstractActionController
                }// END: THE PART IS INSIDE INMSTA 
                
                if ( $partInCATER->isValid( $partnumber ) ) {
-                  return $this->redirect()->toRoute('wishlist', ['action'=>'create', 'id'=>$partnumber]); 
+//                   $url1 = $this->url()->fromRoute('wishlist', ['action'=>'create', 'id'=>$partnumber]);
+//                   return $this->redirect()->toUrl($url1);
+                   $this->session->part = $partnumber;       
+                  return $this->redirect()->toRoute('wishlist', ['action'=>'create']); 
+//                  return $this->redirect()->toRoute('wishlist', ['action'=>'create', 'id'=>$partnumber]); 
                }
                
                /* if the part number exist on CATER or KAMAT, then create part */

@@ -165,7 +165,7 @@ class PartNumberManager {
        $strSql = "SELECT INDESC FROM INMCAT where INCATA = '".strtoupper( trim( $category ) )."'"; 
        $data = $this->queryManager->runSql( $strSql );
        
-       return $data[0]['INDESC'];
+       return $data[0]['INDESC']??'NA';
     }//END: getCategoryDescByStr()
 
     /**

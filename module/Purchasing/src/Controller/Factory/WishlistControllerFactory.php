@@ -7,6 +7,7 @@ use Zend\ServiceManager\Factory\FactoryInterface;
 /* services to retrieve from the Service Manager */
 use Purchasing\Service\WishListManager;
 use Application\Service\QueryManager;
+use Zend\Session\SessionManager;
 
 /* service that will be injected into the Controller: WishListController */
 use Purchasing\Controller\WishlistController;
@@ -22,9 +23,10 @@ class WishlistControllerFactory implements FactoryInterface
        /* retrieving SERVICES queryRecover */
         $wishListManager = $container->get( WishListManager::class );       
         $queryManager = $container->get( QueryManager::class );       
-               
+        $sessionManager = $container->get('WishListSeccion');
+                       
 
         // Instantiating the controller and injecting dependencies (services) 
-        return new WishlistController( $wishListManager, $queryManager );
+        return new WishlistController( $wishListManager, $queryManager, $sessionManager );
     }
 }
