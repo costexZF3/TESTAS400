@@ -4,7 +4,6 @@ namespace Purchasing\Service;
 
 use Application\Service\QueryManager as queryManager;
 use Application\Service\PartNumberManager;
-use Application\ObjectValue\PartNumber;
 
 
 /**
@@ -26,19 +25,23 @@ class WishListManager
    const STATUS_CLOSE = '2';
    const STATUS_CLOSEBYDEVELOPMENT = '3';
    
-   const FROM_MANUAL ='manual';
-   const FROM_LOSTSALE ='lostsale';
-   const FROM_EXCEL_FILE = 'excel';
+   const FROM_LOSTSALE = '1';
+   const FROM_VENDORLIST = '2';
+   const FROM_MANUAL = '3';
+   const FROM_OTHER = '4';
    
   
    const FIELDS = ['WHLCODE', 'WHLUSER', 'WHLPARTN', 'WHLSTATUS', 'WHLSTATUSU',  'WHLREASONT', 'WHLFROM',
                    'WHLCOMMENT'
                   ];
    
-   const TABLE_NAME = 'PRDWL';
+   const TABLE_WISHLIST = 'PRDWL';
+   const TABLE_WISLISTADD = 'PRDWLADD';
     
    protected $reasontype = [ self::NEWVENDOR => "New Vendor", self::NEWPART => "New Part"];
-   protected $from = [ self::FROM_MANUAL => "1", self::FROM_LOSTSALE => "2", self::FROM_EXCEL_FILE => "3"];
+   
+   protected $from = [ self::FROM_LOSTSALE => "LS", self::FROM_VENDORLIST=> "VNDL", 
+                       self::FROM_MANUAL => "MN", self::FROM_OTHER => "other"];
    
    
    /*
@@ -49,7 +52,7 @@ class WishListManager
     /*
      * array with all COLUMN LABELS that will be rendered
      */
-    private $columnHeaders = ['Info','Code','Date', 'User','Part Number', 'Description', 'Year Sales',
+    private $columnHeaders = ['From','Code','Date', 'User','Part Number', 'Description', 'Year Sales',
                               'Qty Quoted','Times Quoted', 'OEM Price', 'Loc20-STK', 'Model', 'Category',
                               'SubCat', 'Major','Minor'];
     /*
@@ -134,16 +137,24 @@ class WishListManager
      */
     private function getSqlStr():String 
     {        
-       $sqlStr = "SELECT * FROM PRDWL LEFT JOIN INMSTA "
-                . "ON TRIM(UCASE(PRDWL.WHLPARTN)) = TRIM(UCASE(INMSTA.IMPTN))"
-                . "LEFT JOIN INVPTYF ON TRIM(UCASE(INVPTYF.IPPART)) = TRIM(UCASE(PRDWL.WHLPARTN)) "
-                . "ORDER BY PRDWL.WHLCODE ASC";
+//       $sqlStr = "SELECT * FROM PRDWL LEFT JOIN INMSTA "
+//                . "ON TRIM(UCASE(PRDWL.WHLPARTN)) = TRIM(UCASE(INMSTA.IMPTN))"
+//                . "LEFT JOIN INVPTYF ON TRIM(UCASE(INVPTYF.IPPART)) = TRIM(UCASE(PRDWL.WHLPARTN)) "
+//                . "ORDER BY PRDWL.WHLCODE ASC";
        
-        return $sqlStr;  
+       
+       $sqlStr = "SELECT * FROM ( SELECT  IMPTN, IMDSC, IMPC1,IMPC2,IMCATA,IMSBCA,IMMOD, IMPRC     
+                  FROM WHLINMSTAJ UNION                                                                     
+                  SELECT  WHLPARTN, WHLADDDESC, WHLADDMAJO, WHLADDMINO, WHLADDCATE, WHLADDSUBC, WHLADDMODE, WHLADDPRIC                       
+                  FROM WHLADDINMJ ) y                                               
+                  INNER JOIN PRDWL on y.IMPTN = PRDWL.WHLPARTN                       
+                  LEFT JOIN invptyf on y.IMPTN = invptyf.IPPART ORDER BY PRDWL.WHLCODE ASC";
+       
+       return $sqlStr;  
     }//END: getSqlString()
     
     /*
-     * Return date as String (one year before) 
+     * Return date as String (one year before)  
      */
     private function dateOneYearBefore()
     {
@@ -176,23 +187,41 @@ class WishListManager
     /**
      * - This method insert data into the PRDWL ( file: WISHLIST )
      * @param array() $data | An associative array with all needed data inside a WL row.
-     * @return object | it returns null is could not insert the field 
+     * @return object | it returns null is could not insert the field  
      */ 
-    public function insert( $data, $from ) 
-    {              
+    public function insert( $data ) 
+    {   
+        // INSERTING DATA: THE PART EXIST INSIDE INMSTA
         $dataSet['WHLCODE'] = $data['code'];
         $dataSet['WHLUSER'] = strtoupper($data['user']);
         $dataSet['WHLPARTN'] = strtoupper($data['partnumber']);
         $dataSet['WHLSTATUS'] = self::STATUS_OPEN;
         $dataSet['WHLSTATUSU'] = strtoupper($data['user']);
         $dataSet['WHLREASONT'] = $data['type'];        
-        $dataSet['WHLFROM'] =  $this->from[$from];
+        $dataSet['WHLFROM']  =  $data['from'];
         $dataSet['WHLCOMMENT'] = $data['comment'];
-       
+
         // inserting in TABLE WL: PRDWL the set of data 
-        $this->dataSet = $this->queryManager->insert( self::TABLE_NAME , $dataSet );
+        $DB = $this->queryManager->insert( self::TABLE_WISHLIST , $dataSet );
        
-       return $this->dataSet ?? null;             
+        //checking if the origin of the PARTNUMBER is: KOMAT or CATER  
+        if (isset($data['minor']) ) {             
+           $dataSet2['WHLADDCODE'] = $data['code'];            
+           $dataSet2['WHLADDMODE'] = strtoupper($data['model']);
+           
+           $dataSet2['WHLADDMAJO'] = $data['major']; 
+           $dataSet2['WHLADDMINO'] = $data['minor']; 
+           
+           $dataSet2['WHLADDCATE'] = $data['category']; 
+           $dataSet2['WHLADDSUBC'] = $data['subcategory']; 
+           
+           $dataSet2['WHLADDDESC'] = $data['partnumberdesc']; 
+           
+           $dataSet2['WHLADDPRIC'] = round( floatval($data['price']), 2); 
+           $this->dataSet = $this->queryManager->insert( self::TABLE_WISLISTADD , $dataSet2 );
+        }
+       
+       return ($this->dataSet || $DB) ?? null;             
     } //END: AddItem method
  
     
@@ -237,8 +266,8 @@ class WishListManager
     private function RowToArray( $row ) {
         $result = [];
         $partNumberInWL = trim($row['WHLPARTN']);
-        
-        array_push( $result, '@' );   // index: 0 : code
+        $fromValue = $this->from[$row['WHLFROM']];
+        array_push( $result, $fromValue );   // index: 0 : code
         array_push( $result, $row['WHLCODE'] );         //index: 1 WL No
         array_push( $result, $row['WHLDATE'] );  // index: 2 DATE
         array_push( $result, $row['WHLUSER'] );  // index: 3 - USER IN CHARGE

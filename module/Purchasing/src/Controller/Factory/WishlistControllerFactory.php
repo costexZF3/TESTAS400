@@ -23,7 +23,7 @@ class WishlistControllerFactory implements FactoryInterface
        /* retrieving SERVICES queryRecover */
         $wishListManager = $container->get( WishListManager::class );       
         $queryManager = $container->get( QueryManager::class );       
-        $sessionManager = $container->get('WishListSeccion');
+        $sessionManager = $container->get('WishListSession');
                        
 
         // Instantiating the controller and injecting dependencies (services) 
