@@ -86,7 +86,7 @@ class FormAddItemWL extends Form
                 $this->addElementSC2();
                 $this->addElementSC3(); 
                 $this->addCommonElements('CREATE');
-                //$this->addInputFiltersSC2(); 
+                $this->addInputFiltersSC3(); 
             break;            
         }//END: SWITCH
     }//END: selectElements
@@ -182,7 +182,7 @@ class FormAddItemWL extends Form
                 'readonly' => true,
             ],
             'options' =>[              
-                'label' => 'CREATED BY'
+                'label' => 'USER'
             ],                     
         ]); 
 
@@ -219,6 +219,8 @@ class FormAddItemWL extends Form
             ],
             'options' =>['label' => 'DESCRIPTION '],                     
         ]);
+        
+        
 
         
         // comment about the ITEM 
@@ -228,11 +230,23 @@ class FormAddItemWL extends Form
             'attributes' =>[          //array of attributes
                 'class' => 'form-control',
                 'id'=>'comment',
-                'rows' => "4", 
+                'rows' => "3", 
                 'maxlenght' => 256,                                           
                 'placeholder' => 'Enter a comment',                    
             ],
             'options' =>['label' => 'COMMENTS'],                     
+        ]);
+        
+        // price
+        $this->add([
+            'name'=>'price',    
+            'type'=>'text',               
+            'attributes' =>[          //array of attributes
+                'class' => 'form-control',
+                'id'=>'price',   
+                'readonly'=> true,
+            ],
+            'options' =>['label' => 'PRICE'],                     
         ]);
 
         // type  
@@ -240,7 +254,7 @@ class FormAddItemWL extends Form
             'type'  => 'select',
             'name' => 'type',
             'options' => [
-                'label' => 'Type',
+                'label' => 'TYPE',
                 'value_options' => [
                     1 => 'New Part',
                     2 => 'New Vendor',                                                                                                                                    
@@ -269,11 +283,11 @@ class FormAddItemWL extends Form
         
         /* MAJOR CODE */
         $this->add([
-            'name'=>'majorcode',    
+            'name'=>'major',    
             'type'=>'text',                    
             'attributes' =>[      
                 'class' =>'form-control',
-                'id'       => 'majorcode',                                          
+                'id'       => 'major',                                          
                 'minlength' => "2",
                 'maxlength' => "2",                   
                 'required' => true, 
@@ -287,8 +301,8 @@ class FormAddItemWL extends Form
             'type'  => 'select',
             'name' => 'minor',
             'options' => [
-                'label' => 'MINOR CODE',
-                
+                'label' => 'MINOR',
+                'disable_inarray_validator' => true, //IMPORTANTTTTT
             ],                   
         ]);
         
@@ -322,6 +336,7 @@ class FormAddItemWL extends Form
             'options' =>['label' => 'SUB-CATEGORY'],                     
         ]);
     }
+   
     /*
      *  This method creates input filters (used for form filtering/validation ).
      */
@@ -394,5 +409,40 @@ class FormAddItemWL extends Form
             ], //END: VALIDATORS KEY 
         ]);   
     } //END: addFilters method()
+    
+    /*
+     *  This method creates input filters (used for form filtering/validation ).
+     */
+   private function addInputFiltersSC3() 
+   { 
+       // Create main input filter
+        $inputFilter = new InputFilter();        
+        $this->setInputFilter( $inputFilter );
+      
+        $inputFilter->add([
+        'name'     => 'major',
+        'required' => true,
+        'filters'  => [
+            ['name' => 'StringTrim'],                                                            
+            ['name' => 'StripTags'],                                                            
+            ['name' => 'StripNewlines'],                                                            
+        ], 
+        'validators' => [ 
+            //validator: 1           
+            ['name'    => 'StringLength',
+                'options' => ['min' =>1 ,'max' => 3],
+            ],  
+            
+            //validator: 2
+            //validate that the code EXIST in THE MAJOR TABLE 
+            ['name' => PartNumberValidator::class,
+             'options' => [
+                'table' => PartNumberValidator::TABLE_MAJOR,
+                'queryManager' => $this->queryManager, 
+//                'notintable' => true  
+              ]                        
+            ],         
+         ], //END: VALIDATORS KEY                       
+   ]); }
     
 }//END CLASS
