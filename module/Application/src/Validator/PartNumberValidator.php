@@ -2,7 +2,6 @@
 namespace Application\Validator;
 
 use Zend\Validator\AbstractValidator;
-use Application\Service\QueryManager;
 
 
 /*
@@ -23,10 +22,12 @@ class PartNumberValidator extends AbstractValidator {
   const TABLE_BY_DEFAULT = 'INMSTA';
   const TABLE_STOCK  = 'DVINVA';  
   const TABLE_INVPTYF  = 'INVPTYF';  
-  const TABLE_CATERPILLAR  = 'CATER';  
-  const TABLE_KOMATSUT  = 'KOMAT';  
+  const TABLE_CATERPILLAR  = 'CATER';  // Parts list of CATERPILLAR 
+  const TABLE_KOMATSUT  = 'KOMAT';  //tale with list of komatsut parts
   
-  const TABLE_WISHLIST = 'PRDWL';
+  const TABLE_MAJOR  = 'MAJCODES'; // table with all majors code   
+  
+  const TABLE_WISHLIST = 'PRDWL'; // wishlist table
   
   // Available validator options.
   protected $options = [
@@ -83,7 +84,8 @@ class PartNumberValidator extends AbstractValidator {
    
     if($table!=self::TABLE_BY_DEFAULT && $table!= self::TABLE_STOCK &&
        $table!=self::TABLE_WISHLIST && $table!= self::TABLE_INVPTYF &&
-       $table!=self::TABLE_CATERPILLAR && $table!= self::TABLE_KOMATSUT
+       $table!=self::TABLE_CATERPILLAR && $table!= self::TABLE_KOMATSUT && 
+       $table!=self::TABLE_MAJOR 
             ) {            
       throw new \Exception('Invalid table argument passed.');
     }
@@ -134,6 +136,7 @@ class PartNumberValidator extends AbstractValidator {
             case self::TABLE_WISHLIST :  $fieldName = 'WHLPARTN'; break; //PRDWL
             case self::TABLE_CATERPILLAR :  $fieldName = 'CATPTN'; break; //CATER
             case self::TABLE_KOMATSUT :  $fieldName = 'KOPTNO'; break; //KOMAT
+            case self::TABLE_MAJOR :  $fieldName = 'MAJCOD'; break; //MAJCODES
 
             default  :  
                $fieldName = 'IMPTN';  //INMSTA      
