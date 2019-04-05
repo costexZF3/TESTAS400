@@ -137,9 +137,9 @@ return [
         ],
     ],
     'session_containers' => [
-        'WishListSeccion'
+        'WishListSession'
     ],
-    // The following key allows to define custom styling for FlashMessenger view helper.
+    // The following key allows to define custom styling for FlashMessenger view helper. 
     'view_helper_config' => [
         'flashmessenger' => [
             'message_open_format'      => '<div%s><ul><li>',
