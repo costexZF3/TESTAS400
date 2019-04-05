@@ -237,7 +237,7 @@ class LostSale {
     //getWishListValue(): it returns It this part exist in the wish list      
     private function getWishListValue( $PartNumber ) {  
        /* getting the Purchasing Agent's ID */ 
-       $strSql = "SELECT 'X' WL  From PRDWL1 WHERE PRWPTN = '".$PartNumber."'";
+       $strSql = "SELECT 'X' WL  From PRDWL WHERE WHLPARTN = '".$PartNumber."'";
        try
         {
           $resultSet = $this->adapter->query( $strSql, MyAdapter::QUERY_MODE_EXECUTE )->toArray(); 
