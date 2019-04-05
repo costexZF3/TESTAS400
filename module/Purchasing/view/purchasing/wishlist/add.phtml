@@ -1,6 +1,5 @@
 <?php     
-    /*getting values */
-       
+    /*getting values */       
     $this->headTitle('NEW ITEM-WISHLIST');	
     $this->mainMenu()->setActiveItemId('Wish List'); 
    
@@ -16,9 +15,13 @@
     * @var Zend\Form  
     */  
     $form = $this->form;
-    //determining whether show all data from de part or not
-    $renderAll = $form->count()=== 11;
     
+    /**
+     * @var boolean | Determining whether show all data from de part or not
+     */
+    
+    $renderAll = $this->renderAll || false; 
+        
     $columnStyle = $renderAll ? 'col-md-6 single-service-item ' : 'col-md-4 single-service-item'; 
      
     /* adding attributes to the form elements */
@@ -33,15 +36,9 @@
     $form->prepare();
     
  ?>  
-         
-<!-- HTML RENDER-->
-<?= $this->flashMessenger()->render('success', ['alert', 'alert-success']); ?>
-<?= $this->flashMessenger()->render('error', ['alert', 'alert-warning']); ?>
-<?= $this->flashMessenger()->render('info', ['alert', 'alert-info']); ?>    
 
 <!--/********************************* CONTAINER TO BE RENDER ************************************************************/-->
-<div class="container">
-        
+<div class="container">        
     <div class="row justify-content-center">
         <div class="<?= $columnStyle; ?>">                 
             <h4 class="title"> NEW ITEM </h4> 
@@ -51,20 +48,35 @@
                 <!-- EDIT: OLD PASSWORD -->
                 <?php if ($renderAll ):?>
                     <div class="form-group"> 
+                        <!--row 1-->
                         <div class="row">
-                          <div class="col-md-5">
-                            <?= $this->FormRow($form->get('code')); ?><br>   
-                            <?= $this->FormRow($form->get('user')); ?><br>
-                            <?= $this->FormRow($form->get('date')); ?><br>
-                            <?= $this->FormRow($form->get('partnumber')); ?><br>
-                            <?= $this->FormRow($form->get('partnumberdesc')); ?><br>
-                          </div>
-                          <div class="col-md-6">  
-                            <?= $this->FormRow( $form->get('vendor') ); ?>
-                            <?= $this->FormRow($form->get('vendordesc')); ?>
-                            <?= $this->FormRow($form->get('type')); ?> <br>
-                            <?= $this->FormRow($form->get('comment')); ?>
-                          </div>
+                            <div class="col-md-2">
+                                <?= $this->FormRow($form->get('code')); ?><br> 
+                            </div>
+                            <div class="col-md-4"> 
+                                <?= $this->FormRow($form->get('user')); ?><br> 
+                            </div>
+                            <div class="col-md-6">                            
+                                <?= $this->FormRow($form->get('date')); ?>                                 
+                            </div>
+                        </div>    
+                        <!--row 2-->
+                        <div class="row">
+                            <div class="col-md-6">  
+                                <?= $this->FormRow($form->get('partnumber')); ?><br>
+                                <?= $this->FormRow( $form->get('vendor') ); ?>                              
+                                <?= $this->FormRow($form->get('type')); ?> <br>                                
+                            </div>
+                            <div class="col-md-6">              
+                                <?= $this->FormRow($form->get('partnumberdesc')); ?><br>
+                                <?= $this->FormRow($form->get('vendordesc')); ?> 
+                            </div>
+                        </div>
+                        <!--row 3-->
+                        <div class="row">
+                            <div class="col-md-12">                          
+                                <?= $this->FormRow($form->get('comment')); ?>
+                            </div>
                         </div>
                     </div>
                 <?php else:?>
