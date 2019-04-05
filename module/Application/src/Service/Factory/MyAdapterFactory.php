@@ -10,7 +10,7 @@ use Application\Service\MyAdapter;
 
 /**
  * This is the factory for IndexController. Its purpose is to instantiate the
- * controller and inject dependencies into IndexController
+ * controller and inject dependencies into IndexController 
  */
 class MyAdapterFactory implements FactoryInterface
 {
@@ -20,7 +20,7 @@ class MyAdapterFactory implements FactoryInterface
          $dbconnection = [
                         'driver'         => 'IbmDb2',
                         'database'       => 'COSTEX1', // COSTEXM15  DEVELOPMENT
-                        'hostname'      => 'COSTEXM15',// '172.0.0.21', 
+                        'hostname'      => '172.0.0.21',// '172.0.0.21',  COSTEXM15
                         'username'       => 'mojeda',
                         'password'       => '1978M1ch3l',
                         'driver_options' => [
