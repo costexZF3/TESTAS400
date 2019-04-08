@@ -40,6 +40,7 @@ class WishListManager
     
    protected $reasontype = [ self::NEWVENDOR => "New Vendor", self::NEWPART => "New Part"];
    
+   protected $status = [ self::STATUS_OPEN => "OPEN", self::STATUS_CLOSE=> "CLOSE", self::STATUS_CLOSEBYDEVELOPMENT=>"CLOSE_DEV"]; 
    protected $from = [ self::FROM_LOSTSALE => "LS", self::FROM_VENDORLIST=> "VNDL", 
                        self::FROM_MANUAL => "MN", self::FROM_OTHER => "other"];
    
@@ -54,7 +55,7 @@ class WishListManager
      */
     private $columnHeaders = ['From','Code','Date', 'User','Part Number', 'Description', 'Year Sales',
                               'Qty Quoted','Times Quoted', 'OEM Price', 'Loc20-STK', 'Model', 'Category',
-                              'SubCat', 'Major','Minor'];
+                              'SubCat', 'Major','Minor', 'ACTION'];
     /*
      * rows: this array saves all <tr> elements generated running sql query..
      */
@@ -136,13 +137,7 @@ class WishListManager
      * @return STRING : It returns and STRING that will be used to execute the SQL query.
      */
     private function getSqlStr():String 
-    {        
-//       $sqlStr = "SELECT * FROM PRDWL LEFT JOIN INMSTA "
-//                . "ON TRIM(UCASE(PRDWL.WHLPARTN)) = TRIM(UCASE(INMSTA.IMPTN))"
-//                . "LEFT JOIN INVPTYF ON TRIM(UCASE(INVPTYF.IPPART)) = TRIM(UCASE(PRDWL.WHLPARTN)) "
-//                . "ORDER BY PRDWL.WHLCODE ASC";
-       
-       
+    {          
        $sqlStr = "SELECT * FROM ( SELECT  IMPTN, IMDSC, IMPC1,IMPC2,IMCATA,IMSBCA,IMMOD, IMPRC     
                   FROM WHLINMSTAJ UNION                                                                     
                   SELECT  WHLPARTN, WHLADDDESC, WHLADDMAJO, WHLADDMINO, WHLADDCATE, WHLADDSUBC, WHLADDMODE, WHLADDPRIC                       
@@ -307,6 +302,12 @@ class WishListManager
          $mayorMinor = $this->partNumberManager->getMajorMinor( $partNumberInWL );
          array_push( $result, $mayorMinor['major'] ); // index; 14 - Major code
          array_push( $result, $mayorMinor['minor'] ); // index: 15 - Minor code 
+       
+         /* inserting  link to the other options */
+         
+        $url = '<a href='.$row['WHLCODE'].' class="btn btn-default btn-rounded" data-toggle="modal" data-target="#modalLoginAvatar">♣</a>';
+         
+         array_push( $result, $url  ); // index: 15 - Minor code 
          
         return $result;
     }
