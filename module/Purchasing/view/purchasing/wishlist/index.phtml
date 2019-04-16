@@ -83,10 +83,10 @@
                             
                         }, //END: PDF BUTTON  OBJECT  
                                      
-                        {
-                            text        : 'IMPORT FROM EXCEL', 
-                            className   : 'submit-btn'      
-                        }                            
+//                        {
+//                            text        : 'IMPORT FROM EXCEL', 
+//                            className   : 'submit-btn'      
+//                        }                            
                                                                   
                      ],
         initComplete: function () {
@@ -124,42 +124,45 @@
 <?= $this->flashMessenger()->render('info', ['alert', 'alert-info']); ?>    
 
 <div class="container-fluid">
-   <div class="row"> 
+    <div class="row"> 
         <div class="col-md-auto">  
-        <!--FILTER ACCORDION-->       
-        <div class="accordion-wrapper contact-form-inner">
-            <div id="accordion_2">               
-                <div class="card">
-                 
-                    <div class="card-header" id="headingOne_2">
-                        <h5 class="mb-0">
-                            <a  class="collapsed" data-toggle="collapse" data-target="#collapseOne_2" aria-expanded="false" aria-controls="collapseOne_2">
-                                <span class="">ACTIONS</span>
-                            </a>
-                        </h5>
-                    </div>                  
-                  <!--ACCORDION CONTENT--> 
-                    <div id="collapseOne_2" class="collapse" aria-labelledby="headingOne_2" data-parent="#accordion_2">
-                        <div class="card-body">
-                            <div class = "row">                                      
-                                <a class="boxed-btn" href="<?= $this->url('wishlist', ['action'=>'add']); ?>">
-                                    <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> NEW ITEM
+            <!--FILTER ACCORDION-->       
+            <div class="accordion-wrapper contact-form-inner">
+                <div id="accordion_2">               
+                    <div class="card">
+
+                        <div class="card-header" id="headingOne_2">
+                            <h5 class="mb-0">
+                                <a  class="collapsed" data-toggle="collapse" data-target="#collapseOne_2" aria-expanded="false" aria-controls="collapseOne_2">
+                                    <span class="">ACTIONS</span>
                                 </a>
-                                <a class="boxed-btn" href="<?= $this->url('wishlist', ['action'=>'add']); ?>">
-                                    <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> UPDATE
-                                </a> 
-                                
-                                <a class="boxed-btn" href="<?= $this->url('wishlist', ['action'=>'add']); ?>">
-                                    <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> DELETE
-                                </a>
-                                
-                            </div>                           
-                        </div> <!-- CARD-BODY --> 
-                    </div>   <!-- COLLAPSE CONTENT END -->    
-                    
-                </div> <!-- CARD END -->            
-            </div> <!-- ACCORDION END -->           
-        </div>  <!-- ACCORDION WRAPPER -->         
+                            </h5>
+                        </div>                  
+                      <!--ACCORDION CONTENT--> 
+                        <div id="collapseOne_2" class="collapse" aria-labelledby="headingOne_2" data-parent="#accordion_2">
+                            <div class="card-body">
+                                <div class = "row">                                      
+                                    <a class="boxed-btn" href="<?= $this->url('wishlist', ['action'=>'add']); ?>">
+                                        <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> NEW ITEM
+                                    </a>
+                                    <a class="boxed-btn" href="<?= $this->url('wishlist', ['action'=>'add']); ?>">
+                                        <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> UPDATE
+                                    </a> 
+
+                                    <a class="boxed-btn" href="<?= $this->url('wishlist', ['action'=>'add']); ?>">
+                                        <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> DELETE
+                                    </a>
+                                    <a class="boxed-btn" href="<?= $this->url('wishlist', ['action'=>'upload']); ?>">
+                                        <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> IMPORT FROM EXCEL
+                                    </a>
+
+                                </div>                           
+                            </div> <!-- CARD-BODY --> 
+                        </div>   <!-- COLLAPSE CONTENT END -->    
+
+                    </div> <!-- CARD END -->            
+                </div> <!-- ACCORDION END -->           
+            </div>  <!-- ACCORDION WRAPPER -->         
     </div> <!-- COLUMN AUTO(INSIDE THIS IS THE ACCORDION --> 
    </div>
    

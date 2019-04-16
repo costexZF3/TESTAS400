@@ -259,9 +259,11 @@ class WishListManager
     
     
     private function RowToArray( $row ) {
+          
         $result = [];
         $partNumberInWL = trim($row['WHLPARTN']);
         $fromValue = $this->from[$row['WHLFROM']];
+        
         array_push( $result, $fromValue );   // index: 0 : code
         array_push( $result, $row['WHLCODE'] );         //index: 1 WL No
         array_push( $result, $row['WHLDATE'] );  // index: 2 DATE
@@ -299,9 +301,9 @@ class WishListManager
          array_push( $result, $row['IMSBCA'] ); //index: 13 - Subcategory
          
          /* mayor and minor */
-         $mayorMinor = $this->partNumberManager->getMajorMinor( $partNumberInWL );
-         array_push( $result, $mayorMinor['major'] ); // index; 14 - Major code
-         array_push( $result, $mayorMinor['minor'] ); // index: 15 - Minor code 
+         //$mayorMinor = $this->partNumberManager->getMajorMinor( $partNumberInWL );
+         array_push( $result, $row['IMPC1'] ); // index; 14 - Major code
+         array_push( $result, $row['IMPC2'] ); // index: 15 - Minor code 
        
          /* inserting  link to the other options */
          

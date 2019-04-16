@@ -104,6 +104,7 @@ return [
                 ['actions' => ['update'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
                 ['actions' => ['delete'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
                 ['actions' => ['insert'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
+                ['actions' => ['upload'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
                 ['actions' => ['wishlist'],       'allow' => '+menu.purchasing'],                 
 
             ], //END: access_filter for LostSaleController    

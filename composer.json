@@ -32,7 +32,11 @@
         "zendframework/zend-permissions-rbac": "^2.5",
         "zendframework/zend-db": "^2.9", 
         "zendframework/zend-json": "^3.1",
-        "zendframework/zend-mail": "^2.10"
+        "zendframework/zend-mail": "^2.10",
+        "zendframework/zend-mvc-plugin-fileprg": "^1.1",
+        "box/spout": "^2.7",
+        "jpgraph/jpgraph": "^4.0",
+        "phpoffice/phpspreadsheet": "^1.6"
     },
     "autoload": {
         "psr-4": {        
@@ -41,7 +45,8 @@
              "Purchasing\\" : "module/Purchasing/src/",
              "Management\\" : "module/Management/src/",            
                   "Sales\\" : "module/Sales/src/",            
-              "Warehouse\\" : "module/Warehouse/src/" 
+              "Warehouse\\" : "module/Warehouse/src/" ,
+              "phpoffice\\" : "module/Warehouse/src/" 
                           
         }
     },

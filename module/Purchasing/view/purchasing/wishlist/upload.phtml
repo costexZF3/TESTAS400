@@ -1,0 +1,76 @@
+<?php     
+    /*getting values */       
+    $this->headTitle('NEW ITEM-WISHLIST');	
+    $this->mainMenu()->setActiveItemId('Wish List'); 
+   
+    $this->pageBreadcrumbs()->setItems([
+        'Home' => $this->url('home'),
+        'Wish List' => $this->url('wishlist'),
+        'Loading From File' => $this->url('wishlist')       
+        ]);       
+    
+    /*** getting params from IndexAction() inside LostsaleController ***/
+  
+    /**
+    * @var Zend\Form  
+    */  
+    $form = $this->form;
+          
+    $columnStyle = 'col-md-10 single-service-item'; 
+     
+    /* adding attributes to the form elements */
+//     $form->get('excelfile')->setAttributes([
+//        'class' => 'submit-btn',        
+//    ]);
+    
+        
+    $form->get('submit')->setAttributes(['class'=>'submit-btn']);
+  
+    /* prepare for before rendering */
+    $form->prepare();
+    
+ ?>  
+
+<!--/********************************* CONTAINER TO BE RENDER ************************************************************/-->
+<div class="container">        
+    <div class="row justify-content-center">
+        <div class="<?= $columnStyle; ?>">                 
+            <h4 class="title"> FILE TO IMPORT DATA </h4> 
+            
+             <?= $this->formFileSessionProgress();?>
+            <br>
+            <!-- Open Form Tag -->
+            <?= $this->form()->openTag($form); ?>
+                    
+                <div class="row">
+                    <div class="col-md-6"> 
+                        <div class="form-group">                           
+                            <?= $this->formLabel($form->get('file')); ?> <br>
+                            <?= $this->formElement($form->get('file')); ?>
+                            <?= $this->formElementErrors($form->get('file')); ?> 
+                            <div class="hint">(CSV and XLS formats are allowed)</div>
+                        </div>
+                        
+                        <br>
+                        <?= $this->formElement($form->get('csrf')); ?>
+                                 
+                        <?= $this->formElement($form->get('submit')); ?>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="btn-wrapper">
+                                 <!-- CROSS SITE REQUEST FORGERY CHECKING -->    
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>                            
+
+               
+            <?= $this->form()->closeTag(); ?>                       
+        </div><!-- offset... -->
+    </div>
+</div>
+
+ 

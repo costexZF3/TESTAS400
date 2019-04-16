@@ -123,7 +123,7 @@ class FormAddItemWL extends Form
             'type'=>'text',                              
             'attributes' => [          //array of attributes                       
                 'id'=>'partnumber',
-                'minlength' => "6",
+                'minlength' => "5",
                 'maxlength' => "19",                   
                 'required' => true, 
                 'placeholder' => 'must be created',
@@ -357,7 +357,7 @@ class FormAddItemWL extends Form
         'validators' => [ 
             //validator: 1           
             ['name'    => 'StringLength',
-                'options' => ['min' => 4,'max' => 19],
+                'options' => ['min' => 5,'max' => 19],
             ],  
             
             //validator: 2
@@ -369,7 +369,7 @@ class FormAddItemWL extends Form
                 'notintable' => true  
               ]                        
             ], 
-            // //validator: 2 
+             //validator: 2 
 //            [ //VALIDATE THAT EXIST IN INMSTA : BY DEFAULT
 //               'name' => PartNumberValidator::class,
 //               'options' => [                

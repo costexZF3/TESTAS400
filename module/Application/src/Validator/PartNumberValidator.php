@@ -26,6 +26,7 @@ class PartNumberValidator extends AbstractValidator {
   const TABLE_KOMATSUT  = 'KOMAT';  //tale with list of komatsut parts
   
   const TABLE_MAJOR  = 'MAJCODES'; // table with all majors code   
+  const TABLE_MINOR  = 'CNTRLM'; // table with minor   
   
   const TABLE_WISHLIST = 'PRDWL'; // wishlist table
   
@@ -45,7 +46,8 @@ class PartNumberValidator extends AbstractValidator {
   const INVALID_PARTNUMBER_LENGTH = 'invalidPartNumberLength';
   const INVALID_PARTNUMBER_ALREADY_EXIST = 'invalidPartNumberExist';
   const INVALID_PARTNUMBER_IN_LOSTSALE = 'invalidpartnumberinlostsale';
-    
+  const INVALID_MINOR_CODE = 'invalidminorcode';
+            
   // Validation failure messages.
   protected $messageTemplates = [
     self::NOT_SCALAR  => "The part number must be a scalar partnumber",
@@ -54,6 +56,7 @@ class PartNumberValidator extends AbstractValidator {
     self::INVALID_PARTNUMBER_IN_LOSTSALE => "NOT EXIT in our INVENTORY neither Lostsales Files",
     self::INVALID_PARTNUMBER_IN_TABLE => "The part number can not be found in the table",
     self::INVALID_PARTNUMBER_ALREADY_EXIST => "This PART NUMBER already exist",
+    self::INVALID_MINOR_CODE => "Invalid Minor Code",
           
   ];
     
@@ -85,7 +88,7 @@ class PartNumberValidator extends AbstractValidator {
     if($table!=self::TABLE_BY_DEFAULT && $table!= self::TABLE_STOCK &&
        $table!=self::TABLE_WISHLIST && $table!= self::TABLE_INVPTYF &&
        $table!=self::TABLE_CATERPILLAR && $table!= self::TABLE_KOMATSUT && 
-       $table!=self::TABLE_MAJOR 
+       $table!=self::TABLE_MAJOR  && $table!= self::TABLE_MINOR
             ) {            
       throw new \Exception('Invalid table argument passed.');
     }
@@ -137,6 +140,7 @@ class PartNumberValidator extends AbstractValidator {
             case self::TABLE_CATERPILLAR :  $fieldName = 'CATPTN'; break; //CATER
             case self::TABLE_KOMATSUT :  $fieldName = 'KOPTNO'; break; //KOMAT
             case self::TABLE_MAJOR :  $fieldName = 'MAJCOD'; break; //MAJCODES
+            case self::TABLE_MINOR :  $fieldName = 'CNMCOD'; break; //MAJCODES
 
             default  :  
                $fieldName = 'IMPTN';  //INMSTA      

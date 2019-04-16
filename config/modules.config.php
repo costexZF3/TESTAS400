@@ -8,9 +8,9 @@
 /**
  * List of enabled modules for this application.
  *
- * This should be an array of module namespaces used in the application.
+ * This should be an array of module namespaces  used in the application.
  */
-return [    
+return [       
     'Zend\Mail',
     'Zend\Db',
     'Zend\Serializer',
@@ -31,11 +31,11 @@ return [
     'Zend\Router',
     'Zend\Validator',    
     'ZendDeveloperTools',     
-    'Application',
+    'Application',      
     'User',       
     'Sales',    
     'Management',
-    'Purchasing',    
+    'Purchasing',      
     //'Warehouse',
         
 ];
