@@ -352,7 +352,8 @@ class FormAddItemWL extends Form
         'filters'  => [
             ['name' => 'StringTrim'],                                                            
             ['name' => 'StripTags'],                                                            
-            ['name' => 'StripNewlines'],                                                            
+            ['name' => 'StripNewlines'],  
+            ['name' => 'StringToUpper'],
         ], 
         'validators' => [ 
             //validator: 1           

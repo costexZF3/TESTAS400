@@ -12,7 +12,12 @@
     /*** getting params from IndexAction() inside LostsaleController ***/
    
     $table = $this->wldata; 
-//    $form = $this->formNewItemWL;
+    $urlValid = $this->url1;
+    
+
+    if ( $urlValid) {
+        $url1 = $this->basePath().'/data/wishlist_inc.xls';
+    }
         
     /* adding attributes to the form elements */
 //     $form->get('partnumber')->setAttributes([
@@ -122,6 +127,11 @@
 <?= $this->flashMessenger()->render('success', ['alert', 'alert-success']); ?>
 <?= $this->flashMessenger()->render('error', ['alert', 'alert-warning']); ?>
 <?= $this->flashMessenger()->render('info', ['alert', 'alert-info']); ?>    
+<?php if($url1!=''): ?>
+    <div>
+        <p> Click here to <a href="<?=$url1;?>" class="base-color">Download</a> inconcistencies!!!</p> 
+    </div>
+<?php endif;?>
 
 <div class="container-fluid">
     <div class="row"> 
@@ -149,9 +159,9 @@
                                         <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> UPDATE
                                     </a> 
 
-                                    <a class="boxed-btn" href="<?= $this->url('wishlist', ['action'=>'add']); ?>">
+<!--                                    <a class="boxed-btn" href="<1?= $this->url('wishlist', ['action'=>'add']); ?>">
                                         <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> DELETE
-                                    </a>
+                                    </a>-->
                                     <a class="boxed-btn" href="<?= $this->url('wishlist', ['action'=>'upload']); ?>">
                                         <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> IMPORT FROM EXCEL
                                     </a>

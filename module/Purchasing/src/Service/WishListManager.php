@@ -28,7 +28,7 @@ class WishListManager
    const FROM_LOSTSALE = '1';
    const FROM_VENDORLIST = '2';
    const FROM_MANUAL = '3';
-   const FROM_OTHER = '4';
+   const FROM_EXCEL = '4';
    
   
    const FIELDS = ['WHLCODE', 'WHLUSER', 'WHLPARTN', 'WHLSTATUS', 'WHLSTATUSU',  'WHLREASONT', 'WHLFROM',
@@ -42,7 +42,7 @@ class WishListManager
    
    protected $status = [ self::STATUS_OPEN => "OPEN", self::STATUS_CLOSE=> "CLOSE", self::STATUS_CLOSEBYDEVELOPMENT=>"CLOSE_DEV"]; 
    protected $from = [ self::FROM_LOSTSALE => "LS", self::FROM_VENDORLIST=> "VNDL", 
-                       self::FROM_MANUAL => "MN", self::FROM_OTHER => "other"];
+                       self::FROM_MANUAL => "MN", self::FROM_EXCEL => "other"];
    
    
    /*
@@ -194,7 +194,7 @@ class WishListManager
         $dataSet['WHLSTATUSU'] = strtoupper($data['user']);
         $dataSet['WHLREASONT'] = $data['type'];        
         $dataSet['WHLFROM']  =  $data['from'];
-        $dataSet['WHLCOMMENT'] = $data['comment'];
+        $dataSet['WHLCOMMENT'] = $data['comment']??'';
 
         // inserting in TABLE WL: PRDWL the set of data 
         $DB = $this->queryManager->insert( self::TABLE_WISHLIST , $dataSet );
@@ -398,6 +398,10 @@ class WishListManager
         return  $this->tableAsHtml;
     }/* END: getGridAsHtml()*/    
     
+    public function nextIndex() 
+    {
+        return $this->queryManager->getMax('WHLCODE', 'PRDWL')?? 1;
+    }
     
     /**
      * 
@@ -409,7 +413,7 @@ class WishListManager
         $partNumberObj =  $this->partNumberManager->getPartNumber( $partNumberID );
         
         if ( $partNumberObj !== null ) {         
-            $data['code'] = $this->queryManager->getMax('WHLCODE', 'PRDWL');
+            $data['code'] = $this->nextIndex();//$this->queryManager->getMax('WHLCODE', 'PRDWL');
             $data['date'] = date('Y-m-d');
             /* - if the partNumber exist NOT NULL then return it back
              *   other case it returns UNKNOW string*/
