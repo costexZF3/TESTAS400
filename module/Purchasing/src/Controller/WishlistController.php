@@ -6,12 +6,6 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container as SM;
 
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Writer\Xls;
-
-
 /* services injected from the FACTORY: WishListControllerFactory */
 use Purchasing\Service\WishListManager;
 use Application\Service\QueryManager;
@@ -56,9 +50,9 @@ class WishlistController extends AbstractActionController
          $this->session = $sessionManager;
       }   
     
-      /*
-      * getting the logged user 
-      */
+    /*
+    * getting the logged user 
+    */
      private function getUser()
      {
          $user = $this->currentUser();       
@@ -118,7 +112,7 @@ class WishlistController extends AbstractActionController
                 $inputFileName = $data['file']['tmp_name']; //recovering from the route defined
                 
                 //reading from file
-                $sheetData = $this->readExcelFile( $inputFileName );
+                $sheetData = $this->WLManager->readExcelFile( $inputFileName );
                 
                 //result['valid'] : data ready for updating  and result['invalid'] : inconsistency data
                 if (!empty( $sheetData )) {
@@ -140,7 +134,10 @@ class WishlistController extends AbstractActionController
                 
                 /* CREATE INCONSISTENCY EXCEL  */
                 if ( $existInc ) {
-                    $this->updateErrorsInXls( $result['novalid'] );
+                    $this->WLManager->writeErrorsToExcel( $result['novalid'] );
+                    $this->session->inconsistency = true;
+                    
+//                    $this->writeErrorsToExcel( $result['novalid'] );
                     $urlInc = './data/upload/wishlist_inc.xls';  
                     $message = !$existPartsToInsert ? 'No PARTS were uploaded' : '';
                     $this->flashMessenger()->addErrorMessage("Oopss!!! [".count($result['novalid'])."] inconsistencies were found. ". $message);                            
@@ -413,9 +410,9 @@ class WishlistController extends AbstractActionController
                 $this->redirect()->toRoute('wishlist');
 
             } else {
-                $this->flashMessenger()->addErrorMessage(
+                $this->flashMessenger()
+                    ->addErrorMessage(
                             'Oops!!! Could not be inserted the new part number in the Wish List.');
-
             } 
         } else {
           $this->session->countUploaded++;  
@@ -454,15 +451,15 @@ class WishlistController extends AbstractActionController
              } //not error getting info from IMSTA
         }// END: THE PART IS INSIDE INMSTA 
                
-        // SCENARIO 3 CATER OR KOMAT
-        if ( $inStock['CATER'] ) { //saving the PARTNUMBER into the session variable: part
+        // SCENARIO 3 CATER OR KOMAT.  
+        // Updating the PartNumber and Table names in the session for recovering their values later
+        if ( $inStock['CATER'] ) { 
             $this->updateSession($partnumber, 'CATER');                              
             return [];
             //return $this->redirect()->toRoute('wishlist', ['action'=>'create']);                       
         }         
 
-        /* if the part number exist on CATER or KAMAT, then create part */
-        if (  $inStock['KOMAT'] ) { //saving the PARTNUMBER into the session variable: part
+        if (  $inStock['KOMAT'] ) { 
 
             $this->updateSession($partnumber, 'KOMAT'); 
             return [];
@@ -534,12 +531,12 @@ class WishlistController extends AbstractActionController
     }// END inconsistencyByMinorRemove()
   
     /**
-     * Auxiliary method for updating NoValid Parts
-     * - invoque for partExcelFile method()
-     * @param int $cod
-     * @param string $partnumber
-     * @param string $error
-     * @param array() $noValid
+     * -This method() create a NoValid Parts (inconsistency) and return it
+     * 
+     * @param int $cod            | Code of the part with inconsistency
+     * @param string $partnumber  | Part Number to insert
+     * @param string $error       | Error code will be inserted
+     * @return array() 
      */
     private function updateNoValid( $cod, $partnumber, $error ) {
         
@@ -651,133 +648,8 @@ class WishlistController extends AbstractActionController
         return $this->session->countUploaded == count( $listValid );  
     }//END insertValid() into WL
     
-    /**
-     * 
-     * @param type $spread | spreadsheet generated 
-     * @param type $cell | Cell will be hightlighter
-     * @param type $bold | True or False if it will be BOLD
-     * @param type $color | color
-     */
-    private function highLighter( $spread, $cell, $bold=true, $color="" ) 
-    {        
-        $styleOptions = ['font'=>['bold'=> $bold, 'color'=>['rgb'=> $color]]];        
-        
-        $spread->getActiveSheet()->getStyle($cell)->applyFromArray( $styleOptions );         
-    }     
+    /**********************************************  EXCEL FILE MANAGER ***************************/
     
-    /**
-     * 
-     * @param Spreadsheet $sheet
-     * @param array() $options
-     */
-    private function createSheetHeaders($sheet, $options )
-    {
-        foreach ($options as $key => $value)     {
-            $sheet->getActiveSheet()->setCellValue($value['cell'], $value['desc']);
-            if ($value['dimension'] != -1 ) {
-                $sheet->getActiveSheet()->getColumnDimensionByColumn( $key )->setWidth(26);                 
-            }
-        }        
-    }
-        
-    
-    /**
-     * This method inserted update ErrorsInXls 
-     * @param array() $inconsistence
-     */
-    private function updateErrorsInXls( $inconsistence )
-    {   
-        $row = 2;
-        $inputFileType = 'Xls';        
-        
-        //creating a new Spreadsheet()
-        $spreadsheet = new Spreadsheet();
-        $writer = IOFactory::createWriter( $spreadsheet,  $inputFileType );          
-                
-        $spreadsheet->setActiveSheetIndex(0);
-        $spreadsheet->getActiveSheet()->setTitle('INCONS_'.date('Y-m-d'));
-//        $styleOptions = ['font'=>['bold'=> true, 'color'=>['rgb'=>'']]];
-        $styleError = ['font'=>['bold'=> true, 'color'=>['rgb'=>'b21703']]];
-        
-        //headings 
-        $this->highLighter($spreadsheet, 'A1');
-        $this->highLighter($spreadsheet, 'B1');
-        $this->highLighter($spreadsheet, 'C1');
-                       
-        //writing headers   
-        //create a Method to Create headers
-        $cellsOptions = [
-                   '1'=>['cell'=>'A1', 'desc' =>'COD', 'dimension'=>-1],
-                   '2'=>['cell'=>'B1', 'desc' =>'PART NUMBER', 'dimension'=>26],
-                   '3'=>['cell'=>'C1', 'desc' =>'ERRORS', 'dimension'=>26],
-            ];
-        $this->createSheetHeaders( $spreadsheet, $cellsOptions);
-        
-        foreach ( $inconsistence as $key => $value) {                   
-            $spreadsheet->getActiveSheet()->setCellValue('A' . $row, $value['code']);
-            $spreadsheet->getActiveSheet()->setCellValue('B' . $row, $value['partnumber']);
-            $spreadsheet->getActiveSheet()->setCellValue('C' . $row, $value['error']);        
-            $spreadsheet->getActiveSheet()->getStyle( 'C' . $row )->applyFromArray( $styleError );            
-            $row++;
-        }
-        
-        try {
-            // $urlInc = './data/upload/wishlist_inc.xls';
-            $urlInc = 'public/data/wishlist_inc.xls';
-            $writer->save( $urlInc );
-            $this->session->inconsistency = true;
-        } catch (Zend_Exception $error ) {
-            echo "Caught exception: trying to saving the wishlist inconsistencies". get_class($error)."\n";
-            echo "Message: ". $error->getMessage()."\n";            
-        }
-        
-        
-    }//END METHOD updateErrorsInXls
-    
-    /**
-     * Auxiliar method. 
-     * -invoke from readExcelFile()
-     * @param array() $sheetData
-     * @return boolean
-     */
-    private function validEXCELHeader( $sheetData ) 
-    {
-        return $sheetData[1]['A'] == 'COD' &&  $sheetData[1]['B'] == 'PART NUMBER' && $sheetData[1]['C'] == 'MINOR';
-    }
-
-    /**
-     * 
-     * @param type $sheetData
-     * @return type
-     */
-    private function removeHeader( &$sheetData )
-    {
-        unset( $sheetData[1] );
-        return $sheetData;
-    }
-    
-     /* 
-     * @param string $inputFileName | route of the file XLS (excel file) with the WL
-     * @return array() | it returns an array with the excel file as array
-     */
-    private function readExcelFile( $inputFileName ) 
-    {   //reading file      
-        $inputFileType = 'Xls';        
-        $reader = IOFactory::createReader( $inputFileType );  
-        $reader->setReadDataOnly( true );        
-        $spreadsheet = $reader->load($inputFileName);
-        $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
-        
-        // validating EXCEL FILE
-        $validHeader = $this->validEXCELHeader( $sheetData );
-        
-        if ( !$validHeader ) {
-            throw new \Exception('The excel file header is not valid. Check the documentation about it.');
-        }        
-        $sheetDataFilter = $this->removeHeader( $sheetData );
-        
-        return $sheetDataFilter;
-    }
     
 } //END: LostsaleController
 

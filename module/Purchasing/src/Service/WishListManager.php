@@ -5,6 +5,13 @@ namespace Purchasing\Service;
 use Application\Service\QueryManager as queryManager;
 use Application\Service\PartNumberManager;
 
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
+
+
 
 /**
  * Description of WishList (class Controller )
@@ -437,6 +444,175 @@ class WishListManager
          return $data['error'] = $partNumberObj['error'];    
 
       } //END: getWishListItem()
+      
+      
+      
+      /**************************************************** EXCEL MANANGER *********************************/
+      
+        /**
+     * 
+     * @param type $spread | spreadsheet generated 
+     * @param type $cell | Cell will be hightlighter
+     * @param type $bold | True or False if it will be BOLD
+     * @param type $color | color
+     */
+    private function highLighter( $spread, $cell, $bold=true, $color="" ) 
+    {        
+        $styleOptions = ['font'=>['bold'=> $bold, 'color'=>['rgb'=> $color]]];        
+        
+        $spread->getActiveSheet()->getStyle($cell)->applyFromArray( $styleOptions );         
+    }     
+    
+    /**
+     * - This Method() adds headers to the sheet of the EXCEL FILE
+     * 
+     * @param Spreadsheet $sheet
+     * @param array() $options
+     */
+    private function createSheetHeaders($sheet)
+    {     
+        
+        $options = [ '1'=>['cell'=>'A1', 'desc' =>'COD', 'dimension'=>-1], //-1: dimension by default 
+                          '2'=>['cell'=>'B1', 'desc' =>'PART NUMBER', 'dimension'=>26],
+                          '3'=>['cell'=>'C1', 'desc' =>'ERRORS', 'dimension'=>26],
+            ];
+        
+        $sheet->getActiveSheet()->freezePane('A2'); //freezing TOP COLUMN
+        
+        foreach ($options as $key => $value)    {
+            $sheet->getActiveSheet()->setCellValue($value['cell'], $value['desc']);
+            
+            $this->highLighter($sheet, $value['cell']);
+            if ($value['dimension'] != -1 ) {
+                $sheet->getActiveSheet()->getColumnDimensionByColumn( $key )->setWidth($value['dimension']);                 
+            }
+        }        
+    }//END createSheetHeaders Method
+    
+    /**
+     * This method update a cell of a SpreadSheet with the value passed
+     * 
+     * @param Spreadsheet $sheet | it's an instance of PHPOffice\Spreadsheet component
+     * @param type $cell         | it's the cell that will be updated ex: C2 
+     * @param type $value        | it's the value will be assigned to CELL passed as param
+     */
+    private function fillCellSheet( $sheet, $cell, $value ) 
+    {
+        $sheet->getActiveSheet()->setCellValue( $cell, $value );
+        
+        $cellTmp = strtoupper(substr($cell, 0, 1));        
+        if ( $cellTmp == 'C') {
+          $styleError = ['font'=>['bold'=> true, 'color'=>['rgb'=>'b21703']]];  
+          $sheet->getActiveSheet()->getStyle( $cell )->applyFromArray( $styleError ); 
+        }  
+        
+    }//END: fillCellSheet() method   
+    
+    
+    /**
+     * This Method creates an instance of Spreadsheet class
+     * 
+     * @param string $sheetName
+     * @return object
+     */
+    private function createSpreadSheet( $sheetName ) {
+        $inputFileType = 'Xls';  
+        
+        $actualDate = date('Y-m-d');      
+        
+        //creating a new Spreadsheet()
+        $spreadsheet = new Spreadsheet();
+        $writer = IOFactory::createWriter( $spreadsheet,  $inputFileType );          
+                
+        $spreadsheet->setActiveSheetIndex(0);
+        $spreadsheet->getActiveSheet()->setTitle($sheetName.'_'.$actualDate); 
+        
+        $result = ['sheet' => $spreadsheet, 'writer' => $writer ];
+        return $result;
+    }
+    
+    /**
+     * -The method inserts INCONSISTENCIES into a new Excel File  
+     *  -the sheet created has as name: INCONS_<actualdate>
+     * 
+     * @param array() $inconsistence | List of Inconsistencies
+     */
+    public function writeErrorsToExcel( $inconsistence ) 
+    {   
+        $row = 2;  
+        
+        $excelOBJ = $this->createSpreadSheet('INCONS');
+        $spreadsheet = $excelOBJ['sheet'];
+        $writer = $excelOBJ['writer'];
+        
+        //creating HEADERS  ( creatin )
+        $this->createSheetHeaders( $spreadsheet );
+        
+        foreach ( $inconsistence as  $value)        {            
+            $this->fillCellSheet( $spreadsheet, 'A'.$row, $value['code'] );
+            $this->fillCellSheet( $spreadsheet, 'B'.$row, $value['partnumber'] );
+            $this->fillCellSheet( $spreadsheet, 'C'.$row, $value['error'] );
+            $row++;
+        }
+        
+        try {
+            // $urlInc = './data/upload/wishlist_inc.xls';
+            $urlInc = 'public/data/wishlist_inc.xls';
+            $writer->save( $urlInc );           
+        } catch (Zend_Exception $error ) {
+            echo "Caught exception: trying to saving the wishlist inconsistencies". get_class($error)."\n";
+            echo "Message: ". $error->getMessage()."\n";            
+        }        
+        
+    }//END METHOD updateErrorsInXls
+    
+    /**
+     * Auxiliar method. 
+     * 
+     * -invoke from readExcelFile()
+     * @param array() $sheetData
+     * @return boolean
+     */
+    private function validEXCELHeader( $sheetData ) 
+    {
+        return $sheetData[1]['A'] == 'COD' &&  
+               $sheetData[1]['B'] == 'PART NUMBER' && 
+               $sheetData[1]['C'] == 'MINOR';
+    }
+
+    /**
+     * 
+     * @param type $sheetData
+     * @return type
+     */
+    private function removeHeader( &$sheetData )
+    {
+        unset( $sheetData[1] );
+        return $sheetData;
+    }
+    
+     /* 
+     * @param string $inputFileName | route of the file XLS (excel file) with the WL
+     * @return array() | it returns an array with the excel file as array
+     */
+    public function readExcelFile( $inputFileName ) 
+    {   //reading file      
+        $inputFileType = 'Xls';        
+        $reader = IOFactory::createReader( $inputFileType );  
+        $reader->setReadDataOnly( true );        
+        $spreadsheet = $reader->load($inputFileName);
+        $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+        
+        // validating EXCEL FILE
+        $validHeader = $this->validEXCELHeader( $sheetData );
+        
+        if ( !$validHeader ) {
+            throw new \Exception('The excel file header is not valid. Check the documentation about it.');
+        }        
+        $sheetDataFilter = $this->removeHeader( $sheetData );
+        
+        return $sheetDataFilter;
+    }
             
     
 }//END: WishList class()
