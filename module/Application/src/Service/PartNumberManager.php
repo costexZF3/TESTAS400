@@ -79,11 +79,13 @@ class PartNumberManager {
             $dataSet = $this->queryManager->runSql( $strSql );
             
           
-            if ($dataSet!==null) {
+            if ( $dataSet!==null ) {
+                $tmpVnd = $dataSet[0]['IPVNUM'] ?? '';                
+               
                 $data['qtyquotedlastyear'] = $dataSet[0]['IPQQTE']?? 0;
-                $data['vendor'] = trim($dataSet[0]['IPVNUM']) !=='' ? $dataSet[0]['IPVNUM'] : 'NA' ;           
-                $data['onhand'] = $dataSet[0]['IPQONH']?? 0;
-                $data['onorder']= $dataSet[0]['IPQONO']?? 0; //qty on order
+                $data['vendor'] =  ( isset($tmpVnd) && $tmpVnd !=='') ? $dataSet[0]['IPVNUM'] : 'NA' ;           
+                $data['onhand'] = ( isset($tmpVnd) && $tmpVnd !=='') ? $dataSet[0]['IPQONH']: 0;
+                $data['onorder']= ( isset($tmpVnd) && $tmpVnd !=='') ? $dataSet[0]['IPQONO']: 0; //qty on order
 
                  //vendor of the part
 
@@ -91,8 +93,7 @@ class PartNumberManager {
                 $data['vendordesc'] = 'NA';
             
             
-          
-                if ( strlen($data['vendor']) > 2 ) { 
+                if ( $data['vendor'] !='NA' ) { 
                    $strSql = "SELECT * FROM VNMAS WHERE VMVNUM = ".$data['vendor']."";
 
                    $vendorName = $this->queryManager->runSql( $strSql );
