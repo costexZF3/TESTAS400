@@ -194,6 +194,7 @@ class WishlistController extends AbstractActionController
         }//ENDIF: getting data by POST
         
         $partnumber = $this->session->part; 
+       //$table = $this->session->table;
              
         if ($partnumber == null) {
             $this->redirect()->toRoute('wishlist');
@@ -227,9 +228,7 @@ class WishlistController extends AbstractActionController
         $form = new FormAddItemWL( 'initial', $this->queryManager );
 
         //checking it the request was by POST()
-        if ($this->getRequest()->isPost()) {  
-
-            /* getting data from the form*/
+        if ($this->getRequest()->isPost()) {              
             $data = $this->params()->fromPost();
 
             //checking which type or instance of ForAddItemWL we MUST CREATE
@@ -240,7 +239,7 @@ class WishlistController extends AbstractActionController
                 $form = new FormAddItemWL( 'insert', $this->queryManager );
             }
 
-            /* it's a MUST BEFORE validate */
+            /* it's a MUST BEFORE validating */
             $form->setData( $data ); 
              
            /* valid if not exit in WISHLIST, THEN I can insert it inside de PRDWL */ 
@@ -257,8 +256,7 @@ class WishlistController extends AbstractActionController
                     $form->get('partnumber')->setMessages(['Oops!!! It does not Exist in our Inventory.']);     
                    return new ViewModel(['form' => $form ]);
                }
-                              
-               //NEWWWWW creating a new method               
+                             
                $result = $this->findOutScenario( $partnumber, $inStock );
            
                if (empty( $result )) {
@@ -268,8 +266,7 @@ class WishlistController extends AbstractActionController
              
            } elseif ( $form->isValid() ) {
                 /* get data filtered*/
-               $data = $form->getData();
-               //updating the from field
+               $data = $form->getData();              
                $data['from'] = WishListManager::FROM_MANUAL;
                
                //inserting THE DATA OF THE FORM INTO WISHLIST
@@ -326,7 +323,8 @@ class WishlistController extends AbstractActionController
     }//end: getMinors() method
     
       /**
-       * This method retrieve information about parts in CATER or KOMAT
+       * This method retrieves information (PartNumber, Description, Price, Major
+       * about parts in CATER or KOMAT
        * @param string $partnumber
        * @return array Description
        */
@@ -346,6 +344,7 @@ class WishlistController extends AbstractActionController
             $result['partnumber'] = $partnumber;
             $result['partnumberdesc'] = $data[0][$decriptionField];
             $result['price'] = round($data[0][$priceField], 2);
+            $result['major'] = ($table == 'CATER') ? '01':'03';
         }
     
         return $result;
@@ -384,17 +383,21 @@ class WishlistController extends AbstractActionController
     }//END METHOD: existPartInventory()
     
     
+    /**
+     *  This Method update the PartNumber and table in the session
+     * @param string $partnumber
+     * @param string $table
+     */
     private function updateSession( $partnumber, $table ) 
     {
         $this->session->part = $partnumber;       
         $this->session->table = $table;
     }
-    
-    
-     /**
-     *  THIS METHOD USE THE WISHLIST MANAGER TO INSERT A LIST OF ITEMS
-     * @param array $data | this method calls to the insert method of the WishList Manager 
-     */  
+        
+    /**
+    *  THIS METHOD USE THE WISHLIST MANAGER TO INSERT A LIST OF ITEMS
+    * @param array $data | this method calls to the insert method of the WishList Manager 
+    */  
     private function insert( $data ) 
     {
         $inserted = $this->WLManager->insert( $data );
@@ -659,8 +662,24 @@ class WishlistController extends AbstractActionController
     {        
         $styleOptions = ['font'=>['bold'=> $bold, 'color'=>['rgb'=> $color]]];        
         
-        $spread->getActiveSheet()->getStyle($cell)->applyFromArray( $styleOptions );          
-    }       
+        $spread->getActiveSheet()->getStyle($cell)->applyFromArray( $styleOptions );         
+    }     
+    
+    /**
+     * 
+     * @param Spreadsheet $sheet
+     * @param array() $options
+     */
+    private function createSheetHeaders($sheet, $options )
+    {
+        foreach ($options as $key => $value)     {
+            $sheet->getActiveSheet()->setCellValue($value['cell'], $value['desc']);
+            if ($value['dimension'] != -1 ) {
+                $sheet->getActiveSheet()->getColumnDimensionByColumn( $key )->setWidth(26);                 
+            }
+        }        
+    }
+        
     
     /**
      * This method inserted update ErrorsInXls 
@@ -674,8 +693,7 @@ class WishlistController extends AbstractActionController
         //creating a new Spreadsheet()
         $spreadsheet = new Spreadsheet();
         $writer = IOFactory::createWriter( $spreadsheet,  $inputFileType );          
-        
-        
+                
         $spreadsheet->setActiveSheetIndex(0);
         $spreadsheet->getActiveSheet()->setTitle('INCONS_'.date('Y-m-d'));
 //        $styleOptions = ['font'=>['bold'=> true, 'color'=>['rgb'=>'']]];
@@ -686,23 +704,26 @@ class WishlistController extends AbstractActionController
         $this->highLighter($spreadsheet, 'B1');
         $this->highLighter($spreadsheet, 'C1');
                        
-        //writing headers        
-        $spreadsheet->getActiveSheet()->setCellValue('A1', "COD");
-        $spreadsheet->getActiveSheet()->setCellValue('B1', "PART NUMBER");
-        $spreadsheet->getActiveSheet()->setCellValue('C1', "ERRORS");        
-                
+        //writing headers   
+        //create a Method to Create headers
+        $cellsOptions = [
+                   '1'=>['cell'=>'A1', 'desc' =>'COD', 'dimension'=>-1],
+                   '2'=>['cell'=>'B1', 'desc' =>'PART NUMBER', 'dimension'=>26],
+                   '3'=>['cell'=>'C1', 'desc' =>'ERRORS', 'dimension'=>26],
+            ];
+        $this->createSheetHeaders( $spreadsheet, $cellsOptions);
+        
         foreach ( $inconsistence as $key => $value) {                   
-            $spreadsheet->getActiveSheet()->setCellValue('A' . $row, $inconsistence[$key]['code']);
-            $spreadsheet->getActiveSheet()->setCellValue('B' . $row, $inconsistence[$key]['partnumber']);
-            $spreadsheet->getActiveSheet()->setCellValue('C' . $row, $inconsistence[$key]['error']);  
-            $spreadsheet->getActiveSheet()->getStyle( 'C' . $row )->applyFromArray( $styleError );
-            
+            $spreadsheet->getActiveSheet()->setCellValue('A' . $row, $value['code']);
+            $spreadsheet->getActiveSheet()->setCellValue('B' . $row, $value['partnumber']);
+            $spreadsheet->getActiveSheet()->setCellValue('C' . $row, $value['error']);        
+            $spreadsheet->getActiveSheet()->getStyle( 'C' . $row )->applyFromArray( $styleError );            
             $row++;
         }
         
         try {
-            $urlInc = './data/upload/wishlist_inc.xls';
-//            $urlInc = './data/wishlist_inc.xls';
+            // $urlInc = './data/upload/wishlist_inc.xls';
+            $urlInc = 'public/data/wishlist_inc.xls';
             $writer->save( $urlInc );
             $this->session->inconsistency = true;
         } catch (Zend_Exception $error ) {

@@ -50,14 +50,7 @@ class FormAddItemWL extends Form
          // form -- method 
         $this->setAttribute('method', 'post');  
         
-        /* changing the default route when the user click in submit */
-//        if ($scenario == 'create') {
-//            // ( Optionally ) set action for this form
-//            
-//            $this->setAttribute('action', 'wishlist/insert');
-//        }      
-
-         /* method for add items to the form */
+        /* method for add items to the form */
         $this->selectElements();
               
     }//END CONSTRUCTOR
@@ -219,8 +212,6 @@ class FormAddItemWL extends Form
             ],
             'options' =>['label' => 'DESCRIPTION '],                     
         ]);
-        
-        
 
         
         // comment about the ITEM 
@@ -290,8 +281,8 @@ class FormAddItemWL extends Form
                 'id'       => 'major',                                          
                 'minlength' => "2",
                 'maxlength' => "2",                   
-                'required' => true, 
-                'placeholder' => 'eg. 99',
+                'required' => true,                 
+                'readonly' => true,
             ],
             'options' =>['label' => 'MAJOR'],                     
         ]);
