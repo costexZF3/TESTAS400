@@ -7,16 +7,14 @@ use Application\Service\PartNumberManager;
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Worksheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Writer\Xls;
-
 
 
 /**
- * Description of WishList (class Controller )
- * - This class is a wrapper. This encapsulates main operations through the WishList file 
- *   depend on some criteria 
+ * - Description of WishListManager
+ *    - This class is a wrapper. This encapsulates main operations through the WishList file 
+ *      depend on some criteria
+ *    - methods privates
+ *       -   
  * 
  * @author mojeda
  */
@@ -28,9 +26,11 @@ class WishListManager
    const NEWPART =  'newpart';  
    
    /* status in the wishlist for an item */
-   const STATUS_OPEN = '1';
-   const STATUS_CLOSE = '2';
-   const STATUS_CLOSEBYDEVELOPMENT = '3';
+   const STATUS_OPEN     = '1'; // initial status
+   const STATUS_REJECTED = '2'; // rejected may be this part won't be develpmented anymore
+   const STATUS_APROVED  = '3'; // the part was moved to achanges to aproved   
+   const STATUS_HOLD     = '4'; // the part is ready (it's APPROVED) but it won't be moved to development yet
+   const STATUS_CLOSED   = '5'; // the parts won't be analysed with hurry
    
    const FROM_LOSTSALE = '1';
    const FROM_VENDORLIST = '2';
@@ -47,9 +47,18 @@ class WishListManager
     
    protected $reasontype = [ self::NEWVENDOR => "New Vendor", self::NEWPART => "New Part"];
    
-   protected $status = [ self::STATUS_OPEN => "OPEN", self::STATUS_CLOSE=> "CLOSE", self::STATUS_CLOSEBYDEVELOPMENT=>"CLOSE_DEV"]; 
-   protected $from = [ self::FROM_LOSTSALE => "LS", self::FROM_VENDORLIST=> "VNDL", 
-                       self::FROM_MANUAL => "MN", self::FROM_EXCEL => "other"];
+   protected $status = [ self::STATUS_OPEN      => "OPEN",                         
+                         self::STATUS_REJECTED  => "REJECTED",                         
+                         self::STATUS_APROVED   => "APROVED",
+                         self::STATUS_HOLD      => "HOLD",
+                         self::STATUS_CLOSED    => "CLOSE", 
+                    ]; 
+  
+   protected $from = [ self::FROM_LOSTSALE    => "LS", 
+                       self::FROM_VENDORLIST  => "VNDL", 
+                       self::FROM_MANUAL      => "MN", 
+                       self::FROM_EXCEL       => "EXCEL"
+                    ];
    
    
    /*
@@ -60,7 +69,7 @@ class WishListManager
     /*
      * array with all COLUMN LABELS that will be rendered
      */
-    private $columnHeaders = ['From','Code','Date', 'User','Part Number', 'Description', 'Year Sales',
+    private $columnHeaders = ['From','Code','Date', 'User','Part Number', 'Description', 'Status','Year Sales',
                               'Qty Quoted','Times Quoted', 'OEM Price', 'Loc20-STK', 'Model', 'Category',
                               'SubCat', 'Major','Minor', 'ACTION'];
     /*
@@ -141,7 +150,7 @@ class WishListManager
     }
     
     /**
-     * @return STRING : It returns and STRING that will be used to execute the SQL query.
+     * @return string  |  It returns a STRING that will be used to execute the SQL query.
      */
     private function getSqlStr():String 
     {          
@@ -150,7 +159,7 @@ class WishListManager
                   SELECT  WHLPARTN, WHLADDDESC, WHLADDMAJO, WHLADDMINO, WHLADDCATE, WHLADDSUBC, WHLADDMODE, WHLADDPRIC                       
                   FROM WHLADDINMJ ) y                                               
                   INNER JOIN PRDWL on y.IMPTN = PRDWL.WHLPARTN                       
-                  LEFT JOIN invptyf on y.IMPTN = invptyf.IPPART ORDER BY PRDWL.WHLCODE ASC";
+                  LEFT JOIN invptyf on y.IMPTN = invptyf.IPPART ORDER BY PRDWL.WHLCODE ASC ";
        
        return $sqlStr;  
     }//END: getSqlString()
@@ -188,6 +197,7 @@ class WishListManager
     
     /**
      * - This method insert data into the PRDWL ( file: WISHLIST )
+     * 
      * @param array() $data | An associative array with all needed data inside a WL row.
      * @return object | it returns null is could not insert the field  
      */ 
@@ -228,8 +238,9 @@ class WishListManager
  
     
     /**
-     * This function creates a <TR> element and assigned the CLASS, ID, 
-     * and TITLE attributes for each <TD> element
+     * - This function creates a <TR> element and assigned the CLASS, ID, 
+     *    and TITLE attributes for each <TD> element
+     * 
      * @param array $row
      * @return string
      */
@@ -239,12 +250,15 @@ class WishListManager
         $col = 0;
         $className = '';
         
-        /*exclude or discard the following COLUMNS to use the CLASS description */
-        $columns = [6, 7, 8, 9, 10];
+        /* Exclude or discard the following COLUMNS to use the CLASS description 
+         * first coluns is 0
+         */
+        
+        $columns = [6, 7, 8, 10, 11];
         foreach( $row as $item ) {              
            if (!in_array( $col, $columns ) ) {
               $className = "description";
-           } else if ( $col === 9 ) { $className = "money";}
+           } else if ( $col === 10 ) { $className = "money";}
            else {$className = '';}
               
             $result .= '<td class="'.$className.'">'.$item.'</td>';
@@ -265,11 +279,12 @@ class WishListManager
     }
     
     
-    private function RowToArray( $row ) {
+    private function rowToArray( $row ) {
           
         $result = [];
         $partNumberInWL = trim($row['WHLPARTN']);
         $fromValue = $this->from[$row['WHLFROM']];
+        $statusP = $this->status[$row['WHLSTATUS']];
         
         array_push( $result, $fromValue );   // index: 0 : code
         array_push( $result, $row['WHLCODE'] );         //index: 1 WL No
@@ -277,10 +292,14 @@ class WishListManager
         array_push( $result, $row['WHLUSER'] );  // index: 3 - USER IN CHARGE
         array_push( $result, $partNumberInWL ); // index: 4 - PART NUMBER IN WL
         array_push( $result, $row['IMDSC'] );   // index: 5 - description
-        array_push( $result, $row['IPYSLS'] );  // index: 6 - year sales
-        array_push( $result, $row['IPQQTE'] );  // index: 7 - qty quoted
-        array_push( $result, $row['IPTQTE'] );  // index: 8 - times quoted
-        array_push( $result, number_format( $row['IMPRC'], 2 )); //index: 9 - OEM PRICE
+        
+        //NEW COLUMS AND REQUIREMENTS 
+        array_push( $result, $statusP );   // index: 6 - description
+        
+        array_push( $result, $row['IPYSLS'] );  // index: 7 - year sales
+        array_push( $result, $row['IPQQTE'] );  // index: 8 - qty quoted
+        array_push( $result, $row['IPTQTE'] );  // index: 9 - times quoted
+        array_push( $result, number_format( $row['IMPRC'], 2 )); //index: 10 - OEM PRICE
         
         /*  getting location from DVINVA  where the part has STOCK in  ( DVBIN#: if you need the bin location) 
          *  - location: 20
@@ -313,8 +332,9 @@ class WishListManager
          array_push( $result, $row['IMPC2'] ); // index: 15 - Minor code 
        
          /* inserting  link to the other options */
-         
-        $url = '<a href='.$row['WHLCODE'].' class="btn btn-default btn-rounded" data-toggle="modal" data-target="#modalLoginAvatar">♣</a>';
+        $strLink = '" comment-'.$row["WHLCOMMENT"].'number-'.$row['WHLCODE'].'"'; 
+        
+        $url = '<a href='.'login'.' class="btn btn-default btn-rounded" data-toggle="modal" data-target="#modalLoginAvatar">♣</a>';
          
          array_push( $result, $url  ); // index: 15 - Minor code 
          
@@ -354,10 +374,7 @@ class WishListManager
              
         if (!$this->dataSetReady()) { return '';}      
         
-        /*
-         * ------------ creating table with all data from dataSet ----------------------------
-         * 
-        */
+        /* ------------ creating table with all data from dataSet -----------------------*/
         $tableHeader = '<table class="table_ctp table_filtered display">';
         $tableHeader.='<thead><tr>';  
         

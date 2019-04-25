@@ -469,11 +469,12 @@ class WishlistController extends AbstractActionController
     
     
     /**
+     *  It returns the name of the table (IMNSTA, KOMAT, or CATER) where the part belongs
      * 
      * @param array() $inStock
-     * @return string it returns the table Name (IMNSTA, KOMAT, or CATER) where the part is.
+     * @return string 
      */
-    private function whichTable( $inStock ) 
+    private function whatTable( $inStock ) 
     {
         if ( $inStock['INMSTA'] == 1) { 
             return 'INMSTA';
@@ -487,19 +488,15 @@ class WishlistController extends AbstractActionController
     /**
      * This method removes from the VALID PARTS all with a no valid MINOR CODE
      *  - the parts inside KOMAT and CATER will be checked
+     * 
      * @param array() $validParts
      * @param array() $noValidParts
      * @return array()  
      */
-    private function inconsistencyByMinorRemove( $validParts, $noValidParts) 
+    private function removeInconsByMinor( $validParts, $noValidParts) 
     {
-        // checking if the minors are loaded withing the sessionManager
-        // if not, then we need to load them 
-        if ( !$this->session->minors  ) {
-            $minors = $this->getMinors(); 
-        } else {
-            $minors = $this->session->minors;
-        }
+        // checking if the minors[] are loaded within the sessionManager
+        $minors = (!$this->session->minors ) ? $this->getMinors() :  $this->session->minors;
         
         //check inconsistencies by MINORS CODE
         foreach ( $validParts as $key => $row ) {            
@@ -528,7 +525,7 @@ class WishlistController extends AbstractActionController
         $result['valid'] = $validParts;
         $result['novalid'] = $noValidParts;
         return $result;
-    }// END inconsistencyByMinorRemove()
+    }// END removeInconsByMinor()
   
     /**
      * -This method() create a NoValid Parts (inconsistency) and return it
@@ -547,13 +544,16 @@ class WishlistController extends AbstractActionController
         return $noValidParts;
     }
     
-    /**     
-     * @param array() $sheetData | it is an array which contains the new records trying to insert to the WL
-     * @return array() | it returns and array['valid', 'novalid']
+    /**  
+     * It returns the array['valid', 'novalid']
+     *     
+     * @param array() $sheetData   | it is an array which contains the new records trying to insert to the WL
+     * @return array()             
      */
     private function parseExcelFile( $sheetData ) 
     {        
-        $noValidParts = []; $validParts = [];        
+        $noValidParts = []; $validParts = [];  
+        
         $form = new FormValidator( $this->queryManager );
         
         foreach ($sheetData as $key => $row ) {                       
@@ -580,11 +580,11 @@ class WishlistController extends AbstractActionController
                 $validParts[$key]['code'] = $row['A'];  
                 $validParts[$key]['partnumber'] = $partnumber;
                 $validParts[$key]['minor'] = $row['C'];  //this MUST BE  a valid MINOR CODE
-                $validParts[$key]['table'] = $this->whichTable( $inStock ); //'C' it contains the name of the source table 
+                $validParts[$key]['table'] = $this->whatTable( $inStock ); //'C' it contains the name of the source table 
             }
         }//endforeach
                      
-        $parsedlist = $this->inconsistencyByMinorRemove( $validParts, $noValidParts);
+        $parsedlist = $this->removeInconsByMinor( $validParts, $noValidParts);
         
         return $parsedlist;
     }//END METHOD: parseExcelFile()
