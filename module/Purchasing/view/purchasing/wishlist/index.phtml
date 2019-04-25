@@ -33,90 +33,20 @@
  ?>  
  	 
 <script language="JavaScript">          
-    
-    /*
-     * JQuery code:
-     * This occurs when the page has finished to load
-    */    
-    
+ 
     $(document).ready( function(){ 
-        /* getting date() as String */
-        
-        const strDate = dateToStr();
-        
-        
+    
 //   taking off CLASS dt-button to the buttons EXCEL, PDF, AND COPY
     $("button.dt-button").removeClass("dt-button");
-      
-    //Initial Objet to config my table_filtered
-    const initialConfig = {        
-
-        "lengthMenu" :  [ [10, 25, 50, 100,  -1], 
-                          [10, 25, 50, 100, "All"]
-                        ],
-                        
-        dom: '<"ctp-buttons"l Bfr<t>ip>',
-       
-            /* see: exportOptions Object. This is an object. It help you to set up all concerning to BUTTONS */
-            buttons: [ 
-                    /* obj: BUTTON TO EXCEL */
-                        { 
-                            extend: 'excel', 
-                            className: 'submit-btn', 
-                            title: 'wishList-EXCEL-'+strDate+')', 
-                            titleAttr : 'Convert to EXCEL',
-                            text: 'E<u>X</u>CEL',                           
-                            key: {
-                                  key:'x',
-                                  altKey: true
-                                }
-                        },
-                        
-                    /* OBJ: BUTTON to PDF */
-                        {
-                            extend: 'pdf',   
-                            className: 'submit-btn', 
-                            title: 'wishList-pdf-('+strDate+')',
-                            titleAttr : 'Convert to PDF',
-                            orientation: 'landscape',  //it's portrait by default 
-                            pageSize: 'TABLOID', //this can be A3, A4, A5, LEGAL, LETTER or TABLOID  : all are STRINGS 
-                            text: '<u>P</u>DF',                           
-                            key: {
-                                  key:'p',
-                                  altKey: true
-                                }
-                            
-                        }, //END: PDF BUTTON  OBJECT  
-                                     
-//                        {
-//                            text        : 'IMPORT FROM EXCEL', 
-//                            className   : 'submit-btn'      
-//                        }                            
-                                                                  
-                     ],
-        initComplete: function () {
-            this.api().columns([1, 3,4,5,13,14,15,8,9]).every( function () { //[0,1, 8,10, 16, 18,19] : columns to apply 
-                var column = this;
-                var select = $('<select><option value=""></option></select>')
-                    .appendTo( $(column.footer()).empty() )
-                    .on( 'change', function () {
-                        var val = $.fn.dataTable.util.escapeRegex(
-                            $(this).val()
-                        );
-                        column.search( val ? '^'+val+'$' : '', true, false ).draw();
-                    } );
-
-                column.data().unique().sort().each( function ( d, j ) {
-                    select.append( '<option value="'+d+'">'+d+'</option>' );
-                } );
-            } );
-        } //end property InitComplete                 
-    };
-
-    var tables = filterTable('table_filtered', initialConfig );
+    
+    const buttons = {'excel':true, 'pdf':true, 'copy' : true};
+    const dropDownsInCols = [0, 1, 3, 4, 5, 13, 14, 15, 8, 9];
+    const initialConfig = dataTableConfig( dropDownsInCols, buttons );  
+    
+    let tables = filterTable('table_filtered', initialConfig );    
     
     //removing dt-button class to each HTMLElement (button) Associates to 
-   // a table
+    // a table
     $('button').removeClass('dt-button');    
   
     }); 
@@ -126,7 +56,8 @@
 <!-- HTML RENDER-->
 <?= $this->flashMessenger()->render('success', ['alert', 'alert-success']); ?>
 <?= $this->flashMessenger()->render('error', ['alert', 'alert-warning']); ?>
-<?= $this->flashMessenger()->render('info', ['alert', 'alert-info']); ?>    
+<?= $this->flashMessenger()->render('info', ['alert', 'alert-info']); ?>   
+
 <?php if($url1!=''): ?>
     <div>
         <p> Click here to <a href="<?=$url1;?>" class="base-color">Download</a> inconcistencies!!!</p> 
@@ -185,7 +116,9 @@
            if ($table !=='') {
                echo $table; 
            } else {
-               echo"wish list is empty";
+               echo '<div class="panel">';
+                  echo"wish list is empty";
+               echo '</div">'   ;
            }    
           ?>
        </div> 
