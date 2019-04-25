@@ -30,20 +30,19 @@ const dateToStr =()=> { return new Date().toISOString().replace(/[\-\:\.]/g, "-"
  */
 
 
-const convertToExcel = (fileName, sheetName) =>{			   
-//                       
-                        var strDate = dateToStr();				
+const convertToExcel = (fileName, sheetName) => {
+                    const strDate = dateToStr();				
 
-                        $("#table_toexcel").table2excel({
-                                exclude: ".noExl",
-                                name: fileName, //"LostSales",
-                                filename: fileName+"_"+ strDate +".xls",					
-                                sheetName:sheetName,
-                                exclude_img: true,
-                                exclude_links: true,
-                                exclude_inputs: true
-                        });	 //end of : table2excel		 
-                }; 
+                    $("#table_toexcel").table2excel({
+                            exclude: ".noExl",
+                            name: fileName, //"LostSales",
+                            filename: fileName+"_"+ strDate +".xls",					
+                            sheetName:sheetName,
+                            exclude_img: true,
+                            exclude_links: true,
+                            exclude_inputs: true
+                    });	 //end of : table2excel		 
+    }; 
                 
 
  /*
@@ -67,10 +66,10 @@ const queryAllElement = element => { return document.querySelectorAll(element);}
 const changeBGColor = (item, color) => { item.style.backgroundColor = color;};
 
 /* function to hide an Element */
-const hideElement = ( classElement )=> { $('.' + classElement).fadeOut();};
+const hideElement = ( classElement ) => { $('.' + classElement).fadeOut();};
 
   /* function to show an Element */
-const showElement = ( classElement )=> { $('.' + classElement).fadeIn();};
+const showElement = ( classElement ) => { $('.' + classElement).fadeIn();};
 
 /* FilterTable: It's a function that calls to the API dataTable with and Object as parameter
  * this Object is sent with the initial values
@@ -80,3 +79,103 @@ const showElement = ( classElement )=> { $('.' + classElement).fadeIn();};
  * @returns {Object}
  */
 const filterTable = ( tableName, initConfig )=> { $('.' + tableName ).dataTable( initConfig );};
+
+
+/**
+ *  This method() returns a button Object (EXCEL, PDF, COPY)
+ *  
+ * @param {type} config
+ * @returns {createBtn.btn}
+ */
+const createBtn = ( config ) => {    
+    const strDate = dateToStr();  
+
+    //destructuring
+    const {type, title, hint } = config;
+
+    const btn = {
+              extend: type,   
+              className: 'submit-btn', 
+              title: title+'-('+strDate+')',
+              titleAttr : hint
+          };
+
+          //if the button is an pdf add new features to the object
+          if (type === 'copy') {
+              btn.text= 'C<u>O</u>PY';
+              btn.key=  {key:'o', altKey: true };
+          } else if (type === 'pdf') {
+              btn.orientation= 'landscape';  //it's portrait by default 
+              btn.pageSize= 'TABLOID'; //this can be A3, A4, A5, LEGAL, LETTER or TABLOID  : all are STRINGS 
+              btn.text= '<u>P</u>DF';
+              btn.key=  {key:'p', altKey: true };
+          } else {
+              btn.text= 'E<u>X</u>CEL'; 
+              btn.key=  {key:'x', altKey: true };
+          }
+
+      return btn;
+};
+
+
+/**
+ * This method creates the INITIAL OBJECT with the datatable configuration
+ * 
+ * @param {array} dropDownCols
+ * @param {object} buttons
+ * @returns {dataTableConfig.ctp_functionsJSAnonym$1}
+ */
+const dataTableConfig = ( dropDownCols, buttons ) => { 
+    //using method
+    const optEXCEL = { type: 'excel', title: 'EXCEL', hint: 'Convert to Excel'};
+    const optPDF = { type: 'pdf', title: 'PDF', hint: 'Convert to PDF'};
+    const optCOPY = { type: 'copy', title: 'COPY', hint: 'Copy to Click board'};
+
+    
+    let btn1 = []; 
+    
+    //destructuring 
+    const { excel, pdf, copy } = buttons;
+    
+    const buttonExcel = (excel) ?  createBtn( optEXCEL ) : null;
+    const buttonPdf =   (pdf)   ? createBtn( optPDF ) :  null;    
+    const buttonCopy =  (copy)  ? createBtn( optCOPY ) :  null;    
+    
+    btn1.push( buttonExcel ); btn1.push( buttonPdf );     btn1.push( buttonCopy ); 
+    const Btns = btn1.filter( (item) => { return item !== null;});
+        
+    return (
+        { 
+           select: true, 
+           "lengthMenu" :  [ 
+                             [10, 25, 50, 100,  -1], 
+                             [10, 25, 50, 100, "All"]
+                           ],
+
+           dom: '<"ctp-buttons"l Bfr<t>ip>',
+
+               /* see: exportOptions Object. This is an object. It help you to set up all concerning to BUTTONS */
+               buttons: Btns,
+               
+           initComplete: 
+           function () {
+                this.api().columns( dropDownCols ).every( function () { //[0,1, 8,10, 16, 18,19] : columns to apply 
+                   var column = this;
+                   var select = $('<select><option value=""></option></select>')
+                       .appendTo( $(column.footer()).empty() )
+                       .on( 'change', function () {
+                           var val = $.fn.dataTable.util.escapeRegex(
+                               $(this).val()
+                           );
+                           column.search( val ? '^'+val+'$' : '', true, false ).draw();
+                       } );
+
+                   column.data().unique().sort().each( function ( d, j ) {
+                       select.append( '<option value="'+d+'">'+d+'</option>' );
+                   });
+                }); //end: every()
+           } //end property InitComplete                 
+
+       }//END: initial configuration 
+    );
+};
