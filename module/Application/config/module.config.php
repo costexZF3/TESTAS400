@@ -107,7 +107,8 @@ return [
             Service\NavManager::class           => Service\Factory\NavManagerFactory::class,            
             Service\RbacAssertionManager::class => Service\Factory\RbacAssertionManagerFactory::class,
             Service\QueryManager::class         => Service\Factory\QueryManagerFactory::class,
-            Service\PartNumberManager::class    => Service\Factory\PartNumberManagerFactory::class
+            Service\PartNumberManager::class    => Service\Factory\PartNumberManagerFactory::class,
+            Service\VendorManager::class        => Service\Factory\VendorManagerFactory::class
         ],
     ],
     'view_helpers' => [
