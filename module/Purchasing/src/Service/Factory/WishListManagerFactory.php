@@ -7,6 +7,7 @@ use Zend\ServiceManager\Factory\FactoryInterface;
 /* services to retrieve from the Service Manager */
 use Application\Service\QueryManager;
 use Application\Service\PartNumberManager;
+use Application\Service\VendorManager;
 
 /*service wich will be created instance with this FACTORY */
 use Purchasing\Service\WishListManager;
@@ -22,8 +23,9 @@ class WishListManagerFactory implements FactoryInterface
 //      $entityManager = $container->get('doctrine.entitymanager.orm_default');
         $partNumberManager = $container->get( PartNumberManager::class );        
         $queryManager = $container->get( QueryManager::class );
+        $vendorManager = $container->get( VendorManager::class );
         
         // Injecting dependencies into the Service WishListManager 
-        return new WishListManager( $queryManager, $partNumberManager );
+        return new WishListManager( $queryManager, $partNumberManager, $vendorManager );
     }
 }
