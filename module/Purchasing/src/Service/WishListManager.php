@@ -4,6 +4,7 @@ namespace Purchasing\Service;
 
 use Application\Service\QueryManager as queryManager;
 use Application\Service\PartNumberManager;
+use Application\Service\VendorManager;
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -69,7 +70,8 @@ class WishListManager
     /*
      * array with all COLUMN LABELS that will be rendered
      */
-    private $columnHeaders = ['From','Code','Date', 'User','Part Number', 'Description', 'Status','Year Sales',
+    private $columnHeaders = ['From','Code','Date', 'User','Part Number', 'Description','Status', 'Vendor',
+                    'PAg', 'PS',  'Year Sales',
                               'Qty Quoted','Times Quoted', 'OEM Price', 'Loc20-STK', 'Model', 'Category',
                               'SubCat', 'Major','Minor', 'ACTION'];
     /*
@@ -91,6 +93,12 @@ class WishListManager
      */
     private $partNumberManager;
     
+    /**
+     *
+     * @var Application\Service\VendorManager 
+     */
+    private $vendorManager;
+    
     /* helpful attributes */        
     private $countItems = 0;
     private $tableAsHtml = '';
@@ -98,13 +106,15 @@ class WishListManager
     /**
      * @param  queryManager $queryManager  
      * @param  PartNumberManager $PNManager
+     * @param  VendorManager $vendorManager
      */
-    public  function __construct( $queryManager, $PNManager ) 
+    public  function __construct( $queryManager, $PNManager, $vendorManager ) 
     {
         /* injection adapter adapterection from WishListController*/
         
         $this->queryManager = $queryManager;
         $this->partNumberManager = $PNManager;
+        $this->vendorManager = $vendorManager;
         
         
         $this->refreshWishList();           
@@ -238,36 +248,40 @@ class WishListManager
  
     
     /**
-     * - This function creates a <TR> element and assigned the CLASS, ID, 
-     *    and TITLE attributes for each <TD> element
+     * - This method() converts the elements of an array into a <TR> element 
+     *   and assigned the CLASS, ID, and TITLE attributes for each <TD> element
+     *   - It receives an array and returns the each Item as a <TD> element inside a <TR>
      * 
      * @param array $row
      * @return string
      */
-    private function rowToHTML( $row ):string
+    private function rowArrayToHTML( $row ):string
     {   
         $result ='<tr>';  
         $col = 0;
         $className = '';
         
-        /* Exclude or discard the following COLUMNS to use the CLASS description 
-         * first coluns is 0
-         */
-        
-        $columns = [6, 7, 8, 10, 11];
-        foreach( $row as $item ) {              
-           if (!in_array( $col, $columns ) ) {
-              $className = "description";
-           } else if ( $col === 10 ) { $className = "money";}
-           else {$className = '';}
+        /* COLUMNS with the CLASS description-CSS- (first coluns is 0 ) */        
+        $columns = [ 2, 3, 5, 8, 9, 15];
+        foreach( $row as $item ) {  
+            if ($col==0) {                             
+                $iconToExcel = '<i class="fa fa-file-excel-o fa-2x"  aria-hidden="true" text="From Excel file" ></i>';
+                $iconToManual = '<i class="fa fa-hand-pointer-o base-color"  aria-hidden="true" text="One by One" ></i>';
+                $item = ($item=='EXCEL') ? $iconToExcel : $iconToManual;
+            }
+            if (in_array( $col, $columns ) ) {
+                $className = "description";
+            } else if ( $col === 13 ) { $className = "money";}
+            else {$className = '';}
               
+            
             $result .= '<td class="'.$className.'">'.$item.'</td>';
           $col++;  
         }//endforeach 
         
         $result .= '</tr>';        
         return $result;
-    }//END METHOD: rowToHTML()
+    }//END METHOD: rowArrayToHTML()
     
     /**
      *  RETURNS: all rows of the table will be returned as an ARRAY 
@@ -278,12 +292,15 @@ class WishListManager
         return ($this->rows)?? null;
     }
     
-    
-    private function rowToArray( $row ) {
-          
+    /**
+     * 
+     * @param array() $row | All fields ( columns ) will be mapped into an ARRAY   
+     * @return array
+     */
+    private function rowToArray( $row ) {         
         $result = [];
         $partNumberInWL = trim($row['WHLPARTN']);
-        $fromValue = $this->from[$row['WHLFROM']];
+        $fromValue = $this->from[$row['WHLFROM']];      //MANUAL, EXCEL, LOSTSALES
         $statusP = $this->status[$row['WHLSTATUS']];
         
         array_push( $result, $fromValue );   // index: 0 : code
@@ -296,10 +313,20 @@ class WishListManager
         //NEW COLUMS AND REQUIREMENTS 
         array_push( $result, $statusP );   // index: 6 - description
         
-        array_push( $result, $row['IPYSLS'] );  // index: 7 - year sales
-        array_push( $result, $row['IPQQTE'] );  // index: 8 - qty quoted
-        array_push( $result, $row['IPTQTE'] );  // index: 9 - times quoted
-        array_push( $result, number_format( $row['IMPRC'], 2 )); //index: 10 - OEM PRICE
+        $vendorNum = $row['IPVNUM'];
+        
+        //using the VendorManage Service
+        $this->vendorManager->setVendor( $vendorNum );
+        
+        array_push( $result,  $vendorNum);   // index: 7 - VENDOR NUMBER
+        array_push( $result,  $this->vendorManager->getPA());   // index: 8 - PA
+        array_push( $result,  $this->vendorManager->getPS());   // index: 9 - PS
+        
+        
+        array_push( $result, $row['IPYSLS'] );  // index: 10 - year sales
+        array_push( $result, $row['IPQQTE'] );  // index: 11 - qty quoted
+        array_push( $result, $row['IPTQTE'] );  // index: 12 - times quoted
+        array_push( $result, number_format( $row['IMPRC'], 2 )); //index: 13 - OEM PRICE
         
         /*  getting location from DVINVA  where the part has STOCK in  ( DVBIN#: if you need the bin location) 
          *  - location: 20
@@ -313,11 +340,7 @@ class WishListManager
         
         /* adding MODEL */
         array_push( $result, trim($row['IMMOD']) != '' ? $row['IMMOD']:'N/A' ); //index: 11 model
-        
-        //passing an OBJECT
-//         $partNumberOBJ = $this->PartNumberManager->getPartNumber( $partNumberInWL );
-//         $CatDescription =  $this->PartNumberManager->getCategoryDescByStr( $partNumberOBJ );
-         
+       
         /* ADDING CATEGORY DESCRIPTION BEST CASE 5.3 S*/
         $cat = $row['IMCATA'];         
         $CatDescription =  $this->partNumberManager->getCategoryDescByStr( $cat );           
@@ -334,7 +357,7 @@ class WishListManager
          /* inserting  link to the other options */
         $strLink = '" comment-'.$row["WHLCOMMENT"].'number-'.$row['WHLCODE'].'"'; 
         
-        $url = '<a href='.'login'.' class="btn btn-default btn-rounded" data-toggle="modal" data-target="#modalLoginAvatar">♣</a>';
+        $url = '<a href='.$strLink.' class="btn btn-default btn-rounded" data-toggle="modal" data-target="#modalLoginAvatar"><i class="fa fa-info-circle" aria-hidden="true"></i></a>';
          
          array_push( $result, $url  ); // index: 15 - Minor code 
          
@@ -357,7 +380,7 @@ class WishListManager
           $currentRow = $this->rows[$iteration];
 
           /* conver row to HTML: $row  */
-          $tableBody.= $this->rowToHTML( $currentRow ); 
+          $tableBody.= $this->rowArrayToHTML( $currentRow ); 
 
         $iteration++;
       }//end: foreach  
@@ -365,10 +388,15 @@ class WishListManager
       return $tableBody;
     }//END: getBodyTable() method
     
-    /*
-     * function: dataToHtml() 
-     * -this return all processed data as a HTML file. This will be rendered by the view
-     */    
+    /**
+     * - function: dataToHtml() 
+     * - this return all data processed as a HTML file. 
+     * - this is recovered by the the WishlistController then
+     *   it'll be sent as parameter for being rendered by the view associated
+     * 
+     * @return string
+     */
+         
     public function TableAsHtml(){
         //checking if the method: runSql() was invoked before...
              
@@ -383,39 +411,41 @@ class WishListManager
             $tableHeader.='<th class="description">'.$field.'</th>';    
          }
 
-            /* concatening  header */
-            $tableHeader .= '</tr></thead>';
+        /* concatening  header */
+        $tableHeader .= '</tr></thead>';
 
             
-            /*********** adding tbody element ***************/      
-            $iteration = 0;
-          //  $tableBody = $this->getBodyTable();
+        /*********** adding tbody element ***************/      
+        $iteration = 0;
+        
+
+        //  $tableBody = $this->getBodyTable();
                          
-            $tableBody = '<tbody>';        
+        $tableBody = '<tbody>';        
             
-            /************* dynamic body **********************/        
-            foreach ($this->dataSet as $row) { 
-                /* gettin row */
-                $rowAsArray = $this->RowToArray( $row );
-                /* each row pushing to the rows (body to render)*/
-                array_push( $this->rows, $rowAsArray );                
-                               
-                $currentRow = $this->rows[$iteration];
+        /************* dynamic body **********************/        
+        foreach ($this->dataSet as $row) { 
+            /* gettin row */
+            $rowAsArray = $this->RowToArray( $row );
+            /* each row pushing to the rows (body to render)*/
+            array_push( $this->rows, $rowAsArray );                
 
-                /* conver row to HTML: $row  */
-                $tableBody.= $this->rowToHTML( $currentRow ); 
-                
-              $iteration++;
-            }//end: foreach    
+            $currentRow = $this->rows[$iteration];
 
-            $tableFooter = '<tfoot class="description"><tr>';
+            /* conver row to HTML: $row  */
+            $tableBody.= $this->rowArrayToHTML( $currentRow ); 
 
-            /*********** generating each column label dynamically *****************/
-            foreach ($this->columnHeaders as $field) {           
-                $tableFooter.='<td>'.$field.'</td>';
-            }
+          $iteration++;
+        }//end: foreach    
 
-            $tableFooter.='</tr></tfoot>';       
+        $tableFooter = '<tfoot class="description"><tr>';
+
+        /*********** generating each column label dynamically *****************/
+        foreach ($this->columnHeaders as $field) {           
+            $tableFooter.='<td>'.$field.'</td>';
+        }
+
+        $tableFooter.='</tr></tfoot>';       
               
         $this->tableAsHtml = $tableHeader.$tableBody.$tableFooter;               
         
@@ -464,9 +494,9 @@ class WishListManager
       
       
       
-      /**************************************************** EXCEL MANANGER *********************************/
+    /**************************************************** EXCEL MANANGER *********************************/
       
-        /**
+    /**
      * 
      * @param type $spread | spreadsheet generated 
      * @param type $cell | Cell will be hightlighter
@@ -608,10 +638,10 @@ class WishListManager
         return $sheetData;
     }
     
-     /* 
-     * @param string $inputFileName | route of the file XLS (excel file) with the WL
-     * @return array() | it returns an array with the excel file as array
-     */
+    /** 
+    * @param string $inputFileName | route of the file XLS (excel file) with the WL
+    * @return array() | it returns an array with the excel file as array
+    */
     public function readExcelFile( $inputFileName ) 
     {   //reading file      
         $inputFileType = 'Xls';        
