@@ -40,13 +40,13 @@
     $("button.dt-button").removeClass("dt-button");
     
     const buttons = {'excel':true, 'pdf':true, 'copy' : true};
-    const dropDownsInCols = [0, 1, 3, 4, 5, 13, 14, 15, 8, 9];
+    const dropDownsInCols = [ 1, 3, 4, 5, 13, 14, 15, 8, 9];
     const initialConfig = dataTableConfig( dropDownsInCols, buttons );  
     
     let tables = filterTable('table_filtered', initialConfig );    
     
     //removing dt-button class to each HTMLElement (button) Associates to 
-    // a table
+    // a datatable
     $('button').removeClass('dt-button');    
   
     }); 
