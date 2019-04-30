@@ -388,7 +388,7 @@ class WishlistController extends AbstractActionController
     private function updateSession( $partnumber, $table ) 
     {
         $this->session->part = $partnumber;       
-        $this->session->table = $table;
+        $this->session->table = $table;        
     }
         
     /**
@@ -615,14 +615,15 @@ class WishlistController extends AbstractActionController
               $data['category'] = $row['category'];   
               $data['subcategory'] = $row['subcategory'];                   
             }
-                     
+            
+            
             switch ($row['table']) {
-               case 'IMNSTA' : $this->updateSession($partnumber, 'IMNSTA'); break;                 
-               case 'CATER' : $this->updateSession($partnumber, 'CATER');
+               case 'IMNSTA' : $this->updateSession($data['partnumber'], 'IMNSTA'); break;                 
+               case 'CATER' : $this->updateSession($data['partnumber'], 'CATER');
                             $data['major'] = '01';
                             $caterKomat = true;
                 break;
-               case 'KOMAT' : $this->updateSession($partnumber, 'KOMAT'); 
+               case 'KOMAT' : $this->updateSession($data['partnumber'], 'KOMAT'); 
                             $data['major'] = '03';
                             $caterKomat = true;
                 break;
