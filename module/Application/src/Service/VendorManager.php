@@ -45,6 +45,11 @@ class VendorManager {
         return $this->vendor;
     }
     
+    /**
+     * 
+     * @param string $vendorNum
+     * @return array()
+     */
     private function loadVendor( string $vendorNum )
     {        
         try {
@@ -56,9 +61,8 @@ class VendorManager {
             return $dataSet[0];
         } catch (Exception $ex) {
             echo "Caught exception: ", $ex->getMessage(), ""; 
-        }
-        
-    } 
+        }        
+    } // end loadVendor()
     
 
     /**
