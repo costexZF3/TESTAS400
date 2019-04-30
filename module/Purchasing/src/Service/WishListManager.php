@@ -28,11 +28,11 @@ class WishListManager
    
    /* status in the wishlist for an item */
    const STATUS_OPEN     = '1'; // initial status
-   const STATUS_REJECTED = '2'; // rejected may be this part won't be develpmented anymore
-   const STATUS_APROVED  = '3'; // the part was moved to achanges to aproved   
-   const STATUS_HOLD     = '4'; // the part is ready (it's APPROVED) but it won't be moved to development yet
-   const STATUS_CLOSED   = '5'; // the parts won't be analysed with hurry
-   
+   const STATUS_CLOSED   = '2'; // the parts is in a Product Development 
+   const STATUS_APROVED  = '3'; // this part number is ready to release it  into a new Product Development  
+   const STATUS_HOLD     = '4'; // It's an APPROVED PART but it won't be developing yet
+   const STATUS_REJECTED = '5'; // this part won't be developing any more
+ 
    const FROM_LOSTSALE = '1';
    const FROM_VENDORLIST = '2';
    const FROM_MANUAL = '3';
