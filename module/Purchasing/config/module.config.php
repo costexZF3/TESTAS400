@@ -40,8 +40,8 @@ return [
                     // Change this to something specific to your module
                     'route'    => '/wishlist[/:action[/:id]]',
                     'constraints' => [
-                       'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id' => '[a-zA-Z0-9_-]*',
+                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                             'id' => '[a-zA-Z0-9_-]*',
                     ],
                     'defaults' => [
                         'controller'    => Controller\WishlistController::class,
@@ -94,18 +94,16 @@ return [
 
             Controller\WishlistController::class => [
                 //Allowing routes access depending on the type of permission assigned to loggin user
-                // Give access to "index" actions to everyone with +menu.purchasing  
-                //+option.purchasing.claims 
+                // Give access to "index" actions to everyone with +menu.purchasing +option.purchasing.claims 
 
                 //Actions reponse to Roles associated to MENUS 
-                ['actions' => ['index'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
-                ['actions' => ['add'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
-                ['actions' => ['create'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
-                ['actions' => ['update'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
-                ['actions' => ['delete'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
-                ['actions' => ['insert'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
-                ['actions' => ['upload'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
-                ['actions' => ['wishlist'],       'allow' => '+menu.purchasing'],                 
+                ['actions' => ['upload', 'add', 'create' ],             'allow' => '+purchasing.high.level'],
+                ['actions' => ['index'],                                'allow' => '+purchasing.option.pd.wishlist'],
+                ['actions' => ['update', 'updatemultiple', 'upload'],   'allow' => '+purchasing.ps'],
+                ['actions' => ['update'],                               'allow' => '+purchasing.pa'],
+                
+                ['actions' => ['delete','insert', 'wishlist' ],         'allow' => '+menu.purchasing'],                
+                              
 
             ], //END: access_filter for LostSaleController    
             

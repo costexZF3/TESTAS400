@@ -134,6 +134,11 @@ form ul li {
     background-image: url(/ctpsystem/public/img/avatar.png); 
 }
 
+.noautorize {
+    height: 100%;
+    width: 100%;
+    background-attachment: url(../../public/img/logo.png); 
+}
 /* ctp titles */
 .ctp_title {
     text-transform: uppercase;
@@ -186,18 +191,18 @@ h2.ctp_subtitle {
 /*******************   TABLE CTP PROPERTIES ***********************************/
 .table_ctp {
     text-align: center;  
-    font-size : 9px;    
+    font-size : 12px;    
 }
 
 .table_ctp thead, tfoot, th {   
     /*font-family: Roboto, Arial;*/
-    font-size: 11px;
+    font-size: 14px;
     text-align: left;    
     background-color: #F7BC59; /*#F9C05F*/
 }
 
 /* highlighter columns */
-.table_ctp .description,.partnumber {    	    
+.table_ctp .description, .partnumber {    	    
     text-align: left;
 }
 
@@ -235,7 +240,7 @@ input[type="search"]:focus {
 }
 
 .table_ctp .partnumber {
-    font-size: 10px;
+    font-size: 12px;
     color: #593a78;
     width: 80px;
 }

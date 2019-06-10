@@ -46,6 +46,7 @@
          */
         public function indexAction() 
         {
+            $this->layout()->setTemplate('layout/layout_Grid');
             // Access control.
             if (!$this->access('manage.user')) {
                 $this->getResponse()->setStatusCode(401);
@@ -156,10 +157,10 @@
                 $roleList[$role->getId()] = $role->getName();
             }
             
-            if (count($roleList)>9) {            
+            if (count($roleList) > 9) {            
                 $form->get('roles')->setAttributes([
                     'class'=>'form-control', 
-                    'size' => 10,
+                    'size' => 12,
                 ]);
             }
             /**

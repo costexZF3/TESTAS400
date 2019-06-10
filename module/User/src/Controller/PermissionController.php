@@ -39,6 +39,8 @@ class PermissionController extends AbstractActionController
      */
     public function indexAction() 
     {
+        $this->layout()->setTemplate('layout/layout_Grid');
+        
         //getting all Permissions orders by id from Permission Repository
         $permissions = $this->entityManager->getRepository(Permission::class)
                 ->findBy([], ['name'=>'ASC']);

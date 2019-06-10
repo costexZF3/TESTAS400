@@ -8,70 +8,84 @@
                 'Manage Permissions'=>$this->url('permissions'),
                 ]);
 ?>
+<!--********************************  JAVASCRIPTS *************************************-->
+<script language="JavaScript">          
+ 
+    $(document).ready( function() {
+        
+        const buttons = {'excel':false, 'pdf':false, 'copy' : false};
+        const dropDownsInCols = [2];
+        const initialConfig = dataTableConfig( dropDownsInCols, buttons ); 
+        
+        const table = renderDataTable(buttons, dropDownsInCols);
+    }); 
 
-<h3>Manage Permissions</h3>
+</script>
 
 <?= $this->flashMessenger()->render('error', ['alert', 'alert-warning']); ?>
 <?= $this->flashMessenger()->render('success', ['alert', 'alert-success']); ?>
 <?= $this->flashMessenger()->render('info', ['alert', 'alert-info']); ?>
 
-<!--------- BUTTON NEW PERMISSION ----------------->
-<p>
-    <a class="btn btn-default" href="<?= $this->url('permissions', ['action'=>'add']); ?>" >
-        <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> New Permission
-    </a>
-</p>
 
-<table class="minimalistBlack">
+<div class="container">    
+    <!--------- BUTTON NEW PERMISSION ----------------->
+    <p>
+      <a class="boxed-btn" href="<?= $this->url('permissions', ['action'=>'add']); ?>" >
+        <i class="fa fa-plus" aria-hidden="true"></i> New Permission
+      </a>
+    </p>
+
+  <table class="table_ctp table_filtered display">
     <thead>
-        <tr>
-             <!--<th>ID</th>-->
-             <th>Name</th>
-             <th>Description</th>
-             <th>Date Created</th>
-             <th>Actions</th>        
-         </tr>
+        <tr>            
+            <th>Name</th>
+            <th>Description</th>
+            <th>Date Created</th>
+            <th><i class="fa fa-gears"></i>Actions</th>        
+        </tr>
     </thead>
+
     
     <tbody>
         <?php foreach ($permissions as $permission): ?>
 
-        <tr>
-            <!--<td><?php //$this->escapeHtml($permission->getId()); ?></td>-->
-            <td>
+        <tr>           
+            <td class="description">
                 <a href="<?= $this->url('permissions', ['action'=>'view', 'id'=>$permission->getId()]); ?>">
                     <?= $this->escapeHtml($permission->getName()); ?>
                 </a> 
             </td>
-            <td><?= $this->escapeHtml($permission->getDescription()); ?></a> 
-            </td>
-            <td><nobr><?= $this->escapeHtml($permission->getDateCreated()); ?></nobr></td>        
+            
+            <td class="description"> <?= $this->escapeHtml($permission->getDescription()); ?></td>
+            <td><?= $this->escapeHtml($permission->getDateCreated()); ?></td>
+            
             <!-- COLUMN WITH EDIT AND DELETE BUTTONS -->
-            <td>
-                <nobr>
-                <a id="ctp-borderDemo" class="btn btn-info btn-sm" href="<?= $this->url('permissions', 
+            <td>               
+                <a id="ctp-borderDemo" class="" href="<?= $this->url('permissions', 
                         ['action'=>'edit', 'id'=>$permission->getId()]); ?>">
-                    <span class="glyphicon glyphicon-pencil" ></span> Edit
+                    <i class="fa fa-edit" ></i>
                 </a>
-                <a id="ctp-borderDemo" class="btn btn-danger btn-sm" href="<?= $this->url('permissions',
+                &nbsp;
+                <a id="ctp-borderDemo" class="" href="<?= $this->url('permissions',
                         ['action'=>'delete', 'id'=>$permission->getId()]); ?>">
-                    <span class="glyphicon glyphicon-remove"></span> Delete
+                    <i class="fa fa-trash"></i>
                 </a>
-                </nobr>
+                
             </td>    
         </tr>
 
         <?php endforeach; ?>   
     </tbody>
-</table>
+    <tfoot>
+        <tr>             
+          <th>Name</th>
+          <th>Description</th>
+          <th>Date Created</th>
+          <th>Actions</th>        
+        </tr>
+    </tfoot>
+  </table>
 
-<hr>
-
-<!--------- BUTTON NEW PERMISSION ----------------->
-<p>
-    <a class="btn btn-default" href="<?= $this->url('permissions', ['action'=>'add']); ?>" >
-        <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> New Permission
-    </a>
-</p>
+</div>
 
 

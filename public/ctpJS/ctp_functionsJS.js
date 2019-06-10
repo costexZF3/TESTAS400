@@ -125,7 +125,7 @@ const createBtn = ( config ) => {
  * @param {object} buttons
  * @returns {dataTableConfig.ctp_functionsJSAnonym$1}
  */
-const dataTableConfig = ( dropDownCols, buttons ) => { 
+const dataTableConfig = ( dropDownCols, buttons, $columns=[] ) => { 
     //using method
     const optEXCEL = { type: 'excel', title: 'EXCEL', hint: 'Convert to Excel'};
     const optPDF = { type: 'pdf', title: 'PDF', hint: 'Convert to PDF'};
@@ -146,11 +146,16 @@ const dataTableConfig = ( dropDownCols, buttons ) => {
         
     return (
         { 
-           select: true, 
-           "lengthMenu" :  [ 
-                             [10, 25, 50, 100,  -1], 
-                             [10, 25, 50, 100, "All"]
-                           ],
+            
+            "columnDefs": [
+              { "visible": false, "targets": $columns }
+            ],
+               
+            select: true, 
+            "lengthMenu" :  [ 
+                              [10, 25, 50, 100,  -1], 
+                              [10, 25, 50, 100, "All"]
+                            ],
 
            dom: '<"ctp-buttons"l Bfr<t>ip>',
 
@@ -173,9 +178,47 @@ const dataTableConfig = ( dropDownCols, buttons ) => {
                    column.data().unique().sort().each( function ( d, j ) {
                        select.append( '<option value="'+d+'">'+d+'</option>' );
                    });
-                }); //end: every()
+                }); //end: every()  
+                
+                //
+                this.api().on( 'select', function (e, dt, type, indexes ) {
+                    if (type === 'row') {
+                        indexes++;
+//                         alert( indexes()+'row clicked' );
+                        let checked = $('#checked'+indexes).prop("checked");
+                        
+                        $('#checked'+indexes).prop("checked", !checked);
+                       
+                    }
+                    
+                } );
            } //end property InitComplete                 
 
        }//END: initial configuration 
     );
 };
+
+/**
+ * 
+ * @param {object} buttons
+ * @param {object} dropDownsInCols
+ * @returns {renderDataTable.table|undefined}
+ */
+ 
+const renderDataTable = ( buttons, dropDownsInCols ) => {
+    
+    // taking off CLASS dt-button to the buttons EXCEL, PDF, AND COPY
+    $("button.dt-button").removeClass("dt-button");
+
+    // getting initial config
+    const settings = dataTableConfig( dropDownsInCols, buttons );  
+
+    let table = filterTable('table_filtered', settings ); 
+
+    //removing dt-button class to each HTMLElement (button) Associates to 
+    // a datatable
+    $('button').removeClass('dt-button');  
+    table.order([0,'asc']).draw();
+
+    return table;
+}; 

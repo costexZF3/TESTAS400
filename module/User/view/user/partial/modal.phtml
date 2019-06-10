@@ -1,0 +1,32 @@
+<!-- MODAL DIALOG BOX -->
+<?php
+    $id = $this->roleId;
+?>
+
+<div class="modal fade" id ="<?=$id?>" tabindex="-1" role="dialog" aria-labelledby="<?=$id?>" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="content">
+            <div class="row">  
+                <div class="col-md-8 modal-header">  
+                   <h4 class="title1 base-color" id="myModalLabel">ROLE LIST </h4>
+                </div> 
+                <div class="col-md-4">            
+                    <button type="button" class="close ctp-green" data-dismiss="modal" aria-label="Close">
+                        <i class="fa fa-close" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- RENDERING CONTENT -->
+        <div class="modal-body">
+            <?php echo $this->content;?>
+        </div>
+         <!-- rendering buttons default and close--> 
+        <div class="modal-footer">
+           <button type="button" class="submit-btn" data-dismiss="modal">Close</button>
+        </div>
+        
+      </div>
+    </div>                                  
+</div> 

@@ -41,6 +41,8 @@ class RoleController extends AbstractActionController
      */
     public function indexAction() 
     {
+        $this->layout()->setTemplate('layout/layout_Grid');
+         
         $roles = $this->entityManager->getRepository(Role::class)
                 ->findBy([], ['name'=>'ASC']);
         

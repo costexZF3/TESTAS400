@@ -153,9 +153,8 @@ class AuthController extends AbstractActionController
      */
     public function notAuthorizedAction()
     {
-        $this->layout()->setTemplate('layout/layout');
-        $this->getResponse()->setStatusCode(403);
-         
+        $this->layout()->setTemplate('layout/layout_Grid.phtml');
+        $this->getResponse()->setStatusCode(403);         
         return new ViewModel();
     }
 }

@@ -17,18 +17,18 @@ class MyAdapterFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
 
-         $dbconnection = [
-                        'driver'         => 'IbmDb2',
-                        'database'       => 'COSTEX1', // COSTEXM15  DEVELOPMENT
-                        'hostname'      => '172.0.0.21',// '172.0.0.21',  COSTEXM15
-                        'username'       => 'mojeda',
-                        'password'       => '1978M1ch3l',
-                        'driver_options' => [
+        $dbconnection = [
+            'driver'         => 'IbmDb2',
+            'database'       => 'COSTEX1', // COSTEXM15  DEVELOPMENT
+            'hostname'      => 'COSTEXM15',// '172.0.0.21',  COSTEXM15
+            'username'       => 'mojeda',
+            'password'       => '1978M1ch3l',
+            'driver_options' => [
 //                          'i5_commit' => DB2_I5_TXN_READ_UNCOMMITTED,
-                            'autocommit' => DB2_AUTOCOMMIT_OFF,
-                            'i5_lib' => "QS36F",
-                        ],
-                   ];
+                'autocommit' => DB2_AUTOCOMMIT_OFF,
+                'i5_lib' => "QS36F",
+            ],
+        ];
 
          $conAdapter= new Adapter( $dbconnection );
        

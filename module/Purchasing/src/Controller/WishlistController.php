@@ -14,7 +14,11 @@ use Application\Service\QueryManager;
 /* MODEL: forms classes */
 use Purchasing\Form\FormAddItemWL as FormAddItemWL;
 use Purchasing\Form\FormUpload; 
+use Purchasing\Form\FormUpdate; 
+use Purchasing\Form\FormUpdateMultiple; 
 use Purchasing\Form\FormValidator;
+use Purchasing\Form\FormWishList;
+
 
 
 class WishlistController extends AbstractActionController 
@@ -62,21 +66,191 @@ class WishlistController extends AbstractActionController
              return;
          } 
          return $user;
-     }//End: getUser()      
+     }//End: getUser()  
      
-   
+   /************************************ for updating items in WL ******************************  
+     
+    /**
+     * It returns $data[] depending on $scenario 
+     * 
+     * @param array() $row
+     * @param string $scenario
+     */     
+    private function parseData( $row, $scenario = 'pa')
+    {
+        $data['partnumber'] = $row['WHLPARTN'] ?? $row['partnumber'];
+        $data['status'] = $row['WHLSTATUS']?? $row['status'];
+        $data['comment'] = $row['WHLCOMMENT']?? $row['comment'];
+        
+        return $data;
+    } 
+    
+    private function saveIntoSession( $data )
+    {
+        $this->session->data = $data;        
+    }
+    
+    private function changedData( $data )
+    {                
+        $result = array_diff( $data, $this->session->data );
+        return  $result;
+    }
+
+
+    /**
+     * This method returns the ViewModel(updatemultiple.phtml)
+     *  - this returns an instance of the form 
+     * 
+     * @return ViewModel
+     */
+    public function updatemultipleAction() 
+    {       
+        $form = new FormUpdateMultiple( $this->WLManager );
+        
+        //checking if was clicked 
+        if( $this->getRequest()->isPost() ) {
+            //retrieving user and status new $data['user], $data['status']
+            $data = $this->params()->fromPost();
+            
+            //if not want update nothing redirect to whislit()
+            $continue = $data['user'] != 'NA' &&  $data['user'] != 'NA';
+            
+            if ( !$continue ) {
+                $this->flashMessenger()->addErrorMessage('Oopss!!!. It seems you did not SELECTED a user neither a new status.');
+                return $this->redirect()->toRoute('wishlist');
+            }
+            //retrieving the code of parts (rows) selected which were saved into 
+            // the session->data (session variable)
+            $data['records'] = $this->session->data;
+              
+            $this->WLManager->update($data, true);
+            
+            return $this->redirect()->toRoute('wishlist');
+        }
+        
+        return new ViewModel(
+        [
+            'form' => $form,
+        ]);        
+    }
+ 
+    /**
+     * This method (Action) update status and comment of one part inside the WL
+     * -used in the FormUpdate
+     */
+    public function updateAction()
+    {   
+        $isHighLevel = $this->access('purchasing.ps', ['user'=>$this->getUser()]);
+        $scenario = !$isHighLevel ? 'pa' : 'ps';        
+                        
+        //checking if the data are coming from FormUpdate
+        if( $this->getRequest()->isPost() ) {            
+            $raw = $this->params()->fromPost();            
+            
+            //checking multiple selection for updating assigned users and status
+            $multipleUpdate = isset($raw['checkedrow']);
+            
+            //checking if the parts need to be updated in a massive way
+            if ($multipleUpdate) {
+                $this->saveIntoSession( $raw['checkedrow'] );
+                return $this->redirect()->toRoute('wishlist', ['action' => 'updatemultiple']);                
+            } else if (!isset($raw['partnumber'])){               
+               $this->flashMessenger()->addErrorMessage('Oopss!!!. It seems you did not check at least one item.');
+               return $this->redirect()->toRoute('wishlist');
+            }
+           
+            //in case the user is updating one by one
+            $rawData = $this->parseData( $raw );
+            
+            //***************************** checkinggg if I can change de STATUS ***********
+            $data = $this->changedData( $rawData );
+            $needUpdate = $data != [];
+            
+            if ( $needUpdate ) {
+                $data['WHLCODE'] = $this->session->id;
+                //using de SERVICE for update by Code
+                $updated = $this->WLManager->update( $data );                
+                
+                $this->flashMessenger()->addInfoMessage('The part number '.$rawData["partnumber"].' with COD:['. $this->session->id. '] was updated ');
+                
+            } else {
+                $this->flashMessenger()->addErrorMessage("Oopss!! You did not change any data of the selected partnumber.");               
+            }
+            
+            return $this->redirect()->toRoute('wishlist');
+            
+        } else {
+            //getting the 'id' param, for checking this later
+            $id = (string)$this->params()->fromRoute('id','');            
+            $this->session->id = $id;
+            
+            //If the user Log in is not a Pa or PS then
+            if ($id==='' && !$isHighLevel) {
+                $this->getResponse()->setStatusCode( 404 );
+                return;
+            }
+            
+            // creating Form template
+            $form = new FormUpdate($scenario, $this->WLManager );
+                
+            // getting information from the part
+            // Retrieving the row with id received 
+            $row = $this->WLManager->getDataFromWL( $id );
+            $data = $this->parseData( $row );        
+            
+            //updating data to show on the form will be updated
+            $form->setData( $data );
+            $this->saveIntoSession( $data ); //updating session for compated data and not update if there is no change
+                  
+        } //end of the else
+        
+        return new ViewModel(
+            [
+                'form' => $form,
+            ]);
+ 
+    }//Method update
+    
     /**
      *  The IndexAction show the WishList 
      */
     public function indexAction() 
     {
-      $this->layout()->setTemplate('layout/layout_Grid');
-      $linkInc = $this->session->inconsistency ?? false;
-      
-      return new ViewModel(
-              ['wldata' => $this->WLManager->TableAsHtml(),
-                  'url1' => $linkInc //$urlinc  
-              ]);
+        $form = new FormWishList();
+        
+        $this->layout()->setTemplate('layout/layout_Grid');
+        
+        $linkInc = $this->session->inconsistency ?? false;
+        
+        $user= $this->getUserS();
+        $isPa = $this->access('purchasing.pa',['user'=>$user]);
+        $isHighLevel = $this->access('purchasing.high.level', ['user'=>$user]);            
+        
+        // Access control.
+        //  CHECKING USER ACCESS:  IF (he/she) management can see all
+        if (!$this->access('special.access')) {
+            if (!$isPa && !$isHighLevel)  {          
+                return $this->redirect()->toRoute('not-authorized');
+            }        
+
+            //in case the user is a PA then renew WL with the users assigned to him  
+            if ( $isPa ) {   
+                //getting user for loading only its items assigned
+                $userN = $this->getUserS();  
+
+                $this->WLManager->renewWL( $userN );       
+            }
+            $re = $this->WLManager->jsonResponse();
+        } else {}
+        
+        return new ViewModel(
+            [
+                'wldata' => $this->WLManager->TableAsHtml(),
+                'urlInc' => $linkInc, //$urlinc  
+                'isPa' => $isPa,
+                'user' => $user,
+                'form' => $form
+            ]);
     }//END: indexAction method
     
  
@@ -137,7 +311,6 @@ class WishlistController extends AbstractActionController
                     $this->WLManager->writeErrorsToExcel( $result['novalid'] );
                     $this->session->inconsistency = true;
                     
-//                    $this->writeErrorsToExcel( $result['novalid'] );
                     $urlInc = './data/upload/wishlist_inc.xls';  
                     $message = !$existPartsToInsert ? 'No PARTS were uploaded' : '';
                     $this->flashMessenger()->addErrorMessage("Oopss!!! [".count($result['novalid'])."] inconsistencies were found. ". $message);                            
@@ -455,15 +628,13 @@ class WishlistController extends AbstractActionController
         // Updating the PartNumber and Table names in the session for recovering their values later
         if ( $inStock['CATER'] ) { 
             $this->updateSession($partnumber, 'CATER');                              
-            return [];
-            //return $this->redirect()->toRoute('wishlist', ['action'=>'create']);                       
+            return [];                                  
         }         
 
         if (  $inStock['KOMAT'] ) { 
 
             $this->updateSession($partnumber, 'KOMAT'); 
-            return [];
-            //return $this->redirect()->toRoute('wishlist', ['action'=>'create']);                       
+            return [];                                 
         }
     }//END METHOD: findOutScenario()
     

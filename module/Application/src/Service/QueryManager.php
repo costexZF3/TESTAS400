@@ -97,7 +97,30 @@ class QueryManager
          return $this->dataSet;
           
       } catch ( Exception $e ) {
-           echo "Caught exception: ", $e->getMessage(), ""; 
+           echo "Caught exception: ", $e->getMessage(), ". Error inserting data to file: ".$table; 
+      } 
+     
+    } /* END: insert */
+    
+    
+    public function  update( $table, $set, $where=[] ) 
+    {            
+      try {          
+         $sql = new Sql( $this->adapter );
+         
+         $update = $sql->update( $table );
+         $update->set( $set );
+         $update->where( $where );
+        
+         $statement = $sql->prepareStatementForSqlObject( $update );   
+         $result = $statement->execute();   
+         
+         $this->dataSet = $result;
+            
+         return $this->dataSet;
+          
+      } catch ( Exception $e ) {
+           echo "Caught exception: ", $e->getMessage(), ". Error updating data in the file: ".$table; 
       } 
      
     } /* END: insert */

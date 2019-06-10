@@ -1,0 +1,54 @@
+<?php
+    //retrieving log in user for checking access
+    $user = $this->user;  
+    $form = $this->form;
+?> 
+
+<div class="row"> 
+    <div class="col-md-auto">  
+        <!--FILTER ACCORDION-->       
+        <div class="accordion-wrapper contact-form-inner">
+            <div id="accordion_2">               
+                <div class="card">
+
+                    <div class="card-header" id="headingOne_2">
+                        <h5 class="mb-0">
+                            <a  class="collapsed" data-toggle="collapse" data-target="#collapseOne_2" aria-expanded="false" aria-controls="collapseOne_2">
+                                <span class="">ACTIONS</span>
+                            </a>
+                        </h5>
+                    </div>      
+                    
+                    <!--ACCORDION CONTENT--> 
+                    <div id="collapseOne_2" class="collapse" aria-labelledby="headingOne_2" data-parent="#accordion_2">
+                        <div class="card-body">
+                            <div class = "row">       
+                                
+                                <!--button NEW ITEM-->
+                                <a class="boxed-btn" href="<?= $this->url('wishlist', ['action'=>'add']); ?>">
+                                    <span class="fa fa-1x fa-gear" aria-hidden="true"></span> NEW ITEM
+                                </a>
+                                
+                                <!--button updata-->
+                                <!--<a class="boxed-btn" href="<1?= $this->url('wishlist', ['action'=>'update']); ?>">-->
+                                <!-- CROSS SITE REQUEST FORGERY CHECKING -->    
+                                
+                                <?= $this->formElement($form->get('csrf')); ?>
+                   
+                                <div class="btn-wrapper">
+                                    <?= $this->formElement($form->get('submit')); ?>
+                                </div>
+                                
+                                <a class="boxed-btn" href="<?= $this->url('wishlist', ['action'=>'upload']); ?>">
+                                    <span class="fa fa-1x fa-file-excel-o black" aria-hidden="true"></span> IMPORT EXCEL
+                                </a>
+
+                            </div>                           
+                        </div> <!-- CARD-BODY --> 
+                    </div>   <!-- COLLAPSE CONTENT END -->    
+
+                </div> <!-- CARD END -->            
+            </div> <!-- ACCORDION END -->           
+        </div>  <!-- ACCORDION WRAPPER -->         
+    </div> <!-- COLUMN AUTO(INSIDE THIS IS THE ACCORDION --> 
+</div>

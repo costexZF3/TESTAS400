@@ -201,7 +201,10 @@ class UserManager
      * Generates a password reset token for the user. This token is then stored in database and 
      * sent to the user's E-mail address. When the user clicks the link in E-mail message, he is 
      * directed to the Set Password page.
+     * @param object $user
+     * @throws \Exception
      */
+   
     public function generatePasswordResetToken($user)
     {
         if ($user->getStatus() != User::STATUS_ACTIVE) {
@@ -225,13 +228,8 @@ class UserManager
         $user->setPasswordResetTokenCreationDate($currentDate);  
         
         // Apply changes to DB. (updating the new Token)
-        $this->entityManager->flush();       
+        $this->entityManager->flush();         
         
-        
-        // Send an email to user.
-        $subject = 'Password Reset';
-            
-        //$httpHost = isset($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:'localhost';
         $httpHost = ($_SERVER['HTTP_HOST'])??$_SERVER['HTTP_HOST']??'localhost';
         $passwordResetUrl = 'http://' .$httpHost. '/ctpsystem/public/users/set-password?token=' . $token . "&email=" . $user->getEmail();
         
@@ -242,16 +240,18 @@ class UserManager
                     'passwordResetUrl' => $passwordResetUrl,
                 ]);
         
-        $html = new MimePart($bodyHtml);
+        $html = new MimePart( $bodyHtml );
         $html->type = "text/html";
         
         $body = new MimeMessage();
-        $body->addPart($html);
-        
+        $body->addPart($html);        
+         
+        // Send an email to user.
+        $subject = 'Password Reset';
         $mail = new Mail\Message();
         $mail->setEncoding('UTF-8');
         $mail->setBody( $body );
-        $mail->setFrom('no-reply@example.com', 'CtpSystem-MIS DEPARTMENT');
+        $mail->setFrom('no-reply@costex.com', 'CtpSystem-MIS DEPARTMENT');
         $mail->addTo($user->getEmail(), $user->getFullName());
         $mail->setSubject( $subject );
         

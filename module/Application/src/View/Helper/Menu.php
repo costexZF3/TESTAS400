@@ -77,9 +77,7 @@ class Menu extends AbstractHelper
             }
         }
         
-        $result .= '</ul>';
-//        $result .= '</div>';
-//        $result .= '</nav>';
+        $result .= '</ul>';    
         
         return $result;        
     }
@@ -105,7 +103,7 @@ class Menu extends AbstractHelper
             $dropdownItems = $item['dropdown'];
             
             //creating Menu TAG (HEADER )
-            $result .= '<li class="nav-item dropdown ' . ($isActive?'active':'') . '">';
+            $result .= '<li class="nav-item dropdown ' . ($isActive ? 'active' : '') . '">';
             $result .= '<a href="#" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true"';
             $result .= ' aria-expanded="false">';
             $result .= $escapeHtml($label);

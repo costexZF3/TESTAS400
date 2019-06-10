@@ -14,7 +14,7 @@ namespace Application\Service;
 
 
 use Application\Service\QueryManager as queryManager;
-use Application\ObjectValue\Vendor;
+use Application\ObjectValue\Vendor as Vendor;
 
 //use Application\Validator\PartNumberValidator;
 
@@ -31,7 +31,8 @@ class VendorManager {
     private $queryManager;
     
     /**
-     *
+     * Instance of Vendor ( Object )
+     * 
      * @var Vendor
      */
     private $vendor;
@@ -41,7 +42,12 @@ class VendorManager {
     }// END: constructor 
     
     
-    public function getVendor() {
+    /**
+     * 
+     * @return \Vendor 
+     */
+    public function getVendor() 
+    {
         return $this->vendor;
     }
     
@@ -59,6 +65,7 @@ class VendorManager {
             $dataSet = $this->queryManager->runSql( $strSql );             
             
             return $dataSet[0];
+            
         } catch (Exception $ex) {
             echo "Caught exception: ", $ex->getMessage(), ""; 
         }        
@@ -93,6 +100,12 @@ class VendorManager {
         }
     }//End recoverName()
     
+    /**
+     * - it receives an array with data and create a vendor
+     * 
+     * @param array() $record
+     * @return Vendor
+     */
     private function populateVendor( $record )
     { 
         $data['name'] = $record["VMNAME"];

@@ -11,118 +11,89 @@
     
     /*** getting params from IndexAction() inside LostsaleController ***/
    
-    $table = $this->wldata; 
-    $urlValid = $this->url1;
+    /**
+     * @var Zend\Form Description
+     */
+    $form = $this->form;
     
-
-    if ( $urlValid) {
-        $url1 = $this->basePath().'/data/wishlist_inc.xls';
-    }
-        
-    /* adding attributes to the form elements */
-//     $form->get('partnumber')->setAttributes([
-//        'class' => 'form-control',        
-//    ]);
+    $table = $this->wldata;     
+    $isPa = $this->isPa;
+    $user = $this->user;    
+    $urlInc = ( $this->urlInc ) ? $this->basePath().'/data/wishlist_inc.xls' : '';
     
-        
-//    $form->get('submit')->setAttributes(['class'=>'submit-btn']);
-//  
-//    /* prepare for before rendering */
-//    $form->prepare();
-    
+    $form->get('submit')->setAttributes(['class'=>'submit-btn']);
+  
+    /* prepare for before rendering */
+    $form->prepare();  
+       
  ?>  
  	 
 <script language="JavaScript">          
  
-    $(document).ready( function(){ 
-    
-//   taking off CLASS dt-button to the buttons EXCEL, PDF, AND COPY
-    $("button.dt-button").removeClass("dt-button");
-    
-    const buttons = {'excel':true, 'pdf':true, 'copy' : true};
-    const dropDownsInCols = [ 1, 3, 4, 5, 13, 14, 15, 8, 9];
-    const initialConfig = dataTableConfig( dropDownsInCols, buttons );  
-    
-    let tables = filterTable('table_filtered', initialConfig );    
-    
-    //removing dt-button class to each HTMLElement (button) Associates to 
-    // a datatable
-    $('button').removeClass('dt-button');    
-  
+    $(document).ready( function() { 
+         let isPa = "<?php echo $isPa; ?>";
+         
+         hideCols=[0];
+         
+         if (!isPa){
+             hideCols =  [];
+         }
+         
+    //   taking off CLASS dt-button to the buttons EXCEL, PDF, AND COPY
+        $("button.dt-button").removeClass("dt-button");
+
+        const buttons = {'excel':true, 'pdf':true, 'copy' : true};
+        const dropDownsInCols = [ 1, 3, 4, 5, 7, 13, 18];
+        const initialConfig = dataTableConfig( dropDownsInCols, buttons, hideCols);  
+
+        var table = filterTable('table_filtered', initialConfig ); 
+        
+        //removing dt-button class to each HTMLElement (button) Associates to 
+        // a datatable
+        $('button').removeClass('dt-button');         
     }); 
 
 </script>
         
 <!-- HTML RENDER-->
 <?= $this->flashMessenger()->render('success', ['alert', 'alert-success']); ?>
-<?= $this->flashMessenger()->render('error', ['alert', 'alert-warning']); ?>
-<?= $this->flashMessenger()->render('info', ['alert', 'alert-info']); ?>   
+<?= $this->flashMessenger()->render('error',   ['alert', 'alert-warning']); ?>
+<?= $this->flashMessenger()->render('info',    ['alert', 'alert-info']); ?>   
 
-<?php if($url1!=''): ?>
+<?php if($urlInc !=''): ?>
     <div>
-        <p> Click here to <a href="<?=$url1;?>" class="base-color">Download</a> inconcistencies!!!</p> 
+        <p> Click here to <a href="<?=$urlInc;?>" class="base-color">Download</a> inconcistencies!!!</p> 
     </div>
 <?php endif;?>
 
 <div class="container-fluid">
-    <div class="row"> 
-        <div class="col-md-auto">  
-            <!--FILTER ACCORDION-->       
-            <div class="accordion-wrapper contact-form-inner">
-                <div id="accordion_2">               
-                    <div class="card">
-
-                        <div class="card-header" id="headingOne_2">
-                            <h5 class="mb-0">
-                                <a  class="collapsed" data-toggle="collapse" data-target="#collapseOne_2" aria-expanded="false" aria-controls="collapseOne_2">
-                                    <span class="">ACTIONS</span>
-                                </a>
-                            </h5>
-                        </div>                  
-                      <!--ACCORDION CONTENT--> 
-                        <div id="collapseOne_2" class="collapse" aria-labelledby="headingOne_2" data-parent="#accordion_2">
-                            <div class="card-body">
-                                <div class = "row">                                      
-                                    <a class="boxed-btn" href="<?= $this->url('wishlist', ['action'=>'add']); ?>">
-                                        <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> NEW ITEM
-                                    </a>
-                                    <a class="boxed-btn" href="<?= $this->url('wishlist', ['action'=>'add']); ?>">
-                                        <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> UPDATE
-                                    </a> 
-
-<!--                                    <a class="boxed-btn" href="<1?= $this->url('wishlist', ['action'=>'add']); ?>">
-                                        <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> DELETE
-                                    </a>-->
-                                    <a class="boxed-btn" href="<?= $this->url('wishlist', ['action'=>'upload']); ?>">
-                                        <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> IMPORT FROM EXCEL
-                                    </a>
-
-                                </div>                           
-                            </div> <!-- CARD-BODY --> 
-                        </div>   <!-- COLLAPSE CONTENT END -->    
-
-                    </div> <!-- CARD END -->            
-                </div> <!-- ACCORDION END -->           
-            </div>  <!-- ACCORDION WRAPPER -->         
-    </div> <!-- COLUMN AUTO(INSIDE THIS IS THE ACCORDION --> 
-   </div>
-   
+   <!--rendering actions-->  
+   <?php if (!$isPa) :?>
+            <!-- Open Form Tag  -->
+        <?= $this->form()->openTag($form); ?> 
+        <?= $this->partial('particialview/actions.phtml',['user'=>$user, 'form' => $form]);?> 
+   <?php endif;?>
+  
    </br>
    
    <!--rendering TABLE WISHLIST--> 
-   <div class="row ">
+   <div class="row">
        <div class="col-md-12">
-          <?php 
-           if ($table !=='') {
-               echo $table; 
-           } else {
-               echo '<div class="panel">';
-                  echo"wish list is empty";
-               echo '</div">'   ;
-           }    
-          ?>
+            <?php 
+            
+            if ($table !=='') {
+                echo $table; 
+            } else { ?>
+                <div class="container  panel panel-info title">
+                   <h3> "THE WISH LIST IS EMPTY OR THERE IS NO ITEM(s) ASSIGNED TO YOU" </h3>
+                </div>
+            <?php } ?>
        </div> 
    </div>
 </div>    
 
 <?= $this->partial('particialview/modal.phtml',['name'=>'User Name']);?> 
+
+<?php if (!$isPa) :?>
+     <?= $this->form()->closeTag(); ?>      
+<?php endif;?>

@@ -64,7 +64,7 @@ class AuthManager
             
         // Authenticate with login/password.
         $authAdapter = $this->authService->getAdapter();
-        $authAdapter->setEmail( $email );
+        $authAdapter->setEmail( strtolower( $email ));
         $authAdapter->setPassword( $password );
         $result = $this->authService->authenticate();
 
@@ -73,8 +73,8 @@ class AuthManager
         // config/global.php file).
         if ($result->getCode()==Result::SUCCESS && $rememberMe) {
             //Session cookie will expire in 1 month (30 days).
-            //$this->sessionManager->rememberMe(60*60*24*30);
-            $this->sessionManager->rememberMe(60*60*24*1);
+            $this->sessionManager->rememberMe(60*60*24*30);
+            //$this->sessionManager->rememberMe(60*60*24*1);
         }
         
         return $result;
@@ -121,10 +121,10 @@ class AuthManager
                 $allow = $item['allow'];
                 if (is_array($actionList) && in_array($actionName, $actionList) ||
                     $actionList=='*') {
-                    if ($allow=='*')
+                    if ($allow=='*') {
                         // Anyone is allowed to see the page.
                         return self::ACCESS_GRANTED; 
-                    else if (!$this->authService->hasIdentity()) {
+                    } else if (!$this->authService->hasIdentity()) {
                         // Only authenticated user is allowed to see the page.
                         return self::AUTH_REQUIRED;                        
                     }

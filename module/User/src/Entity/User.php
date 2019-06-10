@@ -98,7 +98,7 @@ class User
      */
     public function getEmail() 
     {
-        return $this->email;
+        return strtolower( $this->email );
     }
 
     /**
@@ -107,7 +107,7 @@ class User
      */
     public function setEmail($email) 
     {
-        $this->email = $email;
+        $this->email = strtolower( $email );
     }
     
     /**
@@ -156,8 +156,9 @@ class User
     public function getStatusAsString()
     {
         $list = self::getStatusList();
-        if (isset($list[$this->status]))
+        if (isset($list[$this->status])) {
             return $list[$this->status];
+        }
         
         return 'Unknown';
     }    

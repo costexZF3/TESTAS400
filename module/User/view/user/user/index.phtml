@@ -8,135 +8,116 @@
                 'Manage Users'=>$this->url('users'),
                 ]);
 ?>
+
+<!--********************************  JAVASCRIPTS *************************************-->
+<script language="JavaScript">          
+ 
+    $(document).ready( function() {
+
+        const buttons = {'excel':false, 'pdf':false, 'copy' : false};
+        const dropDownsInCols = [2, 4];
+        const initialConfig = dataTableConfig( dropDownsInCols, buttons ); 
+        
+        const table = renderDataTable(buttons, dropDownsInCols);
+    }); 
+
+</script>
    
-<!--***************************** HTML RENDER: IT RESPONSE TO IndexAction() on UserController ************************* -->
+   
+<div class="col-md-10">            
+    <!-- BUTTON NEW USER -->
+    <p>
+        <a class="boxed-btn" href="<?= $this->url('users', ['action'=>'add']); ?>">
+            <i class="fa fa-user-plus" aria-hidden="true"></i> New User
+        </a>
+    </p>
 
-<div class="row">
-    <div class="col-md-12">        
-        <h3 class="ctp_subtitle"> MANAGE USERS </h3>            
-        <div>
-            <p> <!-- BUTTON NEW USER -->
-                <a class="btn btn-default" href="<?= $this->url('users', ['action'=>'add']); ?>">
-                    <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> New User
-                </a>
-            </p>
-           <!-- TABLE: RENDERING USER'S DATA --> 
-            <div class="table-responsive">
-                <table class="minimalistBlack">
-                    <!-- table header -->
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th><span><i class= "fa fa-envelope"></i></span> E-mail</th>
-                            <th><span><i class= "fa fa-user"></i></span> Full Name</th>
-                            <th><span><i class= "fa fa-odnoklassniki"></i></span> Role(s)</th>        
-                            <th><span><i class= "fa fa-table"></i></span> Date Created</th>
-                            <th><span><i class= "fa fa-users"></i></span> Status</th>        
-                            <th><span><i class= "fa fa-gears"></i></span> Actions</th> 
-                        </tr>
-                    </thead>
-                    <!-- table body -->
-                    <tbody>
-                        <?php $id = 0; //identifying the basic Modal?>
-                        <?php foreach ($users as $user): ?>
-                        <?php 
-                            /* roleId: must be changed each time */ 
-                            $roleId =  "basicModal".++$id; 
-                            $dataTarget = "#".$roleId;
-                        ?>
-                        <tr>
-                            <td><?= $this->escapeHtml($user->getId()); ?></td>
-                            <td>
-                                <a href="<?= $this->url('users', ['action'=>'view', 'id'=>$user->getId()]); ?>">
-                                    <?= $this->escapeHtml($user->getEmail()); ?>
-                                </a> 
-                            </td>
-                            <td>
-                                <?= $this->escapeHtml($user->getFullName()); ?></a> 
-                            </td>
-                            <td>
-                                <a href="#" data-toggle="modal" data-target=<?=$dataTarget?>>
-                                    <i id="icons" class="fa fa-list-alt" title="Role List"></i>
-                                </a>
-                                
-                                <?php
-                                    $roleList = $this->escapeHtml($user->getRolesAsString());
-                                    echo $this->partial('user/partial/render-modal', 
-                                          ['content' => $roleList,
-                                              'roleId' => $roleId   
-                                          ]); 
-                                ?>                                
-                            </td>
-                            <td><nobr><?= $this->escapeHtml($user->getDateCreated()); ?></nobr></td>        
-                            <td>
-                                <?php
-                                    $statusStr = $this->escapeHtml($user->getStatusAsString());
-                                    $classRender = ($statusStr=='Active')? "ctp-green":"ctp-red";
-                                    $hint = ($statusStr=='Active')? "Active":"Inactive";
-                                ?>  
-                                <!-- rendering USER's STATUS: green: means ACTIVE, red: means: INACTIVE -->
-                                <p title=<?=$hint;?>><span class=<?=$classRender;?>> <i class="fa fa-circle "></i></span></p>                               
-                            </td>
-                            <td>
-                                <a href="<?= $this->url('users', ['action'=>'edit', 'id'=>$user->getId()]); ?>">
-                                    <i  id = "icons" class="fa fa-pencil" title="Edit" ></i> 
-                                </a>
-                                <span>&thinsp;</span>
-                                <a href="<?= $this->url('users', ['action'=>'change-password', 'id'=>$user->getId()]); ?>">
-                                    <i id="icons" class="fa fa-lock" title="Change Password"></i>
-                                </a>
-                                
-                                <span>&thinsp;</span>
-                                <a href="#">
-                                    <i id="icons" class="fa fa-address-card-o" title="User Info"></i>
-                                </a>
-                            </td>    
-                        </tr>
+    <!-- TABLE: RENDERING USER'S DATA --> 
 
-                        <?php endforeach; ?>
-                    </tbody>    
-                </table>
-            </div> <!-- table-responsive -->
-        </div> <!-- panel-body -->      
-    </div>  <!-- col-sm-12 -->
-</div> <!-- row- bootstrap -->
+    <table class="table_ctp table_filtered display">
+        <!-- table header -->
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th><i class= "fa fa-envelope"></i> User</th>
+                <th><i class= "fa fa-user"></i> Full Name</th>
+                <th><i class= "fa fa-list-alt"></i> Role(s)</th>        
+                <th><i class= "fa fa-table"></i>Date Created</th>
+                <th><i class= "fa fa-users"></i> Status</th>        
+                <th><i class= "fa fa-gears"></i> Actions</th> 
+            </tr>
+        </thead>
+        <!-- table body -->
+        <tbody>
+            <?php $id = 0; //identifying the basic Modal?>
+            <?php foreach ($users as $user): ?>
+            <?php 
+                /* roleId: must be changed each time */ 
+                $roleId =  "basicModal".++$id; 
+                $dataTarget = "#".$roleId;
+            ?>
+            <tr>
+                <td><?= $this->escapeHtml($user->getId()); ?></td>
+                <td class="description">
+                    <a href="<?= $this->url('users', ['action'=>'view', 'id'=>$user->getId()]); ?>">
+                        <?= $this->escapeHtml($user->getEmail()); ?>
+                    </a> 
+                </td>
+                <td class="description">
+                    <?= $this->escapeHtml($user->getFullName()); ?></a> 
+                </td>
+                <td>
+                    <a href="#" data-toggle="modal" data-target=<?=$dataTarget?>>
+                        <i id="icons" class="fa fa-list-alt" title="Role List"></i>
+                    </a>
 
-<!-- BUTTONS RENDERED ON THE FOOTER : NEW USER, PREVIOUS AND NEXT -->
-<div class="row">
-    <hr>
-    <div class="col-md-2">
-        <p> <!-- BUTTON NEW USER -->
-            <span>&thinsp; </span>
-            <a class="btn btn-default" href="<?= $this->url('users', ['action'=>'add']); ?>">
-                <span class="glyphicon glyphicon-plus ctp-green" aria-hidden="true"></span> New User
-            </a>
-        </p>
-    </div>
-    
-    <!-- BUTTONS PREVIOUS AND NEXT IMPLEMENTATION -->
-    <div class="col-md-offset-7 col-md-3">
-        <div class="btn-group">
-            <a title="click to see Previous 15 Items" href="#">
-                <button class="btn btn-default" type="button">
-                    <span class="glyphicon glyphicon-menu-left ctp-green" aria-hidden="true"></span> Previous 
-                </button>
-            </a>    
-            <a title="click to see Next 15 Items" href="#">
-                <button class="btn btn-default" type="button">Next 
-                    <span class="glyphicon glyphicon-menu-right ctp-green" aria-hidden="true"></span> 
-                </button>
-            </a>     
-        </div>
-    </div>
-</div> <!-- END: BUTTONS ROW: NEW USER, PREVIOUS AND NEXT -->
+                    <?php
+                        $roleList = $this->escapeHtml($user->getRolesAsString());
+                        echo $this->partial('user/partial/modal',[
+                               'content' => $roleList,
+                               'roleId' => $roleId   
+                        ]); 
+                    ?>                                
+                </td>
+                <td><?= $this->escapeHtml($user->getDateCreated()); ?></td>        
+                <td>
+                    <?php
+                        $statusStr = $this->escapeHtml($user->getStatusAsString());
+                        $classRender = ($statusStr == 'Active') ? "ctp-green" : "ctp-red";
+                        $hint = ($statusStr == 'Active') ? "Active" : "Inactive";
+                    ?>  
+                    <!-- rendering USER's STATUS: green: means ACTIVE, red: means: INACTIVE -->
+                    <p title=<?= $hint;?>><span class=<?=$classRender;?>> <i class="fa fa-circle "></i></span></p>                               
+                </td>
+                <td>
+                    <a href="<?= $this->url('users', ['action'=>'edit', 'id'=>$user->getId()]); ?>">
+                        <i  id = "icons" class="fa fa-edit" title="Edit" ></i> 
+                    </a>
+                    <span>&thinsp;</span>
+                    <a href="<?= $this->url('users', ['action'=>'change-password', 'id'=>$user->getId()]); ?>">
+                        <i id="icons" class="fa fa-lock" title="Change Password"></i>
+                    </a>
 
+                    <span>&thinsp;</span>
+                    <a href="#">
+                        <i id="icons" class="fa fa-info-circle" title="User Info"></i>
+                    </a>
+                </td>    
+            </tr>
 
-<!-- RENDER A DIV WITH A PARTIAL VIEW: MODAL WINDOWS --> 
-<?php
-  
+            <?php endforeach; ?>
+        </tbody>   
 
-//$this->paginationControl($users,
-//                    'Sliding',
-//                    'user/partial/paginator', 
-//                    ['route' => 'users']);
-//?>
+        <tfoot>
+            <tr>
+              <th>ID</th>
+              <th><i class= "fa fa-envelope"></i> E-mail</th>
+              <th><i class= "fa fa-user"></i> Full Name</th>
+              <th><i class= "fa fa-list-alt"></i> Role(s)</th>        
+              <th><i class= "fa fa-table"></i> Date Created</th>
+              <th><i class= "fa fa-users"></i> Status</th>        
+              <th><i class= "fa fa-gears"></i>Actions</th> 
+            </tr>
+        </tfoot>
+    </table>    
+</div>       

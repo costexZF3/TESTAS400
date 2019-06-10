@@ -7,10 +7,35 @@
     ]);
 ?>
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8 single-service-item"> 
-            <h3 class="title">Sorry, you have no permission to see this page.</h3>
-            
+    <div class="single-service-item">
+        <div class="row">
+        <!--<div class="row justify-content-center">-->
+            <div class="col-md-12">
+               <div class="img-wrapper">
+                   <center>
+                        <img src="assets/img/nopermission.jpg" alt="error image">
+                   </center> 
+                </div>
+            </div>                
+        </div>
+        <div class="row">   
+            <div class="col-md-12"> 
+                <div class="">
+                    <center>
+                    <h3> Sorry, you have no permission to see this page.</h3>            
+                    </center>
+                </div>
+            </div>          
+        </div>
+        <br>
+        <div class="row">       
+            <div class="col-md-12">        
+                <center>
+                <a class="boxed-btn" href="<?= $this->url('home'); ?>">
+                    <i class="fa fa-backward" aria-hidden="true"></i> GO BACK
+                </a>  
+                </center>
+            </div>
         </div>
     </div>
 </div>
