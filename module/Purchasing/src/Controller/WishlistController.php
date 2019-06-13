@@ -85,11 +85,23 @@ class WishlistController extends AbstractActionController
         return $data;
     } 
     
+    /**
+     *  This method save on the session variable an list of data
+     * 
+     * @param array() $data
+     */
     private function saveIntoSession( $data )
     {
         $this->session->data = $data;        
     }
     
+    /**
+     *  This method compares $data, with data in the session and returns if was some 
+     *  differences between the new data and the save them into the session
+     * 
+     * @param array() $data
+     * @return type
+     */    
     private function changedData( $data )
     {                
         $result = array_diff( $data, $this->session->data );
