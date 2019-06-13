@@ -58,16 +58,16 @@ class VendorManager {
      */
     private function loadVendor( string $vendorNum )
     {        
-        try {
+        try {           
             $strSql = "SELECT VMVNUM, VMNAME, DIGITS(VM#POY) PS, DIGITS(VM#POL) PA, VMVTYP, VMADD1, VMADD2, 
                        VMADD3, VMYTDP, VMPLYR FROM vnmas WHERE VMVNUM = '".trim($vendorNum)."'  "; 
   
             $dataSet = $this->queryManager->runSql( $strSql );             
+                        
+            return $dataSet[0] ?? null;
             
-            return $dataSet[0];
-            
-        } catch (Exception $ex) {
-            echo "Caught exception: ", $ex->getMessage(), ""; 
+        } catch ( Exception $e ) {            
+             echo 'Caught exception: ',  $e->getMessage(), "\n";
         }        
     } // end loadVendor()
     
@@ -79,9 +79,15 @@ class VendorManager {
      */
     public function setVendor( $vendor ) {
         //loading All data
-        $vendorArray = !empty($vendor) ? $this->loadVendor( $vendor ) : [];        
+        try {
+            $vendorArray = ($vendor !== null  && $vendor!=='') ? $this->loadVendor( $vendor ) : [];                   
+           
+            //var_dump($vendorArray);       
+            $this->vendor = !empty($vendorArray) ? $this->populateVendor( $vendorArray ) : null;       
         
-        $this->vendor = count($vendorArray)>0 ? $this->populateVendor( $vendorArray ) : null;       
+        } finally {
+            
+        }         
     }
 
     private function recoverName( $value )
