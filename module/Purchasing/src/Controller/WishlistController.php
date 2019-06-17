@@ -20,7 +20,6 @@ use Purchasing\Form\FormValidator;
 use Purchasing\Form\FormWishList;
 
 
-
 class WishlistController extends AbstractActionController 
 {    
      /**
@@ -113,7 +112,7 @@ class WishlistController extends AbstractActionController
      * This method returns the ViewModel(updatemultiple.phtml)
      *  - this returns an instance of the form 
      * 
-     * @return ViewModel
+     * @return ViewModel    
      */
     public function updatemultipleAction() 
     {       
@@ -181,7 +180,7 @@ class WishlistController extends AbstractActionController
             if ( $needUpdate ) {
                 $data['WHLCODE'] = $this->session->id;
                 //using de SERVICE for update by Code
-                $updated = $this->WLManager->update( $data );                
+                $updated = $this->WLManager->update( $data );               
                 
                 $this->flashMessenger()->addInfoMessage('The part number '.$rawData["partnumber"].' with COD:['. $this->session->id. '] was updated ');
                 
