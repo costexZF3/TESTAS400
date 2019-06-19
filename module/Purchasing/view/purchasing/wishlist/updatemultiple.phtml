@@ -17,10 +17,13 @@
     * @var Zend\Form  
     */  
     $form = $this->form;
+    
+    $imgDir = $this->basePath()."/img/puchasing/statetras1.svg";
+    
     //determining whether show all data from de part or not
         
     /* adding attributes to the form elements */
-    $form->get('user')->setAttributes([
+    $form->get('name')->setAttributes([
         'class' => 'form-control',        
     ]);
     $form->get('status')->setAttributes([
@@ -39,7 +42,7 @@
 
 <div class="container">        
     <div class="row justify-content-center">
-        <div class="col-md-6 single-service-item">                 
+        <div class="col-md-5 single-service-item">                 
             <h4 class="title"> UPDATE USER IN CHARGE & STATUS </h4> 
             <br>
             <!-- Open Form Tag  -->
@@ -50,7 +53,7 @@
                     <!--row 1-->
                     <div class="row">
                       <div class="col-md-6">
-                        <?= $this->FormRow($form->get('user')); ?>                                                                                                                                 
+                        <?= $this->FormRow($form->get('name')); ?>                                                                                                                                 
                       </div>
                       <div class="col-md-6">                        
                         <?= $this->FormRow($form->get('status')); ?>                                                                                                
@@ -66,6 +69,9 @@
                 </div><!-- offset... -->  
             <?= $this->form()->closeTag(); ?>
         </div>
+        <div class="col-md-6 single-service-item">            
+            <img src=<?= $imgDir ?> height="100%" width="100%">
+        </div> 
     </div>
 </div>
 

@@ -17,6 +17,9 @@
     * @var Zend\Form  
     */  
     $form = $this->form;
+    $status = $this->status;
+    $imgDir = $this->basePath()."/img/puchasing/statetras$status.svg";
+    
     //determining whether show all data from de part or not
         
     /* adding attributes to the form elements */
@@ -26,12 +29,17 @@
     $form->get('status')->setAttributes([
         'class' => 'form-control',        
     ]);
+    $form->get('name')->setAttributes([
+        'class' => 'form-control',        
+    ]);
     
         
     $form->get('submit')->setAttributes(['class'=>'submit-btn']);
   
     /* prepare for before rendering */
-    $form->prepare();    
+    $form->prepare();  
+    
+    
  ?>  
          
 
@@ -39,7 +47,7 @@
 
 <div class="container">        
     <div class="row justify-content-center">
-        <div class="col-md-6 single-service-item">                 
+        <div class="col-md-5 single-service-item">                 
             <h4 class="title"> UPDATE </h4> 
             <br>
             <!-- Open Form Tag  -->
@@ -52,10 +60,18 @@
                       <div class="col-md-4">
                         <?= $this->FormRow($form->get('partnumber')); ?>                                                                                                                                 
                       </div>
-                      <div class="col-md-8">                        
+                    </div>   
+                    <!---- row 2 ---->
+                    <div class="row">
+                      <div class="col-md-5">                        
+                        <?= $this->FormRow($form->get('name')); ?>                          
+                      </div>
+                    
+                      <div class="col-md-6">                        
                         <?= $this->FormRow($form->get('status')); ?>                          
                       </div>
-                    </div>   
+                    </div>
+                    
                     <br>
                     <!--row 2-->
                     <div class="row">
@@ -73,6 +89,10 @@
                 </div><!-- offset... -->  
             <?= $this->form()->closeTag(); ?>
         </div>
+        
+        <div class="col-md-6 single-service-item">            
+            <img src=<?= $imgDir ?> height="100%" width="100%">
+        </div>     
     </div>
 </div>
 
