@@ -151,7 +151,7 @@ const dataTableConfig = ( dropDownCols, buttons, $columns=[] ) => {
               { "visible": false, "targets": $columns }
             ],
                
-            select: true, 
+            select: false, 
             "lengthMenu" :  [ 
                               [10, 25, 50, 100,  -1], 
                               [10, 25, 50, 100, "All"]
