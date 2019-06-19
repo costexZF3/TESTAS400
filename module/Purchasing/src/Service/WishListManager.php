@@ -1,22 +1,20 @@
 <?php
 
-namespace Purchasing\Service;
+    namespace Purchasing\Service;
 
-use Application\Service\QueryManager as queryManager;
-use Application\Service\PartNumberManager;
-use Application\Service\VendorManager as VendorManager;
+    use Application\Service\QueryManager as queryManager;
+    use Application\Service\PartNumberManager;
+    use Application\Service\VendorManager as VendorManager;
 
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-
+    use PhpOffice\PhpSpreadsheet\IOFactory;
+    use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 /**
  * - Description of WishListManager
  *    - This class is a wrapper. This encapsulates main operations through the WishList file 
  *      depend on some criteria
  *    - methods privates
- *       -   
- * 
+ *      
  * @author mojeda
  */
 
@@ -36,10 +34,10 @@ class WishListManager
     const STATUS_REOPEN           = '5';  // this part can be analyzed again
     const STATUS_REJECTED         = '6';  // this part won't be developing any more
  
-   const FROM_LOSTSALE = '1';
+   const FROM_LOSTSALE   = '1';
    const FROM_VENDORLIST = '2';
-   const FROM_MANUAL = '3';
-   const FROM_EXCEL = '4';
+   const FROM_MANUAL     = '3';
+   const FROM_EXCEL      = '4';
    
   
    const FIELDS = ['WHLCODE', 'WHLUSER', 'WHLPARTN', 'WHLSTATUS', 'WHLSTATUSU',  'WHLREASONT', 'WHLFROM',
@@ -53,13 +51,19 @@ class WishListManager
    const STATE_TRANSITION_TABLE = [
         ['current_state' => '1', 'next_state' => '2'], 
         ['current_state' => '1', 'next_state' => '6'], 
+        ['current_state' => '1', 'next_state' => '1'], 
         ['current_state' => '2', 'next_state' => '3'], 
+        ['current_state' => '2', 'next_state' => '2'], 
         ['current_state' => '3', 'next_state' => '4'], 
         ['current_state' => '3', 'next_state' => '5'], 
+        ['current_state' => '3', 'next_state' => '3'], 
         ['current_state' => '4', 'next_state' => '5'], 
+        ['current_state' => '4', 'next_state' => '4'], 
         ['current_state' => '5', 'next_state' => '2'], 
         ['current_state' => '5', 'next_state' => '6'],                
+        ['current_state' => '5', 'next_state' => '5'],                
         ['current_state' => '6', 'next_state' => '5'],                 
+        ['current_state' => '6', 'next_state' => '6'],                 
    ];
     
    protected $reasontype = [ self::NEWVENDOR => "New Vendor", self::NEWPART => "New Part"];
@@ -88,9 +92,9 @@ class WishListManager
     /*
      * array with all COLUMN LABELS that will be rendered
      */
-    private $columnHeaders = ['Select', 'From','Code','Date', 'User','Part Number', 'Description','Status', 'Assigned To', 'Vendor',
+    private $columnHeaders = ['Check', 'From','Code','Date', 'User','Part Number', 'Description','Status', 'Assigned', 'Vendor',
                     'PA', 'PS',  'Year Sales',
-                              'Qty Quoted','Times Quoted', 'OEM Price', 'Loc20-STK', 'Model', 'Category',
+                              'Qty Quoted','Times Quoted', 'OEM Price', 'Loc20', 'Model', 'Category',
                               'SubCat', 'Major','Minor', 'Action'];
     /*
      * rows: this array saves all <tr> elements generated running sql query..
@@ -134,15 +138,37 @@ class WishListManager
         $this->refreshWishList();           
     }//END:constructor 
     
+    
     /**
-     * this method update and item given its code
+     * This method returns a boolean value indicating whether 
+     * the new status can be assigned to the part
+     * 
+     * @param char(1) $currentState
+     * @param char $newStatus
+     * @return boolean
+     */
+    public function changeStatus( $currentState, $newStatus )
+    {        
+        $tmp = [];
+        foreach (self::STATE_TRANSITION_TABLE as $row) {
+           if ($row['next_state'] == $newStatus) {
+                  array_push( $tmp, $row['current_state']); 
+           } 
+        }
+
+        return in_array( $currentState, $tmp) ;  
+    }//End Method: changeStatus()
+    
+    
+    /**
+     * This method updates an item taking its code into account 
      * 
      * @param array() $data
      */
     private function updateByCode( $data )
-    {   
+    {           
         $SET['WHLSTATUS'] = $data['status'] ?? self::STATUS_OPEN;        
-        $SET['WHLSTATUSU'] = $data['user'] ?? self::USER_BY_DEFAULT;        
+        $SET['WHLSTATUSU'] = $data['name'] ?? self::USER_BY_DEFAULT;        
         $SET['WHLCOMMENT'] = $data['comment'] ?? '';        
         
         if ($SET['WHLCOMMENT']=='') { unset($SET['WHLCOMMENT']);}
@@ -171,9 +197,9 @@ class WishListManager
         //updating multiple records
         $records = $data['records']; //sent from the session variable
         
-        
+        //new values to modify 
         $newStatus = $data['status'];
-        $userToAssign = $data['user'];
+        $userToAssign = $data['name'];
         
         //verifying if the user needs be changed or updated 
         $changeUser = ($userToAssign != self::USER_BY_DEFAULT);
@@ -181,38 +207,23 @@ class WishListManager
         
         //to assign a new user, the actual status must be 2 (approved), 3 (hold)  
         //for each item in $records
-        foreach ( $records as $part) {
-            //getting data from the parts 
-//            $code = $part['code']
-            
-//            $currentState = 1;
+        foreach ( $records as $idItem ) {
+           // getting data from WL 
+           $data = $this->getDataFromWL( $idItem );
+           $actualUserAssigned = $data['WHLSTATUSU'];
+           $actualStatus = $data['WHLSTATUS'];
+           
+           //checking new user will be assigned to list of parts
+           $data['name'] = $changeUser && ( $actualUserAssigned !== $userToAssign ) ? $userToAssign : $actualUserAssigned;           
+           
+           //checking status
+           $data['status'] = $changeStatus && $this->changeStatus($actualStatus, $newStatus) ? $newStatus : $actualStatus; 
+           $data['WHLCODE']= $idItem; 
+           $this->updateByCode($data);
         }
-        
-        var_dump( $data ); 
-        var_dump( $changeUser ); 
-        var_dump( $changeStatus ); exit;
     }//end: update() method
     
-    /**
-     * This method returns a boolean value indicating whether 
-     * the new status can be assigned to the part
-     * 
-     * @param char(1) $currentState
-     * @param char $newStatus
-     * @return boolean
-     */
-    public function changeStatus( $currentState, $newStatus )
-    {        
-        $tmp = [];
-        foreach (self::STATE_TRANSITION_TABLE as $row) {
-           if ($row['next_state'] == $newStatus) {
-                  array_push( $tmp, $row['current_state']); 
-           } 
-        }
-
-        return in_array( $currentState, $tmp) ;  
-    }//End Method: changeStatus()
-    
+        
     
     //DEFINING A METHOD OF CLASS
     /**
@@ -229,9 +240,31 @@ class WishListManager
         }    
        
         return $this->status[$idStatus];        
+    }//END method getStatus()
+    
+    /**
+     * It returns $data[] depending on $scenario 
+     * 
+     * @param array() $row
+     * @param string $scenario
+     */     
+    public function parseData( $row )
+    {
+        $data['partnumber'] = $row['WHLPARTN'] ?? $row['partnumber'];
+        $data['status'] = $row['WHLSTATUS']?? $row['status'];
+        $data['comment'] = $row['WHLCOMMENT']?? $row['comment'];
+        $data['name'] = $row['WHLSTATUSU']?? $row['name'];
+        
+        return $data;
     }
     
-    //This method returns data from a 
+    
+    /**
+     * This method returns whole data of a PARTNUMBER from WL 
+     * 
+     * @param string $partnumber
+     * @return array()
+     */
     public function getDataFromWL( $partnumber )
     {
         $sqlStr = 'SELECT * FROM PRDWL';// WHERE WHLPARTN = '.$partnumber;
@@ -241,6 +274,12 @@ class WishListManager
     }
 
 
+    /**
+     * -This method generates the strSql taking into account the userName and its Role
+     *  in the WL
+     * 
+     * @param string $userName
+     */
     private function refreshWishList( string $userName = '')
     {
        $strSql =  $this->getSqlStr( $userName );         
@@ -293,8 +332,7 @@ class WishListManager
      * @return string  |  It returns a STRING that will be used to execute the SQL query.
      */
     private function getSqlStr( string $userName = '' ):String 
-    {  
-        
+    {          
        $strRenew = ($userName!=='') ? "where UCASE(WHLSTATUSU)= '".strtoupper($userName)."'" : "";
            
        $sqlStr = "SELECT * FROM ( SELECT  IMPTN, IMDSC, IMPC1,IMPC2,IMCATA,IMSBCA,IMMOD, IMPRC     
@@ -386,6 +424,21 @@ class WishListManager
     } //END: AddItem method
  
     
+    private function getClassCSSforStatus( $item )
+    {
+        $strStatus = $this->status;    
+        switch ($item){
+            case $strStatus[self::STATUS_REJECTED]: { $className="statusRejected description"; break;}
+            case $strStatus[self::STATUS_OPEN]: { $className="statusOpen description"; break;}                   
+            case $strStatus[self::STATUS_DOCUMENTATION] : { $className="statusDocumentation description"; break;}                   
+            case $strStatus[self::STATUS_REOPEN] : { $className="statusReOpen description"; break;}                   
+            case $strStatus[self::STATUS_TO_DEVELOP] : { $className="statusDevelop description"; break;}                   
+            case $strStatus[self::STATUS_CLOSE_BY_DEV] : { $className="statusClosebyDev description"; break;}                   
+        }  
+        
+        return $className;
+    }
+    
     /**
      * - This method() converts the elements of an array into a <TR> element 
      *   and assigned the CLASS, ID, and TITLE attributes for each <TD> element
@@ -396,25 +449,30 @@ class WishListManager
      */
     private function rowArrayToHTML( $row ):string
     {   
-        $result ='<tr><td><input type="checkbox" name= "checkedrow[]" id="checked'.$row[1].'" value="'.$row[1].'"></td>';  
-//        $result .='<tr>';  
-        $col = 1;
-        $className = '';
+        $result ='<tr><td><label class= "container-check"> <input type="checkbox" name= "checkedrow[]" id="checked'.$row[1].'" value="'.$row[1].'"><span class="checkmark"></span></label></td>';  
+      
+        $col = 1; $className = '';
+        
         
         /* COLUMNS with the CLASS description-CSS- (first coluns is 0 ) */        
-        $columns = [  3, 4,  6, 9, 10, 16];
+        $columns = [  3, 4, 5, 6, 8, 9, 10, 15, 16];
         foreach( $row as $item ) {
             //CHANGING THE ICON TO THE FROM COLUMN: (EXCEL FILE, ...)
+            if ($col==0) {$className = 'firstcol';}
             if ($col==1) {                             
                 $iconToExcel = '<i class="fa fa-file-excel-o fa-2x"  aria-hidden="true" text="From Excel file" ></i>';
-                $iconToManual = '<i class="fa fa-hand-pointer-o base-color"  aria-hidden="true" text="One by One" ></i>';
+                $iconToManual = '<i class="fa fa-keyboard-o fa-2x"  aria-hidden="true" text="One by One" ></i>';
                 $item = ($item=='EXCEL') ? $iconToExcel : $iconToManual;
             }
             if (in_array( $col, $columns ) ) {
                 $className = "description";
-            } else if ( $col === 14 ) { $className = "money";}
-            else {$className = '';}
-              
+            } else if ( $col === 7 ) { 
+                $className = $this->getClassCSSforStatus( $item );
+                          
+            } else if ( $col === 14 ) 
+                { $className = "money";
+            } else if ( $col === 18 ) { $className = "description";}
+            else {$className = '';}              
             
             $result .= '<td class="'.$className.'">'.$item.'</td>';
           $col++;  
@@ -559,7 +617,7 @@ class WishListManager
          
           //creating rows as JSON
         $this->jsonResponse = json_encode( $toJson ); 
-//        var_dump($this->jsonResponse()); exit;
+        //var_dump($this->jsonResponse()); exit;
         return $result;
     }
     

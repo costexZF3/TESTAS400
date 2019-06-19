@@ -17,8 +17,9 @@
     $form = $this->form;
     
     $table = $this->wldata;     
-    $isPa = $this->isPa;
+    $isWLOwner = $this->isWLOwner;
     $user = $this->user;    
+    //this line check whether it was created a file with inconcistencies 
     $urlInc = ( $this->urlInc ) ? $this->basePath().'/data/wishlist_inc.xls' : '';
     
     $form->get('submit')->setAttributes(['class'=>'submit-btn']);
@@ -31,19 +32,53 @@
 <script language="JavaScript">          
  
     $(document).ready( function() { 
-         let isPa = "<?php echo $isPa; ?>";
+        /**
+         * This variable retrieves if the logged in user has the WLOwner role
+         * assigned
+         * 
+         * @type boolean
+         */
+        
+        let isWLOwner = "<?php echo $isWLOwner; ?>";
          
-         hideCols=[0];
+        /**
+         * hideCols[]: this array has the items that will not been shown in the browser.
+         * - It has been taken into consideration the logged in user's access roles which were defined 
+         * - in the business use cases.
+         * - hideCols[]: it means there are no columns for being hidden 
+         * @type array
+         */
+        hideCols=[];
+        
+        /** 
+         * - it's true then hide the first column 
+         * 
+         * @type boolean
+         */
+        if (!isWLOwner){
+            hideCols =  [0];  
+        }
          
-         if (!isPa){
-             hideCols =  [];
-         }
-         
-    //   taking off CLASS dt-button to the buttons EXCEL, PDF, AND COPY
+        // taking off CLASS dt-button to the buttons EXCEL, PDF, AND COPY
         $("button.dt-button").removeClass("dt-button");
 
+        /**
+         * BUTTONS: it's an object that tells the browser which type of buttons
+         * will be rendered: true value (show) false (hide)
+         * @type object
+         */
         const buttons = {'excel':true, 'pdf':true, 'copy' : true};
-        const dropDownsInCols = [ 1, 3, 4, 5, 7, 13, 18];
+        
+        /**
+         * this array represents the columns there will be a DROPDOWN on the bottom
+         * @type Array
+         */
+        const dropDownsInCols = [ 4, 7,18];
+        
+        /**
+         * 
+         * @type type
+         */
         const initialConfig = dataTableConfig( dropDownsInCols, buttons, hideCols);  
 
         var table = filterTable('table_filtered', initialConfig ); 
@@ -60,15 +95,19 @@
 <?= $this->flashMessenger()->render('error',   ['alert', 'alert-warning']); ?>
 <?= $this->flashMessenger()->render('info',    ['alert', 'alert-info']); ?>   
 
-<?php if($urlInc !=''): ?>
-    <div>
-        <p> Click here to <a href="<?=$urlInc;?>" class="base-color">Download</a> inconcistencies!!!</p> 
+<!-- the following code snipped shows the link if there was some inconsistence 
+    trying to upload some EXCEL file
+--> 
+<?php if( $urlInc !='' ): ?>
+    <div>          
+        <p> Click here to <a href="<?=$urlInc;?>" class="base-color">Download</a> inconsistencies!!!</p> 
     </div>
 <?php endif;?>
 
+<!--SHOWING ALL CONTENT-->
 <div class="container-fluid">
-   <!--rendering actions-->  
-   <?php if (!$isPa) :?>
+   <!--rendering actions depending on the user's access-->  
+   <?php if ($isWLOwner) :?>
             <!-- Open Form Tag  -->
         <?= $this->form()->openTag($form); ?> 
         <?= $this->partial('particialview/actions.phtml',['user'=>$user, 'form' => $form]);?> 
@@ -78,22 +117,22 @@
    
    <!--rendering TABLE WISHLIST--> 
    <div class="row">
-       <div class="col-md-12">
-            <?php 
-            
-            if ($table !=='') {
-                echo $table; 
-            } else { ?>
-                <div class="container  panel panel-info title">
-                   <h3> "THE WISH LIST IS EMPTY OR THERE IS NO ITEM(s) ASSIGNED TO YOU" </h3>
-                </div>
-            <?php } ?>
-       </div> 
+    <div class="col-md-12">
+     <?php
+     if ($table !=='') {
+         echo $table; 
+     } else { ?>
+         <div class="container  panel panel-info title">
+            <h3> "THE WISH LIST IS EMPTY OR THERE IS NO ITEM(s) ASSIGNED TO YOU" </h3>
+         </div>
+     <?php } ?>
+    </div> 
    </div>
 </div>    
 
 <?= $this->partial('particialview/modal.phtml',['name'=>'User Name']);?> 
 
-<?php if (!$isPa) :?>
+<!--closing Form tag--> 
+<?php if ($isWLOwner) :?>
      <?= $this->form()->closeTag(); ?>      
 <?php endif;?>

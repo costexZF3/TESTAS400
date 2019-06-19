@@ -276,6 +276,8 @@ class UserManager
 
         return false;
     }
+    
+    
     /**
      * Checks whether the given password reset token is a valid one.
      */

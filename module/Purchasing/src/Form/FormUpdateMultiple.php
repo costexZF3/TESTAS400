@@ -51,13 +51,14 @@ class FormUpdateMultiple extends Form
             WLM::STATUS_OPEN => $this->WLManager->getStatus( WLM::STATUS_OPEN ),
             WLM::STATUS_DOCUMENTATION => $this->WLManager->getStatus( WLM::STATUS_DOCUMENTATION ),
             WLM::STATUS_TO_DEVELOP => $this->WLManager->getStatus( WLM::STATUS_TO_DEVELOP ),                                                                                           
-            WLM::STATUS_CLOSE_BY_DEV => $this->WLManager->getStatus( WLM::STATUS_CLOSE_BY_DEV ),                                                                                           
+            //WLM::STATUS_CLOSE_BY_DEV => $this->WLManager->getStatus( WLM::STATUS_CLOSE_BY_DEV ),                                                                                           
             WLM::STATUS_REOPEN => $this->WLManager->getStatus( WLM::STATUS_REOPEN ),                                                                                           
             WLM::STATUS_REJECTED => $this->WLManager->getStatus( WLM::STATUS_REJECTED ),                                                                                           
         ];
 
         $users = [
                 'NA'        => 'NA',
+                'NO ASSIGNED' => 'NO ASSIGNED',           
                 'CTOBON'    => 'CTOBON',
                 'ALOPEZ'    => 'ALOPEZ',
                 'ALORENZO'  => 'ALORENZO',
@@ -66,7 +67,6 @@ class FormUpdateMultiple extends Form
         
         $this->addElementSC1( $status, $users ); 
         $this->addCommonElements(); //CSFR (CROSS SIDE FORGERY REQUEST)
-//        $this->addInputFiltersSC1();  
        
     }//END: selectElements
 
@@ -100,7 +100,7 @@ class FormUpdateMultiple extends Form
         // User in charge
         $this->add([            
             'type'  => 'select',
-            'name' => 'user',
+            'name' => 'name',
             'options' => [
                 'label' => 'USER',
                 'value_options' => $users                
@@ -119,58 +119,6 @@ class FormUpdateMultiple extends Form
         ]);
     }
     
-    /*
-     *  This method creates input filters (used for form filtering/validation ).
-     */
-   private function addInputFiltersSC1() 
-   { 
-       // Create main input filter
-        $inputFilter = new InputFilter();        
-        $this->setInputFilter( $inputFilter );
-      
-        $inputFilter->add([
-            'name'     => 'partnumber',
-            'required' => true,
-            'filters'  => [
-                ['name' => 'StringTrim'],                                                            
-                ['name' => 'StripTags'],                                                            
-                ['name' => 'StripNewlines'],  
-                ['name' => 'StringToUpper'],
-            ], 
-            'validators' => [ 
-                //validator: 1           
-                ['name'    => 'StringLength',
-                    'options' => ['min' => 5,'max' => 19],
-                ],
-            ]
-        ]); 
-        
-        //------------------------- validating only the entered data -----------------------
-        
-        /* adding filters by comments */
-        $inputFilter->add([
-            'name'     => 'comment',
-            'required' => false,
-            'filters'  => [
-                ['name' => 'StringTrim',
-                      'options' => ['charlist' => "&'@?*%#$",]  //character to remove from comment                            
-                ],                                                            
-                ['name' => 'StripTags'],                                                            
-            ], //END: FILTERS
-            'validators' => [           
-                ['name'    => 'StringLength', 'options' => ['min' => 0,'max' => 255]],                          
-            ], //END: VALIDATORS KEY 
-        ]);
-   } //END: addFilters method()
-    
-   
-    /*
-     *  This method creates input filters (used for form filtering/validation ).
-     */
-   private function addInputFiltersSC2() 
-   {    
-           
-    } //END: addFilters method()
   
     
 }//END CLASS

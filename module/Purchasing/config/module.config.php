@@ -92,18 +92,27 @@ return [
 
             ], //END: access_filter for LostSaleController           
 
+            //defining access to the WishlistController accions
             Controller\WishlistController::class => [
-                //Allowing routes access depending on the type of permission assigned to loggin user
-                // Give access to "index" actions to everyone with +menu.purchasing +option.purchasing.claims 
+                /* Allowing routes access depending on the type of permission assigned to loggin user
+                 Give access to "index" actions to everyone with +menu.purchasing +option.purchasing.claims */
 
-                //Actions reponse to Roles associated to MENUS 
-                ['actions' => ['upload', 'add', 'create' ],             'allow' => '+purchasing.high.level'],
-                ['actions' => ['index'],                                'allow' => '+purchasing.option.pd.wishlist'],
-                ['actions' => ['update', 'updatemultiple', 'upload'],   'allow' => '+purchasing.ps'],
-                ['actions' => ['update'],                               'allow' => '+purchasing.pa'],
+                //ACCESS TO ACCTIONS ASSOCIATED WITH MENUS               
+                ['actions' => ['index'], 'allow' => '+purchasing.option.pd.wishlist' ],
                 
-                ['actions' => ['delete','insert', 'wishlist' ],         'allow' => '+menu.purchasing'],                
-                              
+                /* ACCESS TO ACTIONS ASSOCIATED TO ROLES  */
+                /* +purchasing.wl.owner 
+                 * +purchasing.ps   
+                 * +purchasing.pa
+                 * +purchasing.wl.documentator
+                 */
+                ['actions' => ['add', 'create','update', 'updatemultiple', 'upload'],   'allow' => '+purchasing.wl.owner'],                
+                
+                ['actions' => ['add', 'create','update'],    'allow' => '+purchasing.ps'],
+               
+                ['actions' => ['update'],                    'allow' => '+purchasing.pa'],                
+               
+                ['actions' => ['update'],                    'allow' => '+purchasing.wl.documentator'],                                
 
             ], //END: access_filter for LostSaleController    
             

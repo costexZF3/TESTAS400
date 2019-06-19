@@ -58,36 +58,41 @@ class FormUpdate extends Form
      * @param string $scenario
      */
     private function  selectElements() 
-    {
-        
+    {        
         switch ( $this->scenario ) {
-            case 'pa' :   //status for users with purchasing.pa permission 
+            case 'PA' :   //status for users with purchasing.pa permission 
+                $status = [                   
+                    WLM::STATUS_DOCUMENTATION => $this->WLManager->getStatus( WLM::STATUS_DOCUMENTATION),
+                    WLM::STATUS_TO_DEVELOP => $this->WLManager->getStatus( WLM::STATUS_TO_DEVELOP ),                                                                                           
+                ];                                
+            break;
+            case 'PS' :   //status for users with purchasing.pa permission 
                 $status = [                   
                     WLM::STATUS_DOCUMENTATION => $this->WLManager->getStatus( WLM::STATUS_DOCUMENTATION),
                     WLM::STATUS_TO_DEVELOP => $this->WLManager->getStatus( WLM::STATUS_TO_DEVELOP ),                                                                                           
                 ];
-                
-                $this->addElementSC1( $status ); 
-                $this->addCommonElements(); //CSFR (CROSS SIDE FORGERY REQUEST)
-                $this->addInputFiltersSC1();                   
+                                   
             break;
         
-            case 'ps' : //for the user: wishlist.owner                   
+            case 'WLO' : //for the user: wishlist.owner                   
                 $status = [ 
                     WLM::STATUS_OPEN => $this->WLManager->getStatus( WLM::STATUS_OPEN ),
                     WLM::STATUS_DOCUMENTATION => $this->WLManager->getStatus( WLM::STATUS_DOCUMENTATION ),
                     WLM::STATUS_TO_DEVELOP => $this->WLManager->getStatus( WLM::STATUS_TO_DEVELOP ),
-                    WLM::STATUS_CLOSE_BY_DEV => $this->WLManager->getStatus( WLM::STATUS_CLOSE_BY_DEV),                                                                                           
+                  //  WLM::STATUS_CLOSE_BY_DEV => $this->WLManager->getStatus( WLM::STATUS_CLOSE_BY_DEV),                                                                                           
                     WLM::STATUS_REOPEN => $this->WLManager->getStatus( WLM::STATUS_REOPEN ),                                                                                           
                     WLM::STATUS_REJECTED => $this->WLManager->getStatus( WLM::STATUS_REJECTED ),                                                                                           
                 ];
                 
-                $this->addElementSC1( $status ); 
-                $this->addCommonElements(); //CSFR (CROSS SIDE FORGERY REQUEST)
-                $this->addInputFiltersSC1();  
+                $userList = ['MOJEDA'=>'MOJEDA', 'ALOPEZ'=>'ALOPEZ', 'CTOBON'=>'CTOBON',
+                    'MAIKOL'=>'MAIKOL'];
             break;            
            
         }//END: SWITCH
+        
+        $this->addElementSC1( $status, $userList ); 
+        $this->addCommonElements(); //CSFR (CROSS SIDE FORGERY REQUEST)
+        $this->addInputFiltersSC1();  
     }//END: selectElements
 
     /**
@@ -115,7 +120,7 @@ class FormUpdate extends Form
         ]);
     }// addCommonElements method
     
-    private function addElementSC1( $status ) 
+    private function addElementSC1( $status, $userList ) 
     {  
         // PART NUMBER BUT ONLY INFORMATION IT WILL BE READ ONLY AS WELL.
         $this->add([
@@ -136,7 +141,7 @@ class FormUpdate extends Form
                 'class'       => 'form-control',
                 'id'          =>'comment',
                 'rows'        => "4", 
-                'maxlenght'   => 256,                                           
+                'maxlenght'   => 500,                                           
                 'placeholder' => 'Enter a comment',                    
             ],
             'options' =>['label' => 'COMMENTS'],                     
@@ -149,6 +154,16 @@ class FormUpdate extends Form
             'options' => [
                 'label' => 'STATUS',
                 'value_options' => $status
+            ],
+        ]);
+        
+        // status: $status is an array with the status allowed to see by the user in charge.   
+        $this->add([            
+            'type' => 'select',            
+            'name' => 'name',
+            'options' => [
+                'label' => 'ASSIGNED TO:',
+                'value_options' => $userList
             ],
         ]);
     }
@@ -192,19 +207,12 @@ class FormUpdate extends Form
                 ['name' => 'StripTags'],                                                            
             ], //END: FILTERS
             'validators' => [           
-                ['name'    => 'StringLength', 'options' => ['min' => 0,'max' => 255]],                          
+                [
+                    'name' => 'StringLength', 
+                 'options' => ['min' => 0,'max' => 500]
+                ],                          
             ], //END: VALIDATORS KEY 
         ]);
    } //END: addFilters method()
-    
-   
-    /*
-     *  This method creates input filters (used for form filtering/validation ).
-     */
-   private function addInputFiltersSC2() 
-   {    
-           
-    } //END: addFilters method()
-  
-    
+       
 }//END CLASS

@@ -68,21 +68,6 @@ class WishlistController extends AbstractActionController
      }//End: getUser()  
      
    /************************************ for updating items in WL ******************************  
-     
-    /**
-     * It returns $data[] depending on $scenario 
-     * 
-     * @param array() $row
-     * @param string $scenario
-     */     
-    private function parseData( $row, $scenario = 'pa')
-    {
-        $data['partnumber'] = $row['WHLPARTN'] ?? $row['partnumber'];
-        $data['status'] = $row['WHLSTATUS']?? $row['status'];
-        $data['comment'] = $row['WHLCOMMENT']?? $row['comment'];
-        
-        return $data;
-    } 
     
     /**
      *  This method save on the session variable an list of data
@@ -124,7 +109,7 @@ class WishlistController extends AbstractActionController
             $data = $this->params()->fromPost();
             
             //if not want update nothing redirect to whislit()
-            $continue = $data['user'] != 'NA' &&  $data['user'] != 'NA';
+            $continue = $data['status'] != 'NA' ||  $data['name'] != 'NA';
             
             if ( !$continue ) {
                 $this->flashMessenger()->addErrorMessage('Oopss!!!. It seems you did not SELECTED a user neither a new status.');
@@ -136,6 +121,8 @@ class WishlistController extends AbstractActionController
               
             $this->WLManager->update($data, true);
             
+            $mes = implode(', ',$data['records'] );
+            $this->flashMessenger()->addInfoMessage('The parts were updated successfully : ['.$mes.']');
             return $this->redirect()->toRoute('wishlist');
         }
         
@@ -146,17 +133,41 @@ class WishlistController extends AbstractActionController
     }
  
     /**
+     * This method returns a string with the logged in user's role
+     * 
+     * @return string
+     */
+    private function getRoleInWl() 
+    {
+        $user= $this->getUser();
+        $isWLO = $this->access('purchasing.wl.owner',['user'=>$user]) ? 'WLO' : null;    
+        $isPS = $this->access('purchasing.ps',['user'=>$user]) ? 'PS' : null;    
+        $isPA = $this->access('purchasing.pa',['user'=>$user]) ? 'PA' : null;    
+        $isWLDoc = $this->access('purchasing.wl.documentator',['user'=>$user]) ? 'WLDOC' : null;    
+        
+        return $isWLO ?? $isPS ?? $isPA ?? $isWLDoc ?? null;
+    }// END: getRoleINWl()
+    
+    /**
      * This method (Action) update status and comment of one part inside the WL
      * -used in the FormUpdate
      */
     public function updateAction()
     {   
-        $isHighLevel = $this->access('purchasing.ps', ['user'=>$this->getUser()]);
-        $scenario = !$isHighLevel ? 'pa' : 'ps';        
-                        
+        $WL = $this->WLManager;
+    
+        $userRole = $this->getRoleInWL();
+        
+        $isHighLevel = $userRole == 'WLO';
+        
+        $scenario = $userRole;
+                       
         //checking if the data are coming from FormUpdate
         if( $this->getRequest()->isPost() ) {            
-            $raw = $this->params()->fromPost();            
+            $raw = $this->params()->fromPost(); 
+            $form = new FormUpdate( $scenario, $this->WLManager );
+            $form->setData($raw);
+            $dat = $form->isValid()? $form->getData():null;
             
             //checking multiple selection for updating assigned users and status
             $multipleUpdate = isset($raw['checkedrow']);
@@ -171,7 +182,21 @@ class WishlistController extends AbstractActionController
             }
            
             //in case the user is updating one by one
-            $rawData = $this->parseData( $raw );
+            $rawData = $WL->parseData( $raw );
+            
+            $status = $rawData['status'];
+            
+            $canChangeStatus = $WL->changeStatus($this->session->InitialStatus, $status);
+            
+            //checking if the new status can be acepted
+            if ( !$canChangeStatus ) {
+               $form->setData($dat);
+                $status = $this->session->InitialStatus;
+               
+                $form->get('status')->setMessages(['Invalid State. See the graph and select the a right state.']);
+                return new ViewModel(
+                        [ 'form' => $form, 'status' => $status ]);
+            }
             
             //***************************** checkinggg if I can change de STATUS ***********
             $data = $this->changedData( $rawData );
@@ -180,7 +205,7 @@ class WishlistController extends AbstractActionController
             if ( $needUpdate ) {
                 $data['WHLCODE'] = $this->session->id;
                 //using de SERVICE for update by Code
-                $updated = $this->WLManager->update( $data );               
+                $WL->update( $data );                
                 
                 $this->flashMessenger()->addInfoMessage('The part number '.$rawData["partnumber"].' with COD:['. $this->session->id. '] was updated ');
                 
@@ -202,63 +227,70 @@ class WishlistController extends AbstractActionController
             }
             
             // creating Form template
-            $form = new FormUpdate($scenario, $this->WLManager );
+            $form = new FormUpdate( $scenario, $WL );
                 
             // getting information from the part
             // Retrieving the row with id received 
-            $row = $this->WLManager->getDataFromWL( $id );
-            $data = $this->parseData( $row );        
+            $row = $WL->getDataFromWL( $id );
+            $data = $WL->parseData( $row );     
+            $status = $data['status'];
             
+            //saving initial status
+            $this->session->InitialStatus = $status;
             //updating data to show on the form will be updated
             $form->setData( $data );
             $this->saveIntoSession( $data ); //updating session for compated data and not update if there is no change
-                  
+                
         } //end of the else
-        
+       
         return new ViewModel(
             [
                 'form' => $form,
+                'status' => $status
             ]);
  
-    }//Method update
+    }//END: updateAction()
     
     /**
-     *  The IndexAction show the WishList 
+     *  The IndexAction show the WishList taking into account
+     *  the logged in user's access permissions
+     * 
+     *  -The users with the permissions: (they are the only users with access to this module)
+     *    -purchasing.wl.owner, -purchasing.ps, purchasing.pa, purchasing.wl.documentator
      */
     public function indexAction() 
-    {
+    {        
+        //  checking user's access into this option
+        if (!$this->access('purchasing.option.pd.wishlist')) {
+            return $this->redirect()->toRoute('not-authorized');
+        }
+        
+        $isPa = false;
         $form = new FormWishList();
         
         $this->layout()->setTemplate('layout/layout_Grid');
         
+        //this checks if there was generated some insconsistency trying to import from
+        // an excel file some new items to the WishList
         $linkInc = $this->session->inconsistency ?? false;
         
         $user= $this->getUserS();
-        $isPa = $this->access('purchasing.pa',['user'=>$user]);
-        $isHighLevel = $this->access('purchasing.high.level', ['user'=>$user]);            
-        
-        // Access control.
-        //  CHECKING USER ACCESS:  IF (he/she) management can see all
-        if (!$this->access('special.access')) {
-            if (!$isPa && !$isHighLevel)  {          
-                return $this->redirect()->toRoute('not-authorized');
-            }        
-
-            //in case the user is a PA then renew WL with the users assigned to him  
-            if ( $isPa ) {   
-                //getting user for loading only its items assigned
-                $userN = $this->getUserS();  
-
-                $this->WLManager->renewWL( $userN );       
-            }
-            $re = $this->WLManager->jsonResponse();
-        } else {}
+        $isWLOwner = $this->access('purchasing.wl.owner',['user'=>$user]);                   
+               
+        // renew WL with the logged in user's assigned parts
+        if ( !$isWLOwner ) {   
+            //getting user for loading only its items assigned
+            $userN = $this->getUserS();
+            $this->WLManager->renewWL( $userN );       
+            $isPa = $this->access('purchasing.pa');
+        }
+        //$re = $this->WLManager->jsonResponse();
         
         return new ViewModel(
             [
                 'wldata' => $this->WLManager->TableAsHtml(),
                 'urlInc' => $linkInc, //$urlinc  
-                'isPa' => $isPa,
+                'isWLOwner' => $isWLOwner,
                 'user' => $user,
                 'form' => $form
             ]);
