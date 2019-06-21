@@ -58,13 +58,16 @@ class FormUpdate extends Form
      * @param string $scenario
      */
     private function  selectElements() 
-    {        
+    {    
+        $userList = ['NA'=>'NA'];
+        
         switch ( $this->scenario ) {
             case 'PA' :   //status for users with purchasing.pa permission 
                 $status = [                   
                     WLM::STATUS_DOCUMENTATION => $this->WLManager->getStatus( WLM::STATUS_DOCUMENTATION),
                     WLM::STATUS_TO_DEVELOP => $this->WLManager->getStatus( WLM::STATUS_TO_DEVELOP ),                                                                                           
-                ];                                
+                ]; 
+                
             break;
             case 'PS' :   //status for users with purchasing.pa permission 
                 $status = [                   

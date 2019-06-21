@@ -172,6 +172,8 @@ class WishListManager
         $SET['WHLCOMMENT'] = $data['comment'] ?? '';        
         
         if ($SET['WHLCOMMENT']=='') { unset($SET['WHLCOMMENT']);}
+        if ($SET['WHLSTATUSU']==self::USER_BY_DEFAULT) { unset($SET['WHLSTATUSU']);}
+        if ($SET['WHLSTATUS']==self::STATUS_OPEN) { unset($SET['WHLSTATUS']);}
         
         $WHERE['WHLCODE'] = $data['WHLCODE'];
                 
@@ -455,7 +457,7 @@ class WishListManager
         
         
         /* COLUMNS with the CLASS description-CSS- (first coluns is 0 ) */        
-        $columns = [  3, 4, 5, 6, 8, 9, 10, 15, 16];
+        $columns = [  3, 4, 5, 6, 8, 9, 10];
         foreach( $row as $item ) {
             //CHANGING THE ICON TO THE FROM COLUMN: (EXCEL FILE, ...)
             if ($col==0) {$className = 'firstcol';}
@@ -469,8 +471,9 @@ class WishListManager
             } else if ( $col === 7 ) { 
                 $className = $this->getClassCSSforStatus( $item );
                           
-            } else if ( $col === 14 ) 
-                { $className = "money";
+            } else if ( $col === 15 ) { 
+                $className = "money";
+                $item ='$ '.$item;
             } else if ( $col === 18 ) { $className = "description";}
             else {$className = '';}              
             
