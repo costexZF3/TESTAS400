@@ -24,13 +24,9 @@
 </script>
    
    
-<div class="col-md-10">            
+<div class="container justify-content-center">            
     <!-- BUTTON NEW USER -->
-    <p>
-        <a class="boxed-btn" href="<?= $this->url('users', ['action'=>'add']); ?>">
-            <i class="fa fa-user-plus" aria-hidden="true"></i> New User
-        </a>
-    </p>
+    
 
     <!-- TABLE: RENDERING USER'S DATA --> 
 
@@ -64,7 +60,7 @@
                     </a> 
                 </td>
                 <td class="description">
-                    <?= $this->escapeHtml($user->getFullName()); ?></a> 
+                    <?= $this->escapeHtml($user->getFullName()); ?>
                 </td>
                 <td>
                     <a href="#" data-toggle="modal" data-target=<?=$dataTarget?>>
@@ -90,18 +86,20 @@
                     <p title=<?= $hint;?>><span class=<?=$classRender;?>> <i class="fa fa-circle "></i></span></p>                               
                 </td>
                 <td>
-                    <a href="<?= $this->url('users', ['action'=>'edit', 'id'=>$user->getId()]); ?>">
+                    <a  class="btn btn-warning btn-sm" href="<?= $this->url('users', ['action'=>'edit', 'id'=>$user->getId()]); ?>">
                         <i  id = "icons" class="fa fa-edit" title="Edit" ></i> 
                     </a>
                     <span>&thinsp;</span>
-                    <a href="<?= $this->url('users', ['action'=>'change-password', 'id'=>$user->getId()]); ?>">
+                    <a class="btn btn-danger btn-sm" href="<?= $this->url('users', ['action'=>'change-password', 'id'=>$user->getId()]); ?>">
                         <i id="icons" class="fa fa-lock" title="Change Password"></i>
                     </a>
 
                     <span>&thinsp;</span>
-                    <a href="#">
+                    <a title="user info" class="btn btn-info btn-sm" href="#">
                         <i id="icons" class="fa fa-info-circle" title="User Info"></i>
                     </a>
+                    
+                    
                 </td>    
             </tr>
 

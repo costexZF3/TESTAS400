@@ -19,7 +19,7 @@
     $(document).ready( function() {
 
         const buttons = {'excel':false, 'pdf':false, 'copy' : false};
-        const dropDownsInCols = [1];
+        const dropDownsInCols = [];
         const initialConfig = dataTableConfig( dropDownsInCols, buttons ); 
         
         const table = renderDataTable(buttons, dropDownsInCols);
@@ -30,16 +30,13 @@
 <!------------------------------------------------------------------------------------------------------------------------------------>
 <!-- ROW #1: DEFINING HEADER AND BUTTON SPACING -->
 
-   
-<div class="col-md-10">        
-    <a class="boxed-btn" href="<?= $this->url('roles', ['action'=>'add']); ?>">
-        <i class="fa fa-user-plus" aria-hidden="true"></i>  New Role
-    </a>        
-</div>    
-
-
-<br>
-<div class="container-fluid">
+<div class="container">   
+<!--    <div class="col-md-4">        
+        <a class="boxed-btn" href="<?= $this->url('roles', ['action'=>'add']); ?>">
+            <i class="fa fa-user-plus" aria-hidden="true"></i>  New Role
+        </a> 
+    </div>    -->
+    <br>
 
     <table class="table_ctp table_filtered display">
         <thead>
@@ -66,14 +63,14 @@
                     <td><nobr><?= $this->escapeHtml($role->getDateCreated()); ?></nobr></td>        
                     <td>
                         <nobr>
-                        <a id="ctp-borderDemo" class="btn btn-info btn-sm" href="<?= $this->url('roles', 
-                                ['action'=>'edit', 'id'=>$role->getId()]); ?>">
-                            <span class="glyphicon glyphicon-pencil" ></span> Edit
-                        </a>
-                        <a id="ctp-borderDemo" class="btn btn-danger btn-sm" href="<?= $this->url('roles',
-                                ['action'=>'delete', 'id'=>$role->getId()]); ?>">
-                            <span class="glyphicon glyphicon-remove"></span> Delete
-                        </a>
+                            <a title="Edit" id="ctp-borderDemo" class="btn btn-info btn-sm" href="<?= $this->url('roles', 
+                                    ['action'=>'edit', 'id'=>$role->getId()]); ?>">
+                                <span class="fa fa-edit fa-1x" ></span>
+                            </a>
+                            <a title="Delete"  id="ctp-borderDemo" class="btn btn-danger btn-sm" href="<?= $this->url('roles',
+                                    ['action'=>'delete', 'id'=>$role->getId()]); ?>">
+                                <span class="fa fa-eraser fa-1x"></span>
+                            </a>
                         </nobr>
                     </td>    
                 </tr>
