@@ -76,7 +76,7 @@ class RoleController extends AbstractActionController
         return new ViewModel([
             'roles' => $roles
         ]);
-    } 
+    }//END indexAction() method 
     
     /**
      * This action displays a page allowing to add a new role.
