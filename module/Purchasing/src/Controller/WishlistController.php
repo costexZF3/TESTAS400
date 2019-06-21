@@ -130,7 +130,8 @@ class WishlistController extends AbstractActionController
         [
             'form' => $form,
         ]);        
-    }
+    }//END updatemultipleAction()
+    
  
     /**
      * This method returns a string with the logged in user's role
@@ -140,10 +141,10 @@ class WishlistController extends AbstractActionController
     private function getRoleInWl() 
     {
         $user= $this->getUser();
-        $isWLO = $this->access('purchasing.wl.owner',['user'=>$user]) ? 'WLO' : null;    
-        $isPS = $this->access('purchasing.ps',['user'=>$user]) ? 'PS' : null;    
-        $isPA = $this->access('purchasing.pa',['user'=>$user]) ? 'PA' : null;    
-        $isWLDoc = $this->access('purchasing.wl.documentator',['user'=>$user]) ? 'WLDOC' : null;    
+        $isWLO = $this->access('purchasing.wl.owner') ? 'WLO' : null;    
+        $isPS = $this->access('purchasing.ps') ? 'PS' : null;    
+        $isPA = $this->access('purchasing.pa') ? 'PA' : null;    
+        $isWLDoc = $this->access('purchasing.wl.documentator') ? 'WLDOC' : null;    
         
         return $isWLO ?? $isPS ?? $isPA ?? $isWLDoc ?? null;
     }// END: getRoleINWl()
@@ -161,7 +162,7 @@ class WishlistController extends AbstractActionController
         $isHighLevel = $userRole == 'WLO';
         
         $scenario = $userRole;
-                       
+              
         //checking if the data are coming from FormUpdate
         if( $this->getRequest()->isPost() ) {            
             $raw = $this->params()->fromPost(); 
@@ -185,7 +186,7 @@ class WishlistController extends AbstractActionController
             $rawData = $WL->parseData( $raw );
             
             $status = $rawData['status'];
-            
+                       
             $canChangeStatus = $WL->changeStatus($this->session->InitialStatus, $status);
             
             //checking if the new status can be acepted
@@ -251,6 +252,37 @@ class WishlistController extends AbstractActionController
  
     }//END: updateAction()
     
+    private function createButtonsOnLayout()
+    {        
+        $buttonADD = [
+            'label' => 'new item',
+            'title' => 'add item',
+            'class' => 'boxed-btn-layout btn-rounded',
+            'font-icon' => 'fa fa-plus fa-1x',
+            'url' => [                          
+                'route'=>'wishlist', 
+                'action'=>['action'=>'add'],                            
+            ],
+        ];
+        
+        $buttonEXCEL = [
+            'label' => 'import',
+            'title' => 'import itesms from excel',
+            'class' => 'boxed-btn-layout btn-rounded',
+            'font-icon' => 'fa fa-file-excel-o fa-1x',
+            'url' => [                          
+                'route'=>'wishlist', 
+                'action'=>['action'=>'upload'],                            
+            ],
+        ];            
+        
+        $buttonList = [];
+        array_push($buttonList, $buttonADD);
+        array_push($buttonList, $buttonEXCEL);
+        
+        return $buttonList;
+    }
+    
     /**
      *  The IndexAction show the WishList taking into account
      *  the logged in user's access permissions
@@ -259,31 +291,40 @@ class WishlistController extends AbstractActionController
      *    -purchasing.wl.owner, -purchasing.ps, purchasing.pa, purchasing.wl.documentator
      */
     public function indexAction() 
-    {        
+    {   
+        $user= $this->getUser();
         //  checking user's access into this option
-        if (!$this->access('purchasing.option.pd.wishlist')) {
-            return $this->redirect()->toRoute('not-authorized');
-        }
+//        if (!$this->access('purchasing.option.pd.wishlist', ['user'=>$user])) {
+//            return $this->redirect()->toRoute('not-authorized');
+//        }
         
-        $isPa = false;
+        $isPa = $this->access('purchasing.pa');
+      
         $form = new FormWishList();
         
         $this->layout()->setTemplate('layout/layout_Grid');
+        unset($this->layout()->buttons);  
+        $this->layout()->form = null;
+        
+        $isWLOwner = $this->access('purchasing.wl.owner'); 
+       
+        if ($isWLOwner) {            
+            $this->layout()->buttons = $this->createButtonsOnLayout();
+           // $this->layout()->form = $form;
+        } else
+        {
+            //getting user for loading only its items assigned           
+            $userN = $this->getUserS();
+            $this->WLManager->renewWL( $userN );       
+           // $isPa = $this->access('purchasing.pa');
+        }
         
         //this checks if there was generated some insconsistency trying to import from
         // an excel file some new items to the WishList
         $linkInc = $this->session->inconsistency ?? false;
-        
-        $user= $this->getUserS();
-        $isWLOwner = $this->access('purchasing.wl.owner',['user'=>$user]);                   
                
         // renew WL with the logged in user's assigned parts
-        if ( !$isWLOwner ) {   
-            //getting user for loading only its items assigned
-            $userN = $this->getUserS();
-            $this->WLManager->renewWL( $userN );       
-            $isPa = $this->access('purchasing.pa');
-        }
+        
         //$re = $this->WLManager->jsonResponse();
         
         return new ViewModel(
@@ -674,8 +715,7 @@ class WishlistController extends AbstractActionController
             return [];                                  
         }         
 
-        if (  $inStock['KOMAT'] ) { 
-
+        if (  $inStock['KOMAT'] ) {
             $this->updateSession($partnumber, 'KOMAT'); 
             return [];                                 
         }
