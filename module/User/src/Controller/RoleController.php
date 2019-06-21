@@ -2,6 +2,7 @@
 namespace User\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+
 use Zend\View\Model\ViewModel;
 use User\Entity\Role;
 use User\Entity\Permission;
@@ -35,6 +36,17 @@ class RoleController extends AbstractActionController
         $this->roleManager = $roleManager;
     }
     
+    
+    public function onBootstrap($e) {
+        //$serviceManager = $e->getApplication()->getServiceManager();
+        $viewModel = $e->getApplication()->getMvcEvent()->getViewModel();
+
+     //   $myService = $serviceManager->get('MyModule\Service\MyService');
+
+//        $viewModel->buttons = $myService->getSomeValue();
+        $viewModel->buttons = null; //initial value
+    }
+    
     /**
      * This is the default "index" action of the controller. It displays the 
      * list of roles.
@@ -42,6 +54,21 @@ class RoleController extends AbstractActionController
     public function indexAction() 
     {
         $this->layout()->setTemplate('layout/layout_Grid');
+        $buttonADD = [
+            'label' => 'new role',
+            'title' => 'add a new role',
+            'class' => 'boxed-btn-layout btn-rounded',
+            'font-icon' => 'fa fa-user-tag fa-1x',
+            'url' => [                          
+                'route'=>'roles', 
+                'action'=>['action'=>'add'],                            
+            ],
+        ];
+                   
+        $listButton = [];
+        array_push($listButton, $buttonADD);
+             
+        $this->layout()->buttons = $listButton;
          
         $roles = $this->entityManager->getRepository(Role::class)
                 ->findBy([], ['name'=>'ASC']);
@@ -102,6 +129,7 @@ class RoleController extends AbstractActionController
      */
     public function viewAction() 
     {
+        $this->layout()->setTemplate('layout/layout_Grid');
         $id = (int)$this->params()->fromRoute('id', -1);
         if ($id<1) {
             $this->getResponse()->setStatusCode(404);

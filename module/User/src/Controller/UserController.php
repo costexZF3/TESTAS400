@@ -39,7 +39,27 @@
             $this->entityManager = $entityManager;
             $this->userManager = $userManager;
         }
+        
+        private function createButtonsOnLayout()
+        {        
+            $buttonADD = [
+                'label' => 'new user',
+                'title' => 'add user',
+                'class' => 'boxed-btn-layout btn-rounded',
+                'font-icon' => 'fa fa-user-plus fa-1x',
+                'url' => [                          
+                    'route'=>'users', 
+                    'action'=>['action'=>'add'],                            
+                ],
+            ];
 
+            $buttonList = [];
+            array_push($buttonList, $buttonADD);
+            
+            return $buttonList;
+        }
+        
+        
         /**
          * This is the default "index" action of the controller. It displays the 
          * list of users.
@@ -52,6 +72,9 @@
                 $this->getResponse()->setStatusCode(401);
                 return;
             }
+            
+            //creating buttons will be rendering on the breadcrums (new item, import from excel)
+            $this->layout()->buttons = $this->createButtonsOnLayout();
             
             $users = $this->entityManager->getRepository(User::class)
                          ->findBy([], ['id'=>'ASC']);
