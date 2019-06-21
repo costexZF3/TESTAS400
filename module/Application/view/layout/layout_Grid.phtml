@@ -53,6 +53,10 @@
        <!-- including all scripts for using DATATABLES -->               
        <?php
             echo $this->partial('application/particialview/scripts-datatable',['pathLogo'=>$PathLogo]);
+            
+            //getting variables sent from a controller to layout            
+            $buttons = $this->buttons ?? null;  
+            $form = $this->form ?? null;            
         ?>
        
        <script src="https://use.fontawesome.com/cca3ab2cb4.js"></script>
@@ -96,13 +100,43 @@
         
    <!-- breadcrumb area start -->
     <section class="breadcrumb-area breadcrumb-bg">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
-               <div class="col-lg-12">
+               <div class="col-md-8">
                     <div class="breadcrumb-inner">
-                        <?= $this->pageBreadcrumbs()->render(); ?>
-                    </div>
+                        <?= $this->pageBreadcrumbs()->render(); ?>                        
+                    </div>                  
                </div>
+                
+                <!-- rendering buttons on the breadcrums passed by a controller -->
+                <div class="col-md-4">
+                    <div class="row">
+                    <?php if (isset($buttons)): ?>                       
+                        <?php foreach ( $buttons as $button ):?>
+                            <div class ="col-md-3">
+                                    <a title="<?=$button['title']?>" class="<?=$button['class']?>" href="<?= $this->url($button['url']['route'], $button['url']['action']); ?>">
+                                        <i class="<?=$button['font-icon']?>" aria-hidden="true"></i> <?=$button['label']?>
+                                    </a>                         
+                            </div>
+                        <?php endforeach; ?> 
+                        
+                        <!--rendering update button -->
+                        <?php if (isset($form)): ?> 
+                            <div class ="col-md-3">
+                                <?php
+                                    $form->get('submit')->setAttributes(['class'=>'boxed-btn-layout btn-rounded']);
+  
+                                    /* prepare for before rendering */
+                                    $form->prepare(); 
+                                ?>
+                                <?= $this->form()->openTag($form); ?> 
+                                    <?= $this->formElement($form->get('csrf')); ?>                                        
+                                    <?= $this->formElement($form->get('submit')); ?>
+                            </div>
+                        <?php endif; ?> 
+                     <?php endif; ?>                      
+                    </div>
+                </div> 
             </div>
         </div>
     </section>
@@ -118,9 +152,9 @@
                 </div>
             </div>
         </div>
-    </section>    
-
-    
+    </section>  
+   
+       
   <!-- back to top area start -->
   <div class="back-to-top">
         <i class="fas fa-angle-up"></i>
