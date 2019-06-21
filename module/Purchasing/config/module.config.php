@@ -106,16 +106,15 @@ return [
                  * +purchasing.pa
                  * +purchasing.wl.documentator
                  */
+                 ['actions' => ['update'],                    'allow' => '+purchasing.pa'], 
                 ['actions' => ['add', 'create','update', 'updatemultiple', 'upload'],   'allow' => '+purchasing.wl.owner'],                
                 
                 ['actions' => ['add', 'create','update'],    'allow' => '+purchasing.ps'],
-               
-                ['actions' => ['update'],                    'allow' => '+purchasing.pa'],                
+                                             
                
                 ['actions' => ['update'],                    'allow' => '+purchasing.wl.documentator'],                                
 
-            ], //END: access_filter for LostSaleController    
-            
+            ], //END: access_filter for LostSaleController 
         ],
     ], //END: ACCESS FILTERS
     
