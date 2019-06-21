@@ -358,6 +358,52 @@
     .boxed-btn.black:hover {
       background-color: #fbba42;
       color: #fff; }
+    
+/*my button by christov*/
+.boxed-btn-layout {
+  display: inline-block;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #333333;
+  width:150px;
+  /*max-width:202px;*/
+  background-color: #ffffff;
+  padding: 0 10px;
+  -webkit-transition: all 0.3s ease-in;
+  -moz-transition: all 0.3s ease-in;
+  -o-transition: all 0.3s ease-in;
+  transition: all 0.3s ease-in; }
+  .boxed-btn-layout:hover {
+      color: #ffffff;
+    background-color: #283446; }
+  .boxed-btn-layout.btn-rounded {
+    border-radius: 5px; }
+  .boxed-btn-layout.blank {
+    background-color: transparent;
+    border: 2px solid #fbba42;
+    color: #fbba42; }
+    .boxed-btn-layout.blank:hover {
+      background-color: #fbba42;
+      color: #fff; }
+  .boxed-btn-layout.black {
+    border: none;
+    color: #fff;
+    background-color: #283446; }
+    .boxed-btn-layout.black:hover {
+      background-color: #fbba42;
+      color: #fff; }
+    
+    .breadcrumb-inner .link {
+        margin-top: 12px;
+        margin-bottom: 16px;
+    }
+    
+    /* christof  */
 
 .section-title {
   text-align: center;
@@ -651,24 +697,29 @@
     Breadcrumb Area
 ----------------------*/
 .breadcrumb-area {
-  padding: 15px 0 12px 0;
+  padding: 10px 0 0px 0;
   background-color: #fbba42;
-  text-align: center; }
+  text-align: left; }
+
   .breadcrumb-area .title {
     color: #333333;
-    font-size: 35px;
-    line-height: 60px;
+    font-size: 25px;
+    line-height: 30px;
     font-weight: 600;
     margin-bottom: 10px;
+    margin-top: 10px;
     text-transform: uppercase; }
+  
   .breadcrumb-area .page-list {
-    font-size: 20px;
-    line-height: 30px;
+    font-size: 18px;
+    line-height: 15px;
     text-transform: uppercase;
     font-weight: 600;
     color: #333333;
     cursor: pointer; }
     .breadcrumb-area .page-list a {
+      margin-top: 30px;  
+      font-size: 18px;  
       -webkit-transition: all 0.3s ease-in;
       -moz-transition: all 0.3s ease-in;
       -o-transition: all 0.3s ease-in;
@@ -690,6 +741,9 @@
       background-color: rgba(251, 186, 66, 0.9);
       content: '';
       z-index: -1; }
+        
+    
+    
 
 /*-------------------------
     Preloader Css
