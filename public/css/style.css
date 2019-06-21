@@ -293,7 +293,7 @@ h2.ctp_subtitle {
 
 /*******************   TABLE CTP PROPERTIES ***********************************/
 .table_ctp {
-    text-align: center;  
+     
     font-size : 12px;    
 }
 
@@ -316,6 +316,23 @@ td select {
     max-width: 50px;
     min-width: 50px;
 }
+
+/*changing paginator styles*/
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    color: white !important;
+    border: 1px solid #F7BC59!important;
+    background-color: #F7BC59!important;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #F7BC59), color-stop(100%, #F7BC59))!important;
+    background: -webkit-linear-gradient(top, #F7BC59 0%, #F7BC59 100%)!important;
+    background: -moz-linear-gradient(top, #F7BC59 0%, #F7BC59 100%)!important;
+    background: -ms-linear-gradient(top, #F7BC59 0%, #F7BC59 100%)!important;
+    background: -o-linear-gradient(top, #F7BC59 0%, #F7BC59 100%)!important;
+    background: linear-gradient(to bottom, #F7BC59 0%, #F7BC59 100%)!important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button .current {
+    color: #68b604;
+}
+
 
 
  /* modified by kristov */
@@ -363,52 +380,6 @@ input[type="search"]:focus {
 .hiderow {
     visibility: collapse;
 }
-
-/*----------------------------------------------------------------------------*/
-
-table.minimalistBlack {
-  font-family: Tahoma, Geneva, sans-serif;
-  width: 100%;
-  text-align: left;
-  border-collapse: collapse;
-}
-table.minimalistBlack td, table.minimalistBlack th {
-  border: 0px solid #111111;
-  padding: 4px 4px;
-  color: #000000;
-}
-table.minimalistBlack tbody td {
-  font-size: 12px;  
-}
-
-table.minimalistBlack tr:nth-child(even) {
-    background: #f8f8f8;
-}
-table.minimalistBlack thead {
-    background: #d8edd1;
-    border-bottom: 1px solid #F8F8F8;
-  border-top: 1px solid #F8F8F8;
-}
-table.minimalistBlack thead th {
-  font-size: 14px;
-  font-weight: bold;
-  text-align: left;  
-  border-left: 0px ;
-}
-table.minimalistBlack thead th:first-child {
-  border-left: none;
-}
-
-table.minimalistBlack tfoot {
-  font-size: 14px;
-  font-weight: bold;
-  color: #000000;
-  border-top: 1px solid #000000;
-}
-table.minimalistBlack tfoot td {
-  font-size: 14px;
-}
-
 
 .ctp-buttons {    
     padding : auto;
