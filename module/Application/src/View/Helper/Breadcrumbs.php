@@ -56,9 +56,14 @@ class Breadcrumbs extends AbstractHelper
                
         $result.= '<div class="page-list">';
                 
-        $last_key = key( array_slice( $this->items, -1, 1, TRUE ) );        
-        $result.= '<h1 class="title">'.$last_key.'</h1>';
-                
+        $last_key = key( array_slice( $this->items, -1, 1, TRUE ) ); 
+        $result.='<div class="row">';
+         
+//          $result.='<div class="col-md-3">';
+//           $result.= '<h1 class="title">'.$last_key.'</h1>';
+//           $result.='</div>';
+           $result.='<div class="col-md-5 link">'; 
+          
         // Walk through items
         foreach ($this->items as $label=>$link) {
                        // Make the last item inactive
@@ -70,7 +75,7 @@ class Breadcrumbs extends AbstractHelper
             // Increment item counter
             $itemNum++;
         }
-        
+        $result.='</div>'; 
         $result .= '</div>'; //closing: page-list div
         $result .= '</div>'; //closing: breadcrumb div
         $result .= '</div>'; //closing: col-lg-12  div
