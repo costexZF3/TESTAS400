@@ -46,7 +46,8 @@ class Breadcrumbs extends AbstractHelper
         $result = '<section class="">';
         $result.= '<div class="container">';
         $result.= '<div class="row">';
-        $result.= '<div class="col-lg-12">';
+        
+        $result.= '<div class="col-md-11">';
         $result.= '<div class="bread-crumb-inner">';
                 
         // Get item count
@@ -59,10 +60,12 @@ class Breadcrumbs extends AbstractHelper
         $last_key = key( array_slice( $this->items, -1, 1, TRUE ) ); 
         $result.='<div class="row">';
          
-//          $result.='<div class="col-md-3">';
+          $result.='<div class="col-md-4">';
 //           $result.= '<h1 class="title">'.$last_key.'</h1>';
-//           $result.='</div>';
-           $result.='<div class="col-md-5 link">'; 
+           $result.='</div>';
+           $result.='<div class="col-md-7 link">'; 
+           $result.='<i class="fa fa-map-marker-alt"></i>'; 
+           $result.='&nbsp  &nbsp &nbsp'; 
           
         // Walk through items
         foreach ($this->items as $label=>$link) {
