@@ -13,8 +13,8 @@
  
     $(document).ready( function() {
         
-        const buttons = {'excel':false, 'pdf':false, 'copy' : false};
-        const dropDownsInCols = [2];
+        const buttons = {'excel':false, 'pdf':true, 'copy' : true};
+        const dropDownsInCols = [];
         const initialConfig = dataTableConfig( dropDownsInCols, buttons ); 
         
         const table = renderDataTable(buttons, dropDownsInCols);
@@ -22,26 +22,19 @@
 
 </script>
 
-<?= $this->flashMessenger()->render('error', ['alert', 'alert-warning']); ?>
-<?= $this->flashMessenger()->render('success', ['alert', 'alert-success']); ?>
-<?= $this->flashMessenger()->render('info', ['alert', 'alert-info']); ?>
-
-
-<div class="container">    
-    <!--------- BUTTON NEW PERMISSION ----------------->
-    <p>
-      <a class="boxed-btn" href="<?= $this->url('permissions', ['action'=>'add']); ?>" >
-        <i class="fa fa-plus" aria-hidden="true"></i> New Permission
-      </a>
-    </p>
-
+<div class="container">  
+  
+    <?= $this->flashMessenger()->render('error', ['alert', 'alert-warning']); ?>
+    <?= $this->flashMessenger()->render('success', ['alert', 'alert-success']); ?>
+    <?= $this->flashMessenger()->render('info', ['alert', 'alert-info']); ?>
+  
   <table class="table_ctp table_filtered display">
     <thead>
         <tr>            
             <th>Name</th>
             <th>Description</th>
             <th>Date Created</th>
-            <th><i class="fa fa-gears"></i>Actions</th>        
+            <th><i class="fa fa-gears"></i> Actions</th>        
         </tr>
     </thead>
 
@@ -60,15 +53,16 @@
             <td><?= $this->escapeHtml($permission->getDateCreated()); ?></td>
             
             <!-- COLUMN WITH EDIT AND DELETE BUTTONS -->
-            <td>               
-                <a id="ctp-borderDemo" class="" href="<?= $this->url('permissions', 
+            <td>    
+                
+                <a class="btn btn-warning btn-sm" href="<?= $this->url('permissions', 
                         ['action'=>'edit', 'id'=>$permission->getId()]); ?>">
                     <i class="fa fa-edit" ></i>
                 </a>
                 &nbsp;
-                <a id="ctp-borderDemo" class="" href="<?= $this->url('permissions',
+                <a class="btn btn-danger btn-sm" href="<?= $this->url('permissions',
                         ['action'=>'delete', 'id'=>$permission->getId()]); ?>">
-                    <i class="fa fa-trash"></i>
+                    <i class="fa fa-trash-alt"></i>
                 </a>
                 
             </td>    

@@ -11,58 +11,58 @@
     $this->mainMenu()->setActiveItemId('permissions');
 
     $this->pageBreadcrumbs()->setItems([
-                'Home'=>$this->url('home'),
-                'Manage Permissions'=>$this->url('permissions'),
-                'Add Permission'=>$this->url('permissions', ['action'=>'add'])
-                ]);
+        'Home'=>$this->url('home'),
+        'Manage Permissions'=>$this->url('permissions'),
+        'Add'=>$this->url('permissions', ['action'=>'add'])
+    ]);
 
     $form->get('name')->setAttributes([
         'class'=>'form-control', 
-        'placeholder'=>'Enter name'
+        'placeholder'=>'Enter permission name'
         ]);
 
     $form->get('description')->setAttributes([
         'class'=>'form-control', 
-        'placeholder'=>'Enter description'
+        'placeholder'=>'Enter a description'
         ]);
 
     $form->get('submit')
-            ->setAttributes(['class'=>'ctp-btn'])
-            ->setValue('  Create  ');
+            ->setAttributes(['class'=>'submit-btn'])
+            ->setValue('  add  ');
 
     $form->prepare();
 ?>
 
-<h2>Add Permission</h2>
+ <div class="row justify-content-center">
+    <div class="col-md-4 single-service-item">   	         
+        <h4 class="title"> NEW PERMISSION </h4> 
+        <p>
+           Please fill out the following form and click the <i>Create</i> button.
+        </p>    
 
-<p>
-    Please fill out the following form and click the <i>Create</i> button.
-</p>
+           <?= $this->form()->openTag($form); ?>
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="ctp-container">
-            <?= $this->form()->openTag($form); ?>
+               <div class="form-group">
+                   <i class="fa fa-universal-access"></i>
+                   <?= $this->formLabel($form->get('name')); ?>
+                   <?= $this->formElement($form->get('name')); ?>
+                   <?= $this->formElementErrors($form->get('name')); ?>                  
+               </div>
 
-                <div class="form-group">
-                    <?= $this->formLabel($form->get('name')); ?>
-                    <?= $this->formElement($form->get('name')); ?>
-                    <?= $this->formElementErrors($form->get('name')); ?>                  
-                </div>
+               <div class="form-group">
+                   <i class="fa fa-prescription-bottle"></i>
+                   <?= $this->formLabel($form->get('description')); ?>
+                   <?= $this->formElement($form->get('description')); ?>
+                   <?= $this->formElementErrors($form->get('description')); ?>                  
+               </div>
 
-                <div class="form-group">
-                    <?= $this->formLabel($form->get('description')); ?>
-                    <?= $this->formElement($form->get('description')); ?>
-                    <?= $this->formElementErrors($form->get('description')); ?>                  
-                </div>
+               <?= $this->formElement($form->get('csrf')); ?>
 
-                <?= $this->formElement($form->get('csrf')); ?>
+               <?= $this->formElement($form->get('submit')); ?>        
+           <?= $this->form()->closeTag(); ?>
+    </div>
+</div>    
 
-                <?= $this->formElement($form->get('submit')); ?>        
-            <?= $this->form()->closeTag(); ?>
-        </div>
-    </div>    
-</div>   
 
 
 

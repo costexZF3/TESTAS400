@@ -28,17 +28,46 @@
 </script>
 
 <!-- PANEL RENDERING ROLE INFO  -->   
-<div class="row justify-content-center">    
+<div class="row  justify-content-center">  
     
-    <!----------------------------------------------------- PERMISSIONS TABLE ------------------------------------------------>
-    <div class="row">
-        <div class="col-md-8">    	
-            <!-- BUTTON EDIT PERMISSIONS -->
+    <div class="row single-service-item">
+         <!--<div class="row">-->
+        <div class="col-md-5">
+            <!----------------------------------------------------- PERMISSIONS TABLE ------------------------------------------------>
+            <!-- TABLE WITH ROLE INFO -->
+            <table class="table table-striped table-bordered ">
+                <tr>
+                   <th>ID:</th>
+                   <td><?= $this->escapeHtml($role->getId()) ?></td>
+                </tr>
+
+                <tr>
+                    <th>Name:</th>
+                    <td><b><?= $this->escapeHtml($role->getName()) ?></b></td>
+                </tr>
+                <tr>
+                    <th>Description:</th>
+                    <td><?= $this->escapeHtml($role->getDescription()) ?></td>
+                </tr>
+                <tr>
+                    <th>Date Created:</th>
+                    <td><?= $this->escapeHtml($role->getDateCreated()) ?></td>
+                </tr>
+
+            </table>
+            
+            <!-- EDIT ROLE BUTTON -->
             <p>
-                <a class="btn-boxed" href="<?= $this->url('roles', ['action'=>'editPermissions', 'id'=>$role->getId()]) ?>">
-                  <span class="fa fa-edit"></span> Edit 
-                </a>
+               <a title="Edit roles features like: name, description and inherited roles" 
+                   class="boxed-btn" href="<?= $this->url('roles', ['action'=>'edit', 'id'=>$role->getId()]); ?>">
+                    <span class="fa fa-edit" ></span> Edit Role
+               </a>
             </p>
+                
+        </div>
+    
+    
+        <div class="col-md-6"> 
             <!-- RENDERING TABLE EDIT PERMISSIONS FOR A GIVEN ROLE --->
             <table class="table_ctp table_filtered display description">
                 <thead>
@@ -72,44 +101,14 @@
                         <th>Description</th>
                     </tr>
                 </tfoot>
-            </table>            
-        </div>
-        
-    <!--<div class="row">-->
-        <div class="col-md-offset-1 col-md-4 ">
-            
-            <!-- EDIT ROLE BUTTON -->
+            </table>    
+            <br>
+            <!-- BUTTON EDIT PERMISSIONS -->
             <p>
-                <a class="btn-boxed" href="<?= $this->url('roles', ['action'=>'edit', 'id'=>$role->getId()]); ?>">
-                    <span class="fa fa-edit" ></span> Edit Role
-               </a>
+                <a title="Edit permissions associated to this role " class="boxed-btn" href="<?= $this->url('roles', ['action'=>'editPermissions', 'id'=>$role->getId()]) ?>">
+                  <span class="fa fa-edit"></span> Edit 
+                </a>
             </p>
-            
-            
-            <!-- TABLE WITH ROLE INFO -->
-            <table class="table table-striped table-bordered ">
-                <tr>
-                   <th>ID:</th>
-                   <td><?= $this->escapeHtml($role->getId()) ?></td>
-                </tr>
-
-                <tr>
-                    <th>Name:</th>
-                    <td><b><?= $this->escapeHtml($role->getName()) ?></b></td>
-                </tr>
-                <tr>
-                    <th>Description:</th>
-                    <td><?= $this->escapeHtml($role->getDescription()) ?></td>
-                </tr>
-                <tr>
-                    <th>Date Created:</th>
-                    <td><?= $this->escapeHtml($role->getDateCreated()) ?></td>
-                </tr>
-
-            </table>
-            
-                
         </div>
-    </div>
-    
-</div> <!-- END DIV: ROW WITH BUTTON EDIT PERMISSIONS -->
+    </div> <!-- END DIV: ROW WITH BUTTON EDIT PERMISSIONS -->
+</div>

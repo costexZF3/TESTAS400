@@ -31,12 +31,11 @@
         ]);
 
     $form->get('roles')->setAttributes([
-        'class'=>'form-control',
-        'rows'=> 5, //wrong property
+        'class'=>'form-control',        
         ]);
 
     $form->get('submit')
-            ->setAttributes(['class'=>'ctp-btn'])
+            ->setAttributes(['class'=>'submit-btn'])
             ->setValue(' Save ');
 
     $form->prepare();
@@ -45,46 +44,44 @@
 <!-- *************************************  HTML RENDER: EDIT.PHTM -- USER MODULE ************************** -->
 
 
-<div class="row">
-    <div class="col-md-6">
-        <h3> EDIT USER <span class="ctp-span"><em>  <?= $this->escapeHtml($user->getEmail()) ?> </em></span></h3>
-        <div class="ctp-container">            
-                        
-            <div>
+<div class="row justify-content-center">
+    <div class="col-md-3 single-service-item"> 
+        <h4> EDIT USER</h4>
+        
+        <!-- form Render : Edit User -->
+        <?= $this->form()->openTag($form); ?>        
+            <div class="form-group">
+                <i class="fa fa-envelope"></i>
+                <?= $this->formLabel($form->get('email')); ?>
+                <?= $this->formElement($form->get('email')); ?>
+                <?= $this->formElementErrors($form->get('email')); ?>                  
+            </div>
 
-                <!-- form Render : Edit User -->
-                <?= $this->form()->openTag($form); ?>        
-                    <div class="form-group">
-                        <?= $this->formLabel($form->get('email')); ?>
-                        <?= $this->formElement($form->get('email')); ?>
-                        <?= $this->formElementErrors($form->get('email')); ?>                  
-                    </div>
+            <div class="form-group">
+                <i class="fa fa-user"></i>
+                <?= $this->formLabel($form->get('full_name')); ?>
+                <?= $this->formElement($form->get('full_name')); ?>
+                <?= $this->formElementErrors($form->get('full_name')); ?>                  
+            </div>
 
-                    <div class="form-group">
-                        <?= $this->formLabel($form->get('full_name')); ?>
-                        <?= $this->formElement($form->get('full_name')); ?>
-                        <?= $this->formElementErrors($form->get('full_name')); ?>                  
-                    </div>
+            <div class="form-group">
+                <i class="fa fa-user-check"></i>
+                <?= $this->formLabel($form->get('status')); ?>
+                <?= $this->formElement($form->get('status')); ?>
+                <?= $this->formElementErrors($form->get('status')); ?>                  
+            </div>
 
-                    <div class="form-group">
-                        <?= $this->formLabel($form->get('status')); ?>
-                        <?= $this->formElement($form->get('status')); ?>
-                        <?= $this->formElementErrors($form->get('status')); ?>                  
-                    </div>
+            <div class="form-group">
+                <i class="fa fa-user-cog"></i>
+                <?= $this->formLabel($form->get('roles')); ?>
+                <?= $this->formElement($form->get('roles')); ?>
+                <?= $this->formElementErrors($form->get('roles')); ?>                  
+            </div>
 
-                    <div class="form-group">
-                        <?= $this->formLabel($form->get('roles')); ?>
-                        <?= $this->formElement($form->get('roles')); ?>
-                        <?= $this->formElementErrors($form->get('roles')); ?>                  
-                    </div>
-
-                    <?= $this->formElement($form->get('csrf')); ?>
-                    <?= $this->formElementErrors($form->get('csrf')); ?>
-                    <?= $this->formElement($form->get('submit')); ?>        
-                <?= $this->form()->closeTag(); ?>
-            </div> <!-- panel-body -->
-            
-        </div> <!-- panel-primary (definition)  -->
+            <?= $this->formElement($form->get('csrf')); ?>
+            <?= $this->formElementErrors($form->get('csrf')); ?>
+            <?= $this->formElement($form->get('submit')); ?>        
+        <?= $this->form()->closeTag(); ?>      
     </div>   <!-- column-md-6 --> 
 </div> <!-- MAIN ROW: IT WILL BE RENDERING AS CONTAINER OF THE LAYOUT -->   
 

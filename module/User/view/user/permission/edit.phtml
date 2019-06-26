@@ -22,19 +22,19 @@
         ]);
     
     $form->get('submit')
-            ->setAttributes(['class'=>'ctp-btn'])
-            ->setValue(' Save ');
+            ->setAttributes(['class'=>'submit-btn'])
+            ->setValue(' SAVE ');
     
     $form->prepare();
 ?>
 
 
-<h2>EDIT PERMISSION <span class="ctp-span"><em><?= $this->permission->getName(); ?></em></span></h2> 
-
-<div class="row">
-    <div class="col-md-6">
-    	<div class="ctp-container">           
-    			
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 single-service-item">   	         
+             <h4 class="title"> EDIT PERMISSION </h4> 
+            <br>
+            
         <!-- OPEN FORM TAG -->
             <?= $this->form()->openTag($form); ?>        
                 <div class="form-group">
@@ -53,6 +53,7 @@
                 <?= $this->formElement($form->get('submit')); ?>
             <!-- CLOSING FORM TAG -->
             <?= $this->form()->closeTag(); ?>
-    </div> <!-- END: DIV col-md-6 : defining 6 columns on bootstramp -->    
-</div> <!-- END: DIV BOOTSTRAP ROW -->   
+        </div> <!-- END: DIV col-md-6 : defining 6 columns on bootstramp -->    
+    </div> <!-- END: DIV BOOTSTRAP ROW -->   
+</div>
 

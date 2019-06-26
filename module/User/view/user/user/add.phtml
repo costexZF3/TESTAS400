@@ -37,60 +37,65 @@
         'class'=>'form-control'
         ]);
 
-    $form->get('submit')->setAttributes(['class'=>'ctp-btn']);
+    $form->get('submit')->setAttributes(['class'=>'submit-btn']);
 
     $form->prepare();
 ?>
 
 <!-- ************************************* HTML RENDERING **********************************************************************-->
 
-<div class="row">
-    <div class="col-md-6">
-        <h1>Add New User Form</h1>
+ <div class="row justify-content-center">
+    <div class="col-md-6 single-service-item"> 
+        <h4>New User</h4>
         <p>
            Please fill out the following form and click the <i>Create</i> button.
         </p>
-        <div class="ctp-container">            
-            <!-- forms elements -->
+        <div class="row">         
+            <!--COLUMN 1-->
+            <div class="col-md-5">
+               <!-- forms elements -->
             <?= $this->form()->openTag($form); ?>
             
                 <div class="form-group">
-                    <i class="glyphicon glyphicon-envelope"></i>
+                    <i class="fa fa-envelope"></i>
                     <?= $this->formLabel($form->get('email')); ?>
                     <?= $this->formElement($form->get('email')); ?>
                     <?= $this->formElementErrors($form->get('email')); ?>                  
                 </div>
 
                 <div class="form-group">
-                    <i class="glyphicon glyphicon-user"></i>
+                    <i class="fa fa-user"></i>
                     <?= $this->formLabel($form->get('full_name')); ?>
                     <?= $this->formElement($form->get('full_name')); ?>
                     <?= $this->formElementErrors($form->get('full_name')); ?>                  
                 </div>
 
                 <div class="form-group">
-                    <i class="glyphicon glyphicon-lock"></i>
+                    <i class="fa fa-lock"></i>
                     <?= $this->formLabel($form->get('password')); ?>
                     <?= $this->formElement($form->get('password')); ?>
                     <?= $this->formElementErrors($form->get('password')); ?>                  
                 </div>
 
                 <div class="form-group">
-                    <i class="glyphicon glyphicon-lock"></i>
+                    <i class="fa fa-lock"></i>
                     <?= $this->formLabel($form->get('confirm_password')); ?>
                     <?= $this->formElement($form->get('confirm_password')); ?>
                     <?= $this->formElementErrors($form->get('confirm_password')); ?>                  
                 </div>
 
                 <div class="form-group">
-                    <i class="glyphicon glyphicon-stats"></i>
+                    <i class="fa fa-user-check"></i>
                     <?= $this->formLabel($form->get('status')); ?>
                     <?= $this->formElement($form->get('status')); ?>
                     <?= $this->formElementErrors($form->get('status')); ?>                  
-                </div>
-
+                </div> 
+            </div>
+            
+            <!--COLUMN 2-->            
+            <div class="col-md-6">
                 <div class="form-group">
-                    <i class="glyphicon glyphicon-open-file"></i>
+                    <i class="fa fa-user-cog"></i>
                     <?= $this->formLabel($form->get('roles')); ?>
                     <?= $this->formElement($form->get('roles')); ?>
                     <?= $this->formElementErrors($form->get('roles')); ?>                  
@@ -101,7 +106,8 @@
             
                 <?= $this->formElement($form->get('submit')); ?>
               
-            <?= $this->form()->closeTag(); ?>
+              <?= $this->form()->closeTag(); ?>
+            </div>
         </div>    
     </div> 
 </div>

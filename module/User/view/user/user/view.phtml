@@ -22,59 +22,58 @@
         <div class="col-md-7 single-service-item">                 
             <h4 class="title"> USER INFO </h4> 
             <br>         
-                <div class="panel-body">                   
-                    <!-- TABLE RESPONSIVE -->
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered">
-                            <tr class="success">
-                                <th>ID:</th>
-                                <td><?= $this->escapeHtml($user->getId()) ?></th>
-                            </tr>
-                            <tr class="">
-                                <th>E-mail:</th>
-                                <td><?= $this->escapeHtml($user->getEmail()) ?></th>
-                            </tr>
-                            <tr class="success">
-                                <th>Full Name:</th>
-                                <td><?= $this->escapeHtml($user->getFullName()) ?></th>
-                            </tr>
-                            <tr class="">
-                                <th>Date Created:</th>
-                                <td><?= $this->escapeHtml($user->getDateCreated()) ?></th>
-                            </tr>
-                            <tr class="success">
-                                <th>Status:</th>
-                                <td><?= $this->escapeHtml($user->getStatusAsString()) ?></th>
-                            </tr>
-                            <tr class="">
-                                <th>Roles:</th>
-                                <td><?= $this->escapeHtml($user->getRolesAsString()) ?> </th>
-                            </tr>
-                        </table>
-                    </div>
-                    
-                    <!-- P TAG: THERE ARE TWO BUTTONS -->
-                    <div class="row center-block">                       
-                       
-                        <!-- BUTTON EDIT -->  
-                        <div class="col-md-4">    
-                            <a class="boxed-btn" href="<?= $this->url('users', 
-                                    ['action'=>'edit', 'id'=>$user->getId()]); ?>">
-                                <span class="fa fa-edit" ></span> Edit
-                            </a>
-                        </div>
-                            
-                        <!-- BUTTON CHANGE PASSWORD -->
-                        <div class="col-md-4">
-                            <a class="boxed-btn" href="<?= $this->url('users',
-                                    ['action'=>'change-psw', 'id'=>$user->getId()]); ?>">
-                                <span class="fa fa-lock"></span> Change Password
-                            </a> 
-                        </div>
-                        
-                    </div>
+            <div class="panel-body">                   
+                <!-- TABLE RESPONSIVE -->
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <tr>
+                            <th>ID:</th>
+                            <td><?= $this->escapeHtml($user->getId()) ?></td>
+                        </tr>
+                        <tr>
+                            <th>E-mail</th>
+                            <td><?= $this->escapeHtml($user->getEmail()) ?></td>
+                        </tr>
+                        <tr>
+                            <th>Full Name</th>
+                            <td><?= $this->escapeHtml($user->getFullName()) ?></td>
+                        </tr>
+                        <tr>
+                            <th>Date Created</th>
+                            <td><?= $this->escapeHtml($user->getDateCreated()) ?></td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td><?= $this->escapeHtml($user->getStatusAsString()) ?></td>
+                        </tr>
+                        <tr >
+                            <th>Roles</th>
+                            <td><?= $this->escapeHtml($user->getRolesAsString()) ?> </td>
+                        </tr>
+                    </table>
                 </div>
-            
+
+                <!-- P TAG: THERE ARE TWO BUTTONS -->
+                <div class="row center-block">                       
+
+                    <!-- BUTTON EDIT -->  
+                    <div class="col-md-4">    
+                        <a class="boxed-btn" href="<?= $this->url('users', 
+                                ['action'=>'edit', 'id'=>$user->getId()]); ?>">
+                            <span class="fa fa-edit" ></span> Edit
+                        </a>
+                    </div>
+
+                    <!-- BUTTON CHANGE PASSWORD -->
+                    <div class="col-md-4">
+                        <a class="boxed-btn" href="<?= $this->url('users',
+                                ['action'=>'change-psw', 'id'=>$user->getId()]); ?>">
+                            <span class="fa fa-lock"></span> Change Password
+                        </a> 
+                    </div>
+
+                </div>
+            </div>            
         </div>
     </div>
 </div>

@@ -7,30 +7,44 @@
     
     //redering de Breadcrumbs on the page
     $this->pageBreadcrumbs()->setItems([
-                'Home'=>$this->url('home'),
-                'Manage Roles'=>$this->url('roles'),
-                'Edit Role'=>$this->url('roles', ['action'=>'edit', 'id'=>$role->getId()])
+                 'Home'=>$this->url('home'),
+                'Manage Roles'=>$this->url('roles'),               
+                'Edit Role ' => $this->url('roles', ['action'=>'edit', 'id'=>$role->getId()]),
+                'Edit Permissions ' => $this->url('roles', ['action'=>'editPermissions', 'id'=>$role->getId()]),
                 ]);
     
     //getting BUTTON SUBMIT of the ViewModel sent in the $form variable 
     $form->get('submit')
-            ->setAttributes(['class'=>'ctp-btn'])
+            ->setAttributes(['class'=>'submit-btn'])
             ->setValue('  Save  ');
     
     //it's completly necessary before rendering each FORM        
     $form->prepare();
 ?>
 
+<script language="JavaScript">          
+ 
+    $(document).ready( function() {
+
+        const buttons = {'excel':false, 'pdf':false, 'copy' : false};
+        const dropDownsInCols = [];
+        const initialConfig = dataTableConfig( dropDownsInCols, buttons ); 
+        
+        const table = renderDataTable(buttons, dropDownsInCols);
+    }); 
+
+</script>
+
 <!-- TEXT that will be shown in the TAB Title -->
 
-<div class="row">
-    <div class="col-md-8">    	
-        <h3> EDIT PERMISSION <span class="ctp-span">
-                <em><?= $this->escapeHtml($role->getName()) ?></em></span></h3>
+<div class="row justify-content-center">
+    <div class="col-md-6 single-service-item">    	
+        <h4> Permissions Assigned to ROLE: <span class="ctp-span">
+                <em><?= $this->escapeHtml($role->getName()) ?></em></span></h4>
     			    	
         <!-- OPENNING FORM TAG -->
         <?=$this->form()->openTag($form);?>
-            <table class="table-bordered minimalistBlack">
+            <table class="table_ctp table_filtered display">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -74,6 +88,12 @@
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                    </tr>
+                </tfoot>
             </table>
             <?= $this->formElement($form->get('csrf')); ?>            
             <?= $this->formElement($form->get('submit')); ?>        

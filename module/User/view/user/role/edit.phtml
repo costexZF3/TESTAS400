@@ -5,7 +5,7 @@
     
     $this->pageBreadcrumbs()->setItems([
                 'Home'=>$this->url('home'),
-                'Manage Roles'=>$this->url('roles'),
+                'Manage Roles'=>$this->url('roles'),               
                 'Edit Role ' => $this->url('roles', ['action'=>'edit', 'id'=>$role->getId()])
                 ]);
     
@@ -30,23 +30,18 @@
     
     
     $form->get('submit')
-            ->setAttributes(['class'=>'ctp-btn btn-lg'])
+            ->setAttributes(['class'=>'submit-btn'])
             ->setValue(' Save ');
     
     $form->prepare();
 ?>
 
-<div class="row">
-    <div class="col-md-6"> 
-        <h3>EDIT ROLE  <span class="ctp-span"><em><?= $this->escapeHtml($role->getName()); ?></em></h3>
+<div class="row justify-content-center">
+    <div class="col-md-4 single-service-item"> 
+        <h4>EDIT ROLE</h4>
         
-        <div class="ctp-container">
-            <!-- BUTTON EDIT PERMISSIONS -->
-            <p>
-                <a class="btn btn-default" href="<?= $this->url('roles', ['action'=>'editPermissions', 'id'=>$role->getId()]) ?>">
-                  <span class="glyphicon glyphicon-check ctp-green"></span> Edit Permissions
-                </a>
-            </p>
+        <div class="col-md-12">
+            
             <!-- OPENNING FORM TAG -->
             <?= $this->form()->openTag($form); ?>        
                 <div class="form-group">
@@ -68,11 +63,27 @@
                 </div>
 
                 <?= $this->formElement($form->get('csrf')); ?>
-
+            <div class="row"> 
+               <div class="col-md-4">                         
                 <?= $this->formElement($form->get('submit')); ?>        
+               </div>
+                &nbsp;
+               <div class="col-md-offset-2 col-md-4">
+                    <a 
+                       title="Edit permissions associated"
+                        class="boxed-btn" 
+                        href="<?= $this->url('roles', ['action'=>'editPermissions', 'id'=>$role->getId()]) ?>">
+                      <i class="fa fa-edit"></i> Edit
+                    </a>
+                </div> 
+            </div>
             <?= $this->form()->closeTag(); ?>
-        </div> <!-- END: DIV ctp-container -->
+            <!-- BUTTON EDIT PERMISSIONS -->
+                
+            
+            
+        </div> <!-- END: DIV col-md-12 -->
         
-    </div>    
+    </div> <!-- DIV CONTAINER -->    
 </div>   
 
