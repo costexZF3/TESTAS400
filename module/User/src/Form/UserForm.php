@@ -115,6 +115,7 @@ class UserForm extends Form
             'name' => 'roles',
             'attributes' => [
                 'multiple' => 'multiple',
+                'size' => 15,
             ],
             'options' => [
                 'label' => 'Role(s)',

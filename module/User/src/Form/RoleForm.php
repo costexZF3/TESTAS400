@@ -57,7 +57,8 @@ class RoleForm extends Form
             'type'  => 'textarea',
             'name' => 'description',
             'attributes' => [
-                'id' => 'description'
+                'id' => 'description',
+                'rows'=> 2,
             ],
             'options' => [
                 'label' => 'Description',
@@ -70,7 +71,8 @@ class RoleForm extends Form
             'name' => 'inherit_roles',
             'attributes' => [
                 'id' => 'inherit_roles',
-                'multiple' => 'multiple',                
+                'multiple' => 'multiple', 
+                'size' => "12",
             ],
             'options' => [
                 'label' => 'Optionally inherit permissions from these role(s)'
