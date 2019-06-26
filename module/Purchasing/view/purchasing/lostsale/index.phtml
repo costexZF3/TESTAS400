@@ -9,11 +9,17 @@
         'Lost Sales'=>$this->url('lostsales')       
         ]);       
     
+    $columnHeaders = [
+        'Part Number', 'Description', 'Description 2','Description 3', 'Qty Qte', 'Times Qte','Custs. Quote',
+        'Sales Last12', 'VND No', 'VND Name','P. Agent', 'List Price', 'WL', 'Dev.Proj', 'Dev.Status', 'Loc.20',
+        'OEM VND', 'Major', 'Category', 'Min', 'Desc'
+    ];
+    
     /*** getting params from IndexAction() inside LostsaleController ***/
     $user = $this->user;
     $specialAccess = $this->specialAccess;
     $lostSales = $this->lostsalelist;    
-    $table = $this->tableHeader;
+    $tableBody = $this->tableHeader;
     $countItems = $this->countItems;
     $timesquoted = $this->timesquoted;
     $columnsToHide = $this->columnsToHide;
@@ -38,7 +44,12 @@
     
  ?>  
  	 
-<script language="JavaScript">          
+<script language="JavaScript">  
+    /**
+     * 
+     * @param {string} tq
+     * @returns {undefined}
+     */
     const getTimesQuote =( tq )=> {
         let color = "";
         var NodeList = [];
@@ -210,6 +221,9 @@
                             className   : 'submit-btn',
                             action      : function ( e, dt, node, config ) {
                                 alert('Activated!');
+                                console.log(config);
+                                console.log(node);
+                                console.log(e);
                                 this.disable(); //disable button
                             }                            
                         }                                           
@@ -367,7 +381,22 @@
 
 <div class="row">
     <div class="col-lg-12">
-       <?=$table?>
+        
+        <table class="table_ctp table_filtered display" id="table_toexcel">
+           <thead><tr>  
+            <?php foreach ($columnHeaders as $field) :?>           
+                <th><?=$field; ?></th>    
+            <?php endforeach; ?>            
+            </tr></thead>
+           
+            <?=$tableBody; ?>
+           
+           <tfoot><tr>  
+            <?php foreach ($columnHeaders as $field) :?>           
+                <th><?=$field; ?></th>    
+            <?php endforeach; ?>            
+            </tr></tfoot>
+        </table>   
     </div> 
 </div>
 <?php endif; ?>
