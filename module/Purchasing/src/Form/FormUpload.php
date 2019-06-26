@@ -87,7 +87,7 @@ class FormUpload extends Form
             'attributes' => [          //array of attributes                       
                 'id'=>'file',                                                                                
             ],
-            'options' =>['label' => 'Excel File'],                     
+//            'options' =>['label' => 'Excel File'],                     
         ]);
     }
       

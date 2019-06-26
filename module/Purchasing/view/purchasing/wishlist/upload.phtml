@@ -17,13 +17,7 @@
     $form = $this->form;
           
     $columnStyle = 'col-md-10 single-service-item'; 
-     
-    /* adding attributes to the form elements */
-//     $form->get('excelfile')->setAttributes([
-//        'class' => 'submit-btn',        
-//    ]);
-    
-        
+           
     $form->get('submit')->setAttributes(['class'=>'submit-btn']);
   
     /* prepare for before rendering */
@@ -45,12 +39,12 @@
                 <div class="row">
                     <div class="col-md-6"> 
                         <div class="form-group">                           
-                            <?= $this->formLabel($form->get('file')); ?> <br>
+                            <!--//<1?= $this->formLabel($form->get('file')); ?> -->
                             <?= $this->formElement($form->get('file')); ?>
                             <?= $this->formElementErrors($form->get('file')); ?> 
-                            <div class="hint">(CSV and XLS formats are allowed)</div>
+                            <br>                            
                         </div>
-                        
+                       <div class="hint"><p>(CSV and XLS formats are allowed)</p></div> 
                         <br>
                         <?= $this->formElement($form->get('csrf')); ?>
                                  
