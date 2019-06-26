@@ -138,8 +138,8 @@ const dataTableConfig = ( dropDownCols, buttons, $columns=[] ) => {
     const { excel, pdf, copy } = buttons;
     
     const buttonExcel = (excel) ?  createBtn( optEXCEL ) : null;
-    const buttonPdf   =   (pdf) ? createBtn( optPDF ) :  null;    
-    const buttonCopy  =  (copy) ? createBtn( optCOPY ) :  null;    
+    const buttonPdf   =   (pdf) ?  createBtn( optPDF )   :  null;    
+    const buttonCopy  =  (copy) ?  createBtn( optCOPY )  :  null;    
     
     btn1.push( buttonExcel ); btn1.push( buttonPdf );     btn1.push( buttonCopy ); 
     const Btns = btn1.filter( (item) => { return item !== null;});
