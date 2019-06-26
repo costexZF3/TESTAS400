@@ -92,10 +92,10 @@ class WishListManager
     /*
      * array with all COLUMN LABELS that will be rendered
      */
-    private $columnHeaders = ['Check', 'From','Code','Date', 'User','Part Number', 'Description','Status', 'Assigned', 'Vendor',
+    private $columnHeaders = ['', 'From','ID','Date', 'User','Part Number', 'Description','Status', 'Assigned', 'Vendor',
                     'PA', 'PS',  'Year Sales',
-                              'Qty Quoted','Times Quoted', 'OEM Price', 'Loc20', 'Model', 'Category',
-                              'SubCat', 'Major','Minor', 'Action'];
+                              'Qty Quot','TimesQ', 'OEM Price', 'Loc20', 'Model', 'Category',
+                              'SubCat', 'Major','Minor'];
     /*
      * rows: this array saves all <tr> elements generated running sql query..
      */
@@ -171,14 +171,14 @@ class WishListManager
         $SET['WHLSTATUSU'] = $data['name'] ?? self::USER_BY_DEFAULT;        
         $SET['WHLCOMMENT'] = $data['comment'] ?? '';        
         
-        if ($SET['WHLCOMMENT']=='') { unset($SET['WHLCOMMENT']);}
-        if ($SET['WHLSTATUSU']==self::USER_BY_DEFAULT) { unset($SET['WHLSTATUSU']);}
-        if ($SET['WHLSTATUS']==self::STATUS_OPEN) { unset($SET['WHLSTATUS']);}
+        if ($SET['WHLCOMMENT'] == '') { unset($SET['WHLCOMMENT']);}
+        if ($SET['WHLSTATUSU'] == self::USER_BY_DEFAULT) { unset($SET['WHLSTATUSU']);}
+        if ($SET['WHLSTATUS'] == self::STATUS_OPEN) { unset($SET['WHLSTATUS']);}
         
         $WHERE['WHLCODE'] = $data['WHLCODE'];
                 
         $this->queryManager->update( self::TABLE_WISHLIST, $SET, $WHERE);
-    }//
+    }//END updateByCode() method
     
     
     /**
@@ -258,19 +258,19 @@ class WishListManager
         $data['name'] = $row['WHLSTATUSU']?? $row['name'];
         
         return $data;
-    }
+    }//END parseDate()
     
     
     /**
-     * This method returns whole data of a PARTNUMBER from WL 
+     * This method returns the data associated to the code of the PARTNUMBER inside of WL 
      * 
-     * @param string $partnumber
+     * @param string $code
      * @return array()
      */
-    public function getDataFromWL( $partnumber )
+    public function getDataFromWL( $code )
     {
         $sqlStr = 'SELECT * FROM PRDWL';// WHERE WHLPARTN = '.$partnumber;
-        $data = $this->queryManager->runSql( $sqlStr )[--$partnumber];
+        $data = $this->queryManager->runSql( $sqlStr )[--$code];
        
         return $data;
     }
@@ -453,21 +453,20 @@ class WishListManager
     {   
         $result ='<tr><td><label class= "container-check"> <input type="checkbox" name= "checkedrow[]" id="checked'.$row[1].'" value="'.$row[1].'"><span class="checkmark"></span></label></td>';  
       
-        $col = 1; $className = '';
-        
+        $col = 1; $className = '';        
         
         /* COLUMNS with the CLASS description-CSS- (first coluns is 0 ) */        
-        $columns = [  3, 4, 5, 6, 8, 9, 10];
+        $columns = [  2, 12, 13, 14, 16 ];
         foreach( $row as $item ) {
             //CHANGING THE ICON TO THE FROM COLUMN: (EXCEL FILE, ...)
-            if ($col==0) {$className = 'firstcol';}
+            
             if ($col==1) {                             
-                $iconToExcel = '<i class="fa fa-file-excel-o fa-2x"  aria-hidden="true" text="From Excel file" ></i>';
-                $iconToManual = '<i class="fa fa-keyboard-o fa-2x"  aria-hidden="true" text="One by One" ></i>';
+                $iconToExcel = '<i class="fa fa-file-excel-o fa-1x"  aria-hidden="true" text="From Excel file" ></i>';
+                $iconToManual = '<i class="fa fa-keyboard-o fa-1x"  aria-hidden="true" text="One by One" ></i>';
                 $item = ($item=='EXCEL') ? $iconToExcel : $iconToManual;
             }
             if (in_array( $col, $columns ) ) {
-                $className = "description";
+                $className = "number";
             } else if ( $col === 7 ) { 
                 $className = $this->getClassCSSforStatus( $item );
                           
@@ -526,7 +525,11 @@ class WishListManager
         array_push( $result, $row['WHLUSER'] );  // index: 3 - USER 
         $toJson += ['usercreated' => $row['WHLUSER'] ];
         
-        array_push( $result, $partNumberInWL ); // index: 4 - PART NUMBER IN WL       
+        $strUpdate = '/ctpsystem/public/wishlist/update/'.$row['WHLCODE'];//$partNumberInWL;        
+//        
+        $url = '<a href='.$strUpdate.' class="partnumber">'.$partNumberInWL.'</a>';
+        
+        array_push( $result, $url ); // index: 4 - PART NUMBER IN WL       
         
         array_push( $result, $row['IMDSC'] );   // index: 5 - description
         $toJson += ['description' => $row['IMDSC']];
@@ -604,29 +607,21 @@ class WishListManager
          
          array_push( $result, $row['IMPC2'] ); // index: 15 - Minor code 
          $toJson += ['minor' => $row['IMPC2']];
-         
-         /* inserting  link to the other options */
-//        $strLink = '" comment-'.$row["WHLCOMMENT"].'number-'.$row['WHLCODE'].'"'; 
         
-//        $strUpdate = 'ctpsystem/public/update/id='.$row['WHLCODE'];
-               
-        $strUpdate = '/ctpsystem/public/wishlist/update/'.$row['WHLCODE'];//$partNumberInWL;
-        
-//        $url = '<a href='.$strLink.' class="btn btn-default btn-rounded" data-toggle="modal" data-target="#modalLoginAvatar"><i class="fa fa-info-circle" aria-hidden="true"></i></a>';
-        $url = '<a href='.$strUpdate.' class="btn btn-default btn-rounded"><i class="fa fa-info-circle fa-1x" aria-hidden="true"></i></a>';
-         
-        array_push( $result, $url  ); // index: 15 - Minor code 
-        $toJson += ['url' => $strUpdate]; 
-         
-          //creating rows as JSON
+        //creating rows as JSON
         $this->jsonResponse = json_encode( $toJson ); 
         //var_dump($this->jsonResponse()); exit;
         return $result;
     }
     
     
-    /* builts the TBODY part */
-    private function getBodyTable():string {
+    /**
+     *  Returns the WL as HTML
+     * 
+     * @return string
+     */ 
+     
+    private function getBodyTable(){
       $iteration = 0; 
       $tableBody = '<tbody>';        
             
@@ -668,7 +663,7 @@ class WishListManager
         
          /*********** generating each column label dynamically *****************/
          foreach ($this->columnHeaders as $field) {           
-            $tableHeader.='<th class="description">'.$field.'</th>';    
+            $tableHeader.='<th>'.$field.'</th>';    
          }
 
         /* concatening  header */
@@ -696,7 +691,7 @@ class WishListManager
           $iteration++;
         }//end: foreach    
 
-        $tableFooter = '<tfoot class="description"><tr>';
+        $tableFooter = '<tfoot><tr>';
 
         /*********** generating each column label dynamically *****************/
         foreach ($this->columnHeaders as $field) {           
