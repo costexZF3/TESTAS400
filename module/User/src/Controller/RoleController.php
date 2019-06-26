@@ -45,6 +45,7 @@ class RoleController extends AbstractActionController
 
 //        $viewModel->buttons = $myService->getSomeValue();
         $viewModel->buttons = null; //initial value
+     
     }
     
     /**
@@ -252,6 +253,8 @@ class RoleController extends AbstractActionController
             return;
         }
         
+        $this->layout()->setTemplate('layout/layout_Grid');
+           
         $role = $this->entityManager->getRepository(Role::class)
                 ->find($id);
         

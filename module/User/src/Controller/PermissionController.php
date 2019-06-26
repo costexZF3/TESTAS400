@@ -38,8 +38,24 @@ class PermissionController extends AbstractActionController
      * list of permission.
      */
     public function indexAction() 
-    {
+    {        
         $this->layout()->setTemplate('layout/layout_Grid');
+        $buttonADD = [
+            'label' => 'permission',
+            'title' => 'adding a new permission',
+            'class' => 'boxed-btn-layout btn-rounded',
+            'font-icon' => 'fa fa-plus fa-1x',
+            'url' => [                          
+                'route'=>'permissions', 
+                'action'=>['action'=>'add'],                            
+            ],
+        ];
+                   
+        $listButton = [];
+        array_push($listButton, $buttonADD);
+             
+        $this->layout()->buttons = $listButton;
+        
         
         //getting all Permissions orders by id from Permission Repository
         $permissions = $this->entityManager->getRepository(Permission::class)
@@ -48,7 +64,7 @@ class PermissionController extends AbstractActionController
         return new ViewModel([
             'permissions' => $permissions
         ]);
-    } 
+    }//END indexAction() 
     
     /**
      * This action displays a page allowing to add a new permission.
@@ -153,7 +169,7 @@ class PermissionController extends AbstractActionController
                 $this->permissionManager->updatePermission($permission, $data);
                 
                 // Add a flash message.
-                $this->flashMessenger()->addSuccessMessage('Updated the permission.');
+                $this->flashMessenger()->addSuccessMessage('Updated the permission. ['.$permission->getName().']');
                 
                 // Redirect to "index" page
                 return $this->redirect()->toRoute('permissions', ['action'=>'index']);                
