@@ -63,6 +63,8 @@ class FormUpdateMultiple extends Form
                 'ALOPEZ'    => 'ALOPEZ',
                 'ALORENZO'  => 'ALORENZO',
                 'CMONTILVA' => 'CMONTILVA',
+                'AALZATE' => 'AALZATE',
+                'JDMIRA' => 'JDMIRA',
             ];
         
         $this->addElementSC1( $status, $users ); 
