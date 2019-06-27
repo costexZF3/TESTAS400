@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * This class represents a permission.
  * @ORM\Entity()
- * @ORM\Table(name="QS36F.ctppermission")
+ * @ORM\Table(name="QS36F.ctppe00001") //ctppermission
  */
 class Permission
 {
