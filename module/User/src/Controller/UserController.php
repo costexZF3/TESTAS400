@@ -7,8 +7,9 @@
     use Zend\Paginator\Paginator;
     use Zend\View\Model\ViewModel;
     use User\Entity\User;
+    use User\Entity\UserAS400;
     use User\Entity\Role;
-    use User\Entity\Permission;
+    //use User\Entity\Permission;
     use User\Form\UserForm;
     use User\Form\PasswordChangeForm;
     use User\Form\PasswordResetForm;
@@ -98,6 +99,7 @@
             foreach ($allRoles as $role) {
                 $roleList[$role->getId()] = $role->getName();
             }
+            //INSERTING ALL ROLES INTO THE roles FORM ITEM, TO SELECCTING
             $form->get('roles')->setValueOptions($roleList);
 
             // Check if user has submitted the form

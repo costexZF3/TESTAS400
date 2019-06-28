@@ -38,12 +38,14 @@
         <!-- OPEN FORM TAG -->
             <?= $this->form()->openTag($form); ?>        
                 <div class="form-group">
+                    <i class="fa fa-universal-access"></i>
                     <?= $this->formLabel($form->get('name')); ?>
                     <?= $this->formElement($form->get('name')); ?>
                     <?= $this->formElementErrors($form->get('name')); ?>                  
                 </div>
 
                 <div class="form-group">
+                    <i class="fa fa-file-text"></i>
                     <?= $this->formLabel($form->get('description')); ?>
                     <?= $this->formElement($form->get('description')); ?>
                     <?= $this->formElementErrors($form->get('description')); ?>                  

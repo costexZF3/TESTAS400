@@ -2,6 +2,7 @@
 namespace User\Service;
 
 use User\Entity\User;
+use User\Entity\UserAS400;
 use User\Entity\Role;
 use Zend\Crypt\Password\Bcrypt;
 use Zend\Math\Rand;

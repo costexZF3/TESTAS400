@@ -1,8 +1,8 @@
 /* injecting fonts from server */
 
 @font-face {
-  font-family: MyOswald;
-  src: url(../fonts/Oswald-ExtraLight.ttf);
+  font-family: CTPFONT;
+  src: url(../fonts/SWZ721C.TTF);
 }
 
 @font-face {
@@ -23,14 +23,19 @@
    - <li> elements: styles. This will be used when formElementsError 
 */
 form ul {
-  list-style-type: circle;
-  padding: 15px;
+  list-style-type: disc;
+  padding: 10px;
   margin: 0px 5px;
   font-size: 8px;
 }
 
 form ul li {    
-  color: #F8C05F;        
+  color: #C70039;        
+}
+
+.form-group ul li {    
+  color: #C70039;        
+  font-size: 8px;
 }
 
 /* RADIO BUTTONS - NOT IN STYLE TEMPLATE */
@@ -211,7 +216,7 @@ form ul li {
 
 /* panels: panels headings */
 .panel-heading h3 {
-    font-family: MyOswald, monospace, Arial;
+    font-family: CTPFONT, monospace, Arial;
     font-weight: 300;
     color: #F39C12;
 }
@@ -233,52 +238,46 @@ form ul li {
     background-image: url(/ctpsystem/public/img/avatar.png); 
 }
 
+.form-group i {
+    color: #C70039;
+}
 .noautorize {
     height: 100%;
     width: 100%;
     background-attachment: url(../../public/img/logo.png); 
 }
 /* ctp titles */
-.ctp_title {
-    text-transform: uppercase;
-    text-align: center;   
+.ctp-title {
+    text-transform: uppercase;  
+    padding-bottom: 10px;
 }
 
 /* All H1 elements inside (.ctp_title class)*/
-.ctp_title h1{
+.ctp-title h1{
     /* font properties */
-    font-family: MyOswald, Arial, Helvetica, sans-serif; 
-    font-size: 24px;
+    font-family: CTPFONT, Arial, Helvetica, sans-serif; 
+    font-size: 80px;
     font-weight: 200;    
     color: #ebc14b;     
-    text-combine-upright: all;
-}
+    text-combine-upright: all;}
 
 /* ctp_subtitle */
 
-.ctp_subtitle {
-    color: white;
-}
 /*  All a h1, h2, h3 elements with class (.ctp_subtitle) */
-h1.ctp_subtitle {
-    font-family: MyOswald, Helvetica, sans-serif;        
-    color: #ebc14b; 
-}
-
-h2.ctp_subtitle {
-    font-family: MyOswald, Arial; 
-    font-size: 25px;
-    padding-left: 5px;   
-    color: white;    
-}
-
- h3.ctp_subtitle {
-    padding-bottom: 10px;
-    font-family: MyOswald, Helvetica, sans-serif;          
-    font-size: 20px;
-    color: #57a900;               
+.ctp-subtitle h1 {
+    color: black;
     text-transform: capitalize;
-}
+    font-weight: 300; 
+    font-family: CTPFONT, Helvetica, sans-serif;    
+    font-size: 40px;
+    padding-bottom: 10px; }
+        
+    .ctp-subtitle h2{    
+        font-size: 25px;
+        font-weight: 200;}
+    .ctp-subtitle h3{         
+        font-size: 20px;
+        }
 
   
 /*** hidding all items with less than 100 TIMES QUOTE ***/ 
@@ -294,7 +293,9 @@ h2.ctp_subtitle {
     .table_ctp thead, tfoot, th {  
         padding: 0; 
         text-transform: uppercase;
-        background-color:#ffcd51;/*#F7BC59; /*#F9C05F*/
+        font-stretch: ultra-condensed; 
+        color: black;
+        background-color:#FFCD45; /*#ffcd51;/*#F7BC59; /*#F9C05F*/
         text-align: left;}
         
         .table_ctp .money, .number {    	    
@@ -306,7 +307,7 @@ h2.ctp_subtitle {
 /*color for icons*/ 
 
 input[type=file] { 
-    size: "60";    
+    size: 60px;    
      /*@extend .submit-btn;*/
 }
         

@@ -6,6 +6,7 @@ use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\ArrayInput;
 use User\Validator\UserExistsValidator;
+use User\Validator\UserExistsValidatorAS400;
 
 /**
  * This form is used to collect user's email, full name, password and status. The form 
@@ -33,6 +34,12 @@ class UserForm extends Form
     private $user = null;
     
     /**
+     *
+     * @var User\Entity\UserAS400; 
+     */
+    private $userAS400;
+    
+    /**
      * Constructor.     
      */
     public function __construct($scenario = 'create', $entityManager = null, $user = null)
@@ -47,6 +54,7 @@ class UserForm extends Form
         $this->scenario = $scenario;
         $this->entityManager = $entityManager;
         $this->user = $user;
+        $this->userAS400 = $user;
         
         $this->addElements();
         $this->addInputFilter();          
@@ -175,6 +183,13 @@ class UserForm extends Form
                     ],
                     [
                         'name' => UserExistsValidator::class,
+                        'options' => [
+                            'entityManager' => $this->entityManager,
+                            'user' => $this->user
+                        ],
+                    ],                    
+                    [
+                        'name' => UserExistsValidatorAS400::class,
                         'options' => [
                             'entityManager' => $this->entityManager,
                             'user' => $this->user
