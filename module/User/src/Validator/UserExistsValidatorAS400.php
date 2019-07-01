@@ -28,7 +28,7 @@ class UserExistsValidatorAS400 extends AbstractValidator
      */
     protected $messageTemplates = array(
         self::NOT_SCALAR  => "The email must be a scalar value",
-        self::USER_NO_EXISTS  => "The user MUST be created in the System"        
+        self::USER_NO_EXISTS  => "The user MUST be created in the System and be active"        
     );
     
     /**
@@ -66,18 +66,18 @@ class UserExistsValidatorAS400 extends AbstractValidator
         
         $user = $entityManager->getRepository(UserAS400::class)
                 ->findOneByUser($value);
-
-        if($this->options['user']==null) {
+        
+       // var_dump($user);
+        if($user != null && $user->getStatus()!='R') {
             $isValid = ($user!=null);
         } else {
-            if($this->options['user']->getUser()!=$value && $user!=null) {
+            if ($user->getUser()!=$value && $user!=null) {
                 $isValid = false;
-            }
-            else { 
+            } else { 
                 $isValid = true;
             }
         }
-        
+       
         // If there were an error, set error message.
         if(!$isValid) {            
             $this->error(self::USER_NO_EXISTS );            

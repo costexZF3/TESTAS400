@@ -98,7 +98,7 @@ return [
                  Give access to "index" actions to everyone with +menu.purchasing +option.purchasing.claims */
 
                 //ACCESS TO ACCTIONS ASSOCIATED WITH MENUS               
-                ['actions' => ['index'], 'allow' => '+purchasing.option.pd.wishlist' ],
+                ['actions' => ['index', 'update', 'updatemultiple', 'add', 'create', 'upload'], 'allow' => '+purchasing.option.pd.wishlist' ],
                 
                 /* ACCESS TO ACTIONS ASSOCIATED TO ROLES  */
                 /* +purchasing.wl.owner 
@@ -106,13 +106,13 @@ return [
                  * +purchasing.pa
                  * +purchasing.wl.documentator
                  */
-                 ['actions' => ['update'],                    'allow' => '+purchasing.pa'], 
+                 
                 ['actions' => ['add', 'create','update', 'updatemultiple', 'upload'],   'allow' => '+purchasing.wl.owner'],                
                 
-                ['actions' => ['add', 'create','update'],    'allow' => '+purchasing.ps'],
+               // ['actions' => ['add', 'create','update'],    'allow' => '+purchasing.ps'],
                                              
-               
-                ['actions' => ['update'],                    'allow' => '+purchasing.wl.documentator'],                                
+//                ['actions' => [],                    'allow' => '+purchasing.pa'], 
+//                ['actions' => ['update'],                    'allow' => '+purchasing.wl.documentator'],                                
 
             ], //END: access_filter for LostSaleController 
         ],

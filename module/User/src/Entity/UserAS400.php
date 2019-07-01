@@ -105,7 +105,7 @@ class UserAS400
     
     /**
      * Returns status.
-     * @return int     
+     * @return string     
      */
     public function getStatus() 
     {
