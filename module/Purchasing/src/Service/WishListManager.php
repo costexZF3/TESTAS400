@@ -288,28 +288,41 @@ class WishListManager
        $this->dataSet = $this->queryManager->runSql( $strSql );       
        
        $this->countItems = count( $this->dataSet ); 
-    }
+    }//END. refreshWishList() 
     
-    /* populate all data */
+    /**
+     *  Populate all data       
+     * getting data dynamically
+     * Pushing on the first ROW the Header of each column      
+     */
     private function populateDataMatriz() 
-    {
-      /* 
-       * getting data dinamically
-       * Pushing on the first ROW the Header of each column
-       */        
-            
-      foreach ($this->dataSet as $row) { 
-         /* gettin row */
-         $rowAsArray = $this->rowToArray( $row );
-         /* each row pushing to the rows (body to render)*/
-         array_push( $this->rawTable, $rowAsArray );                
-         
-      }//end: foreach         
+    {      
+        foreach ($this->dataSet as $row) { 
+            /* gettin row */
+            $rowAsArray = $this->rowToArray( $row );
+
+            /* each row pushing to the rows (body to render)*/
+            array_push( $this->rawTable, $rowAsArray );                
+
+        }//end: foreach         
       
     }//END METHOD: populateDataMatriz() method...
     
-   
-    /* returns all fields defined for the table */
+   /**
+    *  -This method retrieves all active users in the AS400 that are PA and PS
+    */ 
+   public function usersPAAS400()
+   {
+       $strSql =  "SELECT CNTRLL.CNT03 PA, TRIM(CSUSER.USNAME) FULLNAME, TRIM(CSUSER.USUSER) USER 
+              FROM CNTRLL INNER JOIN CSUSER ON CNT03 = DIGITS(USPURC) WHERE CNT01 = '216' AND USPTY9 <> 'R' AND USPURC <> 0";
+       
+       $dataSet = $this->queryManager->runSql( $strSql );       
+       
+       return $dataSet;        
+   }//END: usersPAAS400
+
+
+   /* returns all fields defined for the table */
     public function getFieldNames() 
     {
        return $this->columnHeaders;   
