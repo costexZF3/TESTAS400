@@ -292,8 +292,9 @@ class WishlistController extends AbstractActionController
     public function indexAction() 
     {   
         $user= $this->getUser();
-        $isPa = $this->access('purchasing.pa');
+        $isDocumentator = $this->access('purchasing.wl.documentator');
       
+        var_dump($isDocumentator);
         $form = new FormWishList();
         
         $this->layout()->setTemplate('layout/layout_Grid');
