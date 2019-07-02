@@ -66,15 +66,14 @@ class UserExistsValidatorAS400 extends AbstractValidator
         
         $user = $entityManager->getRepository(UserAS400::class)
                 ->findOneByUser($value);
-        
-       // var_dump($user);
+       
         if($user != null && $user->getStatus()!='R') {
             $isValid = ($user!=null);
         } else {
-            if ($user->getUser()!=$value && $user!=null) {
-                $isValid = false;
-            } else { 
+            if ($user!=null && $user->getUser()!=$value) {
                 $isValid = true;
+            } else { 
+                $isValid = false;
             }
         }
        
