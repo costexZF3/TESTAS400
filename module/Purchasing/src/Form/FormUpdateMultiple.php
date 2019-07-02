@@ -15,19 +15,15 @@ namespace Purchasing\Form;
 
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilter;
-
-use Application\Validator\PartNumberValidator;
-use Application\Service\QueryManager as queryManager;
 use Purchasing\Service\WishListManager as WLM;
 
 class FormUpdateMultiple extends Form 
 {     
-    private $WLManager;
+    private $wlManager;
     
-    public function __construct( $WLM ) 
-    {                
-        
-        $this->WLManager = $WLM;
+    public function __construct( $wlManager ) 
+    {    
+        $this->wlManager = $wlManager;
        
         // Defined form name 
         parent::__construct('form-update-multiple');
@@ -48,26 +44,22 @@ class FormUpdateMultiple extends Form
     {
         $status = [ 
             'NA' =>'NA',
-            WLM::STATUS_OPEN => $this->WLManager->getStatus( WLM::STATUS_OPEN ),
-            WLM::STATUS_DOCUMENTATION => $this->WLManager->getStatus( WLM::STATUS_DOCUMENTATION ),
-            WLM::STATUS_TO_DEVELOP => $this->WLManager->getStatus( WLM::STATUS_TO_DEVELOP ),                                                                                           
-            //WLM::STATUS_CLOSE_BY_DEV => $this->WLManager->getStatus( WLM::STATUS_CLOSE_BY_DEV ),                                                                                           
-            WLM::STATUS_REOPEN => $this->WLManager->getStatus( WLM::STATUS_REOPEN ),                                                                                           
-            WLM::STATUS_REJECTED => $this->WLManager->getStatus( WLM::STATUS_REJECTED ),                                                                                           
+            WLM::STATUS_OPEN => $this->wlManager->getStatus(WLM::STATUS_OPEN ),
+            WLM::STATUS_DOCUMENTATION => $this->wlManager->getStatus( WLM::STATUS_DOCUMENTATION ),
+            WLM::STATUS_TO_DEVELOP => $this->wlManager->getStatus( WLM::STATUS_TO_DEVELOP ),                                                                                           
+            //WLM::STATUS_CLOSE_BY_DEV => $this->wlManager->getStatus( WLM::STATUS_CLOSE_BY_DEV ),                                                                                           
+            WLM::STATUS_REOPEN => $this->wlManager->getStatus( WLM::STATUS_REOPEN ),                                                                                           
+            WLM::STATUS_REJECTED => $this->wlManager->getStatus( WLM::STATUS_REJECTED ),                                                                                           
         ];
-
-        $users = [
-                'NA'        => 'NA',
-                'NO ASSIGNED' => 'NO ASSIGNED',           
-                'CTOBON'    => 'CTOBON',
-                'ALOPEZ'    => 'ALOPEZ',
-                'ALORENZO'  => 'ALORENZO',
-                'CMONTILVA' => 'CMONTILVA',
-                'AALZATE' => 'AALZATE',
-                'JDMIRA' => 'JDMIRA',
-            ];
         
-        $this->addElementSC1( $status, $users ); 
+        //recovering the Pa from the AS400 using the wlManager service
+        $userList = ['NA'=>'NA'];
+        $usersAS400 = $this->wlManager->usersPAAS400();
+        foreach ($usersAS400 as $user) {
+            $userList[$user['USER']] = $user['USER'];
+        }
+        
+        $this->addElementSC1( $status, $userList ); 
         $this->addCommonElements(); //CSFR (CROSS SIDE FORGERY REQUEST)
        
     }//END: selectElements

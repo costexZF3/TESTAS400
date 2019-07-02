@@ -31,7 +31,7 @@ class FormUpdate extends Form
     * @var WLM
     */
    
-    private $WLManager;     
+    private $wlManager;     
     
     /**
      * @param string $scenario  | it defines if the user is looking for ADD or SUBMIT data 
@@ -40,7 +40,7 @@ class FormUpdate extends Form
     public function __construct( $scenario, WLM $WLM ) 
     {                 
         $this->scenario = $scenario;
-        $this->WLManager = $WLM;
+        $this->wlManager = $WLM;
        
         // Defined form name 
         parent::__construct('form-update');
@@ -64,31 +64,34 @@ class FormUpdate extends Form
         switch ( $this->scenario ) {
             case 'PA' :   //status for users with purchasing.pa permission 
                 $status = [                   
-                    WLM::STATUS_DOCUMENTATION => $this->WLManager->getStatus( WLM::STATUS_DOCUMENTATION),
-                    WLM::STATUS_TO_DEVELOP => $this->WLManager->getStatus( WLM::STATUS_TO_DEVELOP ),                                                                                           
+                    WLM::STATUS_DOCUMENTATION => $this->wlManager->getStatus( WLM::STATUS_DOCUMENTATION),
+                    WLM::STATUS_TO_DEVELOP => $this->wlManager->getStatus( WLM::STATUS_TO_DEVELOP ),                                                                                           
                 ]; 
                 
             break;
             case 'PS' :   //status for users with purchasing.pa permission 
                 $status = [                   
-                    WLM::STATUS_DOCUMENTATION => $this->WLManager->getStatus( WLM::STATUS_DOCUMENTATION),
-                    WLM::STATUS_TO_DEVELOP => $this->WLManager->getStatus( WLM::STATUS_TO_DEVELOP ),                                                                                           
+                    WLM::STATUS_DOCUMENTATION => $this->wlManager->getStatus( WLM::STATUS_DOCUMENTATION),
+                    WLM::STATUS_TO_DEVELOP => $this->wlManager->getStatus( WLM::STATUS_TO_DEVELOP ),                                                                                           
                 ];
                                    
             break;
         
             case 'WLO' : //for the user: wishlist.owner                   
                 $status = [ 
-                    WLM::STATUS_OPEN => $this->WLManager->getStatus( WLM::STATUS_OPEN ),
-                    WLM::STATUS_DOCUMENTATION => $this->WLManager->getStatus( WLM::STATUS_DOCUMENTATION ),
-                    WLM::STATUS_TO_DEVELOP => $this->WLManager->getStatus( WLM::STATUS_TO_DEVELOP ),
-                  //  WLM::STATUS_CLOSE_BY_DEV => $this->WLManager->getStatus( WLM::STATUS_CLOSE_BY_DEV),                                                                                           
-                    WLM::STATUS_REOPEN => $this->WLManager->getStatus( WLM::STATUS_REOPEN ),                                                                                           
-                    WLM::STATUS_REJECTED => $this->WLManager->getStatus( WLM::STATUS_REJECTED ),                                                                                           
+                    WLM::STATUS_OPEN => $this->wlManager->getStatus( WLM::STATUS_OPEN ),
+                    WLM::STATUS_DOCUMENTATION => $this->wlManager->getStatus( WLM::STATUS_DOCUMENTATION ),
+                    WLM::STATUS_TO_DEVELOP => $this->wlManager->getStatus( WLM::STATUS_TO_DEVELOP ),
+                  //  WLM::STATUS_CLOSE_BY_DEV => $this->wlManager->getStatus( WLM::STATUS_CLOSE_BY_DEV),                                                                                           
+                    WLM::STATUS_REOPEN => $this->wlManager->getStatus( WLM::STATUS_REOPEN ),                                                                                           
+                    WLM::STATUS_REJECTED => $this->wlManager->getStatus( WLM::STATUS_REJECTED ),                                                                                           
                 ];
                 
-                $userList = ['MOJEDA'=>'MOJEDA', 'ALOPEZ'=>'ALOPEZ', 'CTOBON'=>'CTOBON',
-                    'MAIKOL'=>'MAIKOL'];
+                $usersAS400 = $this->wlManager->usersPAAS400();
+                foreach ($usersAS400 as $user) {
+                    $userList[$user['USER']] = $user['USER'];
+                }
+               
             break;            
            
         }//END: SWITCH
@@ -153,8 +156,8 @@ class FormUpdate extends Form
         // status: $status is an array with the status allowed to see by the user in charge.   
         $this->add([            
             'type'  => 'select',
-            'name' => 'status',
-            'options' => [
+            'name'  => 'status',
+            'options'   => [
                 'label' => 'STATUS',
                 'value_options' => $status
             ],
