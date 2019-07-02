@@ -53,7 +53,7 @@
                     'action'=>['action'=>'add'],                            
                 ],
             ];
-
+            
             $buttonList = [];
             array_push($buttonList, $buttonADD);
             
@@ -135,6 +135,11 @@
          */
         public function viewAction() 
         {
+            $this->layout()->setTemplate('layout/layout_Grid');
+            
+           //creating buttons will be rendering on the breadcrums (new item, import from excel)
+            $this->layout()->buttons = $this->createButtonsOnLayout();
+            
             $id = (int)$this->params()->fromRoute('id', -1);
             if ($id<1) {
                 $this->getResponse()->setStatusCode(404);

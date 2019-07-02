@@ -55,7 +55,7 @@ class UserAS400
      */
     public function getUser() 
     {
-        return $this->user;
+        return trim($this->user);
     }
 
     /**
