@@ -1,10 +1,7 @@
 <?php
     //retrieving log in user for checking access
     $user = $this->user;  
-    $form = $this->form;
-    
-    //$access = $this->access('purchasing.pa');
-   
+    $form = $this->form;   
 ?> 
 
 
@@ -14,7 +11,6 @@
         <div class="accordion-wrapper contact-form-inner">
             <div id="accordion_2">               
                 <div class="card">
-
                     <div class="card-header" id="headingOne_2">
                         <h5 class="mb-0">
                             <a  class="collapsed" data-toggle="collapse" data-target="#collapseOne_2" aria-expanded="false" aria-controls="collapseOne_2">
@@ -26,12 +22,11 @@
                     <!--ACCORDION CONTENT--> 
                     <div id="collapseOne_2" class="collapse" aria-labelledby="headingOne_2" data-parent="#accordion_2">
                         <div class="card-body">
-                            <div class = "row">       
-                                
-<!--                                button NEW ITEM
-                                <a class="boxed-btn" href="<1?= $this->url('wishlist', ['action'=>'add']); ?>">
-                                    <span class="fa fa-1x fa-gear" aria-hidden="true"></span> NEW ITEM
-                                </a>-->
+                            <div class = "row"> 
+                                <!--button DOWN LOAD TEMPLATE -->
+                                <a title="click for downloading a WL template" class="boxed-btn" href="<?=$this->basePath().'/data/templates/wishlist_template.xls'; ?>">
+                                    <i class="fa fa-1x fa-gear download" aria-hidden="true"></i> WL TEMPLATE
+                                </a>
                                 
                                 <!--button updata-->
                                 <!--<a class="boxed-btn" href="<1?= $this->url('wishlist', ['action'=>'update']); ?>">-->
@@ -41,8 +36,7 @@
                    
                                 <div class="btn-wrapper">
                                     <?= $this->formElement($form->get('submit')); ?>
-                                </div>
-                                
+                                </div>                                
 <!--                                <a class="boxed-btn" href="<1?= $this->url('wishlist', ['action'=>'upload']); ?>">
                                     <span class="fa fa-1x fa-file-excel-o black" aria-hidden="true"></span> IMPORT EXCEL
                                 </a>-->

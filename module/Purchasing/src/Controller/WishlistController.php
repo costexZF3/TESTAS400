@@ -140,7 +140,6 @@ class WishlistController extends AbstractActionController
      */
     private function getRoleInWl() 
     {
-        $user= $this->getUser();
         $isWLO = $this->access('purchasing.wl.owner') ? 'WLO' : null;    
         $isPS = $this->access('purchasing.ps') ? 'PS' : null;    
         $isPA = $this->access('purchasing.pa') ? 'PA' : null;    
@@ -293,11 +292,6 @@ class WishlistController extends AbstractActionController
     public function indexAction() 
     {   
         $user= $this->getUser();
-        //  checking user's access into this option
-//        if (!$this->access('purchasing.option.pd.wishlist', ['user'=>$user])) {
-//            return $this->redirect()->toRoute('not-authorized');
-//        }
-        
         $isPa = $this->access('purchasing.pa');
       
         $form = new FormWishList();
