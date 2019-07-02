@@ -1,15 +1,10 @@
 <?php
     namespace User\Controller;
 
-    use Zend\Mvc\Controller\AbstractActionController;    
-    use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
-    use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-    use Zend\Paginator\Paginator;
+    use Zend\Mvc\Controller\AbstractActionController;      
     use Zend\View\Model\ViewModel;
-    use User\Entity\User;
-    use User\Entity\UserAS400;
-    use User\Entity\Role;
-    //use User\Entity\Permission;
+    use User\Entity\User;  
+    use User\Entity\Role;    
     use User\Form\UserForm;
     use User\Form\PasswordChangeForm;
     use User\Form\PasswordResetForm;
@@ -41,6 +36,11 @@
             $this->userManager = $userManager;
         }
         
+        /**
+         * This method creates the button New User will be shown on the breadcrumbs 
+         * 
+         * @return array  
+         */
         private function createButtonsOnLayout()
         {        
             $buttonADD = [
@@ -58,7 +58,7 @@
             array_push($buttonList, $buttonADD);
             
             return $buttonList;
-        }
+        }// END: createButtonsOnLayout()
         
         
         /**
@@ -68,6 +68,7 @@
         public function indexAction() 
         {
             $this->layout()->setTemplate('layout/layout_Grid');
+            
             // Access control.
             if (!$this->access('manage.user')) {
                 $this->getResponse()->setStatusCode(401);
@@ -92,13 +93,16 @@
         {
             // Create user form
             $form = new UserForm('create', $this->entityManager);
+            
             // Get the list of all available roles (sorted by name).
             $allRoles = $this->entityManager->getRepository(Role::class)
                     ->findBy([], ['name'=>'ASC']);
+            
             $roleList = [];
             foreach ($allRoles as $role) {
                 $roleList[$role->getId()] = $role->getName();
             }
+            
             //INSERTING ALL ROLES INTO THE roles FORM ITEM, TO SELECCTING
             $form->get('roles')->setValueOptions($roleList);
 
