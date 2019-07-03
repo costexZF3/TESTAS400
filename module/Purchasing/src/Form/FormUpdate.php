@@ -58,9 +58,7 @@ class FormUpdate extends Form
      * @param string $scenario
      */
     private function  selectElements() 
-    {    
-        //$userList = ['NA'=>'NA'];
-        
+    {   
         switch ( $this->scenario ) {
             case 'PA' :   //status for users with purchasing.pa permission 
                 $status = [                   
@@ -92,10 +90,11 @@ class FormUpdate extends Form
                     WLM::STATUS_REJECTED => $this->wlManager->getStatus( WLM::STATUS_REJECTED ),                                                                                           
                 ];
                 
-                $usersAS400 = $this->wlManager->usersPAAS400();
-                foreach ($usersAS400 as $user) {
-                    $userList[$user['USER']] = $user['USER'];
-                }
+               $userList = ['NA'=>'NA'];
+               $usersAS400 = $this->wlManager->usersPAAS400();
+               foreach ($usersAS400 as $user) {
+                  $userList[$user['USER']] = $user['USER'];
+               }
                
             break;            
            
