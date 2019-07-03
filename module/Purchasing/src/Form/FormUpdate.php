@@ -59,7 +59,7 @@ class FormUpdate extends Form
      */
     private function  selectElements() 
     {    
-        $userList = ['NA'=>'NA'];
+        //$userList = ['NA'=>'NA'];
         
         switch ( $this->scenario ) {
             case 'PA' :   //status for users with purchasing.pa permission 
@@ -73,8 +73,13 @@ class FormUpdate extends Form
                 $status = [                   
                     WLM::STATUS_DOCUMENTATION => $this->wlManager->getStatus( WLM::STATUS_DOCUMENTATION),
                     WLM::STATUS_TO_DEVELOP => $this->wlManager->getStatus( WLM::STATUS_TO_DEVELOP ),                                                                                           
-                ];
-                                   
+                ];                                   
+            break;
+            case 'WLDOC' :   //status for users with purchasing.pa permission 
+                $status = [                   
+                    WLM::STATUS_DOCUMENTATION => $this->wlManager->getStatus( WLM::STATUS_DOCUMENTATION),
+                    WLM::STATUS_TO_DEVELOP => $this->wlManager->getStatus( WLM::STATUS_TO_DEVELOP ),                                                                                           
+                ];                                   
             break;
         
             case 'WLO' : //for the user: wishlist.owner                   
@@ -95,8 +100,11 @@ class FormUpdate extends Form
             break;            
            
         }//END: SWITCH
-        
-        $this->addElementSC1( $status, $userList ); 
+        if (isset($userList)) {
+         $this->addElementSC1( $status, $userList ); 
+        } else {
+           $this->addElementSC1( $status );
+        }
         $this->addCommonElements(); //CSFR (CROSS SIDE FORGERY REQUEST)
         $this->addInputFiltersSC1();  
     }//END: selectElements
@@ -126,7 +134,7 @@ class FormUpdate extends Form
         ]);
     }// addCommonElements method
     
-    private function addElementSC1( $status, $userList ) 
+    private function addElementSC1( $status, $userList = null  ) 
     {  
         // PART NUMBER BUT ONLY INFORMATION IT WILL BE READ ONLY AS WELL.
         $this->add([
@@ -163,15 +171,29 @@ class FormUpdate extends Form
             ],
         ]);
         
-        // status: $status is an array with the status allowed to see by the user in charge.   
-        $this->add([            
-            'type' => 'select',            
-            'name' => 'name',
-            'options' => [
-                'label' => 'ASSIGNED TO:',
-                'value_options' => $userList
-            ],
-        ]);
+        // status: $status is an array with the status allowed to see by the user in charge.  
+        if ($userList!=null) {
+            $this->add([            
+                'type' => 'select',            
+                'name' => 'name',
+                'options' => [
+                    'label' => 'ASSIGNED TO:',
+                    'value_options' => $userList
+                ],
+            ]);
+        } else {
+           $this->add([            
+               'type' => 'text',            
+               'name' => 'name',                                   
+               'attributes' =>[          
+                  'class' => 'form-control',
+                  'readonly' => true,                     
+                ],
+               'options' => [
+                    'label' => 'ASSIGNED TO:',
+                  ], 
+            ]);
+        }
     }
     
     /*
