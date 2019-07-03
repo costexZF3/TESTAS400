@@ -284,10 +284,12 @@ class WishListManager
      */
     private function refreshWishList( string $userName = '')
     {
-       $strSql =  $this->getSqlStr( $userName );         
+       $strSql =  $this->getSqlStr( $userName );  
+       
        $this->dataSet = $this->queryManager->runSql( $strSql );       
        
        $this->countItems = count( $this->dataSet ); 
+       
     }//END. refreshWishList() 
     
     /**
@@ -346,11 +348,16 @@ class WishListManager
      * 
      * @return string  |  It returns a STRING that will be used to execute the SQL query.
      */
-    private function getSqlStr( string $userName = '' ):String 
-    {          
-       $strRenew = ($userName!=='') ? "where UCASE(WHLSTATUSU)= '".strtoupper($userName)."'" : "";
+    private function getSqlStr( string $userName = '' )
+    {   
+      $strRenew = ''; 
+      if ( $userName == 'DOCUMENTATOR' ) {       
+           $strRenew = " where UCASE(PRDWL.WHLSTATUS)= '". self::STATUS_DOCUMENTATION."'";
+    } else if ($userName !='') {
+         $strRenew = "where UCASE(WHLSTATUSU)= '".strtoupper($userName)."'";         
+      }
            
-       $sqlStr = "SELECT * FROM ( SELECT  IMPTN, IMDSC, IMPC1,IMPC2,IMCATA,IMSBCA,IMMOD, IMPRC     
+      $sqlStr = "SELECT * FROM ( SELECT  IMPTN, IMDSC, IMPC1,IMPC2,IMCATA,IMSBCA,IMMOD, IMPRC     
                   FROM WHLINMSTAJ UNION                                                                     
                   SELECT  WHLPARTN, WHLADDDESC, WHLADDMAJO, WHLADDMINO, WHLADDCATE, WHLADDSUBC, WHLADDMODE, WHLADDPRIC                       
                   FROM WHLADDINMJ ) y                                               
