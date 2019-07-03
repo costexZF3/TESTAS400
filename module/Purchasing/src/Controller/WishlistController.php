@@ -26,7 +26,7 @@ class WishlistController extends AbstractActionController
       * VARIABLE QueryManager is an instance of the service
       * @var WishListManager 
       */
-     private $WLManager = null; 
+     private $wlManager = null; 
 
      /**
       * @var queryManager
@@ -48,7 +48,7 @@ class WishlistController extends AbstractActionController
                                    QueryManager $queryManager,
                                    SM $sessionManager ) 
       {           
-         $this->WLManager = $wlManager;   
+         $this->wlManager = $wlManager;   
          $this->queryManager = $queryManager;
          $this->session = $sessionManager;
       }   
@@ -101,7 +101,7 @@ class WishlistController extends AbstractActionController
      */
     public function updatemultipleAction() 
     {       
-        $form = new FormUpdateMultiple( $this->WLManager );
+        $form = new FormUpdateMultiple( $this->wlManager );
         
         //checking if was clicked 
         if( $this->getRequest()->isPost() ) {
@@ -119,7 +119,7 @@ class WishlistController extends AbstractActionController
             // the session->data (session variable)
             $data['records'] = $this->session->data;
               
-            $this->WLManager->update($data, true);
+            $this->wlManager->update($data, true);
             
             $mes = implode(', ',$data['records'] );
             $this->flashMessenger()->addInfoMessage('The parts were updated successfully : ['.$mes.']');
@@ -154,7 +154,7 @@ class WishlistController extends AbstractActionController
      */
     public function updateAction()
     {   
-        $WL = $this->WLManager;
+        $WL = $this->wlManager;
     
         $userRole = $this->getRoleInWL();
         
@@ -165,7 +165,7 @@ class WishlistController extends AbstractActionController
         //checking if the data are coming from FormUpdate
         if( $this->getRequest()->isPost() ) {            
             $raw = $this->params()->fromPost(); 
-            $form = new FormUpdate( $scenario, $this->WLManager );
+            $form = new FormUpdate( $scenario, $this->wlManager );
             $form->setData($raw);
             $dat = $form->isValid()? $form->getData():null;
             
@@ -233,12 +233,12 @@ class WishlistController extends AbstractActionController
             // Retrieving the row with id received 
             $row = $WL->getDataFromWL( $id );
             $data = $WL->parseData( $row );     
-            $status = $data['status'];
-            
+            $status = $data['status'];            
+        
             //saving initial status
             $this->session->InitialStatus = $status;
             //updating data to show on the form will be updated
-            $form->setData( $data );
+            $form->setData( $data );           
             $this->saveIntoSession( $data ); //updating session for compated data and not update if there is no change
                 
         } //end of the else
@@ -294,7 +294,7 @@ class WishlistController extends AbstractActionController
         $user= $this->getUser();
         $isDocumentator = $this->access('purchasing.wl.documentator');
       
-        var_dump($isDocumentator);
+        
         $form = new FormWishList();
         
         $this->layout()->setTemplate('layout/layout_Grid');
@@ -302,16 +302,13 @@ class WishlistController extends AbstractActionController
         $this->layout()->form = null;
         
         $isWLOwner = $this->access('purchasing.wl.owner'); 
-       
+        
         if ($isWLOwner) {            
-            $this->layout()->buttons = $this->createButtonsOnLayout();
-           // $this->layout()->form = $form;
-        } else
-        {
+            $this->layout()->buttons = $this->createButtonsOnLayout();             
+        } else {
             //getting user for loading only its items assigned           
-            $userN = $this->getUserS();
-            $this->WLManager->renewWL( $userN );       
-           // $isPa = $this->access('purchasing.pa');
+            $userN = ($isDocumentator == false) ? $this->getUserS(): 'DOCUMENTATOR';
+            $this->wlManager->renewWL( $userN );                   
         }
         
         //this checks if there was generated some insconsistency trying to import from
@@ -320,13 +317,14 @@ class WishlistController extends AbstractActionController
                
         // renew WL with the logged in user's assigned parts
         
-        //$re = $this->WLManager->jsonResponse();
+        //$re = $this->wlManager->jsonResponse();
         
         return new ViewModel(
             [
-                'wldata' => $this->WLManager->TableAsHtml(),
+                'wldata' => $this->wlManager->TableAsHtml(),
                 'urlInc' => $linkInc, //$urlinc  
                 'isWLOwner' => $isWLOwner,
+                'documentator' => $isDocumentator,
                 'user' => $user,
                 'form' => $form
             ]);
@@ -365,7 +363,7 @@ class WishlistController extends AbstractActionController
                 $inputFileName = $data['file']['tmp_name']; //recovering from the route defined
                 
                 //reading from file
-                $sheetData = $this->WLManager->readExcelFile( $inputFileName );
+                $sheetData = $this->wlManager->readExcelFile( $inputFileName );
                 
                 //result['valid'] : data ready for updating  and result['invalid'] : inconsistency data
                 if (!empty( $sheetData )) {
@@ -387,7 +385,7 @@ class WishlistController extends AbstractActionController
                 
                 /* CREATE INCONSISTENCY EXCEL  */
                 if ( $existInc ) {
-                    $this->WLManager->writeErrorsToExcel( $result['novalid'] );
+                    $this->wlManager->writeErrorsToExcel( $result['novalid'] );
                     $this->session->inconsistency = true;
                     
                     $urlInc = './data/upload/wishlist_inc.xls';  
@@ -649,7 +647,7 @@ class WishlistController extends AbstractActionController
     */  
     private function insert( $data ) 
     {
-        $inserted = $this->WLManager->insert( $data );
+        $inserted = $this->wlManager->insert( $data );
         
         
         if (!$this->session->fromExcel) {
@@ -688,7 +686,7 @@ class WishlistController extends AbstractActionController
         if ( $inStock['INMSTA'] ) {
 
             //get data from the partnumber 
-            $data = $this->WLManager->getDataItem( $partnumber );       
+            $data = $this->wlManager->getDataItem( $partnumber );       
 
             /* check if there was some error or the part does not exist in INMSTA */
              if ( !isset($data['error']) ) {
@@ -852,7 +850,7 @@ class WishlistController extends AbstractActionController
        //loading data of each part number depending on where they comes from.
         foreach ( $listValid as $key => $row ) {            
             
-            $data['code'] = $this->WLManager->nextIndex();
+            $data['code'] = $this->wlManager->nextIndex();
             $data['user'] = $this->getUserS();
             $data['partnumber'] = $listValid[$key]['partnumber'];            
             $data['type'] = '1';   //new item default
