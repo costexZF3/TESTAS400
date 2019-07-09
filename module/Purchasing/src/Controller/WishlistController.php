@@ -76,7 +76,7 @@ class WishlistController extends AbstractActionController
      */
     private function saveIntoSession( $data )
     {
-        $this->session->data = $data;        
+        $this->session->data = $data;
     }
     
     /**
@@ -119,7 +119,7 @@ class WishlistController extends AbstractActionController
             // the session->data (session variable)
             $data['records'] = $this->session->data;
               
-            $this->wlManager->update($data, true);
+            $this->wlManager->update( $data, true );
             
             $mes = implode(', ',$data['records'] );
             $this->flashMessenger()->addInfoMessage('The parts were updated successfully : ['.$mes.']');
@@ -167,6 +167,7 @@ class WishlistController extends AbstractActionController
             $raw = $this->params()->fromPost(); 
             $form = new FormUpdate( $scenario, $this->wlManager );
             $form->setData($raw);
+                    
             $dat = $form->isValid()? $form->getData():null;
             
             //checking multiple selection for updating assigned users and status
@@ -187,7 +188,7 @@ class WishlistController extends AbstractActionController
             $status = $rawData['status'];
                        
             $canChangeStatus = $WL->changeStatus($this->session->InitialStatus, $status);
-            
+           
             //checking if the new status can be acepted
             if ( !$canChangeStatus ) {
                $form->setData($dat);
@@ -200,8 +201,8 @@ class WishlistController extends AbstractActionController
             
             //***************************** checkinggg if I can change de STATUS ***********
             $data = $this->changedData( $rawData );
-            $needUpdate = $data != [];
-            
+            $needUpdate = $data !=[] && $data['name']!= 'NOCHANGE';
+              
             if ( $needUpdate ) {
                 $data['WHLCODE'] = $this->session->id;
                 //using de SERVICE for update by Code
@@ -234,20 +235,26 @@ class WishlistController extends AbstractActionController
             $row = $WL->getDataFromWL( $id );
             $data = $WL->parseData( $row );     
             $status = $data['status'];            
-        
+            $data['name'] = trim($data['name']);
             //saving initial status
             $this->session->InitialStatus = $status;
+                       
             //updating data to show on the form will be updated
-            $form->setData( $data );           
+            $form->setData( $data );  
+            
+            $assignedUser = trim($data['name']);
+            
+            $form->get('name')->setValue( $assignedUser );
+                        
             $this->saveIntoSession( $data ); //updating session for compated data and not update if there is no change
                 
         } //end of the else
        
         return new ViewModel(
-            [
-                'form' => $form,
-                'status' => $status
-            ]);
+      [
+          'form' => $form,
+          'status' => $status
+      ]);
  
     }//END: updateAction()
     

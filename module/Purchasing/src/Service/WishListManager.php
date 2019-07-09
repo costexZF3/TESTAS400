@@ -165,20 +165,20 @@ class WishListManager
      * 
      * @param array() $data
      */
-    private function updateByCode( $data )
-    {           
-        $SET['WHLSTATUS'] = $data['status'] ?? self::STATUS_OPEN;        
-        $SET['WHLSTATUSU'] = $data['name'] ?? self::USER_BY_DEFAULT;        
-        $SET['WHLCOMMENT'] = $data['comment'] ?? '';        
-        
-        if ($SET['WHLCOMMENT'] == '') { unset($SET['WHLCOMMENT']);}
-        if ($SET['WHLSTATUSU'] == self::USER_BY_DEFAULT) { unset($SET['WHLSTATUSU']);}
-        if ($SET['WHLSTATUS'] == self::STATUS_OPEN) { unset($SET['WHLSTATUS']);}
-        
-        $WHERE['WHLCODE'] = $data['WHLCODE'];
-                
-        $this->queryManager->update( self::TABLE_WISHLIST, $SET, $WHERE);
-    }//END updateByCode() method
+   private function updateByCode( $data )
+   {           
+      $SET['WHLSTATUS'] = $data['status'] ?? self::STATUS_OPEN;        
+      $SET['WHLSTATUSU'] = $data['name'] ?? self::USER_BY_DEFAULT;        
+      $SET['WHLCOMMENT'] = $data['comment'] ?? '';        
+
+      if ($SET['WHLCOMMENT'] == '') { unset($SET['WHLCOMMENT']);}
+      if ($SET['WHLSTATUSU'] == self::USER_BY_DEFAULT) { unset($SET['WHLSTATUSU']);}
+      if ($SET['WHLSTATUS'] == self::STATUS_OPEN) { unset($SET['WHLSTATUS']);}
+      //var_dump( $data); exit; 
+      $WHERE['WHLCODE'] = $data['WHLCODE'];
+
+      $this->queryManager->update( self::TABLE_WISHLIST, $SET, $WHERE);
+   }//END updateByCode() method
     
     
     /**
@@ -410,12 +410,12 @@ class WishListManager
      * @param array() $data | An associative array with all needed data inside a WL row.
      * @return object | it returns null is could not insert the field  
      */ 
-    public function insert( $data ) 
-    {   
+   public function insert( $data ) 
+   {   
         // INSERTING DATA: THE PART EXIST INSIDE INMSTA
         $dataSet['WHLCODE'] = $data['code'];
-        $dataSet['WHLUSER'] = strtoupper($data['user']); 
-       $dataSet['WHLPARTN'] = strtoupper($data['partnumber']);
+        $dataSet['WHLUSER'] = trim(strtoupper($data['user'])); 
+        $dataSet['WHLPARTN'] = trim(strtoupper($data['partnumber']));
         $dataSet['WHLSTATUS'] = self::STATUS_OPEN;
         $dataSet['WHLSTATUSU'] = 'N/A';
         $dataSet['WHLREASONT'] = $data['type'];        

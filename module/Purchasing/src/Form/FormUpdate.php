@@ -58,55 +58,56 @@ class FormUpdate extends Form
      * @param string $scenario
      */
     private function  selectElements() 
-    {   
-        switch ( $this->scenario ) {
-            case 'PA' :   //status for users with purchasing.pa permission 
-                $status = [                   
-                    WLM::STATUS_DOCUMENTATION => $this->wlManager->getStatus( WLM::STATUS_DOCUMENTATION),
-                    WLM::STATUS_TO_DEVELOP => $this->wlManager->getStatus( WLM::STATUS_TO_DEVELOP ),                                                                                           
-                ]; 
-                
-            break;
-            case 'PS' :   //status for users with purchasing.pa permission 
-                $status = [                   
-                    WLM::STATUS_DOCUMENTATION => $this->wlManager->getStatus( WLM::STATUS_DOCUMENTATION),
-                    WLM::STATUS_TO_DEVELOP => $this->wlManager->getStatus( WLM::STATUS_TO_DEVELOP ),                                                                                           
-                ];                                   
-            break;
-            case 'WLDOC' :   //status for users with purchasing.pa permission 
-                $status = [                   
-                    WLM::STATUS_DOCUMENTATION => $this->wlManager->getStatus( WLM::STATUS_DOCUMENTATION),
-                    WLM::STATUS_TO_DEVELOP => $this->wlManager->getStatus( WLM::STATUS_TO_DEVELOP ),                                                                                           
-                ];                                   
-            break;
-        
-            case 'WLO' : //for the user: wishlist.owner                   
-                $status = [ 
-                    WLM::STATUS_OPEN => $this->wlManager->getStatus( WLM::STATUS_OPEN ),
-                    WLM::STATUS_DOCUMENTATION => $this->wlManager->getStatus( WLM::STATUS_DOCUMENTATION ),
-                    WLM::STATUS_TO_DEVELOP => $this->wlManager->getStatus( WLM::STATUS_TO_DEVELOP ),
-                  //  WLM::STATUS_CLOSE_BY_DEV => $this->wlManager->getStatus( WLM::STATUS_CLOSE_BY_DEV),                                                                                           
-                    WLM::STATUS_REOPEN => $this->wlManager->getStatus( WLM::STATUS_REOPEN ),                                                                                           
-                    WLM::STATUS_REJECTED => $this->wlManager->getStatus( WLM::STATUS_REJECTED ),                                                                                           
-                ];
-                
-               $userList = ['NA'=>'NA'];
-               $usersAS400 = $this->wlManager->usersPAAS400();
-               foreach ($usersAS400 as $user) {
-                  $userList[$user['USER']] = $user['USER'];
-               }
-               
-            break;            
-           
-        }//END: SWITCH
-        if (isset($userList)) {
-         $this->addElementSC1( $status, $userList ); 
-        } else {
-           $this->addElementSC1( $status );
-        }
-        $this->addCommonElements(); //CSFR (CROSS SIDE FORGERY REQUEST)
-        $this->addInputFiltersSC1();  
-    }//END: selectElements
+    {
+      switch ( $this->scenario ) {
+         case 'PA' :   //status for users with purchasing.pa permission 
+             $status = [                   
+                 WLM::STATUS_DOCUMENTATION => $this->wlManager->getStatus( WLM::STATUS_DOCUMENTATION),
+                 WLM::STATUS_TO_DEVELOP => $this->wlManager->getStatus( WLM::STATUS_TO_DEVELOP ),                                                                                           
+             ]; 
+
+         break;
+         case 'PS' :   //status for users with purchasing.pa permission 
+             $status = [                   
+                 WLM::STATUS_DOCUMENTATION => $this->wlManager->getStatus( WLM::STATUS_DOCUMENTATION),
+                 WLM::STATUS_TO_DEVELOP => $this->wlManager->getStatus( WLM::STATUS_TO_DEVELOP ),                                                                                           
+             ];                                   
+         break;
+         case 'WLDOC' :   //status for users with purchasing.pa permission 
+             $status = [                   
+                 WLM::STATUS_DOCUMENTATION => $this->wlManager->getStatus( WLM::STATUS_DOCUMENTATION),
+                 WLM::STATUS_TO_DEVELOP => $this->wlManager->getStatus( WLM::STATUS_TO_DEVELOP ),                                                                                           
+             ];                                   
+         break;
+
+         case 'WLO' : //for the user: wishlist.owner                   
+             $status = [ 
+                 WLM::STATUS_OPEN => $this->wlManager->getStatus( WLM::STATUS_OPEN ),
+                 WLM::STATUS_DOCUMENTATION => $this->wlManager->getStatus( WLM::STATUS_DOCUMENTATION ),
+                 WLM::STATUS_TO_DEVELOP => $this->wlManager->getStatus( WLM::STATUS_TO_DEVELOP ),
+               //  WLM::STATUS_CLOSE_BY_DEV => $this->wlManager->getStatus( WLM::STATUS_CLOSE_BY_DEV),                                                                                           
+                 WLM::STATUS_REOPEN => $this->wlManager->getStatus( WLM::STATUS_REOPEN ),                                                                                           
+                 WLM::STATUS_REJECTED => $this->wlManager->getStatus( WLM::STATUS_REJECTED ),                                                                                           
+             ];
+
+            $userList = ['N/A'=>'N/A'];            
+            $usersAS400 = $this->wlManager->usersPAAS400();
+            foreach ($usersAS400 as $user) {
+               $userList[$user['USER']] = $user['USER'];
+            }
+
+         break;            
+
+         }//END: SWITCH
+         
+         if (isset($userList)) {
+             $this->addElementSC1( $status, $userList ); 
+         } else {
+            $this->addElementSC1( $status );
+         }
+         $this->addCommonElements(); //CSFR (CROSS SIDE FORGERY REQUEST)
+         $this->addInputFiltersSC1();  
+     }//END: selectElements
 
     /**
      * This method add the commons elements to each scenario 
@@ -166,18 +167,21 @@ class FormUpdate extends Form
             'name'  => 'status',
             'options'   => [
                 'label' => 'STATUS',
-                'value_options' => $status
+                'value_options' => $status,                
             ],
         ]);
         
         // status: $status is an array with the status allowed to see by the user in charge.  
         if ($userList!=null) {
             $this->add([            
-                'type' => 'select',            
-                'name' => 'name',
+               'type' => 'select',            
+               'name' => 'name',                 
                 'options' => [
-                    'label' => 'ASSIGNED TO:',
+                    'label' => 'ASSIGNED TO',
                     'value_options' => $userList
+                ],
+                'attributes' => [
+                  'id' => 'nameid',                    
                 ],
             ]);
         } else {
@@ -189,7 +193,7 @@ class FormUpdate extends Form
                   'readonly' => true,                     
                 ],
                'options' => [
-                    'label' => 'ASSIGNED TO:',
+                    'label' => 'ASSIGNED TO',
                   ], 
             ]);
         }

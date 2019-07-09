@@ -43,7 +43,7 @@ class FormUpdateMultiple extends Form
     private function  selectElements() 
     {
         $status = [ 
-            'NA' =>'NA',
+            'N/A' =>'N/A',
             WLM::STATUS_OPEN => $this->wlManager->getStatus(WLM::STATUS_OPEN ),
             WLM::STATUS_DOCUMENTATION => $this->wlManager->getStatus( WLM::STATUS_DOCUMENTATION ),
             WLM::STATUS_TO_DEVELOP => $this->wlManager->getStatus( WLM::STATUS_TO_DEVELOP ),                                                                                           
@@ -53,7 +53,7 @@ class FormUpdateMultiple extends Form
         ];
         
         //recovering the Pa from the AS400 using the wlManager service
-        $userList = ['NA'=>'NA'];
+        $userList = ['N/A'=>'N/A'];
         $usersAS400 = $this->wlManager->usersPAAS400();
         foreach ($usersAS400 as $user) {
             $userList[$user['USER']] = $user['USER'];

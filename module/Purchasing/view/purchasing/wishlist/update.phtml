@@ -23,22 +23,13 @@
     //determining whether show all data from de part or not
         
     /* adding attributes to the form elements */
-    $form->get('partnumber')->setAttributes([
-        'class' => 'form-control',        
-    ]);
-    $form->get('status')->setAttributes([
-        'class' => 'form-control',        
-    ]);
-    $form->get('name')->setAttributes([
-        'class' => 'form-control',        
-    ]);
-    
-        
+    $form->get('partnumber')->setAttributes(['class' => 'form-control',]);
+    $form->get('status')->setAttributes(['class' => 'form-control',]);
+    $form->get('name')->setAttributes(['class' => 'form-control',]);            
     $form->get('submit')->setAttributes(['class'=>'submit-btn']);
   
     /* prepare for before rendering */
-    $form->prepare();  
-    
+    $form->prepare();      
     
  ?>  
          
@@ -60,14 +51,15 @@
                       <div class="col-md-4">
                         <?= $this->FormRow($form->get('partnumber')); ?>                                                                                                                                 
                       </div>
-                    </div>   
+                    </div> 
+                    <br>
                     <!---- row 2 ---->
                     <div class="row">
                       <div class="col-md-5">                        
                         <?= $this->FormRow($form->get('name')); ?>                          
                       </div>
                     
-                      <div class="col-md-6">                        
+                      <div class="col-md-5">                        
                         <?= $this->FormRow($form->get('status')); ?>                          
                       </div>
                     </div>
