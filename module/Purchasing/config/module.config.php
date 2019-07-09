@@ -32,7 +32,17 @@ return [
                     ],
                 ],                
             ],//end: lostsale route
-            
+            'createdevprod' => [
+                'type'    => Segment::class,
+                'options' => [
+                    // Change this to something specific to your module
+                    'route'    => '/createdevprod',
+                    'defaults' => [
+                        'controller'    => Controller\WishlistController::class,
+                        'action'        => 'createdevprod',
+                    ],
+                ],                
+            ],//end: lostsale route
                         
             'wishlist' => [
                 'type'    => Segment::class,
@@ -98,7 +108,7 @@ return [
                  Give access to "index" actions to everyone with +menu.purchasing +option.purchasing.claims */
 
                 //ACCESS TO ACCTIONS ASSOCIATED WITH MENUS               
-                ['actions' => ['index', 'update', 'updatemultiple', 'add', 'create', 'upload'], 'allow' => '+purchasing.option.pd.wishlist' ],
+                ['actions' => ['index', 'update', 'updatemultiple', 'add', 'create', 'upload', 'createdevprod'], 'allow' => '+purchasing.option.pd.wishlist' ],
                 
                 /* ACCESS TO ACTIONS ASSOCIATED TO ROLES  */
                 /* +purchasing.wl.owner 
@@ -107,7 +117,7 @@ return [
                  * +purchasing.wl.documentator
                  */
                  
-                ['actions' => ['add', 'create','update', 'updatemultiple', 'upload'],   'allow' => '+purchasing.wl.owner'],                
+                ['actions' => ['add', 'create','update', 'updatemultiple', 'upload','createdevprod'],   'allow' => '+purchasing.wl.owner'],                
                 
                // ['actions' => ['add', 'create','update'],    'allow' => '+purchasing.ps'],
                                              

@@ -18,6 +18,8 @@
     */  
     $form = $this->form;
     $status = $this->status;
+    $id = $this->id;
+       
     $imgDir = $this->basePath()."/img/puchasing/statetras$status.svg";
     
     //determining whether show all data from de part or not
@@ -36,56 +38,80 @@
 
 <!--/********************************* CONTAINER TO BE RENDER ************************************************************/-->
 
-<div class="container">        
-    <div class="row justify-content-center">
-        <div class="col-md-5 single-service-item">                 
-            <h4 class="title"> UPDATE </h4> 
-            <br>
-            <!-- Open Form Tag  -->
-            <?= $this->form()->openTag($form); ?>
-                <!-- EDIT: OLD PASSWORD -->
+<div class="container1">        
+   <div class="row justify-content-center">
+      <div class="col-md-5 single-service-item">                 
+         <!--<h4 class="title"> UPDATE </h4>--> 
+         <br>
+         <!-- Open Form Tag  -->
+         <?= $this->form()->openTag($form); ?>
+             <!-- EDIT: OLD PASSWORD -->
+            <div class=""> 
+                <!--row 1-->
+                <div class="row">
+                  <div class="col-md-4">
+                    <?= $this->FormRow($form->get('partnumber')); ?>                                                                                                                                 
+                  </div>
 
-                <div class=""> 
-                    <!--row 1-->
-                    <div class="row">
-                      <div class="col-md-4">
-                        <?= $this->FormRow($form->get('partnumber')); ?>                                                                                                                                 
-                      </div>
-                    </div> 
-                    <br>
-                    <!---- row 2 ---->
-                    <div class="row">
-                      <div class="col-md-5">                        
-                        <?= $this->FormRow($form->get('name')); ?>                          
-                      </div>
-                    
-                      <div class="col-md-5">                        
-                        <?= $this->FormRow($form->get('status')); ?>                          
-                      </div>
-                    </div>
-                    
-                    <br>
-                    <!--row 2-->
-                    <div class="row">
-                      <div class="col-md-12">                                                                            
-                        <?= $this->FormRow($form->get('comment')); ?>                              
-                      </div>
-                    </div>    
+                 <div class="col-md-4">                        
+                    <?= $this->FormRow($form->get('name')); ?>                          
+                  </div>
 
-                    <!-- CROSS SITE REQUEST FORGERY CHECKING -->    
-                    <?= $this->formElement($form->get('csrf')); ?>
-                    <br>
-                    <div class="btn-wrapper">
-                        <?= $this->formElement($form->get('submit')); ?>
-                    </div>
-                </div><!-- offset... -->  
-            <?= $this->form()->closeTag(); ?>
-        </div>
-        
-        <div class="col-md-6 single-service-item">            
-            <img src=<?= $imgDir ?> >
-        </div>     
-    </div>
+                 <div class="col-md-4">                        
+                    <?= $this->FormRow($form->get('status')); ?>                          
+                  </div>   
+                </div> 
+
+                <br>
+                <!--row 2-->
+                <div class="row">
+                  <div class="col-lg-12">                                                                            
+                    <?= $this->FormRow($form->get('comment')); ?>                              
+                  </div>
+                </div>    
+
+                <!-- CROSS SITE REQUEST FORGERY CHECKING -->    
+                <?= $this->formElement($form->get('csrf')); ?>
+
+                <br>
+                <div class=" form-group">
+                    <?= $this->formElement($form->get('submit')); ?>  
+                    
+                    <!--checking if the buttons for creating new products developments will be rendered--> 
+                    <?php if( $status==3 ):?>
+                       <!--buttons for Projects in developing-->
+                       <a class="boxed-btn" title="Add this PART to a new Development Project" 
+                          
+                          href="<?= $this->url(
+                                  'createdevprod', 
+                                  [], 
+                                  ['force_canonical' => true, 
+                                      'query'=>['id'=>$id, 'action'=>'new']
+                                  ]); ?>"
+                        >
+                         <i class="fa fa-newspaper-o"></i>NEW Prod Dev
+                       </a>
+                       <a class="boxed-btn" title="Add this PART to an existing development project" 
+                          href="<?= $this->url(
+                                  'createdevprod', 
+                                  [], 
+                                  ['force_canonical' => true, 
+                                      'query'=>['id'=>$id, 'action'=>'add']
+                                  ]); ?>"
+                        >
+                          <i class="fa fa-plus-circle"></i>Add to
+                       </a>
+                    <?php  endif; ?>
+
+                </div>
+            </div><!-- offset... -->  
+         <?= $this->form()->closeTag(); ?>
+      </div>
+
+      <div class="col-md-6 single-service-item">            
+          <img src=<?= $imgDir ?> >
+      </div>     
+   </div>
 </div>
 
  

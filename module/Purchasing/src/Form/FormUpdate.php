@@ -154,7 +154,7 @@ class FormUpdate extends Form
             'attributes'      => [          //array of attributes
                 'class'       => 'form-control',
                 'id'          =>'comment',
-                'rows'        => "4", 
+                'rows'        => "10", 
                 'maxlenght'   => 500,                                           
                 'placeholder' => 'Enter a comment',                    
             ],
