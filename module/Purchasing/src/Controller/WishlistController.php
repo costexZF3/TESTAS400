@@ -18,7 +18,7 @@ use Purchasing\Form\FormUpdate;
 use Purchasing\Form\FormUpdateMultiple; 
 use Purchasing\Form\FormValidator;
 use Purchasing\Form\FormWishList;
-
+use Purchasing\Form\FormCreateProdDev;
 
 class WishlistController extends AbstractActionController 
 {    
@@ -99,11 +99,20 @@ class WishlistController extends AbstractActionController
     */  
    public function createdevprodAction()
    {
+      //getting params from url( GET ) 
       $params = $this->params()->fromQuery();
       
-      var_dump( $this->session->current);
-      echo "<br>";
-      var_dump($params); exit;
+      $form = new FormCreateProdDev($params['scenario'], $this->wlManager );
+      
+//      var_dump( $this->session->current);
+//      echo "<br>";
+//      var_dump($params); exit;
+      
+      return new ViewModel(
+      [
+          'form' => $form,
+      ]);  
+      
    }
   
   /**
