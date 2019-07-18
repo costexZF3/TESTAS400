@@ -46,9 +46,12 @@ class VendorManager {
      * 
      * @return \Vendor 
      */
-    public function getVendor() 
-    {
-        return $this->vendor;
+    public function getVendor(string $vendorNum = null) 
+    {  
+      if (isset( $vendorNum )) {
+          $this->setVendor( $vendorNum );
+      }
+      return  $this->vendor;
     }
     
     /**
