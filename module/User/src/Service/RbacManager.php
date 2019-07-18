@@ -112,6 +112,7 @@ class RbacManager
      */
     public function isGranted($user, $permission, $params = null)
     {
+        //checking whether the rbac is defined. If not true then init cache and rbac
         if ($this->rbac==null) {
             $this->init();
         }
