@@ -44,7 +44,44 @@ class PartNumberManager {
     }// END: constructor 
    
    /*-------------------------------------- setters ---------------------------------------------*/   
-    
+   
+  /**
+   * This method retrieves the CTP REFERENCE of a given partnumber that exits
+   * 
+   * @param string $partnumber
+   * @return string
+   */  
+   private function getCtpPartNumber( $partnumber )
+   {
+      $strSql = "SELECT * FROM CTPREFS WHERE UCASE(CRPTNO) = '". $partnumber."'";
+      $dataSet = $this->queryManager->runSql( $strSql );
+
+
+      if ( $dataSet!== null ) {
+          $result = $dataSet[0]['CRCTPR'] ?? '';                  
+      }
+
+      return $result;
+   }  
+   
+   /**
+    * This method retrieves the count of references sold 
+    * 
+    * @param string $partnumber
+    * @return integer
+    */
+   private function quantitySold( $partnumber )
+   {
+      $strSql = "SELECT * FROM INVPTYF WHERE trim(IPPART) ='". trim($partnumber)."'";
+      $dataSet = $this->queryManager->runSql( $strSql );
+
+      if ( $dataSet!== null ) {
+          $result = $dataSet[0]['IPYSLS'] ?? '';                  
+      }
+
+      return $result;
+   }   
+            
    /**
     * 
     * @param array $record
@@ -54,7 +91,7 @@ class PartNumberManager {
       
      /* retrieving each FIELD VALUE */
 //         foreach ( dataSet as $record ) {
-            $data['id']              = $record['IMPTN']; //part number
+            $data['id']              = trim($record['IMPTN']); //part number
             $data['description']     = $record['IMDSC']; //part number description            
             $data['major']           = $record['IMPC1']; // major product code
             $data['minor']           = $record['IMPC2']; // minor product code
@@ -70,12 +107,17 @@ class PartNumberManager {
             $data['category']        = $record['IMCATA']; //category of the part
             $data['subCategory']     = $record['IMSBCA']; //subcategory of the part             
             
+            //retrieving  the CTP reference of the part
+            $data['ctppartnumber'] = $this->getCtpPartNumber($data['id']);
+            
+            //retrieving the qty sold 
+            $data['qtysold'] = $this->quantitySold( $data['id'] );
+            
             /*  getting the last year Qty quoted
              *  IPPART
-             */
-            
-            
-            $strSql = "SELECT * FROM INVPTYF WHERE UCASE(IPPART) = '". trim($data['id'])."'";
+             */                       
+           
+            $strSql = "SELECT * FROM INVPTYF WHERE UCASE(IPPART) = '". $data['id']."'";
             $dataSet = $this->queryManager->runSql( $strSql );
             
           
@@ -104,7 +146,7 @@ class PartNumberManager {
                 } 
             }
          /* creating a PartNumber Object */
-          $partNumberObj = new PartNumber( $data );
+          $partNumberObj = new PartNumber( $data ); 
           
          return $partNumberObj;   
    }//END: populatePartNumber method
@@ -176,20 +218,23 @@ class PartNumberManager {
      */
     public function getPartNumber( $partNumberID )
     {
+        $options = [
+            'table' => PartNumberValidator::TABLE_BY_DEFAULT ,
+            'queryManager' => $this->queryManager, 
+          ];
+    
+       $partNumberValidator = new PartNumberValidator( $options );       
+       $isValid = $partNumberValidator->isValid( $partNumberID ); 
+       
+       //if the partnumber not exist then
+       if (!$isValid ) { return null; }      
+       
        /* Loading all from INMSTA */
        $strSql = "SELECT * FROM INMSTA WHERE TRIM(UCASE(IMPTN)) = '". strtoupper( trim( $partNumberID ))."'";
        
-       try {
-           $dataSet = $this->queryManager->runSql( $strSql ); 
-           $ExistPartNumber = ($dataSet[0]['IMPTN'] !== null) ? true : false; 
-         
-         //if exist the part Number then recover all its data
-         if ( $ExistPartNumber ) {
-           $result = $this->populatePartNumber( $dataSet[0] ) ?? null;
-         }
-       } catch ( Exception $e ) {
-         echo 'Caught exception: '.$e->getMessage(),"\n"; 
-       }
+       $dataSet = $this->queryManager->runSql( $strSql ); 
+       
+       $result = $this->populatePartNumber( $dataSet[0] );  
        
        return $result;             
     } //END: getPartNumber 
