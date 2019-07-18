@@ -22,6 +22,7 @@ class PartNumber {
     
    private $id = '';  //IMPTN
    private $description = ''; // IMDSC
+   private $ctppartnumber = '';  //it comes from CTPRefs
    private $major = ''; // IMPC1
    private $minor = ''; // IMPC2
    private $unitCost = ''; // IMCST
@@ -39,13 +40,15 @@ class PartNumber {
    private $onHand;
    private $onOrder;
    private $vendor;  
+   private $qtySold;
    
    /* properties -> LOADING TO ANOTHER QUERIES */
    private $vendorDesc;
    private $qtyQuotedLastYear;
    
  /* constructor
- *  - this receives the SERVICE for recovering data from AS400
+ *  - this receives from the SERVICE PartNumberManager 
+  *   a dataSET for recovering data from AS400
  *    @var dataSet array
  */
     
@@ -57,6 +60,7 @@ class PartNumber {
    private function populate( $data ) {
       $this->id = $data['id'];
       $this->description = $data['description'];
+      $this->ctppartnumber = $data['ctppartnumber'];      
       $this->major = $data['major'];
       $this->minor = $data['minor'];
       $this->unitCost = $data['unitCost'];
@@ -76,9 +80,20 @@ class PartNumber {
       $this->vendor = $data['vendor'];
       $this->vendorDesc = $data['vendordesc'];
       $this->qtyQuotedLastYear = $data['qtyquotedlastyear'];
+      $this->qtySold = $data['qtysold'];
+      
    } //END: populate method
 
    /* getters */
+   
+   public function getCTPRefs() {
+      return $this->ctppartnumber;
+   }
+   
+   public function getQuantitySold()
+   {
+      return $this->qtySold;
+   }
    
    public function getOnHand() {
       return $this->onHand;
@@ -94,8 +109,7 @@ class PartNumber {
    
    public function getVendorDescription() {
       return $this->vendorDesc;
-   }
-   
+   }   
    
    public function getQtyQuotedLastYear() {
       return $this->qtyQuotedLastYear;
