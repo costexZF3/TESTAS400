@@ -28,8 +28,7 @@ class IndexController extends AbstractActionController
      */
     public function __construct(  Adapter $adapter) 
     {
-      $this->conn = $adapter; // by dependency injection
-      
+      $this->conn = $adapter; // by dependency injection      
     }
     
     protected function create_TableWay( $tableName, $adapter )
