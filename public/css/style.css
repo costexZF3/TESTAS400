@@ -191,6 +191,11 @@ form ul li {
     font-style: oblique;
 }
 
+.ctp-div-margins {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
 .ctp-p-justify {
     text-align: justify;
 }
