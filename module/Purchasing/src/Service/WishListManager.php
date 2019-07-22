@@ -22,9 +22,10 @@ class WishListManager
 {
    const USER_BY_DEFAULT = 'NA';
    
-   /* reason type */
-   const NEWVENDOR = 'newvendor';  
-   const NEWPART =  'newpart';  
+   /* reason type */    
+   const NEWPART =  '1';  
+   const NEWVENDOR = '2'; 
+   
    
    /* status in the wishlist for an item */
     const STATUS_OPEN             = '1';  // initial status   (the item is added to the WL)
@@ -66,7 +67,7 @@ class WishListManager
         ['current_state' => '6', 'next_state' => '6'],                 
    ];
     
-   protected $reasontype = [ self::NEWVENDOR => "New Vendor", self::NEWPART => "New Part"];
+   protected $reasontype = [ self::NEWVENDOR => "NEW VENDOR", self::NEWPART => "NEW PART"];
    
    protected $status = [ 
         self::STATUS_OPEN          => "OPEN",                         
@@ -159,6 +160,32 @@ class WishListManager
         return in_array( $currentState, $tmp) ;  
     }//End Method: changeStatus()
     
+    
+    public function validVendor( $vendorNumber )
+    {
+      return $this->vendorManager->validVendor( $vendorNumber);      
+    }
+    
+    /**
+     * 
+     * @param char $reason
+     * @return String
+     */
+    public function getReasonAsString( $reason )
+    {
+       return $this->reasontype[$reason] ?? $this->reasontype['1'];
+    }
+    
+    /**
+     * This method uses the service VendorManager and recover the information of a given vendor
+     * 
+     * @param string $vndNumber
+     */
+    public function getVendorInfo( $vndNumber )
+    {
+       $VNDMANAGER = $this->vendorManager;           
+       return  $VNDMANAGER->getVendor( $vndNumber );       
+    }
     
     /**
      * This method updates an item taking its code into account 
@@ -509,7 +536,8 @@ class WishListManager
      * @return array()
      */      
     public function getRows() {
-        return ($this->rows)?? null;
+      return $this->rows;
+//      return ($this->rows)?? null;
     }
     
     public function jsonResponse()
@@ -521,117 +549,119 @@ class WishListManager
      * @param array() $row | All fields ( columns ) will be mapped into an ARRAY   
      * @return array
      */
-    private function rowToArray( $row ) {         
-        $result = [];
-        $toJson = [];
-        
-        $partNumberInWL = trim($row['WHLPARTN']); 
-        $toJson += ['partnumber' => $partNumberInWL ];
-        
-        $fromValue = $this->from[$row['WHLFROM']];      //MANUAL, EXCEL, LOSTSALES
-        $toJson += ['from' => $fromValue ];
-        
-        $statusP = $this->status[$row['WHLSTATUS']];
-        $toJson += ['status' => $statusP];
-        
-        
-        array_push( $result, $fromValue );   // index: 0 : code
-        array_push( $result, $row['WHLCODE'] );         //index: 1 WL No
-        $toJson += ['code' => $row['WHLCODE'] ];
-        
-        array_push( $result, $row['WHLDATE'] );  // index: 2 DATE
-        $toJson += ['date' => $row['WHLDATE'] ];
-        
-        array_push( $result, $row['WHLUSER'] );  // index: 3 - USER 
-        $toJson += ['usercreated' => $row['WHLUSER'] ];
-        
-        $strUpdate = '/ctpsystem/public/wishlist/update/'.$row['WHLCODE'];//$partNumberInWL;        
-//        
-        $url = '<a href='.$strUpdate.' class="partnumber">'.$partNumberInWL.'</a>';
-        
-        array_push( $result, $url ); // index: 4 - PART NUMBER IN WL       
-        
-        array_push( $result, $row['IMDSC'] );   // index: 5 - description
-        $toJson += ['description' => $row['IMDSC']];
-         
-        //NEW COLUMS AND REQUIREMENTS 
-        array_push( $result, $statusP );   // index: 6 - STATUS
-        
-        array_push( $result, $row['WHLSTATUSU'] );   // index: 7 - USER IN CHARGE
-        
-        
-        // index: 8 - VENDOR NUMBER        
-        $vendorNum = $row['IPVNUM'];                
-        //using the VendorManage Service
-        $this->vendorManager->setVendor( $vendorNum );       
-        
-        array_push( $result,  $vendorNum);   
-        $toJson += ['vendor' => $vendorNum];
+   private function rowToArray( $row ) 
+   { 
+      $result = [];
+      $toJson = [];
 
-        // index: 9 - getting PA
-        array_push( $result,  $this->vendorManager->getPA());   
-        $toJson += ['pa' => $this->vendorManager->getPA()];
-        
-        // index: 10 - getting PS
-        array_push( $result,  $this->vendorManager->getPS());   
-        $toJson += ['ps' => $this->vendorManager->getPS()];
-        
-         // index: 11 - year sales
-        array_push( $result, $row['IPYSLS'] ); 
-        $toJson += ['yearsales' => $row['IPYSLS']];
-        
-        // index: 12 - qty quoted
-        array_push( $result, $row['IPQQTE'] );  
-        $toJson += ['qtyquoted' => $row['IPQQTE']];
-        
-        // index: 13 - times quoted
-        array_push( $result, $row['IPTQTE'] );  
-        $toJson += ['timesquoted' => $row['IPTQTE']];
-        
-        //index: 14 - OEM PRICE
-        array_push( $result, number_format( $row['IMPRC'], 2 )); 
-        $toJson += ['oemprice' => $row['IMPRC']];
-        
-        /*  getting location from DVINVA  where the part has STOCK in  ( DVBIN#: if you need the bin location) 
-         *  - location: 20
-         *  - dvonh#: (qty on hand) > 0  ( hay alguna on hand ) */        
-        $strSql = "SELECT DVONH# FROM DVINVA WHERE UCASE(TRIM(DVPART))='". strtoupper( $partNumberInWL ).
-                "' and dvlocn ='20' and DVONH# > 0";
-               
-        $dataSet = $this->queryManager->runSql( $strSql );
-        
-        //index: 15 - location
-        $inLoc20 = $dataSet[0]['DVONH#']?? '0';
-        array_push( $result,$inLoc20 ); 
-        $toJson += ['inloc20' => $inLoc20];
-        
-        /* adding MODEL */
-        $model = trim($row['IMMOD']) != '' ? $row['IMMOD']:'N/A';
-        array_push( $result,$model  ); //index: 11 model
-        $toJson += ['model' => $inLoc20];
-       
-        /* ADDING CATEGORY DESCRIPTION BEST CASE 5.3 S*/
-        $cat = $row['IMCATA'];         
-        $CatDescription =  $this->partNumberManager->getCategoryDescByStr( $cat );           
-        array_push( $result, $CatDescription ); // index: 12 - Category Description 
-        $toJson += ['categoria' => $CatDescription];
-        
-         /* SUB-CATEGORY */
-        array_push( $result, $row['IMSBCA'] ); //index: 13 - Subcategory
-        $toJson += ['subcategoria' => $row['IMSBCA']];
-        
-         /* mayor and minor */
-         //$mayorMinor = $this->partNumberManager->getMajorMinor( $partNumberInWL );
-         array_push( $result, $row['IMPC1'] ); // index; 14 - Major code
-         $toJson += ['major' => $row['IMPC1']];
-         
-         array_push( $result, $row['IMPC2'] ); // index: 15 - Minor code 
-         $toJson += ['minor' => $row['IMPC2']];
-        
-        //creating rows as JSON
-        $this->jsonResponse = json_encode( $toJson ); 
-        //var_dump($this->jsonResponse()); exit;
-        return $result;
+      $partNumberInWL = trim($row['WHLPARTN']); 
+      $toJson += ['partnumber' => $partNumberInWL ];
+
+      $fromValue = $this->from[$row['WHLFROM']];      //MANUAL, EXCEL, LOSTSALES
+      $toJson += ['from' => $fromValue ];
+
+      $statusP = $this->status[$row['WHLSTATUS']];
+      $toJson += ['status' => $statusP];
+
+
+      array_push( $result, $fromValue );   // index: 0 : code
+      array_push( $result, $row['WHLCODE'] );         //index: 1 WL No
+      $toJson += ['code' => $row['WHLCODE'] ];
+
+      array_push( $result, $row['WHLDATE'] );  // index: 2 DATE
+      $toJson += ['date' => $row['WHLDATE'] ];
+
+      array_push( $result, $row['WHLUSER'] );  // index: 3 - USER 
+      $toJson += ['usercreated' => $row['WHLUSER'] ];
+
+      $strUpdate = '/ctpsystem/public/wishlist/update/'.$row['WHLCODE'];//$partNumberInWL;        
+//        
+      $url = '<a href='.$strUpdate.' class="partnumber">'.$partNumberInWL.'</a>';
+
+      array_push( $result, $url ); // index: 4 - PART NUMBER IN WL       
+
+      array_push( $result, $row['IMDSC'] );   // index: 5 - description
+      $toJson += ['description' => $row['IMDSC']];
+
+      //NEW COLUMS AND REQUIREMENTS 
+      array_push( $result, $statusP );   // index: 6 - STATUS
+
+      array_push( $result, $row['WHLSTATUSU'] );   // index: 7 - USER IN CHARGE
+
+
+      // index: 8 - VENDOR NUMBER        
+      $vendorNum = $row['IPVNUM'];                
+      //using the VendorManage Service
+      $this->vendorManager->setVendor( $vendorNum );       
+
+      array_push( $result,  $vendorNum);   
+      $toJson += ['vendor' => $vendorNum];
+
+      // index: 9 - getting PA
+      array_push( $result,  $this->vendorManager->getPA());   
+      $toJson += ['pa' => $this->vendorManager->getPA()];
+
+      // index: 10 - getting PS
+      array_push( $result,  $this->vendorManager->getPS());   
+      $toJson += ['ps' => $this->vendorManager->getPS()];
+
+       // index: 11 - year sales
+      array_push( $result, $row['IPYSLS'] ); 
+      $toJson += ['yearsales' => $row['IPYSLS']];
+
+      // index: 12 - qty quoted
+      array_push( $result, $row['IPQQTE'] );  
+      $toJson += ['qtyquoted' => $row['IPQQTE']];
+
+      // index: 13 - times quoted
+      array_push( $result, $row['IPTQTE'] );  
+      $toJson += ['timesquoted' => $row['IPTQTE']];
+
+      //index: 14 - OEM PRICE
+      array_push( $result, number_format( $row['IMPRC'], 2 )); 
+      $toJson += ['oemprice' => $row['IMPRC']];
+
+      /*  getting location from DVINVA  where the part has STOCK in  ( DVBIN#: if you need the bin location) 
+       *  - location: 20
+       *  - dvonh#: (qty on hand) > 0  ( hay alguna on hand ) */        
+      $strSql = "SELECT DVONH# FROM DVINVA WHERE UCASE(TRIM(DVPART))='". strtoupper( $partNumberInWL ).
+              "' and dvlocn ='20' and DVONH# > 0";
+
+      $dataSet = $this->queryManager->runSql( $strSql );
+
+      //index: 15 - location
+      $inLoc20 = $dataSet[0]['DVONH#']?? '0';
+      array_push( $result,$inLoc20 ); 
+      $toJson += ['inloc20' => $inLoc20];
+
+      /* adding MODEL */
+      $model = trim($row['IMMOD']) != '' ? $row['IMMOD']:'N/A';
+      array_push( $result,$model  ); //index: 11 model
+      $toJson += ['model' => $inLoc20];
+
+      /* ADDING CATEGORY DESCRIPTION BEST CASE 5.3 S*/
+      $cat = $row['IMCATA'];         
+      $CatDescription =  $this->partNumberManager->getCategoryDescByStr( $cat );           
+      array_push( $result, $CatDescription ); // index: 12 - Category Description 
+      $toJson += ['categoria' => $CatDescription];
+
+       /* SUB-CATEGORY */
+      array_push( $result, $row['IMSBCA'] ); //index: 13 - Subcategory
+      $toJson += ['subcategoria' => $row['IMSBCA']];
+
+       /* mayor and minor */
+       //$mayorMinor = $this->partNumberManager->getMajorMinor( $partNumberInWL );
+       array_push( $result, $row['IMPC1'] ); // index; 14 - Major code
+       $toJson += ['major' => $row['IMPC1']];
+
+       array_push( $result, $row['IMPC2'] ); // index: 15 - Minor code 
+       $toJson += ['minor' => $row['IMPC2']];
+
+      //creating rows as JSON
+      $this->jsonResponse = json_encode( $toJson ); 
+           
+      //var_dump($this->jsonResponse()); exit;
+      return $result;
     }
     
     
@@ -721,7 +751,7 @@ class WishListManager
         $tableFooter.='</tr></tfoot>';       
               
         $this->tableAsHtml = $tableHeader.$tableBody.$tableFooter;               
-        
+       
         return  $this->tableAsHtml;
     }/* END: getGridAsHtml()*/    
     
@@ -749,13 +779,17 @@ class WishListManager
 
             $data['partnumberdesc']= $partNumberObj->getDescription();
 
-            $data['vendor'] = $partNumberObj->getVendor();
-            $data['vendordesc'] = $partNumberObj->getVendorDescription(); 
+            $data['vendor']      = $partNumberObj->getVendor();
+            $data['vendordesc']  = $partNumberObj->getVendorDescription(); 
 
-            $data['tqLastYear'] = $partNumberObj->getQtyQuotedLastYear();
-
+            $data['tqLastYear']  = $partNumberObj->getQtyQuotedLastYear();
+            $data['minor']       =  $partNumberObj->getMinor();
+            $data['oemprice']    = number_format($partNumberObj->getListPrice(), 2);
+            $data['ctppartnumber'] = $partNumberObj->getCTPRefs();
+            $data['qtysold'] = $partNumberObj->getQuantitySold();
+           
             $data['comment'] = '';
-            $data['type'] = '';
+            $data['type'] = ''; //
 
             return $data;
          }
