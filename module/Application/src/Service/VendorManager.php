@@ -15,6 +15,8 @@ namespace Application\Service;
 
 use Application\Service\QueryManager as queryManager;
 use Application\ObjectValue\Vendor as Vendor;
+use Application\Validator\VendorExistValidator;
+
 
 //use Application\Validator\PartNumberValidator;
 
@@ -52,6 +54,26 @@ class VendorManager {
           $this->setVendor( $vendorNum );
       }
       return  $this->vendor;
+    }
+    
+    
+    /**
+     * This method uses the VendorExistValidator()
+     * 
+     * @param string $name  the table name where you can validate the vendor
+     * @param string  $vendorNumber
+     * @return boolean
+     */
+    public function validVendor( $vendorNumber, $table = null )
+    {
+       $options=[
+            'table' => $table ?? VendorExistValidator::TABLE_BY_DEFAULT,
+            'queryManager' => $this->queryManager, 
+            'notintable' => false
+         ];
+       
+       $validator = new VendorExistValidator( $options );
+       return $validator->isValid( $vendorNumber );               
     }
     
     /**
