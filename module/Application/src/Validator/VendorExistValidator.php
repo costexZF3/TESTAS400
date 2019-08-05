@@ -2,6 +2,7 @@
 namespace Application\Validator;
 
 use Zend\Validator\AbstractValidator;
+use Zend\Validator\Digits;
 
 /**
  * Description of VendorExistValidator
@@ -107,6 +108,10 @@ class VendorExistValidator extends AbstractValidator {
     */
    private function existPartInTable( $table, $fieldName, $vendornumber )
    { 
+      //validating that the vendor number has only digitcs
+      $filter = new Digits();
+      if (! $filter->isValid($vendornumber)) return false; 
+      
       $vendorTable = ($table === self::TABLE_BY_DEFAULT ) || ($table === self::TABLE_VENDORS); 
       $WHERE1 = $vendorTable ? " AND VMVTYP IN('I', 'Y') " : "";
         
@@ -116,7 +121,6 @@ class VendorExistValidator extends AbstractValidator {
       $queryManager = $this->options['queryManager'];
       $strSql = "SELECT * FROM ".$table." WHERE ".$fieldName." = ".$vendorFormat." ".$WHERE1; 
       
-//      var_dump($strSql); exit;
       $data = $queryManager->runSql( $strSql );       
       $isValid = isset( $data[0][$fieldName] ) ? true : false;           
       return $isValid;  
@@ -193,8 +197,6 @@ class VendorExistValidator extends AbstractValidator {
       if ( $this->options['checkspecialvendor'] && $isSpecialVendor ) {         
          return $isValid = true;
       }
-         
-//         echo " valid?? ".$isValid."<br>";
 
       //checking assertions
       $notInTable = $this->options['notintable'];
@@ -213,7 +215,6 @@ class VendorExistValidator extends AbstractValidator {
         $this->error(self::INVALID_VENDOR);
       }
 
-//          echo $table." -- isValid: ".$isValid."--- notintable: ".$this->options['notintable'];
       return $isValid;
    }
       

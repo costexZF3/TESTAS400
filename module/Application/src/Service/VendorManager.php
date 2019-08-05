@@ -21,8 +21,12 @@ use Application\Validator\VendorExistValidator;
 //use Application\Validator\PartNumberValidator;
 
 /**
- * Description of PartRecover 
- * - This class is a Service that let us get data from an AS400 TABLE
+ *    DESCRIPTION OF VendorManager Class
+ *  - This class is a Service that let us retrieve information associated to a given Vendor
+ *  
+ *  public methods(): these can be consumed from anywhere through the whole application
+ *   -getVendor( $vendor ): Vendor
+ *   -getPA()
  * 
  * @author mojeda
  */
@@ -48,12 +52,11 @@ class VendorManager {
      * 
      * @return \Vendor 
      */
-    public function getVendor(string $vendorNum = null) 
-    {  
-      if (isset( $vendorNum )) {
-          $this->setVendor( $vendorNum );
-      }
-      return  $this->vendor;
+    public function getVendor( $vendorNum = null) 
+    {             
+      $result = ($this->validVendor( $vendorNum )) ? $this->setVendor( $vendorNum ) : null;         
+      
+      return  $result;
     }
     
     
@@ -68,13 +71,13 @@ class VendorManager {
     {
        $options=[
             'table' => $table ?? VendorExistValidator::TABLE_BY_DEFAULT,
+//            'table' => VendorExistValidator::TABLE_BY_DEFAULT,
             'queryManager' => $this->queryManager, 
             'notintable' => false
          ];
        
-       $validator = new VendorExistValidator( $options );
-       return $validator->isValid( $vendorNumber );               
-    }
+       return (new VendorExistValidator( $options ))->isValid($vendorNumber);      
+    }//END validVendor();
     
     /**
      * 
@@ -82,56 +85,59 @@ class VendorManager {
      * @return array()
      */
     private function loadVendor( string $vendorNum )
-    {        
-        try {           
+    {    
+      try {           
             $strSql = "SELECT VMVNUM, VMNAME, DIGITS(VM#POY) PS, DIGITS(VM#POL) PA, VMVTYP, VMADD1, VMADD2, 
-                       VMADD3, VMYTDP, VMPLYR FROM vnmas WHERE VMVNUM = '".trim($vendorNum)."'  "; 
+                       VMADD3, VMYTDP, VMPLYR FROM vnmas WHERE VMVNUM = ".trim($vendorNum)."  "; 
   
             $dataSet = $this->queryManager->runSql( $strSql );             
                         
             return $dataSet[0] ?? null;
             
-        } catch ( Exception $e ) {            
-             echo 'Caught exception: ',  $e->getMessage(), "\n";
-        }        
+      } catch ( Exception $e ) {            
+         echo 'Caught exception: ',  $e->getMessage(), "\n";
+      }        
     } // end loadVendor()
     
 
-    /**
-     * This METHOD receive the $vendor (number) to looking for its data
-     * 
-     * @param string $vendor
-     */
-    public function setVendor( $vendor ) {
-        //loading All data
-        try {
-            $vendorArray = ($vendor !== null  && $vendor!=='') ? $this->loadVendor( $vendor ) : [];                   
-           
-            //var_dump($vendorArray);       
-            $this->vendor = !empty($vendorArray) ? $this->populateVendor( $vendorArray ) : null;       
-        
-        } finally {
-            
-        }         
-    }
+   /**
+    * This METHOD receive the $vendor (number) to looking for its data
+    * and update a Vendor Object that can be access from whole application
+    * across the method: getVendor( $vendor )
+    * 
+    * @param vendor $vendor
+    */
+    
+   private function setVendor( $vendor ) 
+   {
+      $vendorArray = ($vendor !== null  && $vendor!=='') ? $this->loadVendor( $vendor ) : [];                   
+     
+      $this->vendor = !empty($vendorArray) ? $this->populateVendor( $vendorArray ) : null;           
+   } //END setVendor()
 
-    private function recoverName( $value )
-    {
-        try {
-            $strSql = "SELECT CNTRLL.CNT03 PA, TRIM(CSUSER.USNAME) NAME FROM CNTRLL INNER JOIN CSUSER 
-          ON CNT03 = DIGITS(USPURC) WHERE CNT01 = '216' AND      
-          USPTY9 <> 'R' AND USPURC <> 0 and CNT03='".$value."'";
-            
-            $dataSet = $this->queryManager->runSql( $strSql );             
-                     
-            return ( $dataSet[0]['NAME'] ) ?? 'no assigned';
-            
-        } catch ( Exception $ex ) {
-            echo "Caught exception: ", $ex->getMessage(), ""; 
-        }
-    }//End recoverName()
+   /**
+    * 
+    * @param type $value
+    * @return type
+    */
+   private function recoverName( $value )
+   {
+      try {
+          $strSql = "SELECT CNTRLL.CNT03 PA, TRIM(CSUSER.USNAME) NAME FROM CNTRLL INNER JOIN CSUSER 
+        ON CNT03 = DIGITS(USPURC) WHERE CNT01 = '216' AND      
+        USPTY9 <> 'R' AND USPURC <> 0 and CNT03='".$value."'";
+
+          $dataSet = $this->queryManager->runSql( $strSql );             
+
+          return ( $dataSet[0]['NAME'] ) ?? 'no assigned';
+
+      } catch ( Exception $ex ) {
+          echo "Caught exception: ", $ex->getMessage(), ""; 
+      }
+   }//End recoverName()
     
     /**
+     * This method populate an array with
      * - it receives an array with data and create a vendor
      * 
      * @param array() $record
@@ -163,7 +169,9 @@ class VendorManager {
     * 
     * @return string
     */
-    public function getPA() {
+    public function getPA( $vendor ) {
+       
+       $vendor = $this->getVendor( $vendor );
        if ($this->vendor == null) {return '';}
        
        return $this->vendor->getPurchasingAgent();

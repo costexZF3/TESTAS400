@@ -6,6 +6,8 @@ use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
 use Zend\Session;
 
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+
 return [   
     'router' => [
         'routes' => [
@@ -32,6 +34,7 @@ return [
                     ],
                 ],                
             ],//end: lostsale route
+            
             'createdevprod' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -42,7 +45,24 @@ return [
                         'action'        => 'createdevprod',
                     ],
                 ],                
-            ],//end: lostsale route
+            ],//end: createdevprod
+            
+            // ProductDevController 
+            'productdev' => [
+                'type'    => Segment::class,
+                 'options' => [
+                    // Change this to something specific to your module
+                    'route'    => '/productdev[/:action[/:id]]',
+                    'constraints' => [
+                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                             'id' => '[a-zA-Z0-9_-]*',
+                    ],
+                    'defaults' => [
+                        'controller'    => Controller\ProductdevController::class,
+                        'action'        => 'index',
+                    ],
+                  ],                
+            ],//end: newproject in ProductDevController
                         
             'wishlist' => [
                 'type'    => Segment::class,
@@ -66,8 +86,8 @@ return [
         'factories' => [
             Controller\ClaimsController::class => Controller\Factory\ClaimsControllerFactory::class,
             Controller\LostsaleController::class => Controller\Factory\LostsaleControllerFactory::class,
-            Controller\WishlistController::class => Controller\Factory\WishlistControllerFactory::class
-            
+            Controller\WishlistController::class => Controller\Factory\WishlistControllerFactory::class,
+            Controller\ProductdevController::class => Controller\Factory\ProductDevControllerFactory::class            
         ],
     ],
     // The 'access_filter' key is used by the User module to restrict or permit
@@ -118,24 +138,46 @@ return [
                  */
                  
                 ['actions' => ['add', 'create','update', 'updatemultiple', 'upload','createdevprod'],   'allow' => '+purchasing.wl.owner'],                
-                
-               // ['actions' => ['add', 'create','update'],    'allow' => '+purchasing.ps'],
-                                             
-//                ['actions' => [],                    'allow' => '+purchasing.pa'], 
-//                ['actions' => ['update'],                    'allow' => '+purchasing.wl.documentator'],                                
+                                     
 
+            ], //END: access_filter for WishListController 
+            
+            //defining Access to ProductDevController
+            Controller\ProductdevController::class => [             
+                //ACCESS TO ACCTIONS ASSOCIATED WITH MENUS                            
+                ['actions' => ['index','addproject', 'viewproject'], 'allow' => '+purchasing.option.pd.wishlist' ],
+                ['actions' => ['index','addproject', 'viewproject'], 'allow' => '+purchasing.pa' ],
+                ['actions' => ['index','addproject', 'viewproject'], 'allow' => '+purchasing.ps' ],
+                ['actions' => ['index','addproject', 'viewproject'], 'allow' => '+purchasing.wl.owner' ],
+                                
             ], //END: access_filter for LostSaleController 
         ],
     ], //END: ACCESS FILTERS
     
+    //Registeing the services here
     'service_manager' => [
         'factories' => [
-            Service\WishListManager::class    => Service\Factory\WishListManagerFactory::class
+            Service\WishListManager::class    => Service\Factory\WishListManagerFactory::class,
+            Service\ProductDevManager::class    => Service\Factory\ProductDevManagerFactory::class
         ],
     ],
     'view_manager' => [
         'template_path_stack' => [
             'purchasing' => __DIR__ . '/../view',
         ],
+    ],
+     'doctrine' => [
+        'driver' => [
+            __NAMESPACE__ . '_driver' => [
+                'class' => AnnotationDriver::class,
+                'cache' => 'array',
+                'paths' => [__DIR__ . '/../src/Entity']
+            ],
+            'orm_default' => [
+                'drivers' => [
+                    __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver'
+                ]
+            ]
+        ]
     ],
 ];

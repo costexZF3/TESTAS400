@@ -108,7 +108,7 @@ class PartNumberManager {
             $data['subCategory']     = $record['IMSBCA']; //subcategory of the part             
             
             //retrieving  the CTP reference of the part
-            $data['ctppartnumber'] = $this->getCtpPartNumber($data['id']);
+        //    $data['ctppartnumber'] = $this->getCtpPartNumber($data['id']);
             
             //retrieving the qty sold 
             $data['qtysold'] = $this->quantitySold( $data['id'] );
@@ -116,18 +116,17 @@ class PartNumberManager {
             /*  getting the last year Qty quoted
              *  IPPART
              */                       
-           
+                         
             $strSql = "SELECT * FROM INVPTYF WHERE UCASE(IPPART) = '". $data['id']."'";
             $dataSet = $this->queryManager->runSql( $strSql );
-            
-          
-            if ( $dataSet!==null ) {
-                $tmpVnd = $dataSet[0]['IPVNUM'] ?? '';                
+             
+            if ( $dataSet!==null && $dataSet!==[]) {
+                $tmpVnd = trim($dataSet[0]['IPVNUM']) ?? '';                
                
                 $data['qtyquotedlastyear'] = $dataSet[0]['IPQQTE']?? 0;
                 $data['vendor'] =  ( isset($tmpVnd) && $tmpVnd !=='') ? $dataSet[0]['IPVNUM'] : 'NA' ;           
-                $data['onhand'] = ( isset($tmpVnd) && $tmpVnd !=='') ? $dataSet[0]['IPQONH']: 0;
-                $data['onorder']= ( isset($tmpVnd) && $tmpVnd !=='') ? $dataSet[0]['IPQONO']: 0; //qty on order
+                $data['onhand'] = $dataSet[0]['IPQONH'] ?? 0;
+                $data['onorder']= $dataSet[0]['IPQONO'] ??  0; //qty on order
 
                  //vendor of the part
 
@@ -137,14 +136,17 @@ class PartNumberManager {
             
                 if ( $data['vendor'] !='NA' ) { 
                    $strSql = "SELECT * FROM VNMAS WHERE VMVNUM = ".$data['vendor']."";
-
+                    
                    $vendorName = $this->queryManager->runSql( $strSql );
+                    
                    $data['vendordesc'] = $vendorName[0]['VMNAME']??'';
 
                 } else {
                    $data['vendor'] ='NA';
                 } 
             }
+            
+           
          /* creating a PartNumber Object */
           $partNumberObj = new PartNumber( $data ); 
           

@@ -100,7 +100,8 @@ return [
     'rbac_manager' => [
         'assertions' => [Service\RbacAssertionManager::class],
     ],
-    //
+    
+    // registering the services in the Application Module
     'service_manager' => [
         'factories' => [
             Service\MyAdapter::class            => Service\Factory\MyAdapterFactory::class,

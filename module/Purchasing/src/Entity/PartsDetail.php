@@ -59,28 +59,28 @@ class PartNumber {
    /* setter PRIVATED */
    private function populate( $data ) {
       $this->id = $data['id'];
-      $this->description = $data['description']?? '';
-      $this->ctppartnumber = $data['ctppartnumber'] ?? '';      
-      $this->major = $data['major']?? '';
-      $this->minor = $data['minor'] ?? '';
-      $this->unitCost = $data['unitCost'] ?? '';
-      $this->listPrice = $data['listPrice'] ?? '';
-      $this->sellUnitMeasure = $data['sellUnitMeasure'] ?? '';
-      $this->countryOriginal =  $data['countryOriginal'] ?? '';
-      $this->model = $data['model'] ?? '';
-      $this->length = $data['length'] ?? '';
-      $this->width = $data['width'] ?? '';
-      $this->deep = $data['deep'] ?? '';
-      $this->volumen = $data['volumen'] ?? '';
-      $this->category = $data['category'] ?? '';
-      $this->subCategory =  $data['subCategory'] ?? ''; 
+      $this->description = $data['description'];
+      $this->ctppartnumber = $data['ctppartnumber'];      
+      $this->major = $data['major'];
+      $this->minor = $data['minor'];
+      $this->unitCost = $data['unitCost'];
+      $this->listPrice = $data['listPrice'];
+      $this->sellUnitMeasure = $data['sellUnitMeasure'];
+      $this->countryOriginal =  $data['countryOriginal'];
+      $this->model = $data['model'];
+      $this->length = $data['length'];
+      $this->width = $data['width'];
+      $this->deep = $data['deep'];
+      $this->volumen = $data['volumen'];
+      $this->category = $data['category'];
+      $this->subCategory =  $data['subCategory']; 
             
-      $this->onHand = $data['onhand'] ?? '0';
-      $this->onOrder = $data['onorder'] ?? '0';
-      $this->vendor = $data['vendor'] ?? 'NA';
-      $this->vendorDesc = $data['vendordesc'] ?? 'NA';
-      $this->qtyQuotedLastYear = $data['qtyquotedlastyear'] ?? '';
-      $this->qtySold = $data['qtysold'] ?? '';
+      $this->onHand = $data['onhand'];
+      $this->onOrder = $data['onorder'];
+      $this->vendor = $data['vendor'];
+      $this->vendorDesc = $data['vendordesc'];
+      $this->qtyQuotedLastYear = $data['qtyquotedlastyear'];
+      $this->qtySold = $data['qtysold'];
       
    } //END: populate method
 
