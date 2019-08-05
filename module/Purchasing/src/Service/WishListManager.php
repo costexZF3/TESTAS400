@@ -3,8 +3,8 @@
     namespace Purchasing\Service;
 
     use Application\Service\QueryManager as queryManager;
-    use Application\Service\PartNumberManager;
-    use Application\Service\VendorManager as VendorManager;
+    use Application\Service\PartNumberManager as PNManager;
+    use Application\Service\VendorManager as VndManager; 
 
     use PhpOffice\PhpSpreadsheet\IOFactory;
     use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -55,6 +55,7 @@ class WishListManager
         ['current_state' => '1', 'next_state' => '1'], 
         ['current_state' => '2', 'next_state' => '3'], 
         ['current_state' => '2', 'next_state' => '2'], 
+        ['current_state' => '2', 'next_state' => '6'], 
         ['current_state' => '3', 'next_state' => '4'], 
         ['current_state' => '3', 'next_state' => '5'], 
         ['current_state' => '3', 'next_state' => '3'], 
@@ -75,7 +76,7 @@ class WishListManager
         self::STATUS_TO_DEVELOP    => "TO DEVELOP",                         
         self::STATUS_REJECTED      => "REJECTED",                                 
         self::STATUS_REOPEN        => "RE-OPEN",
-        self::STATUS_CLOSE_BY_DEV  => "CLOSE BY DEV", 
+        self::STATUS_CLOSE_BY_DEV  => "MOVED TO PROJ", 
    ];
   
    protected $from = [ self::FROM_LOSTSALE    => "LS", 
@@ -104,24 +105,25 @@ class WishListManager
     private $rawTable = [];    
     private $jsonResponse;
     
-    /**  
-     * SERVICE: it's the SERVICE injected from WishListController      
-     * sqlStr: it contains the Sql STRING that will be excecuted  
-     * @var queryManager
+    /**
+     *
+     * @var \queryManager 
      */
     private $queryManager;  
     
     /**
      * Service to retrieve PartNumber details
      * 
-     * @var Application\Service\PartNumberManager
+     * @var PNManager
      */
     private $partNumberManager;
     
-    /**
-     *
-     * @var Application\Service\VendorManager 
-     */
+   /**  
+     * SERVICE: it's the SERVICE injected from WishListController      
+     * sqlStr: it contains the Sql STRING that will be excecuted  
+    * 
+     * @var VndManager
+     */    
     
     private $vendorManager;
     
@@ -142,7 +144,7 @@ class WishListManager
     
     /**
      * This method returns a boolean value indicating whether 
-     * the new status can be assigned to the part
+     * the new status can be reached from the current one
      * 
      * @param char(1) $currentState
      * @param char $newStatus
@@ -193,15 +195,15 @@ class WishListManager
      * @param array() $data
      */
    private function updateByCode( $data )
-   {           
+   {       
       $SET['WHLSTATUS'] = $data['status'] ?? self::STATUS_OPEN;        
       $SET['WHLSTATUSU'] = $data['name'] ?? self::USER_BY_DEFAULT;        
-      $SET['WHLCOMMENT'] = $data['comment'] ?? '';        
+      $SET['WHLCOMMENT'] = isset($data['comment']) && trim($data['comment'] !='') ? $data['comment'] : '';        
 
-      if ($SET['WHLCOMMENT'] == '') { unset($SET['WHLCOMMENT']);}
+    //   if (trim($SET['WHLCOMMENT']) == '') { unset($SET['WHLCOMMENT']);}
       if ($SET['WHLSTATUSU'] == self::USER_BY_DEFAULT) { unset($SET['WHLSTATUSU']);}
       if ($SET['WHLSTATUS'] == self::STATUS_OPEN) { unset($SET['WHLSTATUS']);}
-      //var_dump( $data); exit; 
+      
       $WHERE['WHLCODE'] = $data['WHLCODE'];
 
       $this->queryManager->update( self::TABLE_WISHLIST, $SET, $WHERE);
@@ -376,15 +378,15 @@ class WishListManager
      * @return string  |  It returns a STRING that will be used to execute the SQL query.
      */
     private function getSqlStr( string $userName = '' )
-    {   
-      $strRenew = ''; 
-      if ( $userName == 'DOCUMENTATOR' ) {       
-           $strRenew = " where UCASE(PRDWL.WHLSTATUS)= '". self::STATUS_DOCUMENTATION."'";
-    } else if ($userName !='') {
-         $strRenew = "where UCASE(WHLSTATUSU)= '".strtoupper($userName)."'";         
-      }
+    {  
+        $strRenew = ''; 
+        if ( $userName == 'DOCUMENTATOR' ) {       
+           $strRenew = " WHERE UCASE(PRDWL.WHLSTATUS)= '". self::STATUS_DOCUMENTATION."'";
+        } else if ($userName !='') {
+             $strRenew = "WHERE UCASE(WHLSTATUSU)= '".strtoupper($userName)."'  AND PRDWL.WHLSTATUS<> '". self::STATUS_CLOSE_BY_DEV."'";       
+        }
            
-      $sqlStr = "SELECT * FROM ( SELECT  IMPTN, IMDSC, IMPC1,IMPC2,IMCATA,IMSBCA,IMMOD, IMPRC     
+        $sqlStr = "SELECT * FROM ( SELECT  IMPTN, IMDSC, IMPC1,IMPC2,IMCATA,IMSBCA,IMMOD, IMPRC     
                   FROM WHLINMSTAJ UNION                                                                     
                   SELECT  WHLPARTN, WHLADDDESC, WHLADDMAJO, WHLADDMINO, WHLADDCATE, WHLADDSUBC, WHLADDMODE, WHLADDPRIC                       
                   FROM WHLADDINMJ ) y                                               
@@ -591,15 +593,15 @@ class WishListManager
 
       // index: 8 - VENDOR NUMBER        
       $vendorNum = $row['IPVNUM'];                
-      //using the VendorManage Service
-      $this->vendorManager->setVendor( $vendorNum );       
-
+      
       array_push( $result,  $vendorNum);   
       $toJson += ['vendor' => $vendorNum];
 
       // index: 9 - getting PA
-      array_push( $result,  $this->vendorManager->getPA());   
-      $toJson += ['pa' => $this->vendorManager->getPA()];
+     //its needed for retrieving the informations about PA
+     
+      array_push( $result,  $this->vendorManager->getPA( $vendorNum ));   
+      $toJson += ['pa' => $this->vendorManager->getPA( $vendorNum )];
 
       // index: 10 - getting PS
       array_push( $result,  $this->vendorManager->getPS());   

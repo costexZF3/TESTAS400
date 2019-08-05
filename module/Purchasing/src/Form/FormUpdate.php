@@ -61,21 +61,24 @@ class FormUpdate extends Form
     {
       switch ( $this->scenario ) {
          case 'PA' :   //status for users with purchasing.pa permission 
-             $status = [                   
-                 WLM::STATUS_DOCUMENTATION => $this->wlManager->getStatus( WLM::STATUS_DOCUMENTATION),
-                 WLM::STATUS_TO_DEVELOP => $this->wlManager->getStatus( WLM::STATUS_TO_DEVELOP ),                                                                                           
+             $status = [                                   
+                 WLM::STATUS_TO_DEVELOP => $this->wlManager->getStatus( WLM::STATUS_TO_DEVELOP ),       
+                 WLM::STATUS_OPEN => $this->wlManager->getStatus( WLM::STATUS_OPEN ),
+                 WLM::STATUS_DOCUMENTATION => $this->wlManager->getStatus( WLM::STATUS_DOCUMENTATION ),
+                 WLM::STATUS_TO_DEVELOP => $this->wlManager->getStatus( WLM::STATUS_TO_DEVELOP ),
+               //  WLM::STATUS_CLOSE_BY_DEV => $this->wlManager->getStatus( WLM::STATUS_CLOSE_BY_DEV),                                                                                           
+                 WLM::STATUS_REOPEN => $this->wlManager->getStatus( WLM::STATUS_REOPEN ),                                                                                           
+                 WLM::STATUS_REJECTED => $this->wlManager->getStatus( WLM::STATUS_REJECTED ),                                                                                     
              ]; 
 
          break;
          case 'PS' :   //status for users with purchasing.pa permission 
-             $status = [                   
-                 WLM::STATUS_DOCUMENTATION => $this->wlManager->getStatus( WLM::STATUS_DOCUMENTATION),
+             $status = [                                    
                  WLM::STATUS_TO_DEVELOP => $this->wlManager->getStatus( WLM::STATUS_TO_DEVELOP ),                                                                                           
              ];                                   
          break;
          case 'WLDOC' :   //status for users with purchasing.pa permission 
-             $status = [                   
-                 WLM::STATUS_DOCUMENTATION => $this->wlManager->getStatus( WLM::STATUS_DOCUMENTATION),
+             $status = [                                   
                  WLM::STATUS_TO_DEVELOP => $this->wlManager->getStatus( WLM::STATUS_TO_DEVELOP ),                                                                                           
              ];                                   
          break;
@@ -90,6 +93,7 @@ class FormUpdate extends Form
                  WLM::STATUS_REJECTED => $this->wlManager->getStatus( WLM::STATUS_REJECTED ),                                                                                           
              ];
 
+            //updating the list of users which are in the AS400 and also are active. 
             $userList = ['N/A'=>'N/A'];            
             $usersAS400 = $this->wlManager->usersPAAS400();
             foreach ($usersAS400 as $user) {
@@ -102,11 +106,13 @@ class FormUpdate extends Form
          
          if (isset($userList)) {
              $this->addElementSC1( $status, $userList ); 
+             $this->addInputFiltersSC1(false);
          } else {
             $this->addElementSC1( $status );
+            $this->addInputFiltersSC1(false);
          }
          $this->addCommonElements(); //CSFR (CROSS SIDE FORGERY REQUEST)
-         $this->addInputFiltersSC1();  
+           
      }//END: selectElements
 
     /**
@@ -154,25 +160,26 @@ class FormUpdate extends Form
             'attributes'      => [          //array of attributes
                 'class'       => 'form-control',
                 'id'          =>'comment',
-                'rows'        => "10", 
-                'maxlenght'   => 500,                                           
+                'rows'        => "4",                                                            
                 'placeholder' => 'Enter a comment',                    
             ],
             'options' =>['label' => 'COMMENTS'],                     
         ]);
        
-        // status: $status is an array with the status allowed to see by the user in charge.   
-        $this->add([            
-            'type'  => 'select',
-            'name'  => 'status',
-            'options'   => [
-                'label' => 'STATUS',
-                'value_options' => $status,                
-            ],
-        ]);
+        //show if the logged user  is WL Owner
+        if ($userList!=null) { 
+            // status: $status is an array with the status allowed to see by the user in charge.   
+            $this->add([            
+                'type'  => 'select',
+                'name'  => 'status',
+                'options'   => [
+                    'label' => 'STATUS',
+                    'value_options' => $status,                
+                ],
+            ]);               
         
-        // status: $status is an array with the status allowed to see by the user in charge.  
-        if ($userList!=null) {
+             // status: $status is an array with the status allowed to see by the user in charge.  
+      
             $this->add([            
                'type' => 'select',            
                'name' => 'name',                 
@@ -196,13 +203,26 @@ class FormUpdate extends Form
                     'label' => 'ASSIGNED TO',
                   ], 
             ]);
+
+            // status: $status is an array with the status allowed to see by the user in charge.   
+            $this->add([            
+                'type'  => 'select',
+                'name'  => 'status', 
+                'attributes' => [
+                    'disabled'=>true,
+                ],               
+                'options'   => [
+                    'label' => 'STATUS',
+                    'value_options' => $status,                                    
+                ],
+            ]);
         }
     }
     
     /*
      *  This method creates input filters (used for form filtering/validation ).
      */
-   private function addInputFiltersSC1() 
+   private function addInputFiltersSC1( $validStatus = true) 
    { 
        // Create main input filter
         $inputFilter = new InputFilter();        
@@ -224,26 +244,8 @@ class FormUpdate extends Form
                 ],
             ]
         ]); 
-        
-        //------------------------- validating only the entered data -----------------------
-        
-        /* adding filters by comments */
-        $inputFilter->add([
-            'name'     => 'comment',
-            'required' => false,
-            'filters'  => [
-                ['name' => 'StringTrim',
-                      'options' => ['charlist' => "&'@?*%#$",]  //character to remove from comment                            
-                ],                                                            
-                ['name' => 'StripTags'],                                                            
-            ], //END: FILTERS
-            'validators' => [           
-                [
-                    'name' => 'StringLength', 
-                 'options' => ['min' => 0,'max' => 500]
-                ],                          
-            ], //END: VALIDATORS KEY 
-        ]);
+       
+       
    } //END: addFilters method()
        
 }//END CLASS
