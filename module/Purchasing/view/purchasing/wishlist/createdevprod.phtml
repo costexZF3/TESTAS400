@@ -98,20 +98,21 @@
                   <div class="row">
                      <br>
                      <div class="col-lg-12"> 
-                       <h4>PROJECT DATA</h4>  
-                       <!-- PROJECT CODE -->
-                       <div class="row">
-                           <div class="col-lg-12">
-                               <?= $this->FormRow($form->get('projectcode')); ?>                                                                 
-                           </div>       
-                       </div>
-
+                       <h4>PROJECT DATA</h4> 
                        <br>
                        <!-- PROJECT NAME -->
                        <div class="row">
                           <div class="col-lg-12">                                 
                              <?= $this->FormRow($form->get('projectname')); ?>                      
                           </div>            
+                       </div>
+                         
+                       <br>
+                       <!-- PROJECT DESCRIPTION- INITIAL DESCRIPTION -->
+                       <div class="row">
+                           <div class="col-lg-12">
+                               <?= $this->FormRow($form->get('projectdescription')); ?>                                                                 
+                           </div>       
                        </div>
                        
                        <br>

@@ -247,8 +247,9 @@ class FormAddItemWL extends Form
             'options' => [
                 'label' => 'TYPE',
                 'value_options' => [
-                    1 => 'New Part',
+                    
                     2 => 'New Vendor',                                                                                                                                    
+                    1 => 'New Part',
                 ],
             ],
         ]);
@@ -399,7 +400,19 @@ class FormAddItemWL extends Form
             'validators' => [           
                 ['name'    => 'StringLength', 'options' => ['min' => 0,'max' => 255]],                          
             ], //END: VALIDATORS KEY 
-        ]);   
+        ]);
+        /* adding filters by user */
+        $inputFilter->add([
+            'name'     => 'user',
+            'required' => false,
+            'filters'  => [
+                ['name' => 'StringTrim'],                                      
+                ['name' => 'StripTags'], 
+                ['name' => 'StringToUpper'], 
+                
+            ], //END: FILTERS
+         ]);
+        
     } //END: addFilters method()
     
     /*
