@@ -380,8 +380,8 @@ class WishListManager
     private function getSqlStr( string $userName = '' )
     {  
         $strRenew = ''; 
-        if ( $userName == 'DOCUMENTATOR' ) {       
-           $strRenew = " WHERE UCASE(PRDWL.WHLSTATUS)= '". self::STATUS_DOCUMENTATION."'";
+        if ( $userName == 'NOWLOWNER' ) {       
+           $strRenew = " WHERE UCASE(PRDWL.WHLSTATUS)= '". self::STATUS_TO_DEVELOP."'";
         } else if ($userName !='') {
              $strRenew = "WHERE UCASE(WHLSTATUSU)= '".strtoupper($userName)."'  AND PRDWL.WHLSTATUS<> '". self::STATUS_CLOSE_BY_DEV."'";       
         }

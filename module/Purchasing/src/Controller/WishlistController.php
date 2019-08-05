@@ -17,7 +17,7 @@ use Purchasing\Form\FormUpload;
 use Purchasing\Form\FormUpdate; 
 use Purchasing\Form\FormUpdateMultiple; 
 use Purchasing\Form\FormValidator;
-use Purchasing\Form\FormWishList;
+use Purchasing\Form\FormWishList; 
 use Purchasing\Form\FormCreateProdDev;
 
 class WishlistController extends AbstractActionController 
@@ -86,8 +86,8 @@ class WishlistController extends AbstractActionController
   /**
    *  This method compares $data, with data in the session and returns if was some 
    *  differences between the new data and the save them into the session
-   * 
-   * @param array() $data
+   * e
+   * @param array $data
    * @return type
    */    
   private function changedData( $data )
@@ -446,7 +446,8 @@ class WishlistController extends AbstractActionController
           $this->layout()->buttons = $this->createButtonsOnLayout();             
       } else {
           //getting user for loading only its items assigned           
-          $userN = ($isDocumentator == false) ? $this->getUserS(): 'DOCUMENTATOR';
+        //   $userN = ($isDocumentator == false) ? $this->getUserS(): 'DOCUMENTATOR';
+          $userN = 'NOWLOWNER';
           $this->wlManager->renewWL( $userN );                   
       }
 
