@@ -29,6 +29,11 @@
        
  ?>  
  	 
+ <!-- 
+     JavaScrip Code 
+     DataTable() configuration
+  -->
+
 <script language="JavaScript">          
  
     $(document).ready( function() { 
@@ -119,12 +124,12 @@
    <div class="row">
     <div class="col-md-12">
      <?php
-     if ($table !=='') {
+        if ($table !=='') {
          echo $table; 
-     } else { ?>
-         <div class="container  panel panel-info title">
-            <h3> "THE WISH LIST IS EMPTY OR THERE IS NO ITEM(s) ASSIGNED TO YOU" </h3>
-         </div>
+        } else { ?>
+            <div class="container  panel panel-info title">
+                <h3> "THE WISH LIST IS EMPTY OR THERE IS NO ITEM(s) ASSIGNED TO YOU" </h3>
+            </div>
      <?php } ?>
     </div> 
    </div>

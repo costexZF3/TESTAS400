@@ -19,6 +19,7 @@
     $form = $this->form;
     $status = $this->status;
     $id = $this->id;
+    $wlOwner = $this->wlOwner;
        
     $imgDir = $this->basePath()."/img/puchasing/statetras$status.svg";
     
@@ -56,7 +57,7 @@
                  <div class="col-md-4">                        
                     <?= $this->FormRow($form->get('name')); ?>                          
                   </div>
-
+            
                  <div class="col-md-4">                        
                     <?= $this->FormRow($form->get('status')); ?>                          
                   </div>   
@@ -78,9 +79,9 @@
                     <?= $this->formElement($form->get('submit')); ?>  
                     
                     <!--checking if the buttons for creating new products developments will be rendered--> 
-                    <?php if( $status==3 ):?>
+                    <?php if( $status==3 && $wlOwner ):?>
                        <!--buttons for Projects in developing-->
-                       <a class="boxed-btn" title="Add this PART to a new Development Project" 
+                       <a class="boxed-btn" title="Add this PART to a NEW Development Project" 
                           
                           href="<?= $this->url(
                                   'createdevprod', 
@@ -91,7 +92,7 @@
                         >
                          <i class="fa fa-newspaper-o"></i>NEW Prod Dev
                        </a>
-                       <a class="boxed-btn" title="Add this PART to an existing development project" 
+                       <a class="boxed-btn" title="Add this PART to an EXISTING Development Project" 
                           href="<?= $this->url(
                                   'createdevprod', 
                                   [], 

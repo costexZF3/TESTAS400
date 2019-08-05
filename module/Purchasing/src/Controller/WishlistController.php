@@ -32,6 +32,8 @@ class WishlistController extends AbstractActionController
     * @var queryManager
     */
     private $queryManager; 
+    
+    private $productDevManager;
 
     /**
      *
@@ -44,12 +46,14 @@ class WishlistController extends AbstractActionController
     * @param QueryManager $queryManager  | WishList service injected from the Factory
     * 
     */
-    public function __construct( WishListManager $wlManager, 
+    public function __construct( $productDevManager,
+                                 WishListManager $wlManager, 
                                  QueryManager $queryManager,
                                  SM $sessionManager ) 
-    {           
+    {      
+       $this->productDevManager = $productDevManager;
        $this->wlManager = $wlManager;   
-       $this->queryManager = $queryManager;
+       $this->queryManager = $queryManager;//
        $this->session = $sessionManager;
     }   
 
@@ -92,6 +96,42 @@ class WishlistController extends AbstractActionController
       return  $result;
   }
   
+  /**
+   * This method returns an Array with all the needed info to update
+   * the New Project in PD
+   * 
+   * @return array()
+   */
+   private function getPartNumberData() 
+   {
+      $dataSession = $this->session->current;
+
+      $data['wlcode'] = $dataSession['WHLCODE'];
+      $data['creationdate'] = $dataSession['WHLDATE'];
+      $data['usercreated'] = $dataSession['WHLUSER'];
+      $data['assignedto'] = $dataSession['WHLSTATUSU'];
+      $data['partnumber'] = $dataSession['WHLPARTN'];
+      $data['comments'] = $dataSession['WHLCOMMENT'];
+
+      $data['reasontype'] = $this->wlManager->getReasonAsString($dataSession['WHLREASONT']);
+
+
+      //grabbing the Vendor Info using VendorManager across WishListManager
+      $vndData = $this->wlManager->getDataItem($data['partnumber']);
+      $data['timesqtely'] = $vndData['tqLastYear'];
+      $data['currentvendor'] = $vndData['vendor'];
+      $data['vendordesc'] = $vndData['vendordesc'];
+      $data['minorcode'] = $vndData['minor'];
+      $data['oemprice'] = $vndData['oemprice'];
+      $data['partnumberdesc'] = $vndData['partnumberdesc'];
+      $data['ctppartnumber'] = $vndData['ctppartnumber'];
+      $data['qtysold'] = $vndData['qtysold'];
+
+      return $data;
+   }//END: getPartNumberData()
+    
+   
+   
    /**
     *  this ACTION in WL CONTROLLER 
     *  - create a new Product Development 
@@ -99,19 +139,70 @@ class WishlistController extends AbstractActionController
     */  
    public function createdevprodAction()
    {
-      //getting params from url( GET ) 
+      //getting params from url( GET )  ...createdevprod?id=2&scenario=new
       $params = $this->params()->fromQuery();
       
-      $form = new FormCreateProdDev($params['scenario'], $this->wlManager );
+      //creating the form
+      $form = new FormCreateProdDev($params['scenario'], $this->queryManager );
       
-//      var_dump( $this->session->current);
-//      echo "<br>";
-//      var_dump($params); exit;
-      
-      return new ViewModel(
-      [
-          'form' => $form,
-      ]);  
+      //checking if was clicked 
+      if( $this->getRequest()->isPost() ) {
+          //retrieving user and status new $data['user], $data['status']
+          $data = $this->params()->fromPost();
+          
+          $form->setData( $data );
+           
+          //checking DATA entered (form elements) are valid and ready for being proccessed 
+          if ($form->isValid()) {                         
+            //getting data validated
+            $data = $form->getData();
+            
+//            **************************  CHECKING PRECONDITIONS FOR CREATING THE NEW PRODUCT DEVELOPMENT
+            //checking the Vendor Entered don't be equal to the current vendor
+            $changedVendor = $data['currentvendor'] != $data['newvendorname'];
+            $flagError = false;
+            
+            //checking if the CurrentVendor change the newvendorname(its message in case an error)
+            if (! $changedVendor ) {
+               $form->get('newvendorname')->setMessages(['New Vendor MUST be different of the current vendor']);
+               $flagError = true;
+            }
+            
+            //using the ProductDevManager (SERVICE)
+            $record = $this->productDevManager->canCreateProject( $data );
+            
+            if ($record['message'] != 'INSERT') {            
+               $form->get('projectname')->setMessages([$record['message']]);
+               $flagError = true;
+            }
+            
+            //RERENDER THE FORM BECAUSE THERE ARE (IS) SOME (A) WRONG DATA
+            if ($flagError ==true) {                
+               return new ViewModel(['form' => $form,]); 
+            }
+            
+            //ALL INFORMATION ABOUT THE PART IS READY FOR BEING USED TO CREATE A NEW PD
+            //THE INFO IS SENT ACROSS THE SESSION VARIABLE
+            $this->session->newproddev = $data;  
+            
+            //update STATUS OF THE PART IN WL
+            
+            $data['status'] = \Purchasing\Service\WishListManager::STATUS_CLOSE_BY_DEV;
+            $data['WHLCODE'] = $data['wlcode'];
+            $this->wlManager->update($data);
+            
+            
+            return $this->redirect()->toRoute('productdev', ['action'=>'addproject']); 
+          }
+      } else { 
+
+        //retrieving all data needed for rendering on the Form
+         $data = $this->getPartNumberData();                   
+         
+         $form->setData( $data ); 
+      } //if..isPost()???        
+
+      return new ViewModel(['form' => $form, ]);  
       
    }
   
@@ -177,6 +268,7 @@ class WishlistController extends AbstractActionController
   public function updateAction()
   {   
       $WL = $this->wlManager;
+      $isWLOwner = $this->access('purchasing.wl.owner'); 
 
       $userRole = $this->getRoleInWL();
 
@@ -188,10 +280,11 @@ class WishlistController extends AbstractActionController
       if( $this->getRequest()->isPost() ) {            
           $raw = $this->params()->fromPost(); 
           $form = new FormUpdate( $scenario, $this->wlManager );
-          $form->setData( $raw );
-
-          $dat = $form->isValid()? $form->getData():null;
-
+         
+        if (trim($raw['comment'])==='') {
+            $raw['comment'] = '';
+        }
+       
           //checking multiple selection for updating assigned users and status
           $multipleUpdate = isset($raw['checkedrow']);
 
@@ -207,21 +300,21 @@ class WishlistController extends AbstractActionController
           //in case the user is updating one by one
           $rawData = $WL->parseData( $raw );
 
-          $status = $rawData['status'];
-
+          $status = $isWLOwner ?  $rawData['status'] : $this->session->InitialStatus;
+         
           $canChangeStatus = $WL->changeStatus($this->session->InitialStatus, $status);
-
+          
           //checking if the new status can be acepted
           if ( !$canChangeStatus ) {
-             $form->setData($dat);
+             $form->setData($form->getData());
               $status = $this->session->InitialStatus;
 
-              $form->get('status')->setMessages(['Invalid State. See the graph and select the a right state.']);
+              $form->get('status')->setMessages(['Invalid State. See the graph and select a right state.']);
               return new ViewModel(
                       [ 'form' => $form, 'status' => $status ]);
           }
 
-          //***************************** checkinggg if I can change de STATUS ***********
+          //***************************** checking if I can change de STATUS ******************************************
           $data = $this->changedData( $rawData );
           $needUpdate = $data !=[]; 
 
@@ -250,23 +343,35 @@ class WishlistController extends AbstractActionController
           }
 
           // creating Form template
-          $form = new FormUpdate( $scenario, $WL );
+          $form = new FormUpdate( $scenario,  $WL );
 
-          // getting information from the part
-          // Retrieving the row with id received 
+         
+          // getting information from the part and Retrieving the row with id received 
           $row = $WL->getDataFromWL( $id );
-          $data = $WL->parseData( $row );     
-          $status = $data['status'];            
+          $data = $WL->parseData( $row ); 
+
+          $status = $data['status'];
+    
+                      
           $data['name'] = trim($data['name']);
+          if (trim($data['comment'])==='') {
+            $data['comment'] = '';
+         }
+        
           //saving initial status
-          $this->session->InitialStatus = $status;
+          
           $this->session->current = $row;
 
           //updating data to show on the form will be updated
-          $form->setData( $data );  
+          $this->session->InitialStatus = $status;
 
+          $form->get('status')->setValue($data['status']);         
+          
+          //it MUST BE done BEFORE rendering the FORM
+          $form->setData( $data );  
+          
           //retrieving the assigned user name to the part will be updated
-          $assignedUser = trim($data['name']);
+          $assignedUser = trim( strtoupper($data['name']));
 
           //setting the assgined username as the default value selected
           $form->get('name')->setValue( $assignedUser );
@@ -275,12 +380,13 @@ class WishlistController extends AbstractActionController
 
       } //end of the else
 
-      return new ViewModel(
-    [
-        'form' => $form,
-        'status' => $status,
-        'id' =>  $this->session->id, //this is used to create a new link for routing to a newProdDev
-    ]);
+      
+      return new ViewModel([ 
+            'form' => $form,
+            'status' => $status,
+            'id' =>  $this->session->id, //this is used to create a new link for routing to a newProdDev
+            'wlOwner' => $isWLOwner
+        ]);
 
   }//END: updateAction()
 
@@ -727,6 +833,7 @@ class WishlistController extends AbstractActionController
 
                /* creating FORM for scenario 2 */
                $form = new FormAddItemWL( 'insert', $this->queryManager );
+               
                $form->setData( $data );
 
                return ['form' => $form, 'renderAll'=> true ];
