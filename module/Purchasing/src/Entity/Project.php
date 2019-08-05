@@ -1,50 +1,75 @@
 <?php
 
-namespace Application\ObjectValue;
+namespace Purchasing\Entity;
 
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-use Application\Service\QueryManager;
-
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Purchasing\Entity\Detail;
 
 /**
- * Description of PartNumber
- *
- * @author mojeda
+ * THIS IS AN ENTITY CLASS WHICH MAPS THE THE FILE: PRDVLH
+ * IN THE AS400.
+ * - you can retrieve all information about the vendor
+ * 
+ * @ORM\Entity()
+ * @ORM\Table(name="QS36F.PRDVLH")
  */
-class PartNumber {
-   /* properties  COMMOND */
-    
-   private $id = '';  //IMPTN
-   private $description = ''; // IMDSC
-   private $ctppartnumber = '';  //it comes from CTPRefs
-   private $major = ''; // IMPC1
-   private $minor = ''; // IMPC2
-   private $unitCost = ''; // IMCST
-   private $listPrice = 0.0; // IMPRC
-   private $sellUnitMeasure = ''; // IMUMS
-   private $countryOriginal = ''; // IMCNT
-   private $model = ''; // IMMOD
-   private $length = 0; // IMLENG ( CM )
-   private $width = 0; // IMWIDT ( CM )
-   private $deep = 0; // IMDPTH ( CM )
-   private $volumen = 0; // IMVOLU ( CM )
-   private $category = ''; // IMCATA
-   private $subCategory = ''; // IMSBCA
+class Project {
+   // PROJECT STATUS CONSTANTS
+   const STATUS_FINALIZED    = 'F'; // Finalized.
+   const STATUS_INITIALIZED  = 'I'; //  Initialized.
+        
+  /**
+   * @ORM\Id
+   * @ORM\Column(name="PRHCOD")
+   */      
+   private $code;  //PRHCOD
    
-   private $onHand;
-   private $onOrder;
-   private $vendor;  
-   private $qtySold;
+   /** 
+   * @ORM\Column(name="PRDATE")  
+   */
+   private $date; // PRDATE
    
-   /* properties -> LOADING TO ANOTHER QUERIES */
-   private $vendorDesc;
-   private $qtyQuotedLastYear;
+   /** 
+   * @ORM\Column(name="PRINFO")  
+   */
+   private $description;  //PRINFO
+   
+   /** 
+   * @ORM\Column(name="PRNAME")  
+   */
+   private $name; // PRNAME
+   
+   /** 
+   * @ORM\Column(name="PRSTAT")  
+   */
+   private $status; // PRSTAT
+   
+   /** 
+   * @ORM\Column(name="CRDATE")  
+   */
+   private $creationDate  = ''; // CRDATE
+   
+   /** 
+   * @ORM\Column(name="CRUSER")  
+   */
+   private $creationUser; // CRUSER
+   
+   /** 
+   * @ORM\Column(name="MODATE")  
+   */
+   private $modifyDate; // MODATE
+   
+   /** 
+   * @ORM\Column(name="MOUSER")  
+   */
+   private $modifyUser; // MOUSER
+   
+   /** 
+    * @ORM\Column(name="PRPECH")  
+    */
+   private $userInCharge;  //PRPECH
+  
    
  /* constructor
  *  - this receives from the SERVICE PartNumberManager 
@@ -52,128 +77,142 @@ class PartNumber {
  *    @var dataSet array
  */
     
-   public function __construct( $dataSet ) {       
-      $this->populate( $dataSet );
+   public function __construct() {       
+//      $this->listparts = new ArrayCollection();
    }      
    
-   /* setter PRIVATED */
-   private function populate( $data ) {
-      $this->id = $data['id'];
-      $this->description = $data['description'];
-      $this->ctppartnumber = $data['ctppartnumber'];      
-      $this->major = $data['major'];
-      $this->minor = $data['minor'];
-      $this->unitCost = $data['unitCost'];
-      $this->listPrice = $data['listPrice'];
-      $this->sellUnitMeasure = $data['sellUnitMeasure'];
-      $this->countryOriginal =  $data['countryOriginal'];
-      $this->model = $data['model'];
-      $this->length = $data['length'];
-      $this->width = $data['width'];
-      $this->deep = $data['deep'];
-      $this->volumen = $data['volumen'];
-      $this->category = $data['category'];
-      $this->subCategory =  $data['subCategory']; 
-            
-      $this->onHand = $data['onhand'];
-      $this->onOrder = $data['onorder'];
-      $this->vendor = $data['vendor'];
-      $this->vendorDesc = $data['vendordesc'];
-      $this->qtyQuotedLastYear = $data['qtyquotedlastyear'];
-      $this->qtySold = $data['qtysold'];
-      
-   } //END: populate method
-
-   /* getters */
    
-   public function getCTPRefs() {
-      return $this->ctppartnumber;
+   
+   public function getDetails(){
+//      return $this->listparts;
    }
    
-   public function getQuantitySold()
+   public function setDetails( $detail ) 
    {
-      return $this->qtySold;
+//      $this->listparts[] = $detail;              
    }
    
-   public function getOnHand() {
-      return $this->onHand;
-   }
-   
-   public function getOnOrder() {
-      return $this->onOrder;
-   }
-   
-   public function getVendor() {
-      return $this->vendor;
-   }
-   
-   public function getVendorDescription() {
-      return $this->vendorDesc;
-   }   
-   
-   public function getQtyQuotedLastYear() {
-      return $this->qtyQuotedLastYear;
-   }
+   /**
+     * Returns possible statuses as array.
+     * @return array
+     */
+    public static function getStatusList() 
+    {
+        return [
+            self::STATUS_FINALIZED => 'Finalized',
+            self::STATUS_INITIALIZED => 'Initialized'
+        ];
+    }    
+    
+    /**
+     * Returns user status as string.
+     * @return string
+     */
+    public function getStatusAsString()
+    {
+        $list = self::getStatusList();
+        $index = ($this->status =='F') ? 'F' : 'I'; 
+        return $list[$index] ?? 'Unknown';      
+    }    
+    
+    /**
+     * Sets status.
+     * @param int $status     
+     */
+    public function setStatus($status) 
+    {
+        $this->status = $status;
+    }
+    
+    /**     
+     * 
+     * @param integer $code
+     */
+    public function setCode($code) 
+    {
+      $this->code = $code;
+    }
+    
+    /**
+     * 
+     * @param string $name
+     */
+    public function setName( $name ) 
+    {
+      $this->name = $name;
+    }
+    
+    /**
+     * 
+     * @param string $description
+     */
+    public function setDescription($description) 
+    {
+      $this->description = $description;
+    }
+    
+    /**
+     * 
+     * @param string $user
+     */
+    public function setCreationUser($user) 
+    {
+      $this->creationUser = $user;
+    }
+    
+    /**
+     * 
+     * @param string $user
+     */
+    public function setModifyUser($user) 
+    {
+      $this->modifyUser = $user;
+    }
+    
+    /**
+     * 
+     * @param string $user
+     */
+    public function setUserInCharge($user) 
+    {
+      $this->userInCharge = $user;
+    }
+    
+    
+   /* getters */  
 
-   public function getId() {
-      return $this->id;
+   public function getCode() {
+      return $this->code;
    }
-
+   public function getDate() {
+      return $this->date;
+   }
    public function getDescription() {
       return $this->description;
    }
-
-   public function getMajor() {
-      return $this->major;
+   public function getName() {
+      return $this->name;
+   }
+   public function getStatus() {
+      return $this->status;
+   }
+   public function getCreationUser() {
+      return $this->creationUser;
+   }
+   public function getCreationDate() {
+      return $this->creationDate;
+   }
+   
+   public function getModifyDate() {
+      return $this->modifyDate;
    }
 
-   public function getMinor() {
-      return $this->minor;
+   public function getModifyUser() {
+      return $this->modifyUser;
    }
 
-   public function getUnitCost() {
-      return $this->unitCost;
+   public function getUserInCharge() {
+      return $this->userInCharge;
    }
-
-   public function getListPrice() {
-      return $this->listPrice;
-   }
-
-   public function getSellUnitMeasure() {
-      return $this->sellUnitMeasure;
-   }
-
-   public function getCountryOriginal() {
-      return $this->countryOriginal;
-   }
-
-   public function getModel() {
-      return $this->model;
-   }
-
-   public function getLength() {
-      return $this->length;
-   }
-
-   public function getWidth() {
-      return $this->width;
-   }
-
-   public function getDeep() {
-      return $this->deep;
-   }
-
-   public function getVolumen() {
-      return $this->volumen;
-   }
-
-   public function getCategory() {
-      return $this->category;
-   }
-
-   public function getSubCategory() {
-      return $this->subCategory;
-   }
-
 
 }
