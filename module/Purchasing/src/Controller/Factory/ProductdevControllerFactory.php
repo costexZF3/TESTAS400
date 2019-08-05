@@ -5,29 +5,30 @@ use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
 /* services to retrieve from the Service Manager */
+use Purchasing\Service\ProductDevManager;
 use Purchasing\Service\WishListManager;
-use Application\Service\QueryManager;
-use Zend\Session\SessionManager as SM;
 
-/* service that will be injected into the Controller: WishListController */
-use Purchasing\Controller\WishlistController;
+use Application\Service\QueryManager;
+
+
+use Purchasing\Controller\ProductdevController;
 
 /**
- * This is the factory for IndexController. Its purpose is to instantiate the
+ * This is the factory for ProductDevController. Its purpose is to instantiate the
  * controller and inject dependencies into it.
  */
-class WishlistControllerFactory implements FactoryInterface
+class ProductdevControllerFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null) 
     {       
-       /* retrieving SERVICES queryRecover */
+       /* retrieving SERVICES */
+        $entityManager = $container->get('doctrine.entitymanager.orm_default'); 
+        $productDevManager = $container->get( ProductDevManager::class );       
         $wishListManager = $container->get( WishListManager::class );       
         $queryManager = $container->get( QueryManager::class ); //      
         $sessionManager = $container->get('WishListSession');
-          
-//        $sessionManagerMain =$container->get('');
-
-        // Instantiating the controller and injecting dependencies (services) 
-        return new WishlistController( $wishListManager, $queryManager, $sessionManager );
+        
+        // Instantiating and injecting dependencies  to the CONTROLLER (services) 
+        return new ProductdevController( $entityManager, $wishListManager, $productDevManager, $queryManager, $sessionManager );
     }
 }

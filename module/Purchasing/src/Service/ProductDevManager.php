@@ -4,49 +4,61 @@
 
     use Application\Service\QueryManager as queryManager;
     use Application\Service\PartNumberManager;
-    use Application\Service\VendorManager as VendorManager;
+    use Application\Service\VendorManager;
 
     use PhpOffice\PhpSpreadsheet\IOFactory;
     use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 /**
- * - Description of WishListManager
- *    - This class is a wrapper. This encapsulates main operations through the WishList file 
- *      depend on some criteria
- *    - methods privates
- *      
+ * - Description of ProductDevManager
+ *          
  * @author mojeda
  */
 
-class WishListManager 
+class ProductDevManager 
 {
-   const USER_BY_DEFAULT = 'NA';
+   const USER_BY_DEFAULT = 'NA'; //
    
    /* reason type */    
-   const NEWPART =  '1';  
+   const NEWPART =  '1';  //
    const NEWVENDOR = '2'; 
    
+   const FINALIZED = 'F';
+   const IN_PROCESS = 'I';
    
-   /* status in the wishlist for an item */
-    const STATUS_OPEN             = '1';  // initial status   (the item is added to the WL)
-    const STATUS_DOCUMENTATION    = '2';  // purchasing.documentator  ( ready for documenting by Maikol etc )
-    const STATUS_TO_DEVELOP       = '3';  // this part number is ready to release it  into a new Product Development  Project
-    const STATUS_CLOSE_BY_DEV     = '4';  // this part is in development
-    const STATUS_REOPEN           = '5';  // this part can be analyzed again
-    const STATUS_REJECTED         = '6';  // this part won't be developing any more
- 
+   /* status of parts inside a project */
+    const STATUS_ENTERED                          = 'E';  // initial status   (the item is added to the WL)
+    const STATUS_APPROVED_QC                      = 'A';  // approved 
+    const STATUS_APPROVED_WITH_ADVICE             = 'AA';  // purchasing.documentator  ( ready for documenting by Maikol etc )
+    const STATUS_ANALYSIS_OF_SAMPLES_QC           = 'AS';  // ANALYSIS OF SAMPLES_QC 
+    const STATUS_CLOSED_WO_NEGOTIATION            = 'CD';  // ANALYSIS OF SAMPLES_QC 
+    const STATUS_CLOSED_APPROVED                  = 'CL';  // CLOSE WO NEGOTIATION 
+    const STATUS_CLOSED_APPROVED_WO_NEGOTIATION   = 'CN';  // CLOSE APPROVED WO NEGOTIATION 
+    const STATUS_CLOSED_SUCCESSFULLY              = 'CS';  // CLOSE SUCCESSFULLY 
+    const STATUS_DOCUMENTATION_FINALIZED          = 'DF';  // DOCUMENTATION FINALIZED
+    const STATUS_DOCUMENTATION_IN_PROCESS         = 'DF';  // DOCUMENTATION IN PROCCESS
+    const STATUS_NEGOTIATION_SUPPLIER             = 'NS';  // NEGOTION WITH SUPPLIER
+    const STATUS_PENDING_FROM_SUPPLIER            = 'PS';  // PENDING FROM SUPPLIER
+    const STATUS_QUOTING                          = 'Q';  // QUOTING    
+    const STATUS_REJECTED_QC                      = 'R';  // REJECTED  
+    const STATUS_RECEIVING_FIRST_PRODUCTION       = 'RP';  // RECEIVING OF FIRST PRODUCTION  
+    const STATUS_SAMPLE_ALREADY_SENT              = 'SS';  // SAMPLE ALREADY SENT  
+    const STATUS_TECHNICAL_DOCUMENTATION          = 'TD';  // TECHNICAL DOCUMENTATION   
+    
+    
    const FROM_LOSTSALE   = '1';
    const FROM_VENDORLIST = '2';
    const FROM_MANUAL     = '3';
    const FROM_EXCEL      = '4';
-   
-  
+     
    const FIELDS = ['WHLCODE', 'WHLUSER', 'WHLPARTN', 'WHLSTATUS', 'WHLSTATUSU',  'WHLREASONT', 'WHLFROM',
                    'WHLCOMMENT'
                   ];
    
-   const TABLE_WISHLIST   = 'PRDWL';
-   const TABLE_WISLISTADD = 'PRDWLADD';
+   const TABLE_PRDHEADER   = 'PRDVLH';
+   const TABLE_PRDDETAIL   = 'PRDVLD';
+   const TABLE_PRDCOMMENTSH = 'PRDCMH';
+   const TABLE_PRDCOMMENTSD = 'PRDCMD';
    
    //state transition table
    const STATE_TRANSITION_TABLE = [
@@ -70,12 +82,8 @@ class WishListManager
    protected $reasontype = [ self::NEWVENDOR => "NEW VENDOR", self::NEWPART => "NEW PART"];
    
    protected $status = [ 
-        self::STATUS_OPEN          => "OPEN",                         
-        self::STATUS_DOCUMENTATION => "DOCUMENTATION",
-        self::STATUS_TO_DEVELOP    => "TO DEVELOP",                         
-        self::STATUS_REJECTED      => "REJECTED",                                 
-        self::STATUS_REOPEN        => "RE-OPEN",
-        self::STATUS_CLOSE_BY_DEV  => "CLOSE BY DEV", 
+        self::FINALIZED => "FINALIZED",
+        self::IN_PROCESS =>"IN PROCESS"    
    ];
   
    protected $from = [ self::FROM_LOSTSALE    => "LS", 
@@ -128,18 +136,71 @@ class WishListManager
     /* helpful attributes */        
     private $countItems = 0;
     private $tableAsHtml = '';
-   
-    public  function __construct( $queryManager, $PNManager, $vendorManager ) 
-    {
-        /* injection adapter adapterection from WishListController*/        
-        $this->queryManager = $queryManager;
-        $this->partNumberManager = $PNManager;
-        $this->vendorManager = $vendorManager;        
-        
-        $this->refreshWishList();           
+    
+    private $entityManager;
+   /**
+    * 
+    * @param type $queryManager
+    * @param type $PNManager
+    * @param type $vendorManager
+    */
+    public  function __construct( $entityManager, $queryManager, $PNManager, $vendorManager ) 
+    {  
+       $this->entityManager = $entityManager;
+       $this->queryManager = $queryManager;
+       $this->partNumberManager = $PNManager;
+       $this->vendorManager = $vendorManager;  
+       // $this->refreshWishList();           
     }//END:constructor 
     
     
+   /**
+    * THIS METHOD CHECKS IF a project can 
+    * @param strim $partnumber
+    * @return array
+    */ 
+   public function canCreateProject( $data )
+   {
+      $partnumber = trim($data['partnumber']);
+      $newvendor = $data['newvendorname'];
+      $currentVendor = $data['currentvendor'];
+      
+      // using the ORM (DOCTRINE) FOR RECOVERING THE Project ENTITY         
+      $Part = $this->entityManager->getRepository(\Purchasing\Entity\PartsDetail::class)
+                         ->findBy([
+                              'partnumber' => $partnumber,
+                              'vendor' => $newvendor,                             
+                           ] );
+                   
+      //checking the STATUS OF THIS PART
+     
+      if ($Part!=null ) {         
+          
+         $status = $Part[0]->getStatus();
+         $validStatus = [self::STATUS_CLOSED_SUCCESSFULLY,
+                         self::STATUS_CLOSED_APPROVED_WO_NEGOTIATION, 
+                         self::STATUS_CLOSED_WO_NEGOTIATION,
+                         self::STATUS_CLOSED_APPROVED,
+             ];
+         
+         $statusClose = in_array($status, $validStatus); 
+         
+         //EXIST AND ITS NOT CLOSE
+         if ( !$statusClose ) { 
+            $result['partdata'] = $Part[0];
+            $result['message'] = "The partnumber exist in an OPEN PROJECT with CODE: [".$Part[0]->getCode()."]";
+            
+            return $result;
+         } 
+      }      
+           
+      $result['partdata']= null;   
+      $result['message']= 'INSERT';   
+      
+      return $result;
+     
+   }//END: canCreateProject
+   
     /**
      * This method returns a boolean value indicating whether 
      * the new status can be assigned to the part
@@ -166,16 +227,7 @@ class WishListManager
       return $this->vendorManager->validVendor( $vendorNumber);      
     }
     
-    /**
-     * 
-     * @param char $reason
-     * @return String
-     */
-    public function getReasonAsString( $reason )
-    {
-       return $this->reasontype[$reason] ?? $this->reasontype['1'];
-    }
-    
+        
     /**
      * This method uses the service VendorManager and recover the information of a given vendor
      * 
@@ -194,14 +246,14 @@ class WishListManager
      */
    private function updateByCode( $data )
    {           
-      $SET['WHLSTATUS'] = $data['status'] ?? self::STATUS_OPEN;        
-      $SET['WHLSTATUSU'] = $data['name'] ?? self::USER_BY_DEFAULT;        
+      $SET['WHLSTATUS']  = $data['status']  ?? self::STATUS_OPEN;        
+      $SET['WHLSTATUSU'] = $data['name']    ?? self::USER_BY_DEFAULT;        
       $SET['WHLCOMMENT'] = $data['comment'] ?? '';        
 
       if ($SET['WHLCOMMENT'] == '') { unset($SET['WHLCOMMENT']);}
       if ($SET['WHLSTATUSU'] == self::USER_BY_DEFAULT) { unset($SET['WHLSTATUSU']);}
       if ($SET['WHLSTATUS'] == self::STATUS_OPEN) { unset($SET['WHLSTATUS']);}
-      //var_dump( $data); exit; 
+      
       $WHERE['WHLCODE'] = $data['WHLCODE'];
 
       $this->queryManager->update( self::TABLE_WISHLIST, $SET, $WHERE);
@@ -289,14 +341,14 @@ class WishListManager
     
     
     /**
-     * This method returns the data associated to the code of the PARTNUMBER inside of WL 
+     * This method returns the data associated to the Project Number inside the PRDVLH
      * 
      * @param string $code
      * @return array()
      */
-    public function getDataFromWL( $code )
+    public function getDataFromDevelopment( $code )
     {
-        $sqlStr = 'SELECT * FROM PRDWL';// WHERE WHLPARTN = '.$partnumber;
+        $sqlStr = 'SELECT * FROM PRDVLH INNER JOIN PRDVLD';// WHERE WHLPARTN = '.$partnumber;
         $data = $this->queryManager->runSql( $sqlStr )[--$code];
        
         return $data;
@@ -417,348 +469,178 @@ class WishListManager
         return ($this->dataSet != null) ?? false;
     }
         
-    /*
-     * populateHTML : this method populate the table using the resultSet 
-     * value returned by the function runSql()
-     */
-    public function getDataSet()
-    {              
-       return $this->dataSet;
-    } 
+            
+    //************************** INSERTING METHODS FOR PRODUCT DEVELOPMENT ***************************************
     
-    public function countItems() 
+    private function insertSentence( $table, $data )
     {
-        return count( $this->dataSet );
+        
+      $DB = $this->queryManager->insert( $table , $data );
+      
+      return $DB !== null;
     }
     
+    private function insertInPRDHeader( $data )
+    {       
+      $dataSet['PRHCOD'] = $data['projectcode'];
+      $dataSet['PRNAME'] = trim(strtoupper($data['projectname']));
+      $dataSet['PRINFO'] = trim(strtoupper($data['projectdescription']));
+      $dataSet['PRSTAT'] = self::IN_PROCESS;
+      $dataSet['CRUSER'] = $data['currentuser']; //user logged        
+      $dataSet['MOUSER']  = $data['currentuser'];  //user logged
+      $dataSet['PRPECH']  = $data['assignedto'];  //user in charge: by default it's taken from WL      
+      
+      // inserting in TABLE PRDVLH: PRODUCT DEVELOPMENT HEADER
+      return $this->insertSentence(self::TABLE_PRDHEADER, $dataSet);
+    }//END: insertInPRDHeader
+
     /**
-     * - This method insert data into the PRDWL ( file: WISHLIST )
+     *  this method inserts into PRDVLD: PRODUCTDEVELPMENT DETAIL 
+     * @param type $data
+     * @return boolean
+     */
+    private function insertInPRDDetail( $data )
+    {
+      $newPart =  trim($data['reasontype'])=='NEWPART';
+            
+      $dataSet['PRHCOD'] = $data['projectcode'];
+      
+      //updating with data from the WL
+      $dataSet['PRDPTN'] = trim(strtoupper($data['partnumber']));
+      $dataSet['PRDCTP'] = trim(strtoupper($data['ctppartnumber']));
+      $dataSet['CRUSER'] = $data['currentuser'] ?? ''; //user logged        
+      $dataSet['MOUSER'] = $data['currentuser'] ?? '';  //user logged
+      $dataSet['PRDUSR'] = $data['assignedto'] ?? '';  //user in charge: by default it's taken from WL   
+      $dataSet['PRDSTS'] = $data['status'] ?? self::STATUS_ENTERED; //Status of the PART IN PRODUCT DEVELOPMENT CHARACTER (2)
+    //   $dataSet['PRDPTS'] = '' //Status of the PART IN PRODUCT DEVELOPMENT CHARACTER (2)
+    //   $dataSet['PRDERD'] = ''; //
+    //   $dataSet['PRDPDA'] = ''; //
+                  
+//    $dataSet['PRDQTY'] = '';
+//    $dataSet['PRDMFR'] = $data[''];
+      
+//    $dataSet['PRDCOS'] = $data['']; //Unit Cost Current Supplier
+//    $dataSet['PRDCOS'] = $data[''])); //Unit Cost Current Supplier
+//    $dataSet['PRDCON'] = $data['']; //Unit Cost New Supplier
+     
+      $dataSet['VMVNUM'] = $data['newvendorname']; //VENDOR NUMBER      
+        
+      $dataSet['PRDNEW']  = $newPart ? 1 : 0;  //NEW ITEM FLAG; it depends on the New Status of the Reason Type from WL
+      $dataSet['PRDMPC']  = $data['minorcode'] ?? '';  //MINOR PRODUCT CODE
+      $dataSet['PRDSQTY']  = intval( $data['qtysold']) ?? 0;  //MINOR PRODUCT CODE
+      
+      //checking if it comes from WL then retrieve some data
+      if ($data['fromwl']) {
+         $dataSet['PRWLDA'] = $data['creationdate']; 
+         $dataSet['PRWLFL']  = 1;  //CHECKING IS THE PART IS IN THE WL
+      } else {
+         $dataSet['PRWLFL']  = 0;
+      }      
+       
+      // inserting in TABLE PRDVLH: PRODUCT DEVELOPMENT HEADER
+      return $this->insertSentence(self::TABLE_PRDDETAIL, $dataSet);
+    }
+    
+    /* 
+        ! ************************************************ PRODUCT DEVELOPMENT ***************************************************************
+    * /
+
+    /**
+     * ! insertInPRDCommentHeader()
      * 
-     * @param array() $data | An associative array with all needed data inside a WL row.
-     * @return object | it returns null is could not insert the field  
+     *  This METHOD INSERT DATA INTO THE THE TABLE PRDCMH (COMMENTS LOG)
+     * 
+     * @param array $data 
+     * @return object 
+     */
+    private function insertInPRDCommentHeader( $data )
+    {       
+        $dataSet['PRDCCO'] = $data['codecomment'];       
+        $dataSet['PRHCOD'] = $data['projectcode'];                   //product development Code
+        $dataSet['PRDPTN'] = trim(strtoupper($data['partnumber']));  //partnumber
+
+        $comment =  isset($data['fromwl']) ? "COMMENTS FROM WL(REG-WL [".$data['wlcode']."]": $data['comments'];
+
+        
+        //READY TO INSERT INTO THE COMMMENT DETAIL
+        $dataSet['PRDCTX'] = $data['comments'];
+        $dataSet['PRDCDC'] = 1;
+
+        $commentsDetailsInserted = $this->insertSentence(self::TABLE_PRDCOMMENTSD, $dataSet);  
+
+        //unsetting this fields 
+        unset($dataSet['PRDCTX']); 
+        unset($dataSet['PRDCDC']); 
+
+        //comment subject
+        $dataSet['PRDCSU'] = strtoupper( $comment );
+        $dataSet['USUSER'] = strtoupper( $data['assignedto'] );
+
+        // inserting in TABLE PRDVLH: PRODUCT DEVELOPMENT HEADER
+        return $this->insertSentence(self::TABLE_PRDCOMMENTSH, $dataSet) && $commentsDetailsInserted;                   
+    }//END: 
+    
+    /**
+     *  ! insert() 
+     * 
+     * This method insert data into the PRODUCT DEVELOPMENT FILES 
+     * 
+     *   FILES: 
+     *   - PRDVLH : Product Develop Header
+     *   - PRDVLD : Product Develop Detail
+     *   - PRDCMH : Product Develop. comments header
+     *   - PRDCMD : Product Develop. comments detail
+     * 
+     * @param array() $data | An associative array with all needed data needed for updating all FILES
+     * @return boolean | it returns true if the project was created
      */ 
+
    public function insert( $data ) 
    {   
-        // INSERTING DATA: THE PART EXIST INSIDE INMSTA
-        $dataSet['WHLCODE'] = $data['code'];
-        $dataSet['WHLUSER'] = trim(strtoupper($data['user'])); 
-        $dataSet['WHLPARTN'] = trim(strtoupper($data['partnumber']));
-        $dataSet['WHLSTATUS'] = self::STATUS_OPEN;
-        $dataSet['WHLSTATUSU'] = 'N/A';
-        $dataSet['WHLREASONT'] = $data['type'];        
-        $dataSet['WHLFROM']  =  $data['from'];
-        $dataSet['WHLCOMMENT'] = $data['comment']??'';
-
-        // inserting in TABLE WL: PRDWL the set of data 
-        $DB = $this->queryManager->insert( self::TABLE_WISHLIST , $dataSet );
-       
-        //checking if the origin of the PARTNUMBER is: KOMAT or CATER  
-        if (isset($data['minor']) ) {             
-           $dataSet2['WHLADDCODE'] = $data['code'];            
-           $dataSet2['WHLADDMODE'] = strtoupper($data['model']);
-           
-           $dataSet2['WHLADDMAJO'] = $data['major']; 
-           $dataSet2['WHLADDMINO'] = $data['minor']; 
-           
-           $dataSet2['WHLADDCATE'] = $data['category']; 
-           $dataSet2['WHLADDSUBC'] = $data['subcategory']; 
-           
-           $dataSet2['WHLADDDESC'] = $data['partnumberdesc']; 
-           
-           $dataSet2['WHLADDPRIC'] = round( floatval($data['price']), 2); 
-           $this->dataSet = $this->queryManager->insert( self::TABLE_WISLISTADD , $dataSet2 );
-        }
-       
-       return ($this->dataSet || $DB) ?? null;             
-    } //END: AddItem method
- 
-    
-    private function getClassCSSforStatus( $item )
-    {
-        $strStatus = $this->status;    
-        switch ($item){
-            case $strStatus[self::STATUS_REJECTED]: { $className="statusRejected description"; break;}
-            case $strStatus[self::STATUS_OPEN]: { $className="statusOpen description"; break;}                   
-            case $strStatus[self::STATUS_DOCUMENTATION] : { $className="statusDocumentation description"; break;}                   
-            case $strStatus[self::STATUS_REOPEN] : { $className="statusReOpen description"; break;}                   
-            case $strStatus[self::STATUS_TO_DEVELOP] : { $className="statusDevelop description"; break;}                   
-            case $strStatus[self::STATUS_CLOSE_BY_DEV] : { $className="statusClosebyDev description"; break;}                   
-        }  
-        
-        return $className;
-    }
-    
-    /**
-     * - This method() converts the elements of an array into a <TR> element 
-     *   and assigned the CLASS, ID, and TITLE attributes for each <TD> element
-     *   - It receives an array and returns the each Item as a <TD> element inside a <TR>
-     * 
-     * @param array $row
-     * @return string
-     */
-    private function rowArrayToHTML( $row ):string
-    {   
-        $result ='<tr><td><label class= "container-check"> <input type="checkbox" name= "checkedrow[]" id="checked'.$row[1].'" value="'.$row[1].'"><span class="checkmark"></span></label></td>';  
+      //INSERTING PRDVLH ( PRODUCT DEVELOPMENT HEADER )
+      $result['PRDVLH']= $this->insertInPRDHeader( $data );            
       
-        $col = 1; $className = '';        
-        
-        /* COLUMNS with the CLASS description-CSS- (first coluns is 0 ) */        
-        $columns = [  2, 12, 13, 14, 16 ];
-        foreach( $row as $item ) {
-            //CHANGING THE ICON TO THE FROM COLUMN: (EXCEL FILE, ...)
-            
-            if ($col==1) {                             
-                $iconToExcel = '<i class="fa fa-file-excel-o fa-1x"  aria-hidden="true" text="From Excel file" ></i>';
-                $iconToManual = '<i class="fa fa-keyboard-o fa-1x"  aria-hidden="true" text="One by One" ></i>';
-                $item = ($item=='EXCEL') ? $iconToExcel : $iconToManual;
-            }
-            if (in_array( $col, $columns ) ) {
-                $className = "number";
-            } else if ( $col === 7 ) { 
-                $className = $this->getClassCSSforStatus( $item );
-                          
-            } else if ( $col === 15 ) { 
-                $className = "money";
-                $item ='$ '.$item;
-            } else if ( $col === 18 ) { $className = "description";}
-            else {$className = '';}              
-            
-            $result .= '<td class="'.$className.'">'.$item.'</td>';
-          $col++;  
-        }//endforeach 
-        
-        $result .= '</tr>';        
-        return $result;
-    }//END METHOD: rowArrayToHTML()
-    
+      //INSERTING INTO PRDVLD ( PRODUCT DEVELOPMENT DETAIL)
+      $result['PRDVLD']= $this->insertInPRDDetail( $data ); 
+      
+      //INSERTING INTO PRDCMD ( PRODUCT DEVELOPMENT DETAIL)
+
+      //getting the INDEX (code) for the COMMENT
+      //this will be used  for the both below process
+      $data['codecomment'] = $this->nextIndex(self::TABLE_PRDCOMMENTSH, 'PRDCCO');
+
+      //inserting to the COMMMENT HEARDER and DETAIL AT THE SAME TIME
+      $result['PRDCMH']= $this->insertInPRDCommentHeader( $data );            
+
+      $allInserted = ($result['PRDVLH'] != null) && ($result['PRDVLD'] != null) && ($result['PRDCMH'] != null);
+      
+      return $allInserted ?? null;                              
+    } //END: insert() method() 
+ 
+   /*
+    ! *************************** ENDING UP PRODUCT DEVELOPMENT METHODS *************************************************
+    */     
+   
+   
+   
     /**
      *  RETURNS: all rows of the table will be returned as an ARRAY 
      * @return array()
      */      
     public function getRows() {
       return $this->rows;
-//      return ($this->rows)?? null;
     }
-    
-    public function jsonResponse()
-    {
-        return $this->jsonResponse; 
-    }
+  
     /**
-     *  This method converts $row to an Array
-     * @param array() $row | All fields ( columns ) will be mapped into an ARRAY   
-     * @return array
-     */
-   private function rowToArray( $row ) 
-   { 
-      $result = [];
-      $toJson = [];
-
-      $partNumberInWL = trim($row['WHLPARTN']); 
-      $toJson += ['partnumber' => $partNumberInWL ];
-
-      $fromValue = $this->from[$row['WHLFROM']];      //MANUAL, EXCEL, LOSTSALES
-      $toJson += ['from' => $fromValue ];
-
-      $statusP = $this->status[$row['WHLSTATUS']];
-      $toJson += ['status' => $statusP];
-
-
-      array_push( $result, $fromValue );   // index: 0 : code
-      array_push( $result, $row['WHLCODE'] );         //index: 1 WL No
-      $toJson += ['code' => $row['WHLCODE'] ];
-
-      array_push( $result, $row['WHLDATE'] );  // index: 2 DATE
-      $toJson += ['date' => $row['WHLDATE'] ];
-
-      array_push( $result, $row['WHLUSER'] );  // index: 3 - USER 
-      $toJson += ['usercreated' => $row['WHLUSER'] ];
-
-      $strUpdate = '/ctpsystem/public/wishlist/update/'.$row['WHLCODE'];//$partNumberInWL;        
-//        
-      $url = '<a href='.$strUpdate.' class="partnumber">'.$partNumberInWL.'</a>';
-
-      array_push( $result, $url ); // index: 4 - PART NUMBER IN WL       
-
-      array_push( $result, $row['IMDSC'] );   // index: 5 - description
-      $toJson += ['description' => $row['IMDSC']];
-
-      //NEW COLUMS AND REQUIREMENTS 
-      array_push( $result, $statusP );   // index: 6 - STATUS
-
-      array_push( $result, $row['WHLSTATUSU'] );   // index: 7 - USER IN CHARGE
-
-
-      // index: 8 - VENDOR NUMBER        
-      $vendorNum = $row['IPVNUM'];                
-      //using the VendorManage Service
-      $this->vendorManager->setVendor( $vendorNum );       
-
-      array_push( $result,  $vendorNum);   
-      $toJson += ['vendor' => $vendorNum];
-
-      // index: 9 - getting PA
-      array_push( $result,  $this->vendorManager->getPA());   
-      $toJson += ['pa' => $this->vendorManager->getPA()];
-
-      // index: 10 - getting PS
-      array_push( $result,  $this->vendorManager->getPS());   
-      $toJson += ['ps' => $this->vendorManager->getPS()];
-
-       // index: 11 - year sales
-      array_push( $result, $row['IPYSLS'] ); 
-      $toJson += ['yearsales' => $row['IPYSLS']];
-
-      // index: 12 - qty quoted
-      array_push( $result, $row['IPQQTE'] );  
-      $toJson += ['qtyquoted' => $row['IPQQTE']];
-
-      // index: 13 - times quoted
-      array_push( $result, $row['IPTQTE'] );  
-      $toJson += ['timesquoted' => $row['IPTQTE']];
-
-      //index: 14 - OEM PRICE
-      array_push( $result, number_format( $row['IMPRC'], 2 )); 
-      $toJson += ['oemprice' => $row['IMPRC']];
-
-      /*  getting location from DVINVA  where the part has STOCK in  ( DVBIN#: if you need the bin location) 
-       *  - location: 20
-       *  - dvonh#: (qty on hand) > 0  ( hay alguna on hand ) */        
-      $strSql = "SELECT DVONH# FROM DVINVA WHERE UCASE(TRIM(DVPART))='". strtoupper( $partNumberInWL ).
-              "' and dvlocn ='20' and DVONH# > 0";
-
-      $dataSet = $this->queryManager->runSql( $strSql );
-
-      //index: 15 - location
-      $inLoc20 = $dataSet[0]['DVONH#']?? '0';
-      array_push( $result,$inLoc20 ); 
-      $toJson += ['inloc20' => $inLoc20];
-
-      /* adding MODEL */
-      $model = trim($row['IMMOD']) != '' ? $row['IMMOD']:'N/A';
-      array_push( $result,$model  ); //index: 11 model
-      $toJson += ['model' => $inLoc20];
-
-      /* ADDING CATEGORY DESCRIPTION BEST CASE 5.3 S*/
-      $cat = $row['IMCATA'];         
-      $CatDescription =  $this->partNumberManager->getCategoryDescByStr( $cat );           
-      array_push( $result, $CatDescription ); // index: 12 - Category Description 
-      $toJson += ['categoria' => $CatDescription];
-
-       /* SUB-CATEGORY */
-      array_push( $result, $row['IMSBCA'] ); //index: 13 - Subcategory
-      $toJson += ['subcategoria' => $row['IMSBCA']];
-
-       /* mayor and minor */
-       //$mayorMinor = $this->partNumberManager->getMajorMinor( $partNumberInWL );
-       array_push( $result, $row['IMPC1'] ); // index; 14 - Major code
-       $toJson += ['major' => $row['IMPC1']];
-
-       array_push( $result, $row['IMPC2'] ); // index: 15 - Minor code 
-       $toJson += ['minor' => $row['IMPC2']];
-
-      //creating rows as JSON
-      $this->jsonResponse = json_encode( $toJson ); 
-           
-      //var_dump($this->jsonResponse()); exit;
-      return $result;
-    }
-    
-    
-    /**
-     *  Returns the WL as HTML
+     * This method returns the next index where you can insert a new record 
+     * inside the PRDVLH file
      * 
-     * @return string
-     */ 
-     
-    private function getBodyTable(){
-      $iteration = 0; 
-      $tableBody = '<tbody>';        
-            
-      /************* dynamic body **********************/        
-      foreach ($this->dataSet as $row) { 
-          /* gettin row */
-          $rowAsArray = $this->RowToArray( $row );
-          /* each row pushing to the rows (body to render)*/
-          array_push( $this->rows, $rowAsArray );  
-                   
-          $currentRow = $this->rows[$iteration];
-            
-          /* conver row to HTML: $row  */
-          $tableBody.= $this->rowArrayToHTML( $currentRow ); 
-
-        $iteration++;
-      }//end: foreach  
-      
-      return $tableBody;
-    }//END: getBodyTable() method
-    
-    /**
-     * - function: dataToHtml() 
-     * - this return all data processed as a HTML file. 
-     * - this is recovered by the the WishlistController then
-     *   it'll be sent as parameter for being rendered by the view associated
-     * 
-     * @return string
+     * @return INTEGER
      */
-         
-    public function TableAsHtml(){
-        //checking if the method: runSql() was invoked before...
-             
-        if (!$this->dataSetReady()) { return '';}      
-        
-        /* ------------ creating table with all data from dataSet -----------------------*/
-        $tableHeader = '<table class="table_ctp table_filtered display">';
-        $tableHeader.='<thead><tr>';  
-        
-         /*********** generating each column label dynamically *****************/
-         foreach ($this->columnHeaders as $field) {           
-            $tableHeader.='<th>'.$field.'</th>';    
-         }
-
-        /* concatening  header */
-        $tableHeader .= '</tr></thead>';
-
-            
-        /*********** adding tbody element ***************/      
-        $iteration = 0;       
-
-        //  $tableBody = $this->getBodyTable();                         
-        $tableBody = '<tbody>';        
-            
-        /************* dynamic body **********************/        
-        foreach ($this->dataSet as $row) { 
-            /* gettin row */
-            $rowAsArray = $this->RowToArray( $row );
-            /* each row pushing to the rows (body to render)*/
-            array_push( $this->rows, $rowAsArray );                
-
-            $currentRow = $this->rows[$iteration];
-
-            /* conver row to HTML: $row  */
-            $tableBody.= $this->rowArrayToHTML( $currentRow ); 
-
-          $iteration++;
-        }//end: foreach    
-
-        $tableFooter = '<tfoot><tr>';
-
-        /*********** generating each column label dynamically *****************/
-        foreach ($this->columnHeaders as $field) {           
-            $tableFooter.='<td>'.$field.'</td>';
-        }
-
-        $tableFooter.='</tr></tfoot>';       
-              
-        $this->tableAsHtml = $tableHeader.$tableBody.$tableFooter;               
-       
-        return  $this->tableAsHtml;
-    }/* END: getGridAsHtml()*/    
-    
-    public function nextIndex() 
-    {
-        return $this->queryManager->getMax('WHLCODE', 'PRDWL')?? 1;
-    }
+    public function nextIndex( $table=self::TABLE_PRDHEADER, $field= 'PRHCOD' ) 
+    {          
+        return $this->queryManager->getMax($field, $table) ?? -1;           
+    }//END: nextIndex
     
     /**
      * 
@@ -770,7 +652,7 @@ class WishListManager
         $partNumberObj =  $this->partNumberManager->getPartNumber( $partNumberID );
         
         if ( $partNumberObj !== null ) {         
-            $data['code'] = $this->nextIndex();//$this->queryManager->getMax('WHLCODE', 'PRDWL');
+            $data['code'] = $this->nextIndex();
             $data['date'] = date('Y-m-d');
             /* - if the partNumber exist NOT NULL then return it back
              *   other case it returns UNKNOW string*/
@@ -797,206 +679,8 @@ class WishListManager
          // return 'error' if the PartNumber not exits in the DATABASE 
          return $data['error'] = $partNumberObj['error'];    
 
-      } //END: getWishListItem()
+      } //END: 
       
-      
-      
-    /************************************ EXCEL MANANGER *********************************/
-      
-    /**
-     * - This method highLight an specific CELL regarding its style and color
-     * 
-     * @param Spreadsheet $spread | spreadsheet generated 
-     * @param string $cell | Cell will be hightlighter
-     * @param boolean $bold | True or False if it will be BOLD
-     * @param string $color | color
-     */
-    private function highLighter( $spread, $cell, $bold=true, $color="" ) 
-    {        
-        $styleOptions = [
-            'font' => [
-                'bold'  => $bold, 
-                'color' =>[
-                    'rgb' => $color
-                ]
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'color' => [
-                    'argb' => '50E0F5F5'
-                ]
-            ] 
-        ];        
-        
-        $spread->getActiveSheet()->getStyle($cell)->applyFromArray( $styleOptions );
-       
-    }//END highLighter() method
     
-    /**
-     * This method insert a comment in a cell
-     * 
-     * @param string $cell
-     * @param string $comment
-     */
-    private function InsertComment( $sheet, $cell, $comment='', $bold=false)
-    {        
-        $sheet->getActiveSheet()->getComment($cell)->getText()->createTextRun( $comment );
-    }
-    
-    /**
-     * - This Method() adds headers to the sheet of the EXCEL FILE
-     * 
-     * @param Spreadsheet $sheet     * 
-     */
-    private function createSheetHeaders($sheet)
-    {   
-        $options = [ 
-                '1'=>['cell'=>'A1', 'desc' =>'COD', 'dimension'=>-1], //-1: dimension by default 
-                '2'=>['cell'=>'B1', 'desc' =>'PART NUMBER', 'dimension'=>26],
-                '3'=>['cell'=>'C1', 'desc' =>'ERRORS', 'dimension'=>26],
-            ];
-        
-        $sheet->getActiveSheet()->freezePane('A2'); //freezing TOP ROW
-        
-        
-//        $this->InsertComment($sheet, 'C1', 'REFERENCES: '); 
-        
-        foreach ($options as $key => $value)    {
-            $sheet->getActiveSheet()->setCellValue($value['cell'], $value['desc']);            
-         
-            if ($value['dimension'] != -1 ) {
-                $sheet->getActiveSheet()->getColumnDimensionByColumn( $key )->setWidth($value['dimension']);                 
-            }
-        } 
-        
-        $this->highLighter($sheet, 'A1:C1');
-        
-    }//END createSheetHeaders Method
-    
-    /**
-     * This method update a cell of a SpreadSheet with the value passed
-     * 
-     * @param Spreadsheet $sheet | it's an instance of PHPOffice\Spreadsheet component
-     * @param type $cell         | it's the cell that will be updated ex: C2 
-     * @param type $value        | it's the value will be assigned to CELL passed as param
-     */
-    private function fillCellSheet( $sheet, $cell, $value ) 
-    {
-        $sheet->getActiveSheet()->setCellValue( $cell, $value );
-        
-        $cellTmp = strtoupper(substr($cell, 0, 1));        
-        if ( $cellTmp == 'C') {
-          $styleError = ['font'=>['bold'=> true, 'color'=>['rgb'=>'b21703']]];  
-          $sheet->getActiveSheet()->getStyle( $cell )->applyFromArray( $styleError ); 
-        }  
-        
-    }//END: fillCellSheet() method   
-    
-    
-    /**
-     * This Method creates an instance of Spreadsheet class
-     * 
-     * @param string $sheetName
-     * @return object
-     */
-    private function createSpreadSheet( $sheetName ) {
-        $inputFileType = 'Xls';  
-        
-        $actualDate = date('Y-m-d');      
-        
-        //creating a new Spreadsheet()
-        $spreadsheet = new Spreadsheet();
-        $writer = IOFactory::createWriter( $spreadsheet,  $inputFileType );          
-                
-        $spreadsheet->setActiveSheetIndex(0);
-        $spreadsheet->getActiveSheet()->setTitle($sheetName.'_'.$actualDate); 
-        
-        $result = ['sheet' => $spreadsheet, 'writer' => $writer ];
-        return $result;
-    }
-    
-    /**
-     * -The method inserts INCONSISTENCIES into a new Excel File  
-     *   - the sheet created has as name: INCONS_<actualdate>
-     * 
-     * @param array() $inconsistence | List of Inconsistencies
-     */
-    public function writeErrorsToExcel( $inconsistence ) 
-    {   
-        $row = 2;  
-        
-        $excelOBJ = $this->createSpreadSheet('INCONS');
-        $spreadsheet = $excelOBJ['sheet'];
-        $writer = $excelOBJ['writer'];
-        
-        //creating HEADERS  ( creatin )
-        $this->createSheetHeaders( $spreadsheet );
-        
-        foreach ( $inconsistence as  $value)        {            
-            $this->fillCellSheet( $spreadsheet, 'A'.$row, $value['code'] );
-            $this->fillCellSheet( $spreadsheet, 'B'.$row, $value['partnumber'] );
-            $this->fillCellSheet( $spreadsheet, 'C'.$row, $value['error'] );
-            $row++;
-        }
-        
-        try {
-            // $urlInc = './data/upload/wishlist_inc.xls';
-            $urlInc = 'public/data/wishlist_inc.xls';
-            $writer->save( $urlInc );           
-        } catch (Zend_Exception $error ) {
-            echo "Caught exception: trying to saving the wishlist inconsistencies". get_class($error)."\n";
-            echo "Message: ". $error->getMessage()."\n";            
-        }        
-        
-    }//END METHOD updateErrorsInXls
-    
-    /**
-     * Auxiliar method. 
-     * 
-     * -invoke from readExcelFile()
-     * @param array() $sheetData
-     * @return boolean
-     */
-    private function validEXCELHeader( $sheetData ) 
-    {
-        return $sheetData[1]['A'] == 'COD' &&  
-               $sheetData[1]['B'] == 'PART NUMBER' && 
-               $sheetData[1]['C'] == 'MINOR';
-    }
 
-    /**
-     * 
-     * @param type $sheetData
-     * @return type
-     */
-    private function removeHeader( &$sheetData )
-    {
-        unset( $sheetData[1] );
-        return $sheetData;
-    }
-    
-    /** 
-    * @param string $inputFileName | route of the file XLS (excel file) with the WL
-    * @return array() | it returns an array with the excel file as array
-    */
-    public function readExcelFile( $inputFileName ) 
-    {   //reading file      
-        $inputFileType = 'Xls';        
-        $reader = IOFactory::createReader( $inputFileType );  
-        $reader->setReadDataOnly( true );        
-        $spreadsheet = $reader->load($inputFileName);
-        $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
-        
-        // validating EXCEL FILE
-        $validHeader = $this->validEXCELHeader( $sheetData );
-        
-        if ( !$validHeader ) {
-            throw new \Exception('The excel file header is not valid. Check the documentation about it.');
-        }        
-        $sheetDataFilter = $this->removeHeader( $sheetData );
-        
-        return $sheetDataFilter;
-    }
-            
-    
-}//END: WishList class()
+}//END: ProductDevManager class()

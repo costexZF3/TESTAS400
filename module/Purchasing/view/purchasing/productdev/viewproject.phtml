@@ -1,12 +1,18 @@
 <?php
-    $this->headTitle('View User');
+    $this->headTitle('View Project');
 
-    $this->mainMenu()->setActiveItemId('users');
+    $this->mainMenu()->setActiveItemId('productdev');
 
+    // variables sent by the ViewModel   
+    /**
+     * @var Purchasing\Entity\Project
+     */
+    $projectObj = $this->projectObj;
+    
     $this->pageBreadcrumbs()->setItems([
                 'Home'=>$this->url('home'),
-                'Manage Users'=>$this->url('users'),
-                'View User'=>$this->url('users', ['action'=>'view', 'id'=>$user->getId()])
+                'Projects'=>$this->url('productdev'),
+                'View Project'=>$this->url('productdev', ['action'=>'view', 'id'=>$projectObj->getCode()])
                 ]);
 ?>
 
@@ -19,56 +25,52 @@
 
 <div class="container">        
     <div class="row justify-content-center">
-        <div class="col-md-7 single-service-item">                 
-            <h4 class="title"> USER INFO </h4> 
+        <div class="col-md-8 single-service-item">                 
+            <h4 class="title"> PROJECT INFO </h4> 
             <br>         
             <div class="panel-body">                   
                 <!-- TABLE RESPONSIVE -->
                 <div class="table-responsive">
                     <table class="table table-striped table-bordered">
                         <tr>
-                            <th>ID:</th>
-                            <td><?= $this->escapeHtml($user->getId()) ?></td>
+                            <th>Project Code:</th>
+                            <td><?= $this->escapeHtml($projectObj->getCode() ) ?></td>
                         </tr>
                         <tr>
-                            <th>E-mail</th>
-                            <td><?= $this->escapeHtml($user->getEmail()) ?></td>
+                            <th>Project Name</th>
+                            <td><?= $this->escapeHtml($projectObj->getName()) ?></td>
                         </tr>
                         <tr>
-                            <th>Full Name</th>
-                            <td><?= $this->escapeHtml($user->getFullName()) ?></td>
-                        </tr>
-                        <tr>
-                            <th>Date Created</th>
-                            <td><?= $this->escapeHtml($user->getDateCreated()) ?></td>
+                            <th>Project Description</th>
+                            <td><?= $this->escapeHtml($projectObj->getDescription()) ?></td>
                         </tr>
                         <tr>
                             <th>Status</th>
-                            <td><?= $this->escapeHtml($user->getStatusAsString()) ?></td>
+                            <td><?= $this->escapeHtml($projectObj->getStatusAsString()) ?></td>
                         </tr>
-                        <tr >
-                            <th>Roles</th>
-                            <td><?= $this->escapeHtml($user->getRolesAsString()) ?> </td>
-                        </tr>
+                        <tr>
+                            <th>Creation User:</th>
+                            <td><?= $this->escapeHtml($projectObj->getCreationUser()) ?></td>
+                        </tr>                        
                     </table>
                 </div>
 
-                <!-- P TAG: THERE ARE TWO BUTTONS -->
-                <div class="row center-block">                       
-
-                    <!-- BUTTON EDIT -->  
+                <!--THERE ARE TWO BUTTONS--> 
+                <div class="row center-block"> 
+                     <!--BUTTON EDIT-->   
                     <div class="col-md-4">    
-                        <a class="boxed-btn" href="<?= $this->url('users', 
-                                ['action'=>'edit', 'id'=>$user->getId()]); ?>">
+                        <a class="boxed-btn" href="
+                           <?= 
+                              $this->url('productdev', ['action'=>'edit', 'id'=> $projectObj->getCode()]); 
+                           ?>">
                             <span class="fa fa-edit" ></span> Edit
                         </a>
                     </div>
 
-                    <!-- BUTTON CHANGE PASSWORD -->
+                     <!--GO TO WISH LIST--> 
                     <div class="col-md-4">
-                        <a class="boxed-btn" href="<?= $this->url('users',
-                                ['action'=>'change-password', 'id'=>$user->getId()]); ?>">
-                            <span class="fa fa-lock"></span> Change Password
+                        <a class="boxed-btn" href="<?= $this->url('wishlist', ['action'=>'index']);?>">
+                            <span class="fa fa-backward"></span> Return WL
                         </a> 
                     </div>
 

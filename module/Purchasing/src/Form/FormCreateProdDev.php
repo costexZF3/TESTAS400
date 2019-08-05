@@ -110,14 +110,14 @@ class FormCreateProdDev extends Form
       
       /* wish list code */       
       $this->add([
-          'name'=>'wlcode',    
+          'name'=>'projectdescription',    
           'type'=>'text',                              
           'attributes' => [  
               'class' => 'form-control',
-              'id'=>'wlcode',    
-              'readonly'=> true
+              'id'=>'prdescription',    
+              'placeholder' => 'Entera brief description of the project',
           ],
-          'options' =>['label' => 'WISH LIST#'],                     
+          'options' =>['label' => 'DESCRIPTION'],                     
       ]);
      
       /* creation date */       
@@ -301,15 +301,16 @@ class FormCreateProdDev extends Form
       
       // PROJECT CODE
       $this->add([
-           'name'=>'projectcode',    
-           'type'=>'text',                    
+           'name'=>'wlcode',    
+           'type'=>'text',
+           'readonly' => true, 
            'attributes' =>[      
                'class' =>'form-control',
                'id'       => 'code',                                                                    
                'readonly' => true
             ],
             
-           'options' =>['label' => 'PROJECT CODE'],                     
+           'options' =>['label' => 'WISH LIST CODE'],                     
       ]);
 
       //PROJECT NAME
@@ -333,6 +334,7 @@ class FormCreateProdDev extends Form
           'attributes' => [
               'class' =>'form-control',
               'id'=>'newvendor', 
+              'maxlength'=> '6',   //the user can only write up to 6 digitcs
               'placeholder' => 'Enter a vendor number'
           ],
           'options' => ['label' => 'NEW VENDOR'],                     
@@ -396,7 +398,7 @@ class FormCreateProdDev extends Form
        $this->setInputFilter( $inputFilter );
 
        $inputFilter->add([
-       'name'     => 'projectname',
+       'name'     => 'projectdescription',
        'required' => true,
        'filters'  => [
            ['name' => 'StringTrim'],                                                            
@@ -411,6 +413,22 @@ class FormCreateProdDev extends Form
            ],  
         ], //END: VALIDATORS KEY                       
       ]); 
+       $inputFilter->add([
+       'name'     => 'projectname',
+       'required' => true,
+       'filters'  => [
+           ['name' => 'StringTrim'],                                                            
+           ['name' => 'StripTags'],                                                            
+           ['name' => 'StripNewlines'],  
+           ['name' => 'StringToUpper'],
+       ], 
+       'validators' => [ 
+           //validator: 1           
+           ['name'    => 'StringLength',
+               'options' => ['min' => 1,'max' => 255],
+           ],  
+        ], //END: VALIDATORS KEY                       
+      ]); 
        
       $inputFilter->add([
        'name'     => 'newvendorname',
@@ -419,7 +437,7 @@ class FormCreateProdDev extends Form
          'filters'  => [
            ['name' => 'StringTrim'],                                                            
            ['name' => 'StripTags'],                                                            
-           ['name' => 'StripNewlines'],             
+           ['name' => 'StripNewlines'],           
          ], 
           
          'validators' => [ 
@@ -427,7 +445,7 @@ class FormCreateProdDev extends Form
             ['name'    => 'StringLength',
                 'options' => ['min' => 2,'max' => 6],
             ],              
-            
+             
             //validator: 2   if you not define 'table' index then it takes VNMAS BY DEFAULT         
             ['name' => VendorExistValidator::class,
              'options' => [
