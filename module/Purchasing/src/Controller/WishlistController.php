@@ -222,7 +222,17 @@ class WishlistController extends AbstractActionController
           $data = $this->params()->fromPost();
 
           //if not want update nothing redirect to whislit()
-          $continue = $data['status'] != 'NA' ||  $data['name'] != 'NA';
+          $continue = $data['status'] != 'N/A' ||  $data['name'] != 'N/A';
+
+          //checking is the new status is changing for developing
+          if ($data['status']=="3" && $data['name'=='N/A']) {
+            $this->flashMessenger()->addErrorMessage('Please, select an user');
+            return new ViewModel(
+                [
+                    'form' => $form,
+                ]);   
+
+          }
 
           if ( !$continue ) {
               $this->flashMessenger()->addErrorMessage('Oopss!!!. It seems you did not SELECTED a user neither a new status.');
@@ -231,7 +241,7 @@ class WishlistController extends AbstractActionController
           //retrieving the code of parts (rows) selected which were saved into 
           // the session->data (session variable)
           $data['records'] = $this->session->data;
-
+          $data['WHLMOUSER'] = $this->getUserS();
           $this->wlManager->update( $data, true );
 
           $mes = implode(', ',$data['records'] );
@@ -314,12 +324,20 @@ class WishlistController extends AbstractActionController
                       [ 'form' => $form, 'status' => $status ]);
           }
 
+          //taking into account the WL Owner must assign an user to the part before assign the new status
+          if ( $canChangeStatus && $status=="3" && $raw['name']=='N/A') {
+             $form->get('name')->setMessages(['You MUST assign this part to a valid USER']);
+             return new ViewModel(
+                    [ 'form' => $form, 'status' => $rawData['status'] ]);
+          } 
+
           //***************************** checking if I can change de STATUS ******************************************
           $data = $this->changedData( $rawData );
           $needUpdate = $data !=[]; 
 
           if ( $needUpdate ) {
               $data['WHLCODE'] = $this->session->id;
+              $data['WHLMOUSER'] = $this->getUserS();
               //using de SERVICE for update by Code
               $WL->update( $data );                
 
@@ -613,11 +631,13 @@ class WishlistController extends AbstractActionController
   {     
       //scenario 1  
       $form = new FormAddItemWL( 'initial', $this->queryManager );
-
+      
+     
       //checking it the request was by POST()
       if ($this->getRequest()->isPost()) {              
           $data = $this->params()->fromPost();
 
+          
           //checking which type or instance of ForAddItemWL we MUST CREATE
           $initial = $data['submit']=='SUBMIT';
 
@@ -645,7 +665,7 @@ class WishlistController extends AbstractActionController
              }
 
              $result = $this->findOutScenario( $partnumber, $inStock );
-
+            
              if (empty( $result )) {
                 return $this->redirect()->toRoute('wishlist', ['action'=>'create']);  
              }
@@ -818,7 +838,7 @@ class WishlistController extends AbstractActionController
   private function getUserS() 
   {
       $strUser = str_replace('@costex.com', '', $this->getUser()->getEmail());
-      return $strUser;
+      return strtoupper($strUser);
   }
 
   private function findOutScenario( $partnumber, $inStock  ) 
