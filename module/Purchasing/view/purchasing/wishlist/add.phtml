@@ -7,7 +7,7 @@
         'Home' => $this->url('home'),
         'Wish List' => $this->url('wishlist'),
         'Add' => $this->url('wishlist')       
-        ]);       
+      ]);       
     
     /*** getting params from IndexAction() inside LostsaleController ***/
   
@@ -22,7 +22,7 @@
     
     $renderAll = $this->renderAll || false; 
         
-    $columnStyle = $renderAll ? 'col-md-6 single-service-item ' : 'col-md-4 single-service-item'; 
+    $columnStyle = $renderAll ? 'col-md-10 single-service-item ' : 'col-md-4 single-service-item'; 
      
     /* adding attributes to the form elements */
      $form->get('partnumber')->setAttributes([
@@ -35,64 +35,111 @@
     /* prepare for before rendering */
     $form->prepare();
     
+    //***************** prepering for rendering the image *******************************
+    
+    //retrieving the document root to checking whether the part has picture saved
+    $document_root = $_SERVER['DOCUMENT_ROOT'];  
+    
+    //this is the base path for the pictures with resolution 220x220
+    $picturesBasePath = '/webpics/220x220/';
+    
+    //name of the image in case there is not exist the picture
+    $no_valid_pic = 'pic_not_av.jpg';            
+    
+    // recovering the partnumber. it must be alike the picture name in the base directory
+   // $fileNameImg = '0009262.jpg';  //trim($this->FormLabel($form->get('partnumber'))
+    $fileNameImg = trim($form->get('partnumber')->getValue()).'.jpg';
+    
+   // creating the complete path
+    $complete = $picturesBasePath.$fileNameImg;
+    
+    //checking whether the file exists
+    $existFile = file_exists( trim( $document_root.$complete ));
+    
+    //selecting the pic will be shown taking into account if it exists or not
+    $imgPath = $existFile ? $picturesBasePath.$fileNameImg : $picturesBasePath.$no_valid_pic;
+    
  ?>  
 
 <!--/********************************* CONTAINER TO BE RENDER ************************************************************/-->
 <div class="container">        
-    <div class="row justify-content-center">
-        <div class="<?= $columnStyle; ?>">                 
-            <h4 class="title"> NEW ITEM </h4> 
-            <br>
-            <!-- Open Form Tag -->
-            <?= $this->form()->openTag($form); ?>
-                <!-- EDIT: OLD PASSWORD -->
-                <?php if ($renderAll ):?>
-                    <div class="form-group"> 
-                        <!--row 1-->
-                        <div class="row">
-                            <div class="col-md-2">
-                                <?= $this->FormRow($form->get('code')); ?><br> 
-                            </div>
-                            <div class="col-md-4"> 
-                                <?= $this->FormRow($form->get('user')); ?><br> 
-                            </div>
-                            <div class="col-md-6">                            
-                                <?= $this->FormRow($form->get('date')); ?>                                 
-                            </div>
-                        </div>    
-                        <!--row 2-->
-                        <div class="row">
-                            <div class="col-md-6">  
-                                <?= $this->FormRow($form->get('partnumber')); ?><br>
-                                <?= $this->FormRow( $form->get('vendor') ); ?>                              
-                                <?= $this->FormRow($form->get('type')); ?> <br>                                
-                            </div>
-                            <div class="col-md-6">              
-                                <?= $this->FormRow($form->get('partnumberdesc')); ?><br>
-                                <?= $this->FormRow($form->get('vendordesc')); ?> 
-                            </div>
+   <div class="row justify-content-center">
+      <div class="<?= $columnStyle; ?>">                 
+        <h4 class="title"> NEW ITEM </h4> 
+        <br>
+        <!-- Open Form Tag -->
+        <?= $this->form()->openTag($form); ?>
+            <!-- EDIT: OLD PASSWORD -->
+            <?php if ( $renderAll ):?>
+                <div class="form-group"> 
+                    <!--row 1-->
+                    <div class="row">
+                       <div class="col-md-4">
+                             <div class="tumb">
+                                 <img class="img-thumbnail " src="<?=trim($imgPath)?>" title=<?=$fileNameImg?>> 
+                             </div>
+                       </div>
+                       <div class = "col-md-6"> 
+                           <div class="row">
+                                <div class="col-md-2"> 
+                                  <?= $this->FormRow($form->get('code')); ?><br> 
+                                 </div>
+                                <div class="col-md-4"> 
+                                  <?= $this->FormRow($form->get('user')); ?><br> 
+                                 </div>
+                                <div class="col-md-6">                            
+                                    <?= $this->FormRow($form->get('date')); ?>                                 
+                                </div>                                   
+                           </div>
+                           <div class="row">
+                                <div class="col-md-4"> 
+                                    <?= $this->FormRow($form->get('partnumber')); ?> 
+                                 </div>
+                                <div class="col-md-8">                            
+                                    <?= $this->FormRow($form->get('partnumberdesc')); ?>                                 
+                                </div>                                   
+                           </div>
+                           <div class="row">
+                               <div class="col-md-4">                                 
+                                   <?= $this->FormRow( $form->get('vendor') ); ?>                                       
+                               </div>
+                               <div class="col-md-6">                                                                        
+                                   <?= $this->FormRow($form->get('vendordesc')); ?> 
+                               </div>
+                               <div class="col-md-12">                                                                        
+                                   <?= $this->FormRow($form->get('type')); ?> <br> 
+                               </div>
+                           </div>    
+                       </div>    
+                    </div>    
+                    <!--row 2-->
+                    <div class="row">
+                        <div class="col-md-">                                                                            
                         </div>
-                        <!--row 3-->
-                        <div class="row">
-                            <div class="col-md-12">                          
-                                <?= $this->FormRow($form->get('comment')); ?>
-                            </div>
+                        <div class="col-md-">             
                         </div>
                     </div>
-                <?php else:?>
-                    <?= $this->FormRow($form->get('partnumber')); ?>
-                    <br>
-                <?php endif;?>            
-                <!-- CROSS SITE REQUEST FORGERY CHECKING -->    
-                <?= $this->formElement($form->get('csrf')); ?>
-
-                <div class="btn-wrapper">
-                    <?= $this->formElement($form->get('submit')); ?>
+                    <!--row 3-->
+                    <div class="row">
+                        <div class="col-md-10">                          
+                            <?= $this->FormRow($form->get('comment')); ?>
+                        </div>
+                    </div>
                 </div>
-            <?= $this->form()->closeTag(); ?>
-                       
-        </div><!-- offset... -->
-    </div>
+            <?php else:?>
+                <?= $this->FormRow($form->get('partnumber')); ?>
+                <br>
+            <?php endif;?>            
+            <!-- CROSS SITE REQUEST FORGERY CHECKING -->    
+            <?= $this->formElement($form->get('csrf')); ?>
+
+            <div class="btn-wrapper">
+                <?= $this->formElement($form->get('submit')); ?>
+            </div>
+        <?= $this->form()->closeTag(); ?>
+
+    </div><!-- offset... -->
+   </div>
 </div>
 
  
