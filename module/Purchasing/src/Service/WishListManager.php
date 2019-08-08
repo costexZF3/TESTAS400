@@ -20,7 +20,7 @@
 
 class WishListManager 
 {
-   const USER_BY_DEFAULT = 'NA';
+   const USER_BY_DEFAULT = 'N/A';
    
    /* reason type */    
    const NEWPART =  '1';  
@@ -76,7 +76,7 @@ class WishListManager
         self::STATUS_TO_DEVELOP    => "TO DEVELOP",                         
         self::STATUS_REJECTED      => "REJECTED",                                 
         self::STATUS_REOPEN        => "RE-OPEN",
-        self::STATUS_CLOSE_BY_DEV  => "MOVED TO PROJ", 
+        self::STATUS_CLOSE_BY_DEV  => "MOVED TO DEV", 
    ];
   
    protected $from = [ self::FROM_LOSTSALE    => "LS", 
@@ -95,9 +95,8 @@ class WishListManager
      * array with all COLUMN LABELS that will be rendered
      */
     private $columnHeaders = ['', 'From','ID','Date', 'User','Part Number', 'Description','Status', 'Assigned', 'Vendor',
-                    'PA', 'PS',  'Year Sales',
-                              'Qty Quot','TimesQ', 'OEM Price', 'Loc20', 'Model', 'Category',
-                              'SubCat', 'Major','Minor'];
+                    'PA', 'PS',  'Year Sales', 'Qty Quot','TimesQ', 'OEM Price', 'Loc20', 'Model', 'Category',
+               'SubCat', 'Major','Minor'];
     /*
      * rows: this array saves all <tr> elements generated running sql query..
      */
@@ -195,7 +194,8 @@ class WishListManager
      * @param array() $data
      */
    private function updateByCode( $data )
-   {       
+   {   
+      $SET['WHLMOUSER'] = trim(strtoupper($data['WHLMOUSER'])); 
       $SET['WHLSTATUS'] = $data['status'] ?? self::STATUS_OPEN;        
       $SET['WHLSTATUSU'] = $data['name'] ?? self::USER_BY_DEFAULT;        
       $SET['WHLCOMMENT'] = isset($data['comment']) && trim($data['comment'] !='') ? $data['comment'] : '';        
@@ -219,6 +219,7 @@ class WishListManager
      */
     public function update( $data, $multiple=false) 
     {
+      
         //checking if the updating is multiple or not
         if (!$multiple) {
             $this->updateByCode ( $data );
@@ -245,8 +246,7 @@ class WishListManager
            $actualStatus = $data['WHLSTATUS'];
            
            //checking new user will be assigned to list of parts
-           $data['name'] = $changeUser && ( $actualUserAssigned !== $userToAssign ) ? $userToAssign : $actualUserAssigned;           
-           
+           $data['name'] = $changeUser && ( $actualUserAssigned !== $userToAssign ) ? $userToAssign : $actualUserAssigned;                     
            //checking status
            $data['status'] = $changeStatus && $this->changeStatus($actualStatus, $newStatus) ? $newStatus : $actualStatus; 
            $data['WHLCODE']= $idItem; 
@@ -444,6 +444,7 @@ class WishListManager
         // INSERTING DATA: THE PART EXIST INSIDE INMSTA
         $dataSet['WHLCODE'] = $data['code'];
         $dataSet['WHLUSER'] = trim(strtoupper($data['user'])); 
+        $dataSet['WHLMOUSER'] = trim(strtoupper($data['user'])); 
         $dataSet['WHLPARTN'] = trim(strtoupper($data['partnumber']));
         $dataSet['WHLSTATUS'] = self::STATUS_OPEN;
         $dataSet['WHLSTATUSU'] = 'N/A';
@@ -459,8 +460,8 @@ class WishListManager
            $dataSet2['WHLADDCODE'] = $data['code'];            
            $dataSet2['WHLADDMODE'] = strtoupper($data['model']);
            
-           $dataSet2['WHLADDMAJO'] = $data['major']; 
-           $dataSet2['WHLADDMINO'] = $data['minor']; 
+           $dataSet2['WHLADDMAJO'] = $data['major'] ?? ''; 
+           $dataSet2['WHLADDMINO'] = $data['minor'] ?? ''; 
            
            $dataSet2['WHLADDCATE'] = $data['category']; 
            $dataSet2['WHLADDSUBC'] = $data['subcategory']; 
@@ -475,6 +476,13 @@ class WishListManager
     } //END: AddItem method
  
     
+    /**
+     * This method is use to change the color of the status of the part in the WL
+     * according to the current status
+     * 
+     * @param type $item
+     * @return string
+     */        
     private function getClassCSSforStatus( $item )
     {
         $strStatus = $this->status;    
@@ -510,9 +518,10 @@ class WishListManager
             //CHANGING THE ICON TO THE FROM COLUMN: (EXCEL FILE, ...)
             
             if ($col==1) {                             
-                $iconToExcel = '<i class="fa fa-file-excel-o fa-1x"  aria-hidden="true" text="From Excel file" ></i>';
-                $iconToManual = '<i class="fa fa-keyboard-o fa-1x"  aria-hidden="true" text="One by One" ></i>';
-                $item = ($item=='EXCEL') ? $iconToExcel : $iconToManual;
+                $iconToExcel = '<i class="fa fa-file-excel-o fa-1x"  aria-hidden="true" title="From Excel file" > EXC</i>';
+                $iconToManual = '<i class="fa fa-keyboard-o fa-1x"  aria-hidden="true" title="One by One" > MAN </i>';
+                // $item = ($item =='EXCEL') ? $iconToExcel : $iconToManual;
+                $item = ($item =='EXCEL') ? $iconToExcel : $iconToManual;
             }
             if (in_array( $col, $columns ) ) {
                 $className = "number";
