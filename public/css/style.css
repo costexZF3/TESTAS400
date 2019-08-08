@@ -86,7 +86,9 @@ form ul li {
 }
 
 
+
 /* CHECK BOX FOR CTP SYSTEM */
+
 
 /* Customize the label (the container) */
 .container-check {
@@ -161,6 +163,7 @@ form ul li {
 .box {
    background-color:  #FACB4C;  
 }
+
 
 
 /*STATUS COLORS*/
@@ -306,8 +309,10 @@ form ul li {
         .table_ctp .money, .number {    	    
             text-align: right;}
         .table_ctp select {
-            max-width: 50px;
-        }   
+            max-width: 50px;}
+        .table_ctp fa {
+            font-family: 'Courier New', Courier, monospace
+        }
         
 /*color for icons*/ 
 
