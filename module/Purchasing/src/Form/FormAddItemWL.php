@@ -62,8 +62,7 @@ class FormAddItemWL extends Form
     private function  selectElements() 
     {
         switch ( $this->scenario ) {
-            case 'initial' :  
-                
+            case 'initial' :                
                 $this->addElementSC1(); 
                 $this->addCommonElements();
                 $this->addInputFiltersSC1(); 
@@ -90,6 +89,21 @@ class FormAddItemWL extends Form
      */
     private function addCommonElements ( $submitValue = "SUBMIT" ) 
     {
+
+         //MAYBE NOT...IMAGE OF THE PART
+        $this->add([
+            'name'=>'image',    
+            'type'=>'image',    
+            'attributes' =>[          
+                'class' =>'form-control',
+                'id'=>'image',                                      
+                'readonly' => true,
+            ],
+            'options' =>[              
+                'label' => ''
+            ],                     
+        ]);
+        
         // Add the CSRF field
         $this->add([
             'type' => 'csrf',
@@ -244,10 +258,13 @@ class FormAddItemWL extends Form
         $this->add([            
             'type'  => 'select',
             'name' => 'type',
+            'attributes' =>[          //array of attributes
+                'class' => 'form-control',
+                'id'=>'type',                   
+            ],
             'options' => [
                 'label' => 'TYPE',
-                'value_options' => [
-                    
+                'value_options' => [                    
                     2 => 'New Vendor',                                                                                                                                    
                     1 => 'New Part',
                 ],
