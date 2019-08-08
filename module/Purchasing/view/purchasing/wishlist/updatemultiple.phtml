@@ -40,7 +40,11 @@
 
 <!--/********************************* CONTAINER TO BE RENDER ************************************************************/-->
 
-<div class="container">        
+<div class="container">      
+<?= $this->flashMessenger()->render('success', ['alert', 'alert-success']); ?>
+<?= $this->flashMessenger()->render('error',   ['alert', 'alert-warning']); ?>
+<?= $this->flashMessenger()->render('info',    ['alert', 'alert-info']); ?>   
+  
     <div class="row justify-content-center">
         <div class="col-md-5 single-service-item">                 
             <h4 class="title"> UPDATE USER IN CHARGE & STATUS </h4> 
