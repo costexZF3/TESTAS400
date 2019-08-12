@@ -1079,7 +1079,7 @@ select:focus {
       -webkit-animation: 1s .2s slideInUp both;
       animation: 1s .2s fadeInUp both; }
     .header-area.header-style-three .single-header-carosuel-two-item {
-      padding: 210px 0 220px;
+      padding: 50px 0 390px;  /* changing padding of the image*/
       position: relative;
       z-index: 0;
       background-position: center;
@@ -1092,13 +1092,13 @@ select:focus {
         top: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(251, 186, 66, 0.8);
+        background-color: rgba(251, 186, 66, 0);
         content: '';
         z-index: -1; }
       .header-area.header-style-three .single-header-carosuel-two-item .header-inner {
         text-align: left; }
         .header-area.header-style-three .single-header-carosuel-two-item .header-inner .title {
-          font-size: 48px;
+          font-size: 40px;
           line-height: 58px;
           color: #333333;
           text-transform: uppercase;
@@ -1316,8 +1316,8 @@ select:focus {
     Support Bar
 ------------------------*/
 .support-bar-area {
-  background-color: #f7f7fd;
-  padding: 20px 0; }
+  background-color: #333;
+  padding: 10px 0; }
   .support-bar-area .left-content-area {
     display: inline-block; }
     .support-bar-area .left-content-area ul {
