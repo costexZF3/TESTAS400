@@ -150,6 +150,8 @@ class WishlistController extends AbstractActionController
           //retrieving user and status new $data['user], $data['status']
           $data = $this->params()->fromPost();
           
+          //fixing about comments in blank
+          $data['comments'] = trim($data['comments'])==='' ? "part from WL" : $data['comments'];
           $form->setData( $data );
            
           //checking DATA entered (form elements) are valid and ready for being proccessed 

@@ -227,7 +227,7 @@ class FormCreateProdDev extends Form
           'attributes' =>[   
               'class' => 'form-control',
               'id'=>'comments',
-              'rows' => "9",                                                          
+              'rows' => "5",                                                          
               'readonly' => true,                    
           ],
           'options' =>['label' => 'COMMENTS'],                     
