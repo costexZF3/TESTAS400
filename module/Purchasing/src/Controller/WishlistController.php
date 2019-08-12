@@ -144,7 +144,7 @@ class WishlistController extends AbstractActionController
       
       //creating the form
       $form = new FormCreateProdDev($params['scenario'], $this->queryManager );
-      
+           
       //checking if was clicked 
       if( $this->getRequest()->isPost() ) {
           //retrieving user and status new $data['user], $data['status']
@@ -197,11 +197,10 @@ class WishlistController extends AbstractActionController
       } else { 
 
         //retrieving all data needed for rendering on the Form
-         $data = $this->getPartNumberData();                   
-         
+         $data = $this->getPartNumberData();  
          $form->setData( $data ); 
       } //if..isPost()???        
-
+      
       return new ViewModel(['form' => $form, ]);  
       
    }
