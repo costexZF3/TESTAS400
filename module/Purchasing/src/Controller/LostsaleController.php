@@ -11,6 +11,7 @@ use Zend\Db\Adapter\Adapter;
 use Purchasing\ValueObject\LostSale;
 use Purchasing\Form\LostSaleForm;
 use Purchasing\Form\FormLostsaleToWL;
+use Purchasing\Service\WishListManager as WLM;
 
 class LostsaleController extends AbstractActionController
 {
@@ -25,16 +26,20 @@ class LostsaleController extends AbstractActionController
     private $conn; //it's the adapter
     //private $db;
     
+    private $WLManager; 
+    
     /**------------- Class Methods -----------------*/ 
     
    /* constructor for claimsController. It will be injected 
     * with the entityManager with all Entities mapped 
     * by dependency injection 
     */
-   public function __construct( $entityManager, Adapter $adapter ){
+   public function __construct( $entityManager, Adapter $adapter, WLM $wishListManager ){
        //entitymanager
        $this->entityManager = $entityManager;       
-       $this->conn = $adapter;      
+       $this->conn = $adapter; 
+       $this->WLManager = $wishListManager;
+       
    }   
    
    /*
@@ -49,6 +54,17 @@ class LostsaleController extends AbstractActionController
        } 
        return $user;
    }//End: getUser()
+   
+   /**
+   * 
+   * @return string | It returns the short form of the user
+   */
+  private function getUserS() 
+  {
+      $strUser = str_replace('@costex.com', '', $this->getUser()->getEmail());
+      return strtoupper($strUser);
+  }
+
       
    private function testPermission( string $permission){
        $user = self::getUser();       
@@ -57,7 +73,30 @@ class LostsaleController extends AbstractActionController
        //var_dump($accessT); echo "";
        return $accessT;
    }
-                   
+     
+   /**
+    * This method calls prepares data will be sent to WL across the 
+    * Service Wishlist Manager
+    * 
+    * @param array $data
+    * @return type
+    */
+   private function insertToWL( $data ) 
+   {
+      foreach ($data as $item ) {         
+         $data1['code'] = $this->WLManager->nextIndex();
+         $data1['user'] = trim($this->getUserS());
+         $data1['partnumber'] = trim($item);         
+         $data1['type'] = WLM::NEWVENDOR;        
+         $data1['from'] = WLM::FROM_LOSTSALE;
+         $data1['comment'] = 'FROM LOST SALE';
+//         var_dump( $data1 ); echo"<br>";
+         $inserted = $this->WLManager->insert($data1);
+      }
+      return $inserted != null; 
+   }//End: method() insertToWL()
+                  
+                  
    /**
     *  The IndexAction show the main Menu about all concerning to the Purchasing Menus
     */
@@ -70,7 +109,7 @@ class LostsaleController extends AbstractActionController
         $timesQuote = 100; 
     
         //-- checking if the logged user has SPECIAL ACCESS: he/she would be an Prod. Specialist
-        $especial = ($this->access('special.access'))?'true':'false';
+        $especial = ($this->access('special.access'))? 'true' : 'false';
                      
         $changeData = true;        
         $vndAssignedOptionSelected = 1;
@@ -89,12 +128,15 @@ class LostsaleController extends AbstractActionController
                //looking for items select
                if (isset($dataToWL['checkall'])) {
                   //call the service WL and insert the WL
-                  echo "inserting into WL....."; exit;
+                  $inserted = $this->insertToWL( $dataToWL['checkbox'] );                  
+                  $this->flashMessenger()->addErrorMessage('The selected items have been inserted into the WishList successfully');
+                                   
                } else {
                   //active flash messengers
                   $this->flashMessenger()->addErrorMessage('Please, select at least one item thatn you want to send into the Wish List');
-                 
-                   /* this method retrives all items and return a resultSet or data as HTML tableGrid */   
+               }
+               
+                /* this method retrives all items and return a resultSet or data as HTML tableGrid */   
                   $LostSale = new LostSale( $this->conn, $timesQuote, $vndAssignedOptionSelected );
                   $tableHTML = $LostSale->getGridAsHtml();     
                   $countItems = $LostSale->getCountItems();
@@ -110,8 +152,7 @@ class LostsaleController extends AbstractActionController
                                 'timesquoted' => $timesQuote,
                               'columnsToHide' => $hideVnds
                        ]);
-               }
-            }
+            }//end if submit
             
             /* getting DATA from the FORM where times quotes was selected */        
             $data = $this->params()->fromPost();            
