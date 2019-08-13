@@ -10,6 +10,7 @@ use Zend\Db\Adapter\Adapter;
 
 use Purchasing\ValueObject\LostSale;
 use Purchasing\Form\LostSaleForm;
+use Purchasing\Form\FormLostsaleToWL;
 
 class LostsaleController extends AbstractActionController
 {
@@ -77,10 +78,40 @@ class LostsaleController extends AbstractActionController
 
       //create LostSaleForm
         $form = new LostSaleForm();
+        $formWL = new FormLostsaleToWL();
 
         //check if user has submitted the form
 
         if ($this->getRequest()->isPost()) {
+            //checking if the button MOVE TO WL was pressed
+            $dataToWL = $this->params()->fromPost();
+            if ( isset($dataToWL['submitWL'])) {
+               //looking for items select
+               if (isset($dataToWL['checkall'])) {
+                  //call the service WL and insert the WL
+                  echo "inserting into WL....."; exit;
+               } else {
+                  //active flash messengers
+                  $this->flashMessenger()->addErrorMessage('Please, select at least one item thatn you want to send into the Wish List');
+                 
+                   /* this method retrives all items and return a resultSet or data as HTML tableGrid */   
+                  $LostSale = new LostSale( $this->conn, $timesQuote, $vndAssignedOptionSelected );
+                  $tableHTML = $LostSale->getGridAsHtml();     
+                  $countItems = $LostSale->getCountItems();
+
+                  $this->layout()->setTemplate('layout/layout_Grid');
+                  return new ViewModel([
+                                       'form' => $form,         //HTML ELEMENTS: to render on the filter seccions
+                                       'formto' => $formWL,
+                                'tableHeader' => $tableHTML,                                                                    
+                                       'user' => $user,
+                              'specialAccess' => $especial,
+                                 'countItems' => $countItems,
+                                'timesquoted' => $timesQuote,
+                              'columnsToHide' => $hideVnds
+                       ]);
+               }
+            }
             
             /* getting DATA from the FORM where times quotes was selected */        
             $data = $this->params()->fromPost();            
@@ -106,12 +137,11 @@ class LostsaleController extends AbstractActionController
        $LostSale = new LostSale( $this->conn, $timesQuote, $vndAssignedOptionSelected );
        $tableHTML = $LostSale->getGridAsHtml();     
        $countItems = $LostSale->getCountItems();
-       //$timesQuote = $LostSale->getTimesQuoted();
-      
        
        $this->layout()->setTemplate('layout/layout_Grid');
        return new ViewModel([
                             'form' => $form,         //HTML ELEMENTS: to render on the filter seccions
+                            'formto' => $formWL,
                      'tableHeader' => $tableHTML,                                                                    
                             'user' => $user,
                    'specialAccess' => $especial,

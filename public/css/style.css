@@ -161,7 +161,11 @@ form ul li {
   
 }
 
-thead tbody th .container-check .checkmark {
+thead th .container-check .checkmark {
+     background-color: #68b604;
+}
+
+tfoot .container-check .checkmark {
      background-color: #68b604;
 }
 

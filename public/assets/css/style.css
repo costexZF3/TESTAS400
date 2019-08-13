@@ -1221,7 +1221,7 @@ select:focus {
               .header-area.header-style-two .single-header-carosuel-two-item .header-inner .btn-wrapper .boxed-btn.blank:hover {
                 background-color: #fbba42;
                 color: #fff; }
-  .header-area.header-bg {
+  .header-area.header-bg {    
     background-color: #eee;
     background-image: url(../img/bg/header-bg-1.jpg);
     background-position: center;

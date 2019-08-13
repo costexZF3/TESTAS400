@@ -26,6 +26,7 @@
        
     //prepering form
     $form = $this->form;
+    $formwl = $this->formto;
     
     $form->get('num-tq')->setAttributes([
         'class' => 'form-control',
@@ -40,7 +41,11 @@
     
     $form->get('submit')->setAttributes(['class'=>'submit-btn'])
             ->setValue(' Submit ');
+    $formwl->get('submitWL')->setAttributes(['class'=>'btn btn-success'])
+            ->setValue(' To WL ');
+    
     $form->prepare();
+    $formwl->prepare();
     
  ?>  
  	 
@@ -216,17 +221,17 @@
                                 }
                         }, 
                                           
-                        {
-                            text        : 'Export to Wish List', 
-                            className   : 'submit-btn',
-                            action      : function ( e, dt, node, config ) {
-                                alert('Activated!');
-                                console.log(config);
-                                console.log(node);
-                                console.log(e);
-                                this.disable(); //disable button
-                            }                            
-                        }                                           
+//                        {
+//                            text        : 'Export to Wish List', 
+//                            className   : 'submit-btn',
+//                            action      : function ( e, dt, node, config ) {
+//                                alert('Activated!');
+//                                console.log(config);
+//                                console.log(node);
+//                                console.log(e);
+//                                this.disable(); //disable button
+//                            }                            
+//                        }                                           
                      ],
         initComplete: function () {
             this.api().columns([1, 8,10, 16, 18,19]).every( function () {
@@ -294,6 +299,10 @@
 
 <?php if ($specialAccess): ?>
      
+<!-- HTML RENDER-->
+<?= $this->flashMessenger()->render('success', ['alert', 'alert-success']); ?>
+<?= $this->flashMessenger()->render('error',   ['alert', 'alert-warning']); ?>
+<?= $this->flashMessenger()->render('info',    ['alert', 'alert-info']); ?>   
 
 <!--create an ACCODION FILTERS--> 
 
@@ -405,11 +414,16 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <form action="" name="form-lostsale"> 
+         <?=$this->form()->openTag($formwl); ?>
             <table class="table_ctp table_filtered display" id="table_toexcel">
                <thead><tr> 
-                   <th>       
-                      <label class= "container-check"> <input class="checkall" type="checkbox" name= "checkall"><span class="checkmark"></span></label>
+                   <th>
+<!--                       <input type="submit" class="btn btn-success"  value="To WL">-->
+                       <?= $this->formElement($formwl->get('submitWL')); ?> 
+                       <br><br>
+                           
+                        <label class= "container-check"> <input class="checkall" type="checkbox" name= "checkall"><span class="checkmark"></span></label>
+                     
                    </th>       
 
                 <?php foreach ($columnHeaders as $field) :?>           
@@ -427,8 +441,10 @@
                     <th><?=$field; ?></th>    
                 <?php endforeach; ?>            
                 </tr></tfoot>
+               
             </table>  
-        </form>
+            <?= $this->formHidden($formwl->get('csrf')); ?>
+        <?=$this->form()->closeTag();?>
     </div> 
 </div>
 <?php endif; ?>
