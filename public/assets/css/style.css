@@ -1331,12 +1331,14 @@ select:focus {
         .support-bar-area .left-content-area ul li:first-child {
           margin-left: 0; }
   .support-bar-area .right-content-area {
+     
     display: inline-block;
     float: right; }
     .support-bar-area .right-content-area ul {
       margin: 0;
-      padding: 0; }
+      padding: 0;      }
       .support-bar-area .right-content-area ul li {
+         color: #fbba42;  
         display: inline-block;
         margin: 0 8px;
         font-size: 14px; }
@@ -1347,9 +1349,9 @@ select:focus {
           -moz-transition: all 0.3s ease-in;
           -o-transition: all 0.3s ease-in;
           transition: all 0.3s ease-in;
-          color: #777777; }
+          color: #fbba42; }
           .support-bar-area .right-content-area ul li a:hover {
-            color: #fbba42; }
+            color: #777777; }
 
 /*---------------------------
     Build Dream

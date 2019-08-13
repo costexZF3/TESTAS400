@@ -356,10 +356,14 @@ class LostSale {
      */
     private function rowToHTML( $row, $classNameTQ )
     {
-        //$result ='<tr class="'.$classNameTQ.'">';
+        //defining the status  of the first one column checkbox   (disable or enable)
+        $status = ($row['Wish List' ]['value'] ==='X') || ($row['Dev.Proj' ]['value'] !=='--') ? 'disabled=true' : '';
+        $id = trim($row['Part Number']['value']);
+        $classCheck = $status==='' ? 'activeclass' : 'inactiveclass';
         
-        $trClass= ($classNameTQ!=='')? ' class="'.$classNameTQ.'">' : '>';
-        $result ='<tr'.$trClass;
+//        $trClass= ($classNameTQ!=='')? ' class="'.$classNameTQ.'">' : '>';
+        $result ='<tr><td><label class= "container-check"> <input  class="'.$classCheck.'"  type="checkbox" name= "checkbox[]" id="checkbox"'.$id.' value="'.$id.'" '.$status.'><span class="checkmark"></span></label></td>';  
+       
         
         foreach( $row as $item ){
             /*retriving the classes and ids attribute values*/  

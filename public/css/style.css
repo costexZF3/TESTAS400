@@ -121,7 +121,7 @@ form ul li {
   left: 0;
   height: 20px;
   width: 20px;
-  background-color: #F8C05F;
+  background-color: #DCC;
 }
 
 /* On mouse-over, add a grey background color */
@@ -131,7 +131,7 @@ form ul li {
 
 /* When the checkbox is checked, add a blue background */
 .container-check input:checked ~ .checkmark {
-  background-color: #F8CB58;
+  background-color: #68b604;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
@@ -144,6 +144,7 @@ form ul li {
 /* Show the checkmark when checked */
 .container-check input:checked ~ .checkmark:after {
   display: block;
+  
 }
 
 /* Style the checkmark/indicator */
@@ -157,6 +158,11 @@ form ul li {
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
+  
+}
+
+thead tbody th .container-check .checkmark {
+     background-color: #68b604;
 }
 
 /* boxes */
@@ -269,13 +275,14 @@ form ul li {
     color: #ebc14b;     
     text-combine-upright: all;}
 
+
 /* ctp_subtitle */
 
 /*  All a h1, h2, h3 elements with class (.ctp_subtitle) */
 .ctp-subtitle h1 {
     color: black;
     text-transform: capitalize;
-    font-weight: 300; 
+    font-weight: 200; 
     font-family: CTPFONT, Helvetica, sans-serif;    
     font-size: 40px;
     padding-bottom: 10px; }

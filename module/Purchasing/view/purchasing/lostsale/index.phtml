@@ -229,7 +229,7 @@
                         }                                           
                      ],
         initComplete: function () {
-            this.api().columns([0,1, 8,10, 16, 18,19]).every( function () {
+            this.api().columns([1, 8,10, 16, 18,19]).every( function () {
                 var column = this;
                 var select = $('<select><option value=""></option></select>')
                     .appendTo( $(column.footer()).empty() )
@@ -256,11 +256,35 @@
    */ 
     var tables = filterTable('table_filtered', initialConfig );
     
+    /*getting the <TD> value when click it */
+    $('#table_toexcel tbody').on('click', 'td', function () {
+       var table = $('#table_toexcel').DataTable();
+ 
+      alert( table.cell( this ).data() );
+    });
+    
     //removing dt-button class to each HTMLElement (button) Associates to 
    // a table
     $('button').removeClass('dt-button');
+    
+    $('.checkall').click( function(){              
+      var value = $(this).is(':checked');      
+      
+      $('.activeclass').attr('checked', value);
+      
+      if ( value ) {
+         $('.checkall').attr('checked', value);
+      } else {
+         $('.checkall').removeAttr('checked');
+      }
+      
+       console.log(value);
+    });
    
     }); 
+   
+    
+    
 
 </script>
         
@@ -381,22 +405,30 @@
 
 <div class="row">
     <div class="col-lg-12">
-        
-        <table class="table_ctp table_filtered display" id="table_toexcel">
-           <thead><tr>  
-            <?php foreach ($columnHeaders as $field) :?>           
-                <th><?=$field; ?></th>    
-            <?php endforeach; ?>            
-            </tr></thead>
-           
-            <?=$tableBody; ?>
-           
-           <tfoot><tr>  
-            <?php foreach ($columnHeaders as $field) :?>           
-                <th><?=$field; ?></th>    
-            <?php endforeach; ?>            
-            </tr></tfoot>
-        </table>   
+        <form action="" name="form-lostsale"> 
+            <table class="table_ctp table_filtered display" id="table_toexcel">
+               <thead><tr> 
+                   <th>       
+                      <label class= "container-check"> <input class="checkall" type="checkbox" name= "checkall"><span class="checkmark"></span></label>
+                   </th>       
+
+                <?php foreach ($columnHeaders as $field) :?>           
+                    <th><?=$field; ?></th>    
+                <?php endforeach; ?>            
+                </tr></thead>
+
+                <?=$tableBody; ?>
+
+               <tfoot><tr>  
+                <th>       
+                   <label class= "container-check"> <input class="checkall" type="checkbox" name= "checkall"><span class="checkmark"></span></label>
+                </th>       
+                <?php foreach ($columnHeaders as $field) :?>           
+                    <th><?=$field; ?></th>    
+                <?php endforeach; ?>            
+                </tr></tfoot>
+            </table>  
+        </form>
     </div> 
 </div>
 <?php endif; ?>
