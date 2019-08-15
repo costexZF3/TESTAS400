@@ -361,8 +361,14 @@ class LostSale {
         $id = trim($row['Part Number']['value']);
         $classCheck = $status==='' ? 'activeclass' : 'inactiveclass';
         
-//        $trClass= ($classNameTQ!=='')? ' class="'.$classNameTQ.'">' : '>';
-        $result ='<tr><td><label class= "container-check"> <input  class="'.$classCheck.'"  type="checkbox" name= "checkbox[]" id="checkbox"'.$id.' value="'.$id.'" '.$status.'><span class="checkmark"></span></label></td>';  
+        if ($classCheck=='inactiveclass') {
+           $classForCheckIcon = 'checkmarkNot';
+        } else {
+           $classForCheckIcon = 'checkmark';
+        }
+        
+        $checkbox = ' <input  class="'.$classCheck.'"  type="checkbox" name= "checkbox[]" id="checkbox"'.$id.' value="'.$id.'" '.$status.'>';        
+        $result ='<tr><td><label class= "container-check">'.$checkbox.'<span class="'.$classForCheckIcon.'"></span></label></td>';  
        
         
         foreach( $row as $item ){

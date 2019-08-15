@@ -89,6 +89,9 @@ form ul li {
 
 /* CHECK BOX FOR CTP SYSTEM */
 
+.inactiveIcon {
+    cursor: not-allowed;
+}
 
 /* Customize the label (the container) */
 .container-check {
@@ -112,7 +115,8 @@ form ul li {
   cursor: pointer;
   height: 0;
   width: 0;
-}
+} 
+
 
 /* Create a custom checkbox */
 .checkmark {
@@ -122,7 +126,19 @@ form ul li {
   height: 20px;
   width: 20px;
   background-color: #DCC;
+} 
+
+.checkmarkNot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #999999;
+  
+  cursor: not-allowed;  
 }
+
 
 /* On mouse-over, add a grey background color */
 .container-check:hover input ~ .checkmark {
@@ -131,7 +147,8 @@ form ul li {
 
 /* When the checkbox is checked, add a blue background */
 .container-check input:checked ~ .checkmark {
-  background-color: #68b604;
+  /*background-color: #fff;*/
+  background-color: #dc3545b0;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
@@ -162,11 +179,11 @@ form ul li {
 }
 
 thead th .container-check .checkmark {
-     background-color: #68b604;
+     background-color: #dc3545;
 }
 
 tfoot .container-check .checkmark {
-     background-color: #68b604;
+     background-color: #dc3545;
 }
 
 /* boxes */
@@ -307,9 +324,11 @@ tfoot .container-check .checkmark {
 
 /*******************   TABLE CTP PROPERTIES ***********************************/
 .table_ctp {
+    font-family: CTPFONT;
     font-size : 11px;
     text-align: left;}
     .table_ctp thead, tfoot, th {  
+        font-family: Helvetica, sans-serif;        
         padding: 0; 
         text-transform: uppercase;
         font-stretch: ultra-condensed; 
@@ -322,8 +341,10 @@ tfoot .container-check .checkmark {
         .table_ctp select {
             max-width: 50px;}
         .table_ctp fa {
-            font-family: 'Courier New', Courier, monospace
+            font-family: CTPFONT;
+            /*font-family: 'Courier New', Courier, monospace*/
         }
+        
         
 /*color for icons*/ 
 

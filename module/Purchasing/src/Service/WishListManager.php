@@ -81,7 +81,7 @@ class WishListManager
   
    protected $from = [ self::FROM_LOSTSALE    => "LS", 
                        self::FROM_VENDORLIST  => "VNDL", 
-                       self::FROM_MANUAL      => "MN", 
+                       self::FROM_MANUAL      => "MAN", 
                        self::FROM_EXCEL       => "EXCEL"
                      ];
    
@@ -499,6 +499,33 @@ class WishListManager
     }
     
     /**
+     * This method is used for creating the second column on the WL (FROM)
+     * - it depends on the value in the DB ( )
+     * @param string $item
+     * @return string
+     */
+    private function getFromSource( $item )
+    {
+      if ($item == $this->from[self::FROM_EXCEL]) {
+         $title = "From an excel file"; 
+         $iconToExcel = '<span class="statusDevelop"><i class="fa fa-file-excel-o fa-1x"  aria-hidden="true" title="'.$title.'" > &nbsp; EXC</span>';
+         return $iconToExcel;
+      }
+      
+      if ($item == $this->from[self::FROM_MANUAL]) {
+         $title = "Entered by manually";
+         $iconToManual = '<span class="statusDocumentation"><i class="fa fa-keyboard-o fa-1x"  aria-hidden="true" title="'.$title.'" >&nbsp; MAN </span>';
+         return $iconToManual;
+      }
+      
+      //by default it takes the 
+      $title = "Sent from the lostsale file";
+      $iconToLostSale = '<span class="money"><i class="fa fa-list fa-1x"  aria-hidden="true" title="'.$title.'" > &nbsp; LS </span>';
+      return  $iconToLostSale;
+   }//END: getFromSource() METHOD
+   
+   
+    /**
      * - This method() converts the elements of an array into a <TR> element 
      *   and assigned the CLASS, ID, and TITLE attributes for each <TD> element
      *   - It receives an array and returns the each Item as a <TD> element inside a <TR>
@@ -516,14 +543,13 @@ class WishListManager
         $columns = [  2, 12, 13, 14, 16 ];
         foreach( $row as $item ) {
             //CHANGING THE ICON TO THE FROM COLUMN: (EXCEL FILE, ...)
-            
+            $className = '';
             if ($col==1) {                             
-                $iconToExcel = '<i class="fa fa-file-excel-o fa-1x"  aria-hidden="true" title="From Excel file" > EXC</i>';
-                $iconToManual = '<i class="fa fa-keyboard-o fa-1x"  aria-hidden="true" title="One by One" > MAN </i>';
-                // $item = ($item =='EXCEL') ? $iconToExcel : $iconToManual;
-                $item = ($item =='EXCEL') ? $iconToExcel : $iconToManual;
-            }
-            if (in_array( $col, $columns ) ) {
+               // retrieving the Source (from) of the item
+//               $className = "money";
+               $item = $this->getFromSource( $item );
+                                  
+            } else if (in_array( $col, $columns ) ) {
                 $className = "number";
             } else if ( $col === 7 ) { 
                 $className = $this->getClassCSSforStatus( $item );
@@ -532,7 +558,6 @@ class WishListManager
                 $className = "money";
                 $item ='$ '.$item;
             } else if ( $col === 18 ) { $className = "description";}
-            else {$className = '';}              
             
             $result .= '<td class="'.$className.'">'.$item.'</td>';
           $col++;  

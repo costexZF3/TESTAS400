@@ -124,16 +124,22 @@ class LostsaleController extends AbstractActionController
         if ($this->getRequest()->isPost()) {
             //checking if the button MOVE TO WL was pressed
             $dataToWL = $this->params()->fromPost();
+            
             if ( isset($dataToWL['submitWL'])) {
                //looking for items select
-               if (isset($dataToWL['checkall'])) {
+               if (isset($dataToWL['checkbox'])) {
                   //call the service WL and insert the WL
-                  $inserted = $this->insertToWL( $dataToWL['checkbox'] );                  
+                  $inserted = $this->insertToWL( $dataToWL['checkbox'] );
+                  
+                  $arrayTostr = 'Inserted Items: ['.implode("]--[" , $dataToWL['checkbox']).']';
+//                  var_dump($arrayTostr); exit;
                   $this->flashMessenger()->addErrorMessage('The selected items have been inserted into the WishList successfully');
+                  $this->flashMessenger()->addErrorMessage( $arrayTostr );
                                    
                } else {
                   //active flash messengers
-                  $this->flashMessenger()->addErrorMessage('Please, select at least one item thatn you want to send into the Wish List');
+                  $this->flashMessenger()->addErrorMessage('Please, select at least one item that you want to send into the Wish List');
+                  $this->redirect()->toRoute('lostsales');
                }
                
                 /* this method retrives all items and return a resultSet or data as HTML tableGrid */   
@@ -144,7 +150,7 @@ class LostsaleController extends AbstractActionController
                   $this->layout()->setTemplate('layout/layout_Grid');
                   return new ViewModel([
                                        'form' => $form,         //HTML ELEMENTS: to render on the filter seccions
-                                       'formto' => $formWL,
+                                     'formto' => $formWL,
                                 'tableHeader' => $tableHTML,                                                                    
                                        'user' => $user,
                               'specialAccess' => $especial,

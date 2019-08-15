@@ -41,7 +41,7 @@
     
     $form->get('submit')->setAttributes(['class'=>'submit-btn'])
             ->setValue(' Submit ');
-    $formwl->get('submitWL')->setAttributes(['class'=>'btn btn-success'])
+    $formwl->get('submitWL')->setAttributes(['class'=>'btn btn-danger btn-sm'])
             ->setValue(' To WL ');
     
     $form->prepare();
@@ -261,12 +261,15 @@
    */ 
     var tables = filterTable('table_filtered', initialConfig );
     
+    //button submit on the first column will be initially hidden 
+//    $('input[name="submitWL"]').hide();
+    
     /*getting the <TD> value when click it */
-    $('#table_toexcel tbody').on('click', 'td', function () {
-       var table = $('#table_toexcel').DataTable();
- 
-      alert( table.cell( this ).data() );
-    });
+//    $('#table_toexcel tbody').on('click', 'td', function () {
+//       var table = $('#table_toexcel').DataTable();
+// 
+//      alert( table.cell( this ).data() );
+//    });
     
     //removing dt-button class to each HTMLElement (button) Associates to 
    // a table
@@ -283,7 +286,9 @@
          $('.checkall').removeAttr('checked');
       }
       
-       console.log(value);
+//     // $(':input:submit').toggle();
+//      $('input[name="submitWL"]').toggle();
+     
     });
    
     }); 
@@ -418,9 +423,11 @@
             <table class="table_ctp table_filtered display" id="table_toexcel">
                <thead><tr> 
                    <th>
-<!--                       <input type="submit" class="btn btn-success"  value="To WL">-->
-                       <?= $this->formElement($formwl->get('submitWL')); ?> 
-                       <br><br>
+                       <span>
+<!--                           <img src="<1?=$this->basePath().'/img/export.png'?>">-->
+                        <?= $this->formElement($formwl->get('submitWL')); ?> 
+                       </span>
+                       <br>
                            
                         <label class= "container-check"> <input class="checkall" type="checkbox" name= "checkall"><span class="checkmark"></span></label>
                      
