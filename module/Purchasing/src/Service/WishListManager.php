@@ -94,7 +94,7 @@ class WishListManager
     /*
      * array with all COLUMN LABELS that will be rendered
      */
-    private $columnHeaders = ['', 'From','ID','Date', 'User','Part Number', 'Description','Status', 'Assigned', 'Vendor',
+    private $columnHeaders = ['From','ID','Date', 'User','Part Number', 'Description','Status', 'Assigned', 'Vendor',
                     'PA', 'PS',  'Year Sales', 'Qty Quot','TimesQ', 'OEM Price', 'Loc20', 'Model', 'Category',
                'SubCat', 'Major','Minor'];
     /*
@@ -535,7 +535,7 @@ class WishListManager
      */
     private function rowArrayToHTML( $row ):string
     {   
-        $result ='<tr><td><label class= "container-check"> <input type="checkbox" name= "checkedrow[]" id="checked'.$row[1].'" value="'.$row[1].'"><span class="checkmark"></span></label></td>';  
+        $result ='<tr><td><label class= "container-check"> <input class="checkitem" type="checkbox" name= "checkedrow[]" id="checked'.$row[1].'" value="'.$row[1].'"><span class="checkmark"></span></label></td>';  
       
         $col = 1; $className = '';        
         
@@ -746,6 +746,7 @@ class WishListManager
         /* ------------ creating table with all data from dataSet -----------------------*/
         $tableHeader = '<table class="table_ctp table_filtered display">';
         $tableHeader.='<thead><tr>';  
+        $tableHeader.='<th>'.'<label title="Check or Uncheck Parts can be inserted to WL" class= "container-check"> <input class="checkall" type="checkbox" name= "checkall"><span class="checkmark"></span></label>'.'</th>';  
         
          /*********** generating each column label dynamically *****************/
          foreach ($this->columnHeaders as $field) {           
@@ -778,10 +779,11 @@ class WishListManager
         }//end: foreach    
 
         $tableFooter = '<tfoot><tr>';
+        $tableFooter .= '<th>'.'<label title="Check or Uncheck Parts can be inserted to WL" class= "container-check"> <input class="checkall" type="checkbox" name= "checkall"><span class="checkmark"></span></label>'.'</th>';          
 
         /*********** generating each column label dynamically *****************/
         foreach ($this->columnHeaders as $field) {           
-            $tableFooter.='<td>'.$field.'</td>';
+            $tableFooter.='<th>'.$field.'</th>';
         }
 
         $tableFooter.='</tr></tfoot>';       

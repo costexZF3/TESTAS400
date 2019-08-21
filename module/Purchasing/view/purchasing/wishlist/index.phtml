@@ -78,7 +78,7 @@
          * this array represents the columns there will be a DROPDOWN on the bottom
          * @type Array
          */
-        const dropDownsInCols = [7, 8];
+        const dropDownsInCols = [1, 7, 8];
         
         /**
          * 
@@ -90,7 +90,15 @@
         
         //removing dt-button class to each HTMLElement (button) Associates to 
         // a datatable
-        $('button').removeClass('dt-button');         
+        $('button').removeClass('dt-button');   
+        
+        // check all or uncheck all 
+         $(".checkall").click(function(){
+            var value = $(this).is(':checked');
+          
+            $('.checkitem:checkbox').each(function(){this.checked = !this.checked;})
+            $('.checkall:checkbox').each(function(){this.checked = value;})
+         });
     }); 
 
 </script>

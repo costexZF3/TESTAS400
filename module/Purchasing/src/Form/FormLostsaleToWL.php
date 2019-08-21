@@ -17,7 +17,7 @@ use Zend\Form\Form;
 use Zend\InputFilter\InputFilter;
 
 use Application\Validator\PartNumberValidator;
-use Application\Service\QueryManager as queryManager;
+use Application\Service\QueryManager as queryManager; 
 
 
 class FormLostsaleToWL extends Form 
@@ -67,7 +67,16 @@ class FormLostsaleToWL extends Form
         $this->add([
             'type'  => 'submit',
             'name' => 'submitWL',
-            'attributes' => ['value' => 'To WL', 'id'=>"towlbutton"],
+             'options' => [
+               'label'   => 'WL',
+               'class'    => 'fas fa-file-export',
+              ],
+            'attributes' => [
+                'value' => 'WL', 
+                'title' => "Insert in the Wish List",
+//                'icon'  => '<i class="fas fa-file-export">', 
+                'id'    => 'towlbutton'
+            ],
         ]);
     }
     

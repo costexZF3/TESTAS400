@@ -133,8 +133,9 @@ class LostsaleController extends AbstractActionController
                   
                   $arrayTostr = 'Inserted Items: ['.implode("]--[" , $dataToWL['checkbox']).']';
 //                  var_dump($arrayTostr); exit;
-                  $this->flashMessenger()->addErrorMessage('The selected items have been inserted into the WishList successfully');
+                  $this->flashMessenger()->addErrorMessage('The following items have been inserted into the WishList successfully');
                   $this->flashMessenger()->addErrorMessage( $arrayTostr );
+                  $this->redirect()->toRoute('wishlist'); 
                                    
                } else {
                   //active flash messengers
@@ -167,7 +168,7 @@ class LostsaleController extends AbstractActionController
             /* getting: vendors assigned option: 1, 2, 3 */
             $vndAssignedOptionSelected = (int)$data['sel-vndassigned']; 
             /* if not vendor Assigned then decide with columns will be shown or not */
-            $hideVnds = ( $vndAssignedOptionSelected==2 )?[8, 9,10]:[];
+            $hideVnds = ( $vndAssignedOptionSelected==2 ) ? [8, 9,10]:[];
             
             /* assigning value seleted to the ListBox */
             $form->get('sel-vndassigned')->setValue( $vndAssignedOptionSelected );

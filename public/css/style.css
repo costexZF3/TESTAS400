@@ -179,12 +179,13 @@ form ul li {
 }
 
 thead th .container-check .checkmark {
-     background-color: #dc3545;
+     background-color: #dc3545b0;
 }
 
 tfoot .container-check .checkmark {
-     background-color: #dc3545;
+     background-color:#dc3545b0;
 }
+
 
 /* boxes */
 .box {

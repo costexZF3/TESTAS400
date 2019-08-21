@@ -126,7 +126,8 @@ const createBtn = ( config ) => {
  * @returns {dataTableConfig.ctp_functionsJSAnonym$1}
  */
 const dataTableConfig = ( dropDownCols, buttons, $columns=[] ) => { 
-    //using method
+   
+    //creating templates of buttons
     const optEXCEL = { type: 'excel', title: 'EXCEL', hint: 'Convert to Excel'};
     const optPDF = { type: 'pdf', title: 'PDF', hint: 'Convert to PDF'};
     const optCOPY = { type: 'copy', title: 'COPY', hint: 'Copy to Click board'};
@@ -143,7 +144,8 @@ const dataTableConfig = ( dropDownCols, buttons, $columns=[] ) => {
     
     btn1.push( buttonExcel ); btn1.push( buttonPdf );     btn1.push( buttonCopy ); 
     const Btns = btn1.filter( (item) => { return item !== null;});
-        
+    
+    //this return an object with all the settings
     return (
         { 
             
