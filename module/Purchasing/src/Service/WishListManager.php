@@ -5,6 +5,8 @@
     use Application\Service\QueryManager as queryManager;
     use Application\Service\PartNumberManager as PNManager;
     use Application\Service\VendorManager as VndManager; 
+    
+    use User\Service\UserManager;
 
     use PhpOffice\PhpSpreadsheet\IOFactory;
     use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -95,7 +97,7 @@ class WishListManager
      * array with all COLUMN LABELS that will be rendered
      */
     private $columnHeaders = ['From','ID','Date', 'User','Part Number', 'Description','Status', 'Assigned', 'Vendor',
-                    'PA', 'PS',  'Year Sales', 'Qty Quot','TimesQ', 'OEM Price', 'Loc20', 'Model', 'Category',
+                    'PA', 'PS',  'Year Sales', 'Qty Qte','TimesQ', 'OEM Price', 'Loc20', 'Model', 'Category',
                'SubCat', 'Major','Minor'];
     /*
      * rows: this array saves all <tr> elements generated running sql query..
@@ -136,10 +138,10 @@ class WishListManager
         $this->queryManager = $queryManager;
         $this->partNumberManager = $PNManager;
         $this->vendorManager = $vendorManager;        
-        
+      
         $this->refreshWishList();           
     }//END:constructor 
-    
+  
     
     /**
      * This method returns a boolean value indicating whether 
@@ -379,11 +381,9 @@ class WishListManager
      */
     private function getSqlStr( string $userName = '' )
     {  
-        $strRenew = ''; 
-        if ( $userName == 'NOWLOWNER' ) {       
-           $strRenew = " WHERE UCASE(PRDWL.WHLSTATUS)= '". self::STATUS_TO_DEVELOP."'";
-        } else if ($userName !='') {
-             $strRenew = "WHERE UCASE(WHLSTATUSU)= '".strtoupper($userName)."'  AND PRDWL.WHLSTATUS<> '". self::STATUS_CLOSE_BY_DEV."'";       
+        $strRenew = '';    
+        if ($userName !='') {
+             $strRenew = "WHERE UCASE(WHLSTATUSU)= '".strtoupper($userName)."'  AND PRDWL.WHLSTATUS = '". self::STATUS_TO_DEVELOP."'";       
         }
            
         $sqlStr = "SELECT * FROM ( SELECT  IMPTN, IMDSC, IMPC1,IMPC2,IMCATA,IMSBCA,IMMOD, IMPRC     
@@ -392,7 +392,7 @@ class WishListManager
                   FROM WHLADDINMJ ) y                                               
                   INNER JOIN PRDWL on y.IMPTN = PRDWL.WHLPARTN                       
                   LEFT JOIN invptyf on y.IMPTN = invptyf.IPPART ".$strRenew." ORDER BY PRDWL.WHLCODE ASC ";
-       
+
        return $sqlStr;  
     }//END: getSqlString()
     
@@ -746,7 +746,7 @@ class WishListManager
         /* ------------ creating table with all data from dataSet -----------------------*/
         $tableHeader = '<table class="table_ctp table_filtered display">';
         $tableHeader.='<thead><tr>';  
-        $tableHeader.='<th>'.'<label title="Check or Uncheck Parts can be inserted to WL" class= "container-check"> <input class="checkall" type="checkbox" name= "checkall"><span class="checkmark"></span></label>'.'</th>';  
+        $tableHeader.='<th>'.'<label title="Check or Uncheck (Massive update)" class= "container-check"> <input class="checkall" type="checkbox" name= "checkall"><span class="checkmark"></span></label>'.'</th>';  
         
          /*********** generating each column label dynamically *****************/
          foreach ($this->columnHeaders as $field) {           

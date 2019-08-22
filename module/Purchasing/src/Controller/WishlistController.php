@@ -63,11 +63,7 @@ class WishlistController extends AbstractActionController
    private function getUser()
    {
        $user = $this->currentUser();       
-       //validating the user
-       if ($user == null) {
-           $this->getResponse()->setStatusCode( 404 );
-           return;
-       } 
+   
        return $user;
    }//End: getUser()  
 
@@ -317,10 +313,10 @@ class WishlistController extends AbstractActionController
           
           //checking if the new status can be acepted
           if ( !$canChangeStatus ) {
-             $form->setData($form->getData());
-              $status = $this->session->InitialStatus;
+             $form->setData( $raw );
+             $status = $this->session->InitialStatus;
 
-              $form->get('status')->setMessages(['Invalid State. See the graph and select a right state.']);
+              $form->get('status')->setMessages(['Invalid Status. See the graph and select a right status.']);
               return new ViewModel(
                       [ 'form' => $form, 'status' => $status ]);
           }
@@ -431,11 +427,23 @@ class WishlistController extends AbstractActionController
               'route'=>'wishlist', 
               'action'=>['action'=>'upload'],                            
           ],
+      ];        
+      
+      $buttonLostSale = [
+          'label' => 'From LS',
+          'title' => 'import itesms from Lost Sale',
+          'class' => 'boxed-btn-layout btn-rounded',
+          'font-icon' => 'fa fa-list-alt fa-1x',
+          'url' => [                          
+              'route'=>'lostsales', 
+              'action'=>['action'=>'index'],                            
+          ],
       ];            
 
       $buttonList = [];
       array_push($buttonList, $buttonADD);
       array_push($buttonList, $buttonEXCEL);
+      array_push($buttonList, $buttonLostSale);
 
       return $buttonList;
   }
@@ -460,14 +468,13 @@ class WishlistController extends AbstractActionController
       $this->layout()->form = null;
 
       $isWLOwner = $this->access('purchasing.wl.owner'); 
-
+       
       if ($isWLOwner) {            
           $this->layout()->buttons = $this->createButtonsOnLayout();             
       } else {
           //getting user for loading only its items assigned           
-        //   $userN = ($isDocumentator == false) ? $this->getUserS(): 'DOCUMENTATOR';
-          $userN = 'NOWLOWNER';
-          $this->wlManager->renewWL( $userN );                   
+           $userN = ($isDocumentator == false) ? $this->getUserS(): 'NOWLOWNER';         
+          $this->wlManager->renewWL( $userN );                    
       }
 
       //this checks if there was generated some insconsistency trying to import from
