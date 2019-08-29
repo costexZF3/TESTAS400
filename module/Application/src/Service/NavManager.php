@@ -115,10 +115,15 @@ class NavManager
                         $options[] = $this->setOptions('productdevelopment', 'Product Developments', 'pagebuilding','');
                     }//end if: option.purchasing.productdevelopments 
                     
+                     if ($this->rbacManager->isGranted(null, 'purchasing.wl.owner')) {                                                                     
+                         $options[] = $this->setOptions('lostsales', 'Lost Sales', 'lostsales','');                        
+                    }//end if: productdevelopments  wish list
+                    
                     if ($this->rbacManager->isGranted(null, 'purchasing.option.pd.wishlist')) {                                                                     
-                         $options[] = $this->setOptions('lostsales', 'Lost Sale', 'lostsales','');
+//                         $options[] = $this->setOptions('lostsales', 'Lost Sale', 'lostsales','');
                          $options[] = $this->setOptions('wishlist', 'Wish List', 'wishlist','');
                     }//end if: productdevelopments  wish list
+                   
                     
                     if ($this->rbacManager->isGranted(null, 'purchasing.option.pd.personincharge')) {                                             
                          $options[] = $this->setOptions('pdpersonincharge', 'Product Dev. Person In Charge', 'pagebuilding','');
@@ -461,7 +466,7 @@ class NavManager
             }
             
             /*
-             *  Adding About Menu
+             *  Adding About Menu 
              */
             $items[] = $this->setOptions('about', 'About', 'about','');              
              
@@ -469,7 +474,7 @@ class NavManager
              *  Adding Sing in Menu  
              */
             $items[] = [
-                'id' => 'logout',
+                'id' => 'logout', 
                 'label' => $this->authService->getIdentity(),
                 'float' => 'right',
                 'dropdown' => [

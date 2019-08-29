@@ -6,8 +6,7 @@
     use Application\Service\PartNumberManager as PNManager;
     use Application\Service\VendorManager as VndManager; 
     
-    use User\Service\UserManager;
-
+    use User\Service\UserManager; 
     use PhpOffice\PhpSpreadsheet\IOFactory;
     use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
@@ -989,7 +988,8 @@ class WishListManager
     }//END METHOD updateErrorsInXls
     
     /**
-     * Auxiliar method. 
+     * This method receives a template (XLS) then checks the columns have a specific 
+     * format 
      * 
      * -invoke from readExcelFile()
      * @param array() $sheetData
@@ -1002,7 +1002,7 @@ class WishListManager
                $sheetData[1]['C'] == 'MINOR';
     }
 
-    /**
+    /** 
      * 
      * @param type $sheetData
      * @return type
@@ -1022,7 +1022,7 @@ class WishListManager
         $inputFileType = 'Xls';        
         $reader = IOFactory::createReader( $inputFileType );  
         $reader->setReadDataOnly( true );        
-        $spreadsheet = $reader->load($inputFileName);
+        $spreadsheet = $reader->load( $inputFileName );
         $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
         
         // validating EXCEL FILE

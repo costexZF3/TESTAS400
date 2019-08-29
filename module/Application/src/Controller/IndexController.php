@@ -86,7 +86,7 @@ class IndexController extends AbstractActionController
         //checking the logged user's permissions, if he/she has no access to the route requested, 
         //the response will be  NOT-AUTHORIZED page.
         if (!$this->access('profile.any.view') && 
-            !$this->access('profile.own.view', ['user'=>$user])) {
+            !$this->access('profile.own.view', ['user'=>$user])) {            
             return $this->redirect()->toRoute('not-authorized');
         }
         

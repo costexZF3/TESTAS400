@@ -436,7 +436,7 @@ class WishlistController extends AbstractActionController
           'font-icon' => 'fa fa-list-alt fa-1x',
           'url' => [                          
               'route'=>'lostsales', 
-              'action'=>['action'=>'index'],                            
+              'action'=>['action'=>'index'],                             
           ],
       ];            
 

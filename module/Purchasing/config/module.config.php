@@ -104,7 +104,7 @@ return [
                     ['actions' => ['claims'],              'allow' => '+option.purchasing.claims'],                 
 
                     //Actions response to Roles associated to OPERATION
-                    // an user with Entry Level will be permissions to 
+                    // an user with Entry Level will be permissions to  
                     ['actions' => ['watch'],               'allow' => '+purchasing.entry.level'],
                     ['actions' => ['export','print',],     'allow' => '+purchasing.regular.level'],
                     ['actions' => ['create', 'update', ],  'allow' => '+purchasing.high.level'],
@@ -114,15 +114,14 @@ return [
             Controller\LostsaleController::class => [
                 //Allowing routes access depending on the type of permission assigned to loggin user
                 // Give access to "index" actions to everyone with +menu.purchasing  
-                //+option.purchasing.claims 
-
-                //Actions reponse to Roles associated to MENUS 
-                ['actions' => ['index'],          'allow' => '+menu.purchasing'],  //every body logged in with this permission
-                ['actions' => ['lostsales'],      'allow' => '+option.purchasing.claims'],                 
+                //+purchasing.wl.owner
+ 
+                //Actions reponse to Roles associated to MENUS //             
+                ['actions' => ['lostsales', 'index'],   'allow' => '+purchasing.wl.owner'], 
 
             ], //END: access_filter for LostSaleController           
 
-            //defining access to the WishlistController accions
+            //defining access to the WishlistController accions 
             Controller\WishlistController::class => [
                 /* Allowing routes access depending on the type of permission assigned to loggin user
                  Give access to "index" actions to everyone with +menu.purchasing +option.purchasing.claims */
@@ -157,7 +156,7 @@ return [
     //Registeing the services here
     'service_manager' => [
         'factories' => [
-            Service\WishListManager::class    => Service\Factory\WishListManagerFactory::class,
+            Service\WishListManager::class      => Service\Factory\WishListManagerFactory::class,
             Service\ProductDevManager::class    => Service\Factory\ProductDevManagerFactory::class
         ],
     ],

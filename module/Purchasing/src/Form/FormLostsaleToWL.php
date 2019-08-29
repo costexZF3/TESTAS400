@@ -73,8 +73,7 @@ class FormLostsaleToWL extends Form
               ],
             'attributes' => [
                 'value' => 'WL', 
-                'title' => "Insert in the Wish List",
-//                'icon'  => '<i class="fas fa-file-export">', 
+                'title' => "Insert in the Wish List", 
                 'id'    => 'towlbutton'
             ],
         ]);
