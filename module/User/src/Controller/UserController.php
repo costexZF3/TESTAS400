@@ -135,7 +135,7 @@
          */
         public function viewAction() 
         {
-            $this->layout()->setTemplate('layout/layout_Grid');
+//            $this->layout()->setTemplate('layout/layout_Grid');
             
            //creating buttons will be rendering on the breadcrums (new item, import from excel)
             $this->layout()->buttons = $this->createButtonsOnLayout();

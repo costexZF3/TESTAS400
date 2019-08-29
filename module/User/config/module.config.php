@@ -128,10 +128,10 @@ return [
             Controller\UserController::class => [
                 // Give access to "resetPassword", "message" and "setPassword" actions
                 // to anyone.
-                ['actions' => ['resetPassword', 'message', 'setPassword'], 'allow' => '*'],
+                ['actions' => ['resetPassword', 'message', 'setPassword', 'changePassword'], 'allow' => '*'],
                 // Give access to "index", "add", "edit", "view", "changePassword" actions to users having the "user.manage" permission.
-                ['actions' => ['index', 'add', 'edit', 'view'], 'allow' => '+manage.user'],               
-                ['actions' => ['view','changePassword','changePassword', 'resetPassword'], 'allow' => '@']
+                ['actions' => ['index', 'add', 'edit'], 'allow' => '+manage.user'],               
+                ['actions' => ['view','changePassword', 'resetPassword', 'message'], 'allow' => '@']
             ],
             Controller\RoleController::class => [
                 // Allow access to authenticated users having the "role.manage" permission.
@@ -167,12 +167,12 @@ return [
         ],
         'aliases' => [
             'access' => View\Helper\Access::class,
-            'currentUser' => View\Helper\CurrentUser::class,
+            'currentUser' => View\Helper\CurrentUser::class, 
         ],
     ],
     'doctrine' => [
         'driver' => [
-            __NAMESPACE__ . '_driver' => [
+            __NAMESPACE__ . '_driver' => [ 
                 'class' => AnnotationDriver::class,
                 'cache' => 'array',
                 'paths' => [__DIR__ . '/../src/Entity']
